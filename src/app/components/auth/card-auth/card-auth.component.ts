@@ -1,0 +1,11 @@
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-card-auth',
+  imports: [],
+  templateUrl: './card-auth.component.html',
+  styleUrl: './card-auth.component.css'
+})
+export class CardAuthComponent {
+
+}
