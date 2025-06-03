@@ -4,7 +4,9 @@ import { Component } from '@angular/core';
   selector: 'app-card-auth',
   imports: [],
   templateUrl: './card-auth.component.html',
-  styleUrl: './card-auth.component.css'
+  styleUrls: [
+     './card-auth.component.css'
+  ]
 })
 export class CardAuthComponent {
 
