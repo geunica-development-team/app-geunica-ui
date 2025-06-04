@@ -1,5 +1,5 @@
 .auth-contain {
-    height: 100vh;
+    min-height: 100vh;
     background-color: #004C35;
     display: flex;
     justify-content: center;

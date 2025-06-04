@@ -1,1 +1,37 @@
-<app-card-auth />
+<div class="container w-100 w-responsive min-vh-100 d-flex align-items-center justify-content-center">
+    <div class="row green rounded-4">
+        <!-- Lado verde -->
+        <div class="col-12 col-md-6 rounded-start-4 p-4 text-light d-none d-md-block">
+            <div class="row">
+                <div class="icon-geunica"></div>
+                <p class="fs-5">Geunica</p>    
+            </div>
+            <div class="row side-green d-flex align-items-center justify-content-center">
+                <h3>La nueva experiencia digital de aprendizaje</h3>
+                <div class="line-auth"></div>
+                <p>Cercana, dinámica y flexible</p>
+            </div>
+        </div>
+
+        <!-- Lado blanco -->
+        <div class="col-12 col-md-6 bg-white rounded-4 p-4">
+            <div class="py-3">
+                <h2 class="mb-5 fs-4 text-blue">Ingresa tus datos para iniciar sesión</h2>
+                <div class="mb-3">
+                    <label class="label text-blue fw-normal mb-2">Número de DNI:</label>
+                    <input class="input form-control" name="dni" placeholder="Número de DNI" formControlName="dni">
+                </div>
+                <div class="mb-3">
+                    <label class="label text-blue fw-normal mb-2">Contraseña:</label>
+                    <input type="password" class="input form-control" name="password" placeholder="Contraseña" formControlName="password">
+                </div>
+                <div class="my-3 d-flex flex-column flex-md-row justify-content-end align-items-center">
+                    <a routerLink="/auth/recover/email" class="text-blue fw-medium" style="font-size: 14px;">Restablecer contraseña</a>
+                </div>
+                <div class="d-grid">
+                    <button type="submit" class="btn-custom-green-100">Iniciar sesión</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
