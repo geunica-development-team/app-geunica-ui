@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authRoutes } from './pages/auth/auth.routes';
+import { panelRoutes } from './pages/panel/panel.routes';
 
 export const routes: Routes = [
     {
@@ -7,5 +8,6 @@ export const routes: Routes = [
         redirectTo: 'auth',
         pathMatch: 'full'
     },
-    ... authRoutes
+    ... authRoutes,
+    ... panelRoutes
 ];

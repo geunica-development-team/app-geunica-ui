@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { CardAuthComponent } from '../../../components/auth/card-auth/card-auth.component';
 import { RouterLink } from '@angular/router';
 
 @Component({

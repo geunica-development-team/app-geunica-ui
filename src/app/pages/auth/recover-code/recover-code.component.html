@@ -8,7 +8,7 @@
             </div>
             <div class="row side-green d-flex align-items-center justify-content-center">
                 <h3>La nueva experiencia digital de aprendizaje</h3>
-                <div class="line-auth"></div>
+                <div class="line-auth my-3"></div>
                 <p>Cercana, dinámica y flexible</p>
             </div>
         </div>
@@ -16,20 +16,13 @@
         <!-- Lado blanco -->
         <div class="col-12 col-md-6 bg-white rounded-4 p-4">
             <div class="py-3">
-                <h2 class="mb-5 fs-4 text-blue">Ingresa tus datos para iniciar sesión</h2>
-                <div class="mb-3">
-                    <label class="label text-blue fw-normal mb-2">Nombre de usuario:</label>
+                <h2 class="mb-4 fs-4 m-0 text-blue">Ingresar código:</h2>
+                <div class="mb-4">
+                    <label class="label text-blue fw-normal mb-2">Código:</label>
                     <input type="email" class="input form-control" name="email" placeholder="Correo electrónico" formControlName="email">
                 </div>
-                <div class="mb-3">
-                    <label class="label text-blue fw-normal mb-2">Contraseña:</label>
-                    <input type="password" class="input form-control" name="password" placeholder="Contraseña" formControlName="password">
-                </div>
-                <div class="my-3 d-flex flex-column flex-md-row justify-content-end align-items-center">
-                    <a href="#" class="text-blue fw-medium" style="font-size: 14px;">Restablecer contraseña</a>
-                </div>
                 <div class="d-grid">
-                    <button type="submit" class="btn-custom-green-100">Iniciar sesión</button>
+                    <button routerLink="/auth/recover/password" type="submit" class="btn-custom-green-100">Verificar</button>
                 </div>
             </div>
         </div>
