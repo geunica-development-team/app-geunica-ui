@@ -1,3 +1,9 @@
-<app-sidenav />
-<app-header />
-<router-outlet />
+<div class="app-layout">
+    <app-sidenav />
+    <div class="main-content">
+        <app-header />
+        <div class="page-content">
+            <router-outlet />
+        </div>
+    </div>
+</div>

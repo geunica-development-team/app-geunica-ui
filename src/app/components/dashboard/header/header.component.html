@@ -1,43 +1,33 @@
-<p>header works!</p>
 <header class="app-header">
   <div class="container-fluid">
     <div class="row align-items-center">
       <!-- Left Section: Back Button and Title -->
       <div class="col-auto">
         <div class="d-flex align-items-center">
-          @if (showBackButton) {
             <button
                 class="btn btn-link header-back-btn p-0 me-3"
-                (click)="onBackClick()"
                 type="button">
                 <i class="fas fa-arrow-left"></i>
             </button>
-          }
-          <h4 class="header-title mb-0">{{ title }}</h4>
+          <h4 class="header-title mb-0">Dashboard</h4>
         </div>
       </div>
-
       <!-- Right Section: Action Icons -->
       <div class="col">
         <div class="d-flex align-items-center justify-content-end">
           <!-- Notification Bell -->
           <button 
             class="btn btn-link header-icon-btn position-relative"
-            (click)="onNotificationClick()"
             type="button">
             <i class="far fa-bell"></i>
-            @if (notificationCount > 0) {
                 <span 
                     class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                    {{ notificationCount > 99 ? '99+' : notificationCount }}
                 </span>
-            }
           </button>
 
           <!-- Messages -->
           <button 
             class="btn btn-link header-icon-btn"
-            (click)="onMessageClick()"
             type="button">
             <i class="far fa-comment"></i>
           </button>
@@ -45,7 +35,6 @@
           <!-- Settings -->
           <button 
             class="btn btn-link header-icon-btn"
-            (click)="onSettingsClick()"
             type="button">
             <i class="fas fa-cog"></i>
           </button>
@@ -58,10 +47,8 @@
               id="profileDropdown"
               data-bs-toggle="dropdown"
               aria-expanded="false"
-              (click)="onProfileClick()">
+              >
               <img 
-                [src]="userAvatar" 
-                [alt]="userName"
                 class="header-avatar"
                 onerror="this.src='assets/images/default-avatar.jpg'">
             </button>

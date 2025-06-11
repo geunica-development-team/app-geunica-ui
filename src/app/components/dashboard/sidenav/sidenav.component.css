@@ -1,8 +1,8 @@
 .sidenav {
   width: 280px;
   height: 100vh;
-    background-color: #008C62;
-    position: fixed;
+  background-color: #008C62;
+  position: fixed;
   left: 0;
   top: 0;
   overflow-y: auto;

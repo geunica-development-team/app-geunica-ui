@@ -3,7 +3,7 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-recover-password',
-  imports: [RouterLink],
+  imports: [],
   templateUrl: './recover-password.component.html',
   styleUrls: [
     './recover-password.component.css'
