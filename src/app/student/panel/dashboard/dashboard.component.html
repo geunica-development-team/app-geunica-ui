@@ -1,0 +1,227 @@
+<app-panel-header title="Dashboard"/>
+<div class="dashboard-container">
+  <div class="row g-4">
+    <!-- Left Column -->
+    <div class="col-12 col-lg-8">
+      <!-- Welcome Card -->
+      <div class="row g-4">
+        <div class="col-12">
+          <div class="card welcome-card">
+            <div class="card-body">
+              <div class="row align-items-center">
+                <div class="col-md-8">
+                  <h3 class="welcome-title">¡Hola Pepito!</h3>
+                  <p class="welcome-text">
+                    ¡Bienvenido de nuevo! Estamos aquí para apoyarte en tu proceso de aprendizaje. 
+                    Sumérgete en tus clases y sigue progresando hacia tus objetivos.
+                  </p>
+                </div>
+                <div class="col-md-4 text-center">
+                  <img src="https://cdn-icons-png.flaticon.com/256/4481/4481273.png" 
+                       alt="Student illustration" 
+                       class="welcome-illustration">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subject Grades -->
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Progreso y calificación por materia</h5>
+            </div>
+            <div class="card-body">
+              <div class="row g-3">
+                @for (curso of subjectGrades; track curso.subject) {
+                  <div class="col-md-6">
+                    <app-subject-grade-bar 
+                        [materia]="curso.subject"
+                        [nota]="curso.currentScore"
+                        [notaMaxima]="curso.maxScore"
+                        [color]="curso.color"
+                    />
+                  </div>
+                } @empty {
+                  <div class="col-12">
+                    <p class="text-muted text-center">No hay calificaciones disponibles</p>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Assignments Table -->
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="card-title mb-0">Assignments</h5>
+              <div class="input-group" style="width: 250px;">
+                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                <input type="text" class="form-control" placeholder="Search by Subject">
+              </div>
+            </div>
+            <div class="card-body p-0">
+              @if (assignments.length > 0) {
+                <div class="table-responsive">
+                  <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                      <tr>
+                        <th>No</th>
+                        <th>Task</th>
+                        <th>Subject</th>
+                        <th>Due Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (assignment of assignments; track assignment.no) {
+                        <tr>
+                          <td>{{ assignment.no }}</td>
+                          <td>{{ assignment.task }}</td>
+                          <td>{{ assignment.subject }}</td>
+                          <td>{{ assignment.dueDate }}</td>
+                          <td>
+                            <span [class]="getStatusClass(assignment.status)">
+                              {{ assignment.status }}
+                            </span>
+                          </td>
+                          <td>
+                            <button class="btn btn-sm btn-outline-primary me-1">
+                              <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger">
+                              <i class="fas fa-trash"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+                <div class="card-footer d-flex justify-content-between align-items-center">
+                  <span class="text-muted">Previous</span>
+                  <span class="text-muted">Page 1 of 12</span>
+                  <span class="text-primary" style="cursor: pointer;">Next</span>
+                </div>
+              } @else {
+                <div class="text-center p-4">
+                  <p class="text-muted">No hay asignaciones disponibles</p>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column -->
+    <div class="col-12 col-lg-4">
+      <div class="row g-4">
+        <!-- Attendance -->
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h6 class="mb-0">Asistencia</h6>
+            </div>
+            <div class="card-body text-center">
+              <div class="attendance-chart">
+                <div class="circular-progress" [style.background]="'conic-gradient(#8b5cf6 0deg ' + (attendancePercentage * 3.6) + 'deg, #e5e7eb ' + (attendancePercentage * 3.6) + 'deg 360deg)'">
+                  <div class="circular-progress-inner">
+                    <span class="attendance-percentage">{{ attendancePercentage }}%</span>
+                  </div>
+                </div>
+              </div>
+              <div class="attendance-stats mt-3">
+                <div class="row text-center">
+                  <div class="col-4">
+                    <div class="stat-item">
+                      <i class="fas fa-check-circle text-success"></i>
+                      <div class="stat-label">Presente</div>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="stat-item">
+                      <i class="fas fa-clock text-warning"></i>
+                      <div class="stat-label">Tardanza</div>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="stat-item">
+                      <i class="fas fa-times-circle text-danger"></i>
+                      <div class="stat-label">Ausente</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Announcements -->
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h6 class="mb-0">Anuncios</h6>
+              <span class="text-primary" style="cursor: pointer;">Ver todos</span>
+            </div>
+            <div class="card-body">
+              @if (announcements.length > 0) {
+                @for (announcement of announcements; track announcement.title) {
+                  <div class="announcement-item">
+                    <div class="alert" [class]="getAnnouncementClass(announcement.type)">
+                      <div class="d-flex align-items-start">
+                        <i [class]="announcement.icon + ' me-3 mt-1'"></i>
+                        <div>
+                          <h6 class="alert-heading">{{ announcement.title }}</h6>
+                          <p class="mb-0">{{ announcement.description }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                }
+              } @else {
+                <p class="text-muted text-center">No hay anuncios disponibles</p>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Today's Schedule -->
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <button class="btn btn-sm btn-outline-secondary">
+                <i class="fas fa-chevron-left"></i>
+              </button>
+              <h6 class="mb-0">Lunes</h6>
+              <button class="btn btn-sm btn-outline-secondary">
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+            <div class="card-body">
+              @if (todaySchedule.length > 0) {
+                @for (item of todaySchedule; track item.subject) {
+                  <div class="schedule-item">
+                    <div class="d-flex align-items-center mb-3">
+                      <div class="schedule-color" [style.background-color]="item.color"></div>
+                      <div class="ms-3">
+                        <div class="schedule-subject">{{ item.subject }}</div>
+                        <div class="schedule-time">{{ item.time }}</div>
+                      </div>
+                    </div>
+                  </div>
+                }
+              } @else {
+                <p class="text-muted text-center">No hay clases programadas para hoy</p>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -39,9 +39,4 @@ export const generalItems = [
       label: 'Configuración', 
       route: '/configuracion' 
     },
-    { 
-      icon: 'fas fa-sign-out-alt', 
-      label: 'Cerrar sesión', 
-      action: 'logout' 
-    }
   ];

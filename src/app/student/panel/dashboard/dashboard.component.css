@@ -1,0 +1,283 @@
+/* Welcome Card */
+.welcome-card {
+    background-color: #FFFFFF;
+    color: rgb(0, 0, 0);
+    border: none;
+    border-radius: 12px;
+}
+
+.welcome-title {
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.welcome-text {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+.welcome-illustration {
+  max-width: 150px;
+  height: auto;
+}
+
+/* Cards */
+.card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+.card-header {
+  background-color: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  border-radius: 12px 12px 0 0 !important;
+  padding: 1rem 1.25rem;
+}
+
+.card-title {
+  font-weight: 600;
+  color: #1a202c;
+}
+
+/* Subject Grades */
+.subject-grade-item {
+  padding: 0.75rem;
+  background: #f8fafc;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.subject-name {
+  font-weight: 500;
+  color: #4a5568;
+}
+
+.grade-percentage {
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.progress {
+  border-radius: 4px;
+  background-color: #e2e8f0;
+}
+
+.progress-bar {
+  border-radius: 4px;
+}
+
+/* Calendar */
+.calendar-grid {
+  font-size: 0.9rem;
+}
+
+.calendar-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.calendar-day-header {
+  text-align: center;
+  font-weight: 600;
+  color: #718096;
+  padding: 0.5rem 0;
+  font-size: 0.8rem;
+}
+
+.calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.25rem;
+}
+
+.calendar-day {
+  text-align: center;
+  padding: 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.calendar-day:hover {
+  background-color: #edf2f7;
+}
+
+.calendar-day.today {
+  background-color: #667eea;
+  color: white;
+  font-weight: 600;
+}
+
+/* Attendance Chart */
+.attendance-chart {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.circular-progress {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.circular-progress-inner {
+  width: 80px;
+  height: 80px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.attendance-percentage {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #8b5cf6;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-item i {
+  font-size: 1.2rem;
+  margin-bottom: 0.25rem;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: #718096;
+}
+
+/* Announcements */
+.announcement-item {
+  margin-bottom: 1rem;
+}
+
+.announcement-item:last-child {
+  margin-bottom: 0;
+}
+
+.alert {
+  border-radius: 8px;
+  border: none;
+  padding: 1rem;
+}
+
+.alert-heading {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+/* Schedule */
+.schedule-item {
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 1rem;
+}
+
+.schedule-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.schedule-color {
+  width: 4px;
+  height: 40px;
+  border-radius: 2px;
+}
+
+.schedule-subject {
+  font-weight: 500;
+  color: #2d3748;
+  margin-bottom: 0.25rem;
+}
+
+.schedule-time {
+  font-size: 0.8rem;
+  color: #718096;
+}
+
+/* Table */
+.table th {
+  font-weight: 600;
+  color: #4a5568;
+  border-bottom: 2px solid #e2e8f0;
+  font-size: 0.9rem;
+}
+
+.table td {
+  vertical-align: middle;
+  font-size: 0.9rem;
+}
+
+/* Badges */
+.badge {
+  font-size: 0.75rem;
+  padding: 0.35rem 0.65rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 1rem;
+  }
+  
+  .welcome-illustration {
+    max-width: 100px;
+    margin-top: 1rem;
+  }
+  
+  .table-responsive {
+    font-size: 0.8rem;
+  }
+  
+  .card-header {
+    padding: 0.75rem 1rem;
+  }
+  
+  .circular-progress {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .circular-progress-inner {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .attendance-percentage {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .subject-grade-item {
+    margin-bottom: 0.75rem;
+  }
+  
+  .calendar-day {
+    padding: 0.25rem;
+    font-size: 0.8rem;
+  }
+  
+  .schedule-subject {
+    font-size: 0.9rem;
+  }
+}

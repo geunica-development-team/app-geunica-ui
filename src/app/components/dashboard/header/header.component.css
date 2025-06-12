@@ -2,27 +2,9 @@
   background-color: #ffffff;
   border-bottom: 1px solid #e5e7eb;
   padding: 1rem 0;
-  position: sticky;
-  top: 0;
   z-index: 999;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.header-back-btn {
-  color: #374151 !important;
-  text-decoration: none;
-  font-size: 1.1rem;
-  transition: color 0.2s ease;
-}
-
-.header-back-btn:hover {
-  color: #10b981 !important;
-}
-
-.header-title {
-  color: #111827;
-  font-weight: 600;
-  font-size: 1.5rem;
+  width: 100%;
 }
 
 .header-icon-btn {
@@ -57,28 +39,31 @@
 }
 
 .header-profile-btn::after {
-  display: none;
+  display: none !important; /* Ocultar la flecha de Bootstrap */
 }
 
 .header-avatar {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #e5e7eb;
-  transition: border-color 0.2s ease;
+  transition: all 0.2s ease;
+  cursor: pointer;
 }
 
 .header-avatar:hover {
   border-color: #10b981;
+  transform: scale(1.05);
 }
 
-.dropdown-menu {
+/* Estilos para el dropdown */
+.custom-dropdown {
   border: 1px solid #e5e7eb;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   border-radius: 8px;
   padding: 0.5rem 0;
-  min-width: 180px;
+  min-width: 200px;
 }
 
 .dropdown-item {
@@ -100,7 +85,6 @@
   margin: 0.5rem 0;
 }
 
-/* Badge para notificaciones */
 .badge {
   font-size: 0.7rem;
   padding: 0.2rem 0.4rem;
@@ -108,10 +92,6 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-  .header-title {
-    font-size: 1.25rem;
-  }
-  
   .header-icon-btn {
     width: 36px;
     height: 36px;
@@ -119,17 +99,13 @@
   }
   
   .header-avatar {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
   }
 }
 
 @media (max-width: 576px) {
   .app-header {
     padding: 0.75rem 0;
-  }
-  
-  .header-back-btn {
-    margin-right: 0.75rem !important;
   }
 }

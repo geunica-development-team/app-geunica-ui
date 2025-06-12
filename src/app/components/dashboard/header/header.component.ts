@@ -7,5 +7,5 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
-  @Input({required : true}) title!: string;
+
 }

@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { RouterOutlet } from '@angular/router';
 import { SidenavComponent } from '../../components/dashboard/sidenav/sidenav.component';
 import { HeaderComponent } from '../../components/dashboard/header/header.component';

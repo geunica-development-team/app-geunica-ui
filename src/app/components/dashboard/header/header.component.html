@@ -1,17 +1,6 @@
 <header class="app-header">
   <div class="container-fluid">
     <div class="row align-items-center">
-      <!-- Left Section: Back Button and Title -->
-      <div class="col-auto">
-        <div class="d-flex align-items-center">
-            <button
-                class="btn btn-link header-back-btn p-0 me-3"
-                type="button">
-                <i class="fas fa-arrow-left"></i>
-            </button>
-          <h4 class="header-title mb-0">Dashboard</h4>
-        </div>
-      </div>
       <!-- Right Section: Action Icons -->
       <div class="col">
         <div class="d-flex align-items-center justify-content-end">
@@ -20,9 +9,10 @@
             class="btn btn-link header-icon-btn position-relative"
             type="button">
             <i class="far fa-bell"></i>
-                <span 
-                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                </span>
+            <span 
+              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              5
+            </span>
           </button>
 
           <!-- Messages -->
@@ -46,13 +36,14 @@
               type="button"
               id="profileDropdown"
               data-bs-toggle="dropdown"
-              aria-expanded="false"
-              >
+              aria-expanded="false">
               <img 
                 class="header-avatar"
+                src="https://cdn-icons-png.freepik.com/512/9368/9368284.png"
+                alt="Perfil"
                 onerror="this.src='assets/images/default-avatar.jpg'">
             </button>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+            <ul class="dropdown-menu dropdown-menu-end custom-dropdown" aria-labelledby="profileDropdown">
               <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Mi Perfil</a></li>
               <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Configuración</a></li>
               <li><hr class="dropdown-divider"></li>
