@@ -1,0 +1,93 @@
+<!--SOLO TABLA-->
+<div class="table-responsive">
+	@defer {
+		<table class="table align-middle mb-0">
+			<thead>
+				<tr>
+					@for (column of columns; track $index) {
+						<th>{{ column }}</th>
+					}
+					@if (acciones) {
+						<th>ACCIONES</th>
+					}
+				</tr>
+			</thead>
+			<tbody>
+				@for (row of rows; track $index) {
+					<tr>
+						@for (column of columns; track $index) {
+							<td>
+								{{ row[columnMappings[column]] }}
+							</td>
+						}
+						@if (acciones) {
+							<td>
+								<div class="btn-group me-2" role="group">
+									<button type="button" class="btn btn-bg-yellow pt-2" (click)="accionEditar(row)">
+										<i class="fi fi-rr-pencil"></i>
+									</button>
+									<button type="button" class="btn btn-bg-yellow pt-2" (click)="accionEliminar(row)">
+										<i class="fi fi-rr-trash"></i>
+									</button>
+								</div>
+							</td>
+						}
+					</tr>
+				}
+			</tbody>
+		</table>
+	}
+</div>
+@if (rows.length === 0) {
+	<div class="no-results">No se encontraron resultados</div>
+}
+<div class="d-flex justify-content-between justify-content-md-end mt-3">
+	<div class="">
+		<button
+			class="btn-pagination"
+			(click)="goToFirstPage()"
+			[disabled]="currentPage === 1"
+		>
+            <i class="fa-solid fa-backward-fast"></i>
+        </button>
+		<button
+			class="btn-pagination"
+			(click)="changePage(currentPage - 1)"
+			[disabled]="currentPage <= 1"
+		>
+			<i class="fa-solid fa-left-long"></i>
+		</button>
+        <span
+            >{{ startIndex + 1 }}-{{ endIndex }} de
+            {{ originalRows.length }}</span
+        >
+		<button
+			class="btn-pagination"
+			(click)="changePage(currentPage + 1)"
+			[disabled]="currentPage * pageSize >= originalRows.length"
+		>
+			<i class="fa-solid fa-right-long"></i>
+		</button>
+		<button
+			class="btn-pagination"
+			(click)="goToLastPage()"
+			[disabled]="currentPage === totalPages"
+		>
+            <i class="fa-solid fa-forward-fast"></i>
+		</button>
+	</div>
+    <div class="d-flex me-4">
+		<label class="me-2" for="itemsPage">Mostrar:</label>
+		<select
+			class="select-items"
+			id="itemsPage"
+			(change)="changePageSize($event)"
+		>
+			@for (item of [5, 10, 20]; track $index) {
+				<option [value]="item" [selected]="item === pageSize">
+					{{ item }}
+				</option>
+			}
+		</select>
+	</div>
+</div>
