@@ -8,7 +8,7 @@ import { Component, Input } from '@angular/core';
   styleUrl: './table.component.css'
 })
 export class TableComponent {
-  @Input() accionEditar!: (row: any) => void;
+  	@Input() accionEditar!: (row: any) => void;
 	@Input() accionEliminar!: (row: any) => void;
 	@Input() acciones!: boolean;
 
@@ -26,10 +26,6 @@ export class TableComponent {
 	//#endregion
 	@Input() columnMappings: Record<string, string> = {}; // Recibe el mapeo desde fuera
 	@Input() filterValue = '';
-
-	toggleStatus(row: Record<string, any>, key: string): void {
-		row[key] = !row[key]; // Cambia el valor booleano de estado
-	}
 
 	// Filas originales
 	rows: any[] = [];

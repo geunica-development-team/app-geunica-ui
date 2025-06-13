@@ -60,7 +60,7 @@
               <h5 class="card-title mb-0">Tareas</h5>
               <div class="input-group" style="width: 250px;">
                 <span class="input-group-text"><i class="fas fa-search"></i></span>
-                <input type="text" class="form-control" placeholder="Search by Subject">
+                <input (input)="applyFilter($event)" type="text" class="form-control" placeholder="Buscar tarea...">
               </div>
             </div>
             <div class="card-body p-3">

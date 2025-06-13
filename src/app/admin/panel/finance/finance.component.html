@@ -1,0 +1,155 @@
+<app-panel-header title="Finanzas" />
+  
+<div class="row g-4">
+    <!-- Gráfico de Recaudación de Pagos -->
+    <div class="col-12 col-lg-6">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0">Recaudación de Pagos</h5>
+          <button class="btn btn-sm btn-icon">
+            <i class="fas fa-ellipsis-h"></i>
+          </button>
+        </div>
+        <div class="card-body">
+          <div class="fees-chart">
+            <!-- Aquí iría el gráfico real con una librería como Chart.js -->
+            <div class="chart-placeholder">
+              <div class="chart-line"></div>
+              <div class="chart-point" style="left: 70%; top: 30%;">
+                <div class="point-value">{{ formatCurrency(152927) }}</div>
+              </div>
+            </div>
+            <div class="chart-y-axis">
+              <div class="y-label">7,500</div>
+              <div class="y-label">5,000</div>
+              <div class="y-label">2,500</div>
+              <div class="y-label">1,000</div>
+              <div class="y-label">0</div>
+            </div>
+            <div class="chart-x-axis">
+              @for (month of chartData.months; track month) {
+                <div class="x-label">{{ month }}</div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Estado de Pagos -->
+    <div class="col-12 col-lg-3">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0">Estado de Pagos</h5>
+          <button class="btn btn-sm btn-icon">
+            <i class="fas fa-ellipsis-h"></i>
+          </button>
+        </div>
+        <div class="card-body">
+          <div class="fee-status-item">
+            <div class="fee-status-value">{{ paidCount }}</div>
+            <div class="fee-status-label paid">
+              <i class="fas fa-check-circle"></i> Pagado
+            </div>
+          </div>
+          <div class="fee-status-item">
+            <div class="fee-status-value">{{ pendingCount }}</div>
+            <div class="fee-status-label pending">
+              <i class="fas fa-clock"></i> Pendiente
+            </div>
+          </div>
+          <div class="fee-status-item">
+            <div class="fee-status-value">{{ overdueCount }}</div>
+            <div class="fee-status-label overdue">
+              <i class="fas fa-exclamation-circle"></i> Vencido
+            </div>
+          </div>
+          <div class="text-center mt-3">
+            <select class="form-select form-select-sm">
+              <option>Anual</option>
+              <option>Semestral</option>
+              <option>Trimestral</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Resumen de Pagos -->
+    <div class="col-12 col-lg-3">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0">Resumen de Pagos</h5>
+          <div class="d-flex">
+            <select class="form-select form-select-sm me-2">
+              <option>2023-2024</option>
+              <option>2022-2023</option>
+            </select>
+            <select class="form-select form-select-sm">
+              <option>Anual</option>
+              <option>Mensual</option>
+            </select>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="fee-overview-grid">
+            <div class="fee-overview-item">
+              <div class="fee-overview-header">
+                <div class="fee-overview-title">Monto Total</div>
+                <div class="fee-overview-growth">
+                  <i class="fas fa-arrow-up"></i> 10%
+                </div>
+              </div>
+              <div class="fee-overview-amount">{{ formatCurrency(totalAmount) }}</div>
+              <div class="fee-overview-chart"></div>
+            </div>
+            
+            <div class="fee-overview-item">
+              <div class="fee-overview-header">
+                <div class="fee-overview-title">Total Hospedaje</div>
+                <div class="fee-overview-growth">
+                  <i class="fas fa-arrow-up"></i> 5%
+                </div>
+              </div>
+              <div class="fee-overview-amount">{{ formatCurrency(totalHostel) }}</div>
+              <div class="fee-overview-chart"></div>
+            </div>
+            
+            <div class="fee-overview-item">
+              <div class="fee-overview-header">
+                <div class="fee-overview-title">Total Matrícula</div>
+                <div class="fee-overview-growth">
+                  <i class="fas fa-arrow-up"></i> 12%
+                </div>
+              </div>
+              <div class="fee-overview-amount">{{ formatCurrency(totalTuition) }}</div>
+              <div class="fee-overview-chart"></div>
+            </div>
+            
+            <div class="fee-overview-item">
+              <div class="fee-overview-header">
+                <div class="fee-overview-title">Total Media Pensión</div>
+                <div class="fee-overview-growth">
+                  <i class="fas fa-arrow-up"></i> 8%
+                </div>
+              </div>
+              <div class="fee-overview-amount">{{ formatCurrency(totalDayBoarding) }}</div>
+              <div class="fee-overview-chart"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Tabla de Recaudación de Pagos -->
+  <div class="card mt-4">
+    <app-table
+      #assignmentsTable
+      [columns]="columns"
+      [originalRows]="rows"
+      [columnMappings]="columnMappings"
+      [pageSize]="10"
+      [acciones]="true"
+    />
+</div>

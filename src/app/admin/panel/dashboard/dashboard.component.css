@@ -1,0 +1,515 @@
+/* Tarjeta de bienvenida */
+.welcome-card {
+  background-color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.welcome-title {
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 1rem;
+}
+
+.welcome-text {
+  color: #64748b;
+  line-height: 1.6;
+}
+
+.welcome-illustration {
+  max-width: 100%;
+  height: auto;
+  max-height: 180px;
+}
+
+/* Tarjetas de estadísticas */
+.stats-card {
+  padding: 1.5rem;
+  border-radius: 12px;
+  color: #1e293b;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.students-card {
+  background-color: #fef9c3;
+}
+
+.teachers-card {
+  background-color: #ddd6fe;
+}
+
+.employees-card {
+  background-color: #fef08a;
+}
+
+.stats-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.stats-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.stats-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+/* Tarjetas generales */
+.card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  margin-bottom: 1.5rem;
+}
+
+.card-header {
+  background-color: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 1rem 1.25rem;
+}
+
+.card-title {
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.btn-icon {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  color: #64748b;
+  background-color: #f1f5f9;
+  border: none;
+}
+
+.btn-icon:hover {
+  background-color: #e2e8f0;
+  color: #1e293b;
+}
+
+/* Estadísticas de estudiantes */
+.student-stats {
+  text-align: center;
+}
+
+.gender-charts {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.gender-chart {
+  position: relative;
+  width: 100px;
+  height: 100px;
+}
+
+.chart-circle {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.male .chart-circle {
+  background: conic-gradient(#3b82f6 0% 53%, #e2e8f0 53% 100%);
+}
+
+.female .chart-circle {
+  background: conic-gradient(#facc15 0% 47%, #e2e8f0 47% 100%);
+}
+
+.chart-percentage {
+  background-color: white;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #1e293b;
+}
+
+.gender-counts {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.male-count, .female-count {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #64748b;
+}
+
+.male-count i {
+  color: #3b82f6;
+}
+
+.female-count i {
+  color: #facc15;
+}
+
+/* Tablón de anuncios */
+.announcement-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.announcement-item {
+  display: flex;
+  padding: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.announcement-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
+.announcement-event .announcement-icon {
+  background-color: #fef9c3;
+  color: #ca8a04;
+}
+
+.announcement-info .announcement-icon {
+  background-color: #dbeafe;
+  color: #2563eb;
+}
+
+.announcement-title {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: #1e293b;
+}
+
+.announcement-text {
+  color: #64748b;
+  font-size: 0.9rem;
+  margin-bottom: 0;
+}
+
+/* Resumen financiero */
+.financial-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.financial-item {
+  background-color: #f8fafc;
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.financial-label {
+  color: #64748b;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+}
+
+.financial-amount {
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #1e293b;
+}
+
+.financial-growth {
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+}
+
+.financial-growth.positive {
+  background-color: #dcfce7;
+  color: #16a34a;
+}
+
+.financial-growth.negative {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+/* Estado de pagos */
+.fee-status-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.fee-status-item:last-child {
+  border-bottom: none;
+}
+
+.fee-status-value {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #1e293b;
+}
+
+.fee-status-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+}
+
+.fee-status-label.paid {
+  color: #16a34a;
+}
+
+.fee-status-label.pending {
+  color: #ca8a04;
+}
+
+.fee-status-label.overdue {
+  color: #dc2626;
+}
+
+/* Mensajes */
+.message-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.message-item {
+  display: flex;
+  padding: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.message-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
+.message-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+}
+
+.message-name {
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.message-time {
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+.message-text {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+/* Gráfico de ingresos */
+.chart-legend {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.income-color {
+  background-color: #3b82f6;
+}
+
+.expense-color {
+  background-color: #a78bfa;
+}
+
+.earnings-chart {
+  height: 300px;
+  position: relative;
+}
+
+.chart-placeholder {
+  height: 100%;
+  position: relative;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.income-line {
+  position: absolute;
+  top: 30%;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, 
+    rgba(59, 130, 246, 0.2) 0%, 
+    rgba(59, 130, 246, 1) 50%, 
+    rgba(59, 130, 246, 0.2) 100%);
+}
+
+.expense-line {
+  position: absolute;
+  top: 60%;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, 
+    rgba(167, 139, 250, 0.2) 0%, 
+    rgba(167, 139, 250, 1) 50%, 
+    rgba(167, 139, 250, 0.2) 100%);
+}
+
+.chart-info {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 0.75rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.chart-date {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin-bottom: 0.25rem;
+}
+
+.chart-amount {
+  font-weight: 600;
+}
+
+.chart-amount.income {
+  color: #3b82f6;
+}
+
+.chart-amount.expense {
+  color: #a78bfa;
+}
+
+.chart-x-axis {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+}
+
+.month-label {
+  font-size: 0.8rem;
+  color: #64748b;
+  text-align: center;
+  flex: 1;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .gender-charts {
+    gap: 1rem;
+  }
+  
+  .gender-chart {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .chart-percentage {
+    width: 55px;
+    height: 55px;
+    font-size: 1rem;
+  }
+  
+  .stats-value {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 1rem;
+  }
+  
+  .welcome-illustration {
+    max-height: 150px;
+    margin-top: 1rem;
+  }
+  
+  .stats-card {
+    padding: 1rem;
+  }
+  
+  .earnings-chart {
+    height: 250px;
+  }
+}
+
+@media (max-width: 576px) {
+  .gender-charts {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .gender-counts {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .financial-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .financial-growth {
+    align-self: flex-end;
+  }
+}

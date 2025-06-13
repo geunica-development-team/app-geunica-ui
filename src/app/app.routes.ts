@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authRoutes } from './pages/auth/auth.routes';
-import { panelRoutes } from './student/panel/panel.routes';
+import { studentPanelRoutes } from './student/panel/panelStudent.routes';
+import { adminPanelRoutes } from './admin/panel/panelAdmin.routes';
 
 export const routes: Routes = [
     {
@@ -9,5 +10,6 @@ export const routes: Routes = [
         pathMatch: 'full'
     },
     ... authRoutes,
-    ... panelRoutes
+    ... studentPanelRoutes,
+    ... adminPanelRoutes
 ];

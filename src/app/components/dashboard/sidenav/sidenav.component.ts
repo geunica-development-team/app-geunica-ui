@@ -1,28 +1,13 @@
-import { Component } from '@angular/core';
-import { generalItems, menuItems } from './sidenav-data';
+import { Component, Input } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-sidenav',
-  imports: [],
+  imports: [RouterLinkActive, RouterLink],
   templateUrl: './sidenav.component.html',
   styleUrl: './sidenav.component.css'
 })
 export class SidenavComponent {
-
-  Items = menuItems;
-  GeneralItems = generalItems;
-
-  constructor() { }
-  onMenuClick(item: any): void {
-    if (item.action === 'logout') {
-      this.logout();
-    } else {
-      // Aquí puedes implementar la navegación
-      console.log('Navegando a:', item.route);
-    }
-  }
-  logout(): void {
-    // Implementar lógica de cierre de sesión
-    console.log('Cerrando sesión...');
-  }
+  @Input({required : true}) menuItems: any[] = [];
+  @Input({required : true}) generalItems: any[] = [];
 }

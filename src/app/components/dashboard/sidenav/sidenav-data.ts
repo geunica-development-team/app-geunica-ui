@@ -1,4 +1,4 @@
-export const menuItems = [
+export const menuItemsStudent = [
     { 
       icon: 'fas fa-home', 
       label: 'Dashboard', 
@@ -30,6 +30,36 @@ export const menuItems = [
       icon: 'fas fa-calendar-alt', 
       label: 'Cronograma', 
       route: '/cronograma' 
+    }
+];
+
+export const menuItemsAdmin = [
+    { 
+      icon: 'fas fa-home', 
+      label: 'Dashboard', 
+      route: '/admin/panel/dashboard',
+      active: true 
+    },
+    { 
+      icon: 'fa-solid fa-users', 
+      label: 'Usuarios', 
+      route: '/admin/panel/usuarios' 
+    },
+    { 
+      icon: 'fa-solid fa-school', 
+      label: 'Gestión Académica', 
+      route: '/admin/panel/gestion-academica' 
+    },
+    { 
+      icon: 'fa-solid fa-coins', 
+      label: 'Finanzas', 
+      route: '/admin/panel/finanzas' 
+    },
+    { 
+      icon: 'fas fa-bullhorn', 
+      label: 'Anuncios', 
+      route: '/admin/panel/anuncios',
+      badge: 24 
     }
 ];
 

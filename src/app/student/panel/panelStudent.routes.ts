@@ -2,9 +2,9 @@ import { Routes } from "@angular/router";
 import { PanelComponent } from "./panel.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 
-export const panelRoutes: Routes = [
+export const studentPanelRoutes: Routes = [
     {
-        path: 'panel',
+        path: 'student/panel',
         component: PanelComponent,
         children: [
             {

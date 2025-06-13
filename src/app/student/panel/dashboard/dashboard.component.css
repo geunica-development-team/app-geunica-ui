@@ -74,50 +74,6 @@
   border-radius: 4px;
 }
 
-/* Calendar */
-.calendar-grid {
-  font-size: 0.9rem;
-}
-
-.calendar-header {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.calendar-day-header {
-  text-align: center;
-  font-weight: 600;
-  color: #718096;
-  padding: 0.5rem 0;
-  font-size: 0.8rem;
-}
-
-.calendar-days {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 0.25rem;
-}
-
-.calendar-day {
-  text-align: center;
-  padding: 0.5rem;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.calendar-day:hover {
-  background-color: #edf2f7;
-}
-
-.calendar-day.today {
-  background-color: #667eea;
-  color: white;
-  font-weight: 600;
-}
-
 /* Attendance Chart */
 .attendance-chart {
   display: flex;
@@ -189,7 +145,7 @@
 /* Schedule */
 .schedule-item {
   border-bottom: 1px solid #e2e8f0;
-  padding-bottom: 1rem;
+  margin-top: 0.4rem;
 }
 
 .schedule-item:last-child {
