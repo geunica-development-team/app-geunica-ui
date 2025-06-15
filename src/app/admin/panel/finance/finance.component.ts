@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
 import { TableComponent } from '../../../components/table/table.component';
 import { FeeRecord } from '../../services/payments.service';
@@ -16,10 +16,9 @@ export class FinanceComponent {
   overdueCount: number = 208;
   
   // Resumen de pagos
-  totalAmount: number = 3500000;
-  totalHostel: number = 1200000;
-  totalTuition: number = 2000000;
-  totalDayBoarding: number = 300000;
+  totalAmount: number = 35000;
+  totalTuition: number = 2000;
+  totalDayBoarding: number = 3000;
   
   // Datos del gráfico
   chartData = {
@@ -136,10 +135,6 @@ export class FinanceComponent {
     // Inicialización del componente
   }
   
-  formatCurrency(amount: number): string {
-    return new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(amount);
-  }
-  
   getStatusClass(status: string): string {
     switch (status) {
       case 'paid': return 'status-paid';
@@ -164,5 +159,17 @@ export class FinanceComponent {
   
   isSelected(record: FeeRecord): boolean {
     return this.selectedRecord === record;
+  }
+
+  //APLICAR FILTRO EN LA TABLA
+  @ViewChild('paymentsTable') paymentsTable?: TableComponent;
+
+  applyFilter(event: Event) {
+    if (this.paymentsTable) {
+      this.paymentsTable.filterValue = (
+        event.target as HTMLInputElement
+      ).value;
+      this.paymentsTable.updateTable();
+    }
   }
 }

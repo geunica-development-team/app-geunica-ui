@@ -11,6 +11,8 @@ export class TableComponent {
   	@Input() accionEditar!: (row: any) => void;
 	@Input() accionEliminar!: (row: any) => void;
 	@Input() acciones!: boolean;
+	@Input() editarFila!: boolean;
+	@Input() eliminarFila!: boolean
 
  	@Input() columns: string[] = [];
 	//#region originalRows

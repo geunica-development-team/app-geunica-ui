@@ -33,15 +33,15 @@
 }
 
 .students-card {
-  background-color: #fef9c3;
+  background-color: #f3c9b6;
 }
 
 .teachers-card {
-  background-color: #ddd6fe;
+  background-color: #b3eeda;
 }
 
 .employees-card {
-  background-color: #fef08a;
+  background-color: #f7eb97;
 }
 
 .stats-header {
@@ -57,7 +57,7 @@
 }
 
 .stats-value {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
 }
 
@@ -303,6 +303,7 @@
 .message-item {
   display: flex;
   padding: 1rem;
+  width: 100%;
   border-bottom: 1px solid #e2e8f0;
 }
 
@@ -319,6 +320,10 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.message-content {
+  width: 100%;
 }
 
 .message-header {

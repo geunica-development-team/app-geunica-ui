@@ -5,6 +5,7 @@ export interface User {
   dni: string;
   phone: string;
   email: string;
+  state: string;
 }
 
 
