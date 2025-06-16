@@ -8,7 +8,7 @@
 						<th>{{ column }}</th>
 					}
 					@if (acciones) {
-						<th>ACCIONES</th>
+						<th class="text-center">ACCIONES</th>
 					}
 				</tr>
 			</thead>
@@ -21,36 +21,32 @@
 							</td>
 						}
 						@if (acciones) {
-							@if (editarFila) {
-								<td>
-									<div class="btn-group me-2" role="group">
-										<button type="button" class="btn btn-bg-yellow pt-2" (click)="accionEliminar(row)">
-											<i class="fa-solid fa-trash"></i>
-										</button>
-									</div>
-								</td>
-							}
-							@else if (eliminarFila) {
-								<td>
-									<div class="btn-group me-2" role="group">
-										<button type="button" class="btn btn-bg-yellow pt-2" (click)="accionEliminar(row)">
-											<i class="fa-solid fa-trash"></i>
-										</button>
-									</div>
-								</td>
-							}
-							@else {
-								<td>
-									<div class="btn-group me-2" role="group">
-										<button type="button" class="btn btn-bg-yellow pt-2" (click)="accionEditar(row)">
+							<td class="text-center">
+								@if (editarFila) {
+									<div class="me-2" role="group">
+										<button type="button" class="btn pt-2" (click)="accionEditar(row)">
 											<i class="fa-solid fa-pencil"></i>
 										</button>
-										<button type="button" class="btn btn-bg-yellow pt-2" (click)="accionEliminar(row)">
+									</div>
+								}
+								@else if (eliminarFila) {
+									<div class="me-2" role="group">
+										<button type="button" class="btn pt-2" (click)="accionEliminar(row)">
 											<i class="fa-solid fa-trash"></i>
 										</button>
 									</div>
-								</td>
-							}
+								}
+								@else {
+									<div class="me-2" role="group">
+										<button type="button" class="btn pt-2" (click)="accionEditar(row)">
+											<i class="fa-solid fa-pencil"></i>
+										</button>
+										<button type="button" class="btn pt-2" (click)="accionEliminar(row)">
+											<i class="fa-solid fa-trash"></i>
+										</button>
+									</div>
+								}
+							</td>
 						}
 					</tr>
 				}
