@@ -1,0 +1,12 @@
+<div class="app-layout">
+    <app-sidenav 
+        [menuItems]="menuItemsStudent"
+        [generalItems]="generalItems"
+    />
+    <div class="main-content">
+        <app-header/>
+        <div class="page-content">
+            <router-outlet />
+        </div>
+    </div>
+</div>

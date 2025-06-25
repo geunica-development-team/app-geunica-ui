@@ -1,0 +1,272 @@
+<app-panel-header title="Dashboard" />
+<div class="dashboard-container">
+  <div class="row g-4">
+    <!-- Primera fila -->
+    <div class="col-12 col-lg-8">
+      <!-- Tarjeta de bienvenida -->
+      <div class="card welcome-card mb-4">
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col-md-8">
+              <h2 class="welcome-title">¡Bienvenido, Equipo {{ schoolName }}!</h2>
+              <p class="welcome-text">
+                Administre las operaciones de su escuela con facilidad. Manténgase actualizado sobre gestión académica, asistencia, finanzas y más, todo en un solo lugar. ¡Sigamos construyendo un futuro más brillante juntos!
+              </p>
+            </div>
+            <div class="col-md-4 text-center">
+              <img src="https://cdn-icons-png.flaticon.com/256/4481/4481273.png" alt="Administración escolar" class="welcome-illustration">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Estadísticas de estudiantes y tablón de anuncios -->
+      <div class="row g-4">
+        <!-- Estadísticas de estudiantes -->
+        <div class="col-12 col-md-6">
+          <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="card-title mb-0">Estudiantes</h5>
+              <button class="btn btn-sm btn-icon">
+                <i class="fas fa-ellipsis-h"></i>
+              </button>
+            </div>
+            <div class="card-body">
+              <div class="student-stats">
+                <div class="gender-charts">
+                  <div class="gender-chart male">
+                    <div class="chart-circle">
+                      <div class="chart-percentage">{{ malePercentage }}%</div>
+                    </div>
+                  </div>
+                  <div class="gender-chart female">
+                    <div class="chart-circle">
+                      <div class="chart-percentage">{{ femalePercentage }}%</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="gender-counts mt-3">
+                  <div class="male-count">
+                    <i class="fas fa-male text-primary"></i>
+                    <span>{{ formatNumber(maleCount) }} (Niños)</span>
+                  </div>
+                  <div class="female-count">
+                    <i class="fas fa-female text-warning"></i>
+                    <span>{{ formatNumber(femaleCount) }} (Niñas)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tablón de anuncios -->
+        <div class="col-12 col-md-6">
+          <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="card-title mb-0">Tablón de Anuncios</h5>
+              <a href="#" class="text-muted small">Ver todo</a>
+            </div>
+            <div class="card-body p-0">
+              <div class="announcement-list">
+                @for (announcement of announcements; track announcement.title) {
+                  <div class="announcement-item" [class]="getAnnouncementClass(announcement.type)">
+                    <div class="announcement-icon">
+                      <i [class]="announcement.icon"></i>
+                    </div>
+                    <div class="announcement-content">
+                      <h6 class="announcement-title">{{ announcement.title }}</h6>
+                      <p class="announcement-text">{{ announcement.description }}</p>
+                    </div>
+                  </div>
+                }
+                <div class="p-3 text-center">
+                  <button class="btn btn-sm btn-outline-primary">
+                    <i class="fas fa-plus me-1"></i> Añadir Nuevo
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gráfico de ingresos -->
+      <div class="card mt-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0">Ingresos</h5>
+          <button class="btn btn-sm btn-icon">
+            <i class="fas fa-ellipsis-h"></i>
+          </button>
+        </div>
+        <div class="card-body">
+          <div class="chart-legend mb-3">
+            <div class="legend-item">
+              <span class="legend-color income-color"></span>
+              <span>Ingresos</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-color expense-color"></span>
+              <span>Gastos</span>
+            </div>
+          </div>
+          <div class="earnings-chart mb-4">
+            <!-- Aquí iría el gráfico real con una librería como Chart.js -->
+            <div class="chart-placeholder">
+              <div class="income-line"></div>
+              <div class="expense-line"></div>
+              <div class="chart-info">
+                <div class="chart-date">Sep 14, 2023</div>
+                <div class="chart-amount income">{{ formatCurrency(837000) }}</div>
+                <div class="chart-amount expense">{{ formatCurrency(500000) }}</div>
+              </div>
+            </div>
+            <div class="chart-x-axis">
+              @for (month of chartData.months; track month) {
+                <div class="month-label">{{ month }}</div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Segunda columna -->
+    <div class="col-12 col-lg-4">
+      <!-- Tarjetas de estadísticas -->
+      <div class="stats-card students-card mb-4">
+        <div class="stats-header">
+          <div class="stats-title">Estudiantes</div>
+          <button class="btn btn-sm btn-icon">
+            <i class="fas fa-ellipsis-h"></i>
+          </button>
+        </div>
+        <div class="stats-value">{{ formatNumber(totalStudents) }}</div>
+      </div>
+
+      <div class="stats-card teachers-card mb-4">
+        <div class="stats-header">
+          <div class="stats-title">Profesores</div>
+          <button class="btn btn-sm btn-icon">
+            <i class="fas fa-ellipsis-h"></i>
+          </button>
+        </div>
+        <div class="stats-value">{{ teacherCount }}</div>
+      </div>
+
+      <div class="stats-card employees-card mb-4">
+        <div class="stats-header">
+          <div class="stats-title">Empleados</div>
+          <button class="btn btn-sm btn-icon">
+            <i class="fas fa-ellipsis-h"></i>
+          </button>
+        </div>
+        <div class="stats-value">{{ employeeCount }}</div>
+      </div>
+
+      <!-- Resumen financiero -->
+      <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0">Resumen Financiero</h5>
+          <div class="d-flex">
+            <select class="form-select form-select-sm me-2">
+              <option>2023-2024</option>
+              <option>2022-2023</option>
+            </select>
+            <select class="form-select form-select-sm">
+              <option>Anual</option>
+              <option>Mensual</option>
+            </select>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="financial-summary">
+            <div class="financial-item income-item">
+              <div class="financial-details">
+                <div class="financial-label">Ingresos Totales</div>
+                <div class="financial-amount">{{ formatCurrency(totalIncome) }}</div>
+              </div>
+              <div class="financial-growth positive">
+                <i class="fas fa-arrow-up"></i> {{ incomeGrowth }}%
+              </div>
+            </div>
+            <div class="financial-item expense-item">
+              <div class="financial-details">
+                <div class="financial-label">Gastos Totales</div>
+                <div class="financial-amount">{{ formatCurrency(totalExpenses) }}</div>
+              </div>
+              <div class="financial-growth negative">
+                <i class="fas fa-arrow-up"></i> {{ expensesGrowth }}%
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Estado de pagos -->
+      <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0">Estado de Pagos</h5>
+          <button class="btn btn-sm btn-icon">
+            <i class="fas fa-ellipsis-h"></i>
+          </button>
+        </div>
+        <div class="card-body">
+          <div class="fee-status-item">
+            <div class="fee-status-value">{{ formatNumber(paidFees) }}</div>
+            <div class="fee-status-label paid">
+              <i class="fas fa-check-circle"></i> Pagado
+            </div>
+          </div>
+          <div class="fee-status-item">
+            <div class="fee-status-value">{{ formatNumber(pendingFees) }}</div>
+            <div class="fee-status-label pending">
+              <i class="fas fa-clock"></i> Pendiente
+            </div>
+          </div>
+          <div class="fee-status-item">
+            <div class="fee-status-value">{{ formatNumber(overdueFees) }}</div>
+            <div class="fee-status-label overdue">
+              <i class="fas fa-exclamation-circle"></i> Vencido
+            </div>
+          </div>
+          <div class="text-center mt-3">
+            <select class="form-select form-select-sm">
+              <option>Anual</option>
+              <option>Semestral</option>
+              <option>Trimestral</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mensajes -->
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0">Mensajes</h5>
+          <button class="btn btn-sm btn-icon">
+            <i class="fas fa-ellipsis-h"></i>
+          </button>
+        </div>
+        <div class="card-body p-0">
+          <div class="message-list">
+            @for (message of messages; track message.name) {
+              <div class="message-item">
+                <div class="message-avatar">
+                  <img [src]="message.avatar" [alt]="message.name">
+                </div>
+                <div class="message-content">
+                  <div class="message-header">
+                    <div class="message-name">{{ message.name }}</div>
+                    <div class="message-time">{{ message.time }}</div>
+                  </div>
+                  <div class="message-text">{{ message.message }}</div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

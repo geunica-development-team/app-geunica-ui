@@ -1,0 +1,111 @@
+.app-header {
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 1rem 0;
+  z-index: 999;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+.header-icon-btn {
+  color: #6b7280 !important;
+  text-decoration: none;
+  padding: 0.5rem !important;
+  margin: 0 0.25rem;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.header-icon-btn:hover {
+  background-color: #f3f4f6;
+  color: #374151 !important;
+}
+
+.header-icon-btn i {
+  font-size: 1.1rem;
+}
+
+.header-profile-btn {
+  padding: 0 !important;
+  border: none !important;
+  background: none !important;
+  margin-left: 0.5rem;
+}
+
+.header-profile-btn::after {
+  display: none !important; /* Ocultar la flecha de Bootstrap */
+}
+
+.header-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e5e7eb;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.header-avatar:hover {
+  border-color: #10b981;
+  transform: scale(1.05);
+}
+
+/* Estilos para el dropdown */
+.custom-dropdown {
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  padding: 0.5rem 0;
+  min-width: 200px;
+}
+
+.dropdown-item {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #f3f4f6;
+}
+
+.dropdown-item i {
+  width: 16px;
+  text-align: center;
+}
+
+.dropdown-divider {
+  margin: 0.5rem 0;
+}
+
+.badge {
+  font-size: 0.7rem;
+  padding: 0.2rem 0.4rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .header-icon-btn {
+    width: 36px;
+    height: 36px;
+    margin: 0 0.1rem;
+  }
+  
+  .header-avatar {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+@media (max-width: 576px) {
+  .app-header {
+    padding: 0.75rem 0;
+  }
+}

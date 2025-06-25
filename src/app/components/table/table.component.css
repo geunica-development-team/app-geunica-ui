@@ -1,0 +1,51 @@
+.table th, .table td{
+    vertical-align: middle;
+}
+
+/* Estilo para el fondo del encabezado */
+.table th {
+    font-size: 15px;
+    font-weight: 600;
+    border-bottom: none;
+    background-color: #F1F4F9;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+  
+/* Añadir borde redondeado en la parte superior */
+.table thead th:first-child {
+    border-top-left-radius: 0.75rem;
+    border-bottom-left-radius: 0.75rem;
+}
+
+.table thead th:last-child {
+    border-top-right-radius: 0.75rem;
+    border-bottom-right-radius: 0.75rem;
+}
+
+.table td {
+    font-size: 16px;
+}
+
+/*Paginado*/
+.btn-pagination {
+  border: none !important;
+  background: none;
+  color: #202224;
+  text-align: center;
+  cursor: pointer;
+/* Para que el estilo no se interponga con el del navegador uwu */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+.btn-pagination:disabled {
+  color: #818181;
+}
+.no-results{
+  width: 100%;
+  margin-top: 2rem;
+  text-align: center;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #dee2e6;
+}

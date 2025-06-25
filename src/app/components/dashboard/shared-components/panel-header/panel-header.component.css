@@ -1,0 +1,16 @@
+.header-back-btn {
+  color: #374151 !important;
+  text-decoration: none;
+  font-size: 1.1rem;
+  transition: color 0.2s ease;
+}
+
+.header-back-btn:hover {
+  color: #10b981 !important;
+}
+
+.header-title {
+  color: #111827;
+  font-weight: 600;
+  font-size: 1.5rem;
+}

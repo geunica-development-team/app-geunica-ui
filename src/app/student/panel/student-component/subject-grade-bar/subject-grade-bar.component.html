@@ -1,0 +1,13 @@
+<div class="grade-bar-container">
+  <div class="grade-bar">
+    <div class="percentage-section" [style.width.%]="porcentaje" [style.background-color]="color">
+      <span class="fs-6 fw-semibold">{{ porcentaje }}%</span>
+    </div>
+    <div class="subject-section">
+      <span class="fs-6 fw-semibold">{{ materia }}</span>
+    </div>
+  </div>
+  <div class="score-section">
+    <span class="fs- fw-semibold">{{ notaMateria }}</span>
+  </div>
+</div>

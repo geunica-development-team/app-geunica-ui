@@ -1,0 +1,56 @@
+<div class="sidenav">
+  <!-- Header -->
+  <div class="sidenav-header">
+    <div class="d-flex align-items-center">
+      <div class="logo-icon">
+        <i class="fas fa-graduation-cap"></i>
+      </div>
+      <h5 class="mb-0 ms-2 text-white">Colegio</h5>
+    </div>
+  </div>
+
+  <!-- Menu Section -->
+  <div class="sidenav-section">
+    <div class="section-title">MENU</div>
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        @for (item of menuItems; track $index) {
+            <a 
+              class="nav-link sidenav-link"
+              [routerLink]="item.route"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{exact: item.exactMatch || false}"
+              >
+              <i [class]="item.icon"></i>
+              <span class="ms-3">{{ item.label }}</span>
+              @if (item.badge) {
+                <span class="badge bg-light text-success ms-auto">
+                    {{ item.badge }}
+                </span>
+              }
+            </a>
+        }
+      </li>
+    </ul>
+  </div>
+
+  <!-- General Section -->
+  <div class="sidenav-section">
+    <div class="section-title">GENERAL</div>
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        @for (item of generalItems; track $index) {
+            <a 
+              class="nav-link sidenav-link"
+              [routerLink]="item.route"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{exact: item.exactMatch || false}"
+              >
+              <i [class]="item.icon"></i>
+              <span class="ms-3">{{ item.label }}</span>
+            </a>
+        }
+      </li>
+    </ul>
+  </div>
+</div>

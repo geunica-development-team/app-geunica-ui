@@ -1,0 +1,9 @@
+@import url(../public/css/fonts.css);
+@import url(../public/css/colors.css);
+@import url(../public/css/buttons.css);
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
