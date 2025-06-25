@@ -95,7 +95,7 @@ export const generalItems = [
       route: '/configuracion' 
     },
         { 
-      icon: 'fas fa-exit', 
+      icon: 'fas fa-cog', 
       label: 'Salir', 
       route: '/configuracion' 
     },
