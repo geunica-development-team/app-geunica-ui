@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { authRoutes } from './pages/auth/auth.routes';
 import { studentPanelRoutes } from './student/panel/panelStudent.routes';
 import { adminPanelRoutes } from './admin/panel/panelAdmin.routes';
+import {  teacherPanelRoutes } from './teacher/panel/panelTeacher.routes';
 
 export const routes: Routes = [
     {
@@ -11,5 +12,6 @@ export const routes: Routes = [
     },
     ... authRoutes,
     ... studentPanelRoutes,
-    ... adminPanelRoutes
+    ... adminPanelRoutes,
+    ... teacherPanelRoutes
 ];
