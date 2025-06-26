@@ -1,6 +1,7 @@
 import { Routes } from "@angular/router";
-import { PanelComponent } from "./panel.component";
-import { DashboardComponent } from "./dashboard/dashboard.component";
+import { PanelComponent } from "./panel/panel.component";
+import { DashboardComponent } from "./panel/dashboard/dashboard.component";
+import { CoursesComponent } from "./panel/courses/courses.component";
 
 export const studentPanelRoutes: Routes = [
     {
@@ -15,7 +16,11 @@ export const studentPanelRoutes: Routes = [
             {
                 path: 'dashboard',
                 component: DashboardComponent
-            }
+            },
+            {
+                path: 'courses',
+                component: CoursesComponent
+            },
         ]
     }
 ]
