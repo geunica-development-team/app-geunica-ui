@@ -11,5 +11,5 @@ export class CardCoursesComponent {
   @Input() title = '';
   @Input() subtitle?: string;
   @Input() imageUrl?: string;
-  @Input() footer?: string;
+  @Input() teacher!: string;
 }
