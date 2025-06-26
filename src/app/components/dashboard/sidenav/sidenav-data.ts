@@ -2,13 +2,14 @@ export const menuItemsStudent = [
     { 
       icon: 'fas fa-home', 
       label: 'Dashboard', 
-      route: '/dashboard',
+      route: 'dashboard',
       active: true 
     },
     { 
       icon: 'fas fa-chart-bar', 
       label: 'Mis cursos', 
-      route: '/cursos' 
+      route: 'courses',
+      active: true
     },
     { 
       icon: 'fas fa-sticky-note', 
