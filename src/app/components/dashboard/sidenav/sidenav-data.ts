@@ -33,6 +33,46 @@ export const menuItemsStudent = [
     }
 ];
 
+export const menuItemsTeacher = [
+    { 
+      icon: 'fas fa-home', 
+      label: 'Dashboard', 
+      route: '/dashboard',
+      active: true 
+    },
+    { 
+      icon: 'fas fa-chart-bar', 
+      label: 'Cursos Asignados', 
+      route: '/CursosAsignados' 
+    },
+    { 
+      icon: 'fas fa-sticky-note', 
+      label: 'Gestion de Notas', 
+      route: '/GestionNotas' 
+    },
+    { 
+      icon: 'fas fa-clock', 
+      label: 'Reportes y estadsiticas', 
+      route: '/Reportes' 
+    },
+    { 
+      icon: 'fas fa-bullhorn', 
+      label: 'Gestion de asistencias', 
+      route: '/GestionAsistencias',
+      badge: 24 
+    },
+    { 
+      icon: 'fas fa-calendar-alt', 
+      label: 'Anuncios', 
+      route: '/Anuncios' 
+    },
+        { 
+      icon: 'fas fa-calendar-alt', 
+      label: 'Horario', 
+      route: '/Horario' 
+    }
+];
+
 export const menuItemsAdmin = [
     { 
       icon: 'fas fa-home', 
