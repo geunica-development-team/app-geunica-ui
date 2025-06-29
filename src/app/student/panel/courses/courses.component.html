@@ -9,10 +9,12 @@
           class="form-control me-2" 
           type="search" 
           placeholder="Buscar por curso" 
-          aria-label="Buscar">
+          [(ngModel)]="searchTerm"
+          aria-label="Buscar por curso"
+          name="search">
         <button 
           class="btn btn-outline-success" 
-          type="submit">
+          type="button">
           <i class="fas fa-search"></i>
         </button>
       </form>
@@ -22,7 +24,7 @@
   <!-- 2. Fila de las cards -->
   <div class="row g-4">
     <div class="col-12 col-sm-6 col-md-4 col-lg-3"
-         *ngFor="let course of courses">
+         *ngFor="let course of filteredCourses">
       <app-card-courses class="h-100"
         [title]="course.title"
         [code]="course.code"
