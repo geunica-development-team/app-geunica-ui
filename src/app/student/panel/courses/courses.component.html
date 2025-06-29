@@ -1,9 +1,17 @@
-<ng-container *ngFor="let course of courses">
-  <app-card-courses 
-    [title]="course.title"
-    [code]="course.code"
-    [imageUrl]="course.imageUrl"
-    [teacher]="course.teacher">
-  </app-card-courses>
-</ng-container>
+
+  <div class="container py-4">
+    <div class="row g-4">
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let course of courses">
+        <div > <!-- Asegura altura uniforme -->
+          <app-card-courses class="h-100"
+            [title]="course.title"
+            [code]="course.code"
+            [imageUrl]="course.imageUrl"
+            [teacher]="course.teacher">
+          </app-card-courses>
+        </div>
+      </div>
+    </div>
+  </div>
+
 

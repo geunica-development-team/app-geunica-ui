@@ -1,7 +1,17 @@
 {
   "courses": [
     { "id": 1, "title": "Aritmética", "code": "Matemática", "teacher": "Juan Carlos", "imageUrl":"https://picsum.photos/300/150"},
-    { "id": 2, "title": "Física",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"}
+    { "id": 2, "title": "Física",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"},
+    { "id": 3, "title": "Física",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"},
+    { "id": 4, "title": "Física",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"},
+    { "id": 5, "title": "Física",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"},
+    { "id": 6, "title": "Física",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"},
+    { "id": 7, "title": "Física",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"},
+    { "id": 8, "title": "Física",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"},
+    { "id": 9, "title": "Física",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"},
+    { "id": 10, "title": "Física",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"},
+    { "id": 11, "title": "Física",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"},
+    { "id": 12, "title": "Física",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"}
   ],
   "grades": [
     { "id": 1, "courseId": 1, "studentId": 101, "grade": 15.5 },
