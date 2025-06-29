@@ -1,17 +1,35 @@
+<div class="container py-4">
 
-  <div class="container py-4">
-    <div class="row g-4">
-      <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let course of courses">
-        <div > <!-- Asegura altura uniforme -->
-          <app-card-courses class="h-100"
-            [title]="course.title"
-            [code]="course.code"
-            [imageUrl]="course.imageUrl"
-            [teacher]="course.teacher">
-          </app-card-courses>
-        </div>
-      </div>
+  <!-- 1. Fila del buscador -->
+  <div class="row mb-4">
+    <!-- Ocupa la mitad en md+ y todo en xs–sm -->
+    <div class="col-12 col-md-6">
+      <form class="d-flex" role="search">
+        <input 
+          class="form-control me-2" 
+          type="search" 
+          placeholder="Buscar por curso" 
+          aria-label="Buscar">
+        <button 
+          class="btn btn-outline-success" 
+          type="submit">
+          <i class="fas fa-search"></i>
+        </button>
+      </form>
     </div>
   </div>
 
+  <!-- 2. Fila de las cards -->
+  <div class="row g-4">
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3"
+         *ngFor="let course of courses">
+      <app-card-courses class="h-100"
+        [title]="course.title"
+        [code]="course.code"
+        [imageUrl]="course.imageUrl"
+        [teacher]="course.teacher">
+      </app-card-courses>
+    </div>
+  </div>
 
+</div>
