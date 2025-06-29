@@ -3,6 +3,7 @@ import { CardCoursesComponent } from '../../../components/card-courses/card-cour
 import { Course, DataService } from '../../services/dataStudent.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-courses',
