@@ -1,6 +1,9 @@
-<app-card-courses
-  title="Aritmetica"
-  subtitle="Lenguaje"
-  imageUrl="https://picsum.photos/300/150"
-  [teacher]="'Juan Carlos Gutiérrez'">
-</app-card-courses>
+<ng-container *ngFor="let course of courses">
+  <app-card-courses 
+    [title]="course.title"
+    [code]="course.code"
+    [imageUrl]="course.imageUrl"
+    [teacher]="course.teacher">
+  </app-card-courses>
+</ng-container>
+

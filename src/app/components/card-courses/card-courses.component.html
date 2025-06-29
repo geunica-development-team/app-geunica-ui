@@ -2,7 +2,7 @@
   <img *ngIf="imageUrl" [src]="imageUrl" class="card-img-top" [alt]="title">
   <div class="card-body d-flex flex-column">
     <h5 class="card-title">{{ title }}</h5>
-    <h6 *ngIf="subtitle" class="card-subtitle mb-2 text-muted">C0D1G0: {{ subtitle }}</h6><br>
+    <h6 *ngIf="code" class="card-subtitle mb-2 text-muted">C0D1G0: {{ code }}</h6><br>
     <h6  class="card-subtitle mb-1 text-muted">DOCENTE: {{ teacher }}</h6>
     <!-- Slot para contenido libre -->
     <div class="flex-grow-1">

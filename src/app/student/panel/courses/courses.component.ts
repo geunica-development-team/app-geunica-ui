@@ -1,13 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CardCoursesComponent } from '../../../components/card-courses/card-courses.component';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Course, DataService } from '../../services/dataStudent.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-courses',
-  imports: [CardCoursesComponent],
+  standalone: true,
+  imports: [CardCoursesComponent, CommonModule],
   templateUrl: './courses.component.html',
-  styleUrl: './courses.component.css'
+  styleUrls: ['./courses.component.css']
 })
-export class CoursesComponent {
+export class CoursesComponent implements OnInit {
+  courses: Course[] = [];
 
+  constructor(private dataSvc: DataService) {}    // <-- aquí
+  ngOnInit() {
+    this.dataSvc.getCourses().subscribe(c => this.courses = c);
+  }
 }

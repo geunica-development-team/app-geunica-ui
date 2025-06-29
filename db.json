@@ -1,0 +1,11 @@
+{
+  "courses": [
+    { "id": 1, "title": "Aritmética", "code": "Matemática", "teacher": "Juan Carlos", "imageUrl":"https://picsum.photos/300/150"},
+    { "id": 2, "title": "Física",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"}
+  ],
+  "grades": [
+    { "id": 1, "courseId": 1, "studentId": 101, "grade": 15.5 },
+    { "id": 2, "courseId": 1, "studentId": 102, "grade": 18.0 }
+  ]
+
+}

@@ -10,6 +10,6 @@ import { Component, Input } from '@angular/core';
 export class CardCoursesComponent {
   @Input() title = '';
   @Input() imageUrl?: string;
-  @Input() subtitle?: string;
+  @Input() code?: string;
   @Input() teacher!: string;
 }

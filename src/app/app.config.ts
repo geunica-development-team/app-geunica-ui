@@ -15,14 +15,18 @@ import { adminPanelRoutes } from './admin/panel/panelAdmin.routes';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
-    provideRouter(authRoutes),
-    provideRouter(studentPanelRoutes),
-    provideRouter(adminPanelRoutes),
+    provideRouter([
+      ...routes,
+      ...authRoutes,
+      ...studentPanelRoutes,
+      ...adminPanelRoutes
+    ]),
+
     provideClientHydration(
       withHttpTransferCacheOptions({
 				includePostRequests: true,
-			}),
+			}), 
+      withEventReplay()
     ),
     provideAnimations(),
     provideToastr(),
