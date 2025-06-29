@@ -17,6 +17,11 @@ export const menuItemsStudent = [
       route: '/notas' 
     },
     { 
+      icon: 'fas fa-solid fa-money-bill-wave', 
+      label: 'Pagos', 
+      route: '/pagos' 
+    },
+    { 
       icon: 'fas fa-clock', 
       label: 'Asistencia', 
       route: '/asistencia' 
@@ -29,8 +34,8 @@ export const menuItemsStudent = [
     },
     { 
       icon: 'fas fa-calendar-alt', 
-      label: 'Cronograma', 
-      route: '/cronograma' 
+      label: 'Horario', 
+      route: '/horario' 
     }
 ];
 
