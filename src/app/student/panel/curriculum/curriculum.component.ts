@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 export class CurriculumComponent implements OnInit {
     course!: Course;
   curriculum: Curriculum[] = [];
+  mostrarDetalle = false;
 
   constructor(
     private route: ActivatedRoute,
