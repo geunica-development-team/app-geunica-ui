@@ -1,0 +1,53 @@
+<app-panel-header title="Inscripciones" />
+
+<div class="d-flex justify-content-end">
+  <button class="btn-custom-green mb-3">
+    Añadir inscripción manualmente
+  </button>
+</div>
+<!-- Inscripciones Table -->
+<div class="col-12">
+  <div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="card-title mb-0">Inscripciones</h5>
+      <div class="input-group" style="width: 250px;">
+        <span class="input-group-text"><i class="fas fa-search"></i></span>
+        <input (input)="applyFilter($event)" type="text" class="form-control" placeholder="Buscar inscripción...">
+      </div>
+    </div>
+    <div class="card-body p-3">
+      <app-table-enrollment
+        #enrollmentTable
+        [columns]="columns"
+        [originalRows]="rows"
+        [columnMappings]="columnMappings"
+        [pageSize]="10"
+        [accionVer]="onVer"
+        [accionEnviarEvaluacion]="onEnviarEvaluacion"
+
+        [actionContinueRegistration]="onContinueRegistration"
+        
+        [actionMarkPayment]="onMarcarPago"
+        [actionCreateCredentials]="onCrearCredenciales"
+        [actionDeleteEnrollment]="onCrearCredenciales"
+      />
+    </div>
+  </div>
+</div>
+
+<app-modal-continue-registration
+  #modalContinueRegistration
+  (groupAssigned)="ongroupAssigned($event)"
+/>
+
+<app-modal-mark-payment
+  #modalMarkPayment
+/>
+
+<app-modal-create-credentials
+  #modalCreateCredentials
+/>
+
+<app-modal-delete-enrollment
+  #modalDeleteEnrollment
+/>

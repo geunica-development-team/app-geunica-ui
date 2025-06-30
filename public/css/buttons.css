@@ -12,8 +12,36 @@
     border: none;
     background-color: #03704f;
     color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 .btn-custom-green-100:disabled {
+    background-color: #09ac7b;
+    border: none;
+    color: #fff;
+}
+
+
+.btn-custom-green {
+    background-color: #008C62;
+    border: none;
+    border-radius: 7px;
+    padding-bottom: 9px;
+    padding-top: 9px;
+    padding-right: 15px;
+    padding-left: 15px;
+    color: #fff;
+    font-weight: 400;
+}
+.btn-custom-green:hover {
+    transition: 0.5s;
+    border: none;
+    background-color: #03704f;
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.btn-custom-green:disabled {
     background-color: #09ac7b;
     border: none;
     color: #fff;

@@ -40,6 +40,17 @@ export const menuItemsAdmin = [
       route: '/admin/panel/dashboard',
       active: true 
     },
+    {
+      icon: 'fa-solid fa-file-circle-plus', 
+      label: 'Inscripciones', 
+      route: '/admin/panel/inscripciones',
+      active: true 
+    },
+    { 
+      icon: 'fa-solid fa-users', 
+      label: 'Usuarios', 
+      route: '/admin/panel/usuarios' 
+    },
     { 
       icon: 'fa-solid fa-school', 
       label: 'Gestión Académica', 
@@ -69,11 +80,6 @@ export const menuItemsAdmin = [
       icon: 'fa-solid fa-book', 
       label: 'Cursos', 
       route: '/admin/panel/cursos' 
-    },
-    { 
-      icon: 'fa-solid fa-users', 
-      label: 'Usuarios', 
-      route: '/admin/panel/usuarios' 
     },
     { 
       icon: 'fa-solid fa-coins', 

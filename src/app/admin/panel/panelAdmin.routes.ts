@@ -4,6 +4,7 @@ import { DashboardComponent } from "./dashboard/dashboard.component";
 import { UsersComponent } from "./users/users.component";
 import { FinanceComponent } from "./finance/finance.component";
 import { AcademicComponent } from "./academic/academic.component";
+import { EnrollmentComponent } from "./enrollment/enrollment.component";
 
 export const adminPanelRoutes: Routes = [
     {
@@ -18,6 +19,10 @@ export const adminPanelRoutes: Routes = [
             {
                 path: 'dashboard',
                 component: DashboardComponent
+            },
+            {
+                path: 'inscripciones',
+                component: EnrollmentComponent
             },
             {
                 path: 'usuarios',
