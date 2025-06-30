@@ -14,7 +14,7 @@ import { SearcherComponent } from '../../../components/searcher/searcher.compone
   styleUrls: ['./courses.component.css']
 })
 export class CoursesComponent implements OnInit {
-[x: string]: any;
+  [x: string]: any;
 
   courses: Course[] = [];
   searchTerm: string = '';

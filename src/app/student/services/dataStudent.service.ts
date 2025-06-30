@@ -5,10 +5,9 @@ import { map, Observable } from 'rxjs';
 import { environment } from '../../../enviroments/environment';
 
 export interface Course { id: number; title: string; code: string; teacher: string; imageUrl?: string;}
-export interface Grade  { id: number; courseId: number; studentId: number; grade: number; }
 export interface Curriculum { id: number; courseId: number; topic: string; description: string; teacher: string; date: string; imageUrl?: string;}
                                                                                                                 // ISO YYYY-MM-DD
-
+export interface Grade  { id: number; courseId: number; studentId: number; grade: number; }
 // …añade interfaces para Attendance, Payment, etc.
 
 @Injectable({ providedIn: 'root' })
@@ -21,15 +20,7 @@ export class DataService {
   }
 
   getCourseById(id: number): Observable<Course> {
-    return this.getCourses().pipe(
-      map(courses => {
-        const found = courses.find(c => c.id === id);
-        if (!found) {
-          throw new Error(`Curso con id ${id} no encontrado`);
-        }
-        return found;
-      })
-    );
+    return this.http.get<Course>(`${this.base}/course/${id}`);
   }
 
     getCurriculums(): Observable<Curriculum[]> {

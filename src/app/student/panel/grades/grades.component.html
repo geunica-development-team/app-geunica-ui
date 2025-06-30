@@ -1,1 +1,37 @@
-<p>grades works!</p>
+<div class="container py-4">
+
+  <!-- 1. Fila del buscador -->
+  <div class="row mb-4">
+    <div class="col-12 col-md-6">
+      <app-searcher
+        [(term)]="searchTerm"
+        placeholder="Buscar por curso"
+        (search)="onSearch()"
+      ></app-searcher>
+    </div>
+  </div>
+
+  <!-- 2. Fila de las cards -->
+      
+    <div class="row g-4">
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let course of filteredCourses">
+        
+          <app-card-courses class="h-100"
+            [title]="course.title"
+            
+            [imageUrl]="course.imageUrl"
+            [teacher]="course.teacher">
+            <!-- este ng-content se pegará al final de card-body -->
+          <button
+            class="btn btn-primary mt-auto"
+            [routerLink]="['/student/panel/courses', course.id, 'curriculum']"
+            type="button">
+            Ver currículum
+          </button>
+            </app-card-courses>
+      </div>
+    </div>
+
+
+
+</div>
