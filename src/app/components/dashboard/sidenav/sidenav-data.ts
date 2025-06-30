@@ -13,8 +13,8 @@ export const menuItemsStudent = [
     },
     { 
       icon: 'fas fa-sticky-note', 
-      label: 'Notas', 
-      route: '/notas' 
+      label: 'Mis notas', 
+      route: 'grades' 
     },
     { 
       icon: 'fas fa-solid fa-money-bill-wave', 
