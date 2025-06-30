@@ -1,1 +1,28 @@
-<p>curriculum works!</p>
+<div class="container py-4">
+  <h2>Currículum de {{ course.title }}</h2>
+  <p><strong>Código:</strong> {{ course.code }}</p>
+  <p><strong>Docente:</strong> {{ course.teacher }}</p>
+
+  <div class="row gy-4 mt-4">
+    <div class="col-12 col-md-6" *ngFor="let item of curriculum">
+      <div class="card h-100">
+        <img 
+          *ngIf="item.imageUrl" 
+          [src]="item.imageUrl" 
+          class="card-img-top" 
+          [alt]="item.topic">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">{{ item.topic }}</h5>
+          <p class="card-text">{{ item.description }}</p>
+          <p class="mt-auto mb-0">
+            <small>
+              <strong>Docente:</strong> {{ item.teacher }} |
+              <strong>Fecha:</strong> {{ item.date | date:'longDate' }}
+            </small>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
