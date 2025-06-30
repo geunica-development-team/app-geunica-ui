@@ -4,11 +4,12 @@ import { Course, DataService } from '../../services/dataStudent.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink, RouterModule } from '@angular/router';
+import { SearcherComponent } from '../../../components/searcher/searcher.component';
 
 @Component({
   selector: 'app-courses',
   
-  imports: [CardCoursesComponent, CommonModule, FormsModule, RouterLink, RouterModule],
+  imports: [CardCoursesComponent, CommonModule, FormsModule, RouterLink, RouterModule, SearcherComponent],
   templateUrl: './courses.component.html',
   styleUrls: ['./courses.component.css']
 })
@@ -51,6 +52,10 @@ export class CoursesComponent implements OnInit {
       // cada término debe aparecer en el título normalizado
       return terms.every(t => title.includes(t));
     });
+  }
+
+    onSearch() {
+    // ya tenemos el getter filteredCourses que reacciona a searchTerm,
   }
 
 }

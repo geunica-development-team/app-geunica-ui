@@ -1,0 +1,5 @@
+.search-input:focus {
+  border-color: #008C62;              /* el color que prefieras */
+  box-shadow: 0 0 0 0.2rem rgba(0, 140, 98, 0.25); /* matching translúcido */
+  outline: none;                      /* quita el outline por defecto */
+}

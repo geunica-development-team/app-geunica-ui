@@ -2,22 +2,12 @@
 
   <!-- 1. Fila del buscador -->
   <div class="row mb-4">
-    <!-- Ocupa la mitad en md+ y todo en xs–sm -->
     <div class="col-12 col-md-6">
-      <form class="d-flex" role="search">
-        <input 
-          class="form-control me-2" 
-          type="search" 
-          placeholder="Buscar por curso" 
-          [(ngModel)]="searchTerm"
-          aria-label="Buscar por curso"
-          name="search">
-        <button 
-          class="btn btn-outline-success" 
-          type="button">
-          <i class="fas fa-search"></i>
-        </button>
-      </form>
+      <app-searcher
+        [(term)]="searchTerm"
+        placeholder="Buscar por curso"
+        (search)="onSearch()"
+      ></app-searcher>
     </div>
   </div>
 
