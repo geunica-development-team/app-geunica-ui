@@ -1,4 +1,4 @@
-<div class="card h-100" >
+<div class="card h-100"   (click)="goToLink()" [ngClass]="{ 'clickable-card': link.length > 0 }">
       <img *ngIf="imageUrl" [src]="imageUrl" class="card-img-top" [alt]="title">
   <div class="card-body d-flex flex-column">
     <h5 class="card-title">{{ title }}</h5>

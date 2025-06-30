@@ -20,14 +20,11 @@
             [title]="course.title"
             [code]="course.code"
             [imageUrl]="course.imageUrl"
-            [teacher]="course.teacher">
+            [teacher]="course.teacher"
+            [link]="['/student/panel/courses', course.id, 'curriculum']">
+            
             <!-- este ng-content se pegará al final de card-body -->
-          <button
-            class="btn btn-primary mt-auto"
-            [routerLink]="['/student/panel/courses', course.id, 'curriculum']"
-            type="button">
-            Ver currículum
-          </button>
+
             </app-card-courses>
       </div>
     </div>
