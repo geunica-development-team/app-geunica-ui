@@ -21,7 +21,7 @@
       "description": "Definición de ángulos y sus tipos básicos.",
       "teacher": "María López",
       "date": "2025-07-05",
-      "imageUrl": "https://example.com/img/intro-angulos.jpg"
+      "imageUrl": "https://picsum.photos/300/150"
     },
     {
       "id": 2,
@@ -30,7 +30,7 @@
       "description": "Relaciones entre ángulos que suman 90° o 180°.",
       "teacher": "María López",
       "date": "2025-07-07",
-      "imageUrl": "https://example.com/img/sup-comple.jpg"
+      "imageUrl": "https://picsum.photos/300/150"
     },
     {
       "id": 3,
@@ -39,16 +39,16 @@
       "description": "Punto, eje X, eje Y y representación en el plano.",
       "teacher": "Juan Pérez",
       "date": "2025-07-06",
-      "imageUrl": "https://example.com/img/sistema-coord.jpg"
+      "imageUrl": "https://picsum.photos/300/150"
     },
     {
       "id": 4,
       "courseId": 1,
       "topic": "Ecuaciones de la recta",
-      "description": "Formas punto‑pendiente y general de la ecuación lineal.",
+      "description": "Formas punto pendiente y general de la ecuación lineal.",
       "teacher": "Juan Pérez",
       "date": "2025-07-08",
-      "imageUrl": "https://example.com/img/ecuaciones-recta.jpg"
+      "imageUrl": "https://picsum.photos/300/150"
     }
   ],
   "grades": [

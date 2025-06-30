@@ -38,6 +38,6 @@ export class DataService {
 
     /** Temas de un curso concreto */
   getCurriculumByCourseId(courseId: number): Observable<Curriculum[]> {
-    return this.http.get<Curriculum[]>(`${this.base}/curriculums?courseId=${courseId}`);
+    return this.http.get<Curriculum[]>(`${this.base}/curriculum?courseId=${courseId}`);
   }
 }
