@@ -1,13 +1,17 @@
+
+
+
+
 <ng-container *ngIf="course; else cargando">
-  <h2 class="text-left mb-3"> {{ course.title }}</h2>
+  <h2 class="mb-3">{{ course.title }}</h2>
+  <div class="container py-4">
 
-<div class="container py-4">
-  <!-- Fila central con una gran card contenedora -->
-  <div class="row justify-content-center">
-    <!-- Columna vacía izquierda y derecha implícita -->
-    <div class="col-12 col-md-8">
 
-        <!-- Botón y mini-card a la izquierda -->
+
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-8">
+
+                    <!-- Botón y mini-card a la izquierda -->
         <div class="mb-3 d-flex justify-content-end">
             <div class="dropdown">
                 <label class="me-2">Filtrar por:</label>
@@ -29,40 +33,12 @@
             </div>
         </div>
 
-
-      <div class="card p-4 shadow-sm">
-        <h4 class="mb-3 text-center">Temario del curso</h4>
-        <div class="mb-4" *ngFor="let item of curriculum">
-            <div class="card h-100 p-3">
-                <div class="row g-3 align-items-center">
-                    <!-- Columna 1: Imagen -->
-                    <div class="col-12 col-md-3" *ngIf="item.imageUrl">
-                        <img  [src]="item.imageUrl" class="img-fluid rounded" [alt]="item.topic">
-                    </div>
-
-                    <!-- Columnas 2-4: Contenido -->
-                    <div class="col-12 col-md-9">
-                        <h5 class="card-title">{{ item.topic }}</h5>
-                        <p class="card-text">{{ item.description }}</p>
-                        <p class="mb-0">
-                            <small>
-                                <strong>Docente:</strong> {{ item.teacher }} |
-                                <strong>Fecha:</strong> {{ item.date | date:'longDate' }}
-                            </small>
-                        </p>
-                    </div>
-                </div>
-            </div>
-          </div>
-        </div>
+        <app-card-list 
+          [title]="'Temario de ' + course.title" 
+          [items]="curriculum">
+        </app-card-list>
       </div>
     </div>
-</div>
-</ng-container>
-
-<ng-template #cargando>
-  <div class="text-center py-4">
-    <div class="spinner-border" role="status"><span class="visually-hidden">Cargando...</span></div>
   </div>
-</ng-template>
-
+</ng-container>
+<ng-template #cargando>…</ng-template>

@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Course, Curriculum, DataService } from '../../services/dataStudent.service';
 import { CommonModule } from '@angular/common';
+import { CardListComponent } from '../../../components/card-list/card-list.component';
 
 @Component({
   selector: 'app-curriculum',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule, CardListComponent],
   templateUrl: './curriculum.component.html',
   styleUrl: './curriculum.component.css'
 })

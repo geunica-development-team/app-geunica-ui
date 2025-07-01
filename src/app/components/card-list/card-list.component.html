@@ -1,0 +1,10 @@
+<!-- curriculum-list.component.html -->
+<div class="card p-4 shadow-sm">
+  <h4 class="mb-3 text-center">{{ title }}</h4>
+  
+  <!-- dropdown de filtro aquí, si lo deseas -->
+  
+  <div *ngFor="let item of items" class="mb-4">
+    <app-card-item [item]="item"></app-card-item>
+  </div>
+</div>

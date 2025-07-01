@@ -3,13 +3,13 @@ import { CardCoursesComponent } from '../../../components/card-courses/card-cour
 import { Course, DataService } from '../../services/dataStudent.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { SearcherComponent } from '../../../components/searcher/searcher.component';
 
 @Component({
   selector: 'app-courses',
   
-  imports: [CardCoursesComponent, CommonModule, FormsModule, RouterLink, RouterModule, SearcherComponent],
+  imports: [CardCoursesComponent, CommonModule, FormsModule, RouterModule, SearcherComponent],
   templateUrl: './courses.component.html',
   styleUrls: ['./courses.component.css']
 })
