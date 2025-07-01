@@ -19,23 +19,23 @@ export const menuItemsStudent = [
     { 
       icon: 'fas fa-solid fa-money-bill-wave', 
       label: 'Pagos', 
-      route: '/pagos' 
+      route: 'payments' 
     },
     { 
       icon: 'fas fa-clock', 
       label: 'Asistencia', 
-      route: '/asistencia' 
+      route: 'attendance' 
     },
     { 
       icon: 'fas fa-bullhorn', 
       label: 'Anuncios', 
-      route: '/anuncios',
+      route: 'announcement',
       badge: 24 
     },
     { 
       icon: 'fas fa-calendar-alt', 
       label: 'Horario', 
-      route: '/horario' 
+      route: 'schedule' 
     }
 ];
 
