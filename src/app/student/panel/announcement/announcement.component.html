@@ -1,1 +1,51 @@
-<p>announcement works!</p>
+<!-- announcements.component.html -->
+<ng-container *ngIf="announcements$ | async as announcements; else cargando">
+  <h2 class="text-center mb-4">Anuncios</h2>
+
+  <div class="container">
+    <div class="row">
+      <!-- Columna vacía -->
+      <div class="col-0 col-md-4"></div>
+
+      <!-- Columna central con cards verticales -->
+      <div class="col-12 col-md-4">
+        <div *ngFor="let a of announcements" class="mb-4">
+          <div class="card h-100">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">{{ a.title }}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">
+                {{ a.fecha_creacion | date: 'longDate' }}
+              </h6>
+              <p class="card-text flex-grow-1">{{ a.cuerpo }}</p>
+              <small class="text-muted mt-auto">
+                Creado por {{ a.creado_por }}
+              </small>
+            </div>
+            <div class="card-footer">
+              <span
+                class="badge"
+                [ngClass]="{
+                  'bg-success': a.estado === 'publicado',
+                  'bg-secondary': a.estado === 'Visto'
+                }"
+              >
+                {{ a.estado }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Columna vacía -->
+      <div class="col-0 col-md-4"></div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #cargando>
+  <div class="d-flex justify-content-center my-5">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+</ng-template>

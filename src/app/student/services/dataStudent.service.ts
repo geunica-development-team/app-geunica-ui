@@ -8,6 +8,14 @@ export interface Course { id: number; title: string; code: string; teacher: stri
 export interface Curriculum { id: number; courseId: number; topic: string; description: string; teacher: string; date: string; imageUrl?: string;}
                                                                                                                 // ISO YYYY-MM-DD
 export interface Grade  { id: number; courseId: number; studentId: number; grade: number; }
+export interface Announcement {
+  id: number;
+  title: string;
+  cuerpo: string;
+  creado_por: string;
+  fecha_creacion: string; // ISO 8601 format, e.g. "2025-07-02T09:00:00Z"
+  estado: 'Visto' | 'publicado';
+}
 // …añade interfaces para Attendance, Payment, etc.
 
 @Injectable({ providedIn: 'root' })
@@ -23,6 +31,7 @@ export class DataService {
     return this.http.get<Course>(`${this.base}/course/${id}`);
   }
 
+    //curriculum
     getCurriculums(): Observable<Curriculum[]> {
     return this.http.get<Curriculum[]>(`${this.base}/curriculum`);
   }
@@ -31,4 +40,11 @@ export class DataService {
   getCurriculumByCourseId(courseId: number): Observable<Curriculum[]> {
     return this.http.get<Curriculum[]>(`${this.base}/curriculum?courseId=${courseId}`);
   }
+
+    //anouncements
+    getAnnouncements(): Observable<Announcement[]> {
+    return this.http.get<Announcement[]>(`${this.base}/announcement`);
+  }
+
+
 }

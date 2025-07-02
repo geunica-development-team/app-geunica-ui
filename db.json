@@ -54,6 +54,48 @@
   "grades": [
     { "id": 1, "courseId": 1, "studentId": 101, "grade": 15.5 },
     { "id": 2, "courseId": 1, "studentId": 102, "grade": 18.0 }
+  ],
+  "announcement": [
+    {
+      "id": 1,
+      "title": "Inicio de Clases",
+      "cuerpo": "Las clases del segundo semestre inician el 15 de julio. Por favor revisa tu horario y asegúrate de estar preparado con tus materiales.",
+      "creado_por": "María López",
+      "fecha_creacion": "2025-07-02",
+      "estado": "publicado"
+    },
+    {
+      "id": 2,
+      "title": "Mantenimiento del Sistema",
+      "cuerpo": "El sistema estará en mantenimiento el sábado 5 de julio de 00:00 a 04:00. Durante este tiempo no podrás acceder a las plataformas de notas ni asistencias.",
+      "creado_por": "José Pérez",
+      "fecha_creacion": "2025-07-01",
+      "estado": "publicado"
+    },
+    {
+      "id": 3,
+      "title": "Entrega de Certificados",
+      "cuerpo": "Los certificados de cursos de verano estarán disponibles para recoger en la secretaría a partir del 10 de julio.",
+      "creado_por": "Ana García",
+      "fecha_creacion": "2025-06-30",
+      "estado": "visto"
+    },
+    {
+      "id": 4,
+      "title": "Charla Informativa de Becas",
+      "cuerpo": "Habrá una charla sobre las becas disponibles para el próximo año académico el martes 8 de julio a las 14:00 en el auditorio principal.",
+      "creado_por": "Carlos Ramírez",
+      "fecha_creacion": "2025-07-01",
+      "estado": "visto"
+    },
+    {
+      "id": 5,
+      "title": "Encuesta de Satisfacción",
+      "cuerpo": "Te invitamos a completar la encuesta de satisfacción del semestre antes del 12 de julio. Tu opinión es muy importante.",
+      "creado_por": "Lucía Torres",
+      "fecha_creacion": "2025-07-02",
+      "estado": "visto"
+    }
   ]
 
 }
