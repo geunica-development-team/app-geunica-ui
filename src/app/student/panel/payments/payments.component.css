@@ -26,10 +26,10 @@
 
 
 .advertencia-box {
-  border: 1px solid #314732;    /* mismo verde “success” */
+  border: 1px solid #474531;    
   border-radius: 0.5rem;
-  background-color: #e0df82;    /* verde muy suave */
-  width: 29rem;
-  height: 7.5rem;
+  background-color: #fff9c4;    
+  width: 32rem;
+  height: 10.7rem;
 }
 
