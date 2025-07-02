@@ -2,10 +2,12 @@ import { Component, ViewChild } from '@angular/core';
 import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
 import { TableComponent } from '../../../components/table/table.component';
 import { User } from '../../services/users.service';
+import { ModalAddUserComponent } from './modal-add-user/modal-add-user.component';
+import { ModalEditUserComponent } from "./modal-edit-user/modal-edit-user.component";
 
 @Component({
   selector: 'app-users',
-  imports: [PanelHeaderComponent, TableComponent],
+  imports: [PanelHeaderComponent, TableComponent, ModalAddUserComponent, ModalEditUserComponent],
   templateUrl: './users.component.html',
   styleUrl: './users.component.css'
 })
@@ -53,15 +55,29 @@ export class UsersComponent {
   { id: '15', name: 'Andrea Maldonado', rol: 'Estudiante', dni: '72301847', phone: '982134765', email: 'andreamal@hotmail.com', last_login: '-', state: 'Activo' }
 ];
 
+
+  @ViewChild('usersTable') usersTable?: TableComponent;
+  
+  //MODAL EDITAR USUARIO
+  @ViewChild('modalEditUser') modalEditUser!: ModalEditUserComponent;
+  openModalEditUser(row: any) {
+    if (this.modalEditUser) {
+        this.modalEditUser.openModal(row);
+    }
+  }
+  onEditUser = (row: User) => {
+    console.log('Crear credenciales:', row);
+    this.openModalEditUser(row);
+  }
+
   //APLICAR FILTRO EN LA TABLA
-  @ViewChild('assignmentsTable') assignmentsTable?: TableComponent;
 
   applyFilter(event: Event) {
-    if (this.assignmentsTable) {
-      this.assignmentsTable.filterValue = (
+    if (this.usersTable) {
+      this.usersTable.filterValue = (
         event.target as HTMLInputElement
       ).value;
-      this.assignmentsTable.updateTable();
+      this.usersTable.updateTable();
     }
   }
 }

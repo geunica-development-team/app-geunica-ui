@@ -1,4 +1,12 @@
 <app-panel-header title="Usuarios" />
+<div class="d-flex justify-content-end">
+  <button
+  class="btn-custom-green mb-3"
+  (click)="modalAddUser.openModal()"
+  >
+    Añadir nuevo usuario
+  </button>
+</div>
 <!-- Users Table -->
         <div class="col-12">
           <div class="card">
@@ -11,15 +19,24 @@
             </div>
             <div class="card-body p-3">
                 <app-table
-                  #assignmentsTable
+                  #usersTable
                   [columns]="columns"
                   [originalRows]="rows"
                   [columnMappings]="columnMappings"
                   [pageSize]="10"
                   [acciones]="true"
                   [editarFila]="true"
+                  [accionEditar]="onEditUser"
                 />
             </div>
           </div>
         </div>
         
+
+<app-modal-add-user
+  #modalAddUser
+/>
+
+<app-modal-edit-user
+  #modalEditEnrollment
+/>

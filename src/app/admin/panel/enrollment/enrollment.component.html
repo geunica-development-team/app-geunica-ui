@@ -1,7 +1,10 @@
 <app-panel-header title="Inscripciones" />
 
 <div class="d-flex justify-content-end">
-  <button class="btn-custom-green mb-3">
+  <button
+  class="btn-custom-green mb-3"
+  (click)="modalAddEnrollment.openModal()"
+  >
     Añadir inscripción manualmente
   </button>
 </div>
@@ -22,14 +25,13 @@
         [originalRows]="rows"
         [columnMappings]="columnMappings"
         [pageSize]="10"
-        [accionVer]="onVer"
-        [accionEnviarEvaluacion]="onEnviarEvaluacion"
+        
 
         [actionContinueRegistration]="onContinueRegistration"
-        
-        [actionMarkPayment]="onMarcarPago"
-        [actionCreateCredentials]="onCrearCredenciales"
-        [actionDeleteEnrollment]="onCrearCredenciales"
+        [actionMarkPayment]="onMarkPayment"
+        [actionCreateCredentials]="onCreateCredentials"
+        [actionDeleteEnrollment]="onDeleteEnrollment"
+        [actionReadEnrollment]="onReadEnrollment"
       />
     </div>
   </div>
@@ -42,12 +44,22 @@
 
 <app-modal-mark-payment
   #modalMarkPayment
+  (groupAssigned)="ongroupAssigned($event)"
 />
 
 <app-modal-create-credentials
   #modalCreateCredentials
+  (groupAssigned)="ongroupAssigned($event)"
 />
 
 <app-modal-delete-enrollment
   #modalDeleteEnrollment
+/>
+
+<app-modal-add-enrollment
+  #modalAddEnrollment
+/>
+
+<app-modal-read-enrollment 
+  #modalReadEnrollment
 />

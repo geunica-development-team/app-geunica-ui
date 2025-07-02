@@ -22,7 +22,7 @@ export const adminPanelRoutes: Routes = [
             },
             {
                 path: 'inscripciones',
-                component: EnrollmentComponent
+                component: EnrollmentComponent,
             },
             {
                 path: 'usuarios',

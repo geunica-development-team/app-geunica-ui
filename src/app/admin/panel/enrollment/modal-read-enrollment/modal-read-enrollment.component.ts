@@ -4,13 +4,13 @@ import { AssignGroupData, GroupOption } from '../../../services/enrollment.servi
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-modal-mark-payment',
+  selector: 'app-modal-read-enrollment',
   imports: [FormsModule],
-  templateUrl: './modal-mark-payment.component.html',
-  styleUrl: './modal-mark-payment.component.css'
+  templateUrl: './modal-read-enrollment.component.html',
+  styleUrl: './modal-read-enrollment.component.css'
 })
-export class ModalMarkPaymentComponent {
-//INYECCIONES
+export class ModalReadEnrollmentComponent {
+  //INYECCIONES
   private modalService = inject(NgbModal);
 
   @Output() groupAssigned = new EventEmitter<AssignGroupData>();
@@ -60,7 +60,7 @@ export class ModalMarkPaymentComponent {
     }
   ];
 
-  @ViewChild('modalMarkPayment') modalMarkPayment!: TemplateRef<ElementRef>;
+  @ViewChild('modalReadEnrollment') modalReadEnrollment!: TemplateRef<ElementRef>;
 
   openModal(studentData: any) {
     console.log('Abriendo modal para:', studentData); // Para debug
@@ -75,7 +75,7 @@ export class ModalMarkPaymentComponent {
       this.selectedGroupId = firstAvailable.id;
     }
     
-    this.modalService.open(this.modalMarkPayment, { 
+    this.modalService.open(this.modalReadEnrollment, { 
       centered: true,
       size: 'lg',
       backdrop: 'static'

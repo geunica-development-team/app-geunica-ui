@@ -7,13 +7,13 @@ import { Component, Input } from '@angular/core';
   styleUrl: './table-enrollment.component.css'
 })
 export class TableEnrollmentComponent {
-  @Input() accionVer!: (row: any) => void;
   @Input() accionEnviarEvaluacion!: (row: any) => void;
 
   @Input() actionContinueRegistration!: (row: any) => void;
   @Input() actionMarkPayment!: (row: any) => void;
   @Input() actionCreateCredentials!: (row: any) => void;
   @Input() actionDeleteEnrollment!: (row: any) => void;
+  @Input() actionReadEnrollment!: (row: any) => void;
 
   @Input() columns: string[] = [];
 
@@ -124,7 +124,7 @@ export class TableEnrollmentComponent {
       case 'enviarEvaluacion':
         this.accionEnviarEvaluacion(row);
         break;
-
+        
       case 'continuarMatricula':
         this.actionContinueRegistration(row);
         break;
@@ -134,9 +134,6 @@ export class TableEnrollmentComponent {
       case 'crearCredenciales':
         this.actionCreateCredentials(row);
         break;
-      case 'eliminarInscripcion':
-      this.actionDeleteEnrollment(row);
-      break;
     }
   }
 

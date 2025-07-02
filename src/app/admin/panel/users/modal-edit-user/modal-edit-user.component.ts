@@ -4,18 +4,21 @@ import { AssignGroupData, GroupOption } from '../../../services/enrollment.servi
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-modal-mark-payment',
+  selector: 'app-modal-edit-user',
   imports: [FormsModule],
-  templateUrl: './modal-mark-payment.component.html',
-  styleUrl: './modal-mark-payment.component.css'
+  templateUrl: './modal-edit-user.component.html',
+  styleUrl: './modal-edit-user.component.css'
 })
-export class ModalMarkPaymentComponent {
-//INYECCIONES
+export class ModalEditUserComponent {
+  //INYECCIONES
   private modalService = inject(NgbModal);
+
+
+  @Output() userUpdated = new EventEmitter<void>();
 
   @Output() groupAssigned = new EventEmitter<AssignGroupData>();
 
-// Datos del estudiante seleccionado
+  // Datos del estudiante seleccionado
   currentStudent: any = null;
   selectedLevel: string = 'Primaria';
   selectedGrade: string = '2do';
@@ -60,7 +63,7 @@ export class ModalMarkPaymentComponent {
     }
   ];
 
-  @ViewChild('modalMarkPayment') modalMarkPayment!: TemplateRef<ElementRef>;
+  @ViewChild('modalEditUser') modalEditUser!: TemplateRef<ElementRef>;
 
   openModal(studentData: any) {
     console.log('Abriendo modal para:', studentData); // Para debug
@@ -75,7 +78,7 @@ export class ModalMarkPaymentComponent {
       this.selectedGroupId = firstAvailable.id;
     }
     
-    this.modalService.open(this.modalMarkPayment, { 
+    this.modalService.open(this.modalEditUser, { 
       centered: true,
       size: 'lg',
       backdrop: 'static'

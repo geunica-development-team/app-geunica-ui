@@ -2,16 +2,16 @@ import { Component, ViewChild } from '@angular/core';
 import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
 import { TableEnrollmentComponent } from '../admin-component/table-enrollment/table-enrollment.component';
 import { AssignGroupData, Enrollment } from '../../services/enrollment.service';
-import { AddEnrollmentComponent } from './add-enrollment/add-enrollment.component';
-import { ReadEnrollmentComponent } from './read-enrollment/read-enrollment.component';
 import { ModalContinueRegistrationComponent } from './modal-continue-registration/modal-continue-registration.component';
 import { ModalMarkPaymentComponent } from './modal-mark-payment/modal-mark-payment.component';
 import { ModalCreateCredentialsComponent } from './modal-create-credentials/modal-create-credentials.component';
 import { ModalDeleteEnrollmentComponent } from './modal-delete-enrollment/modal-delete-enrollment.component';
+import { ModalAddEnrollmentComponent } from './modal-add-enrollment/modal-add-enrollment.component';
+import { ModalReadEnrollmentComponent } from './modal-read-enrollment/modal-read-enrollment.component';
 
 @Component({
   selector: 'app-enrollment',
-  imports: [PanelHeaderComponent, TableEnrollmentComponent, AddEnrollmentComponent, ReadEnrollmentComponent, ModalContinueRegistrationComponent, ModalMarkPaymentComponent, ModalCreateCredentialsComponent, ModalDeleteEnrollmentComponent],
+  imports: [PanelHeaderComponent, TableEnrollmentComponent, ModalContinueRegistrationComponent, ModalMarkPaymentComponent, ModalCreateCredentialsComponent, ModalDeleteEnrollmentComponent, ModalAddEnrollmentComponent, ModalReadEnrollmentComponent],
   templateUrl: './enrollment.component.html',
   styleUrl: './enrollment.component.css'
 })
@@ -148,46 +148,58 @@ export class EnrollmentComponent {
   //MODAL PARA MARCAR PAGO
   @ViewChild('modalMarkPayment') modalMarkPayment?: ModalMarkPaymentComponent;
   openModalMarkPayment(row: any) {
-    
+    if (this.modalMarkPayment) {
+      this.modalMarkPayment.openModal(row);
+    }
   }
+  onMarkPayment = (row: Enrollment) => {
+    console.log('Marcar pago:', row);
+    this.openModalMarkPayment(row);
+  }
+
 
   //MODAL PARA CREAR CREDENCIALES
   @ViewChild('modalCreateCredentials') modalCreateCredentials?: ModalCreateCredentialsComponent;
+
   openModalCreateCredentials(row: any) {
-    
+    if (this.modalCreateCredentials) {
+      this.modalCreateCredentials.openModal(row);
+    }
+  }
+  onCreateCredentials = (row: Enrollment) => {
+    console.log('Crear credenciales:', row);
+    this.openModalCreateCredentials(row);
   }
 
   //MODAL PARA ELIMINAR INSCRIPCION
   @ViewChild('modalDeleteEnrollment') modalDeleteEnrollment?: ModalDeleteEnrollmentComponent;
   openModalDeleteEnrollment(row: any) {
-    
+    if (this.modalDeleteEnrollment) {
+      this.modalDeleteEnrollment.openModal(row);
+    }
+  }
+  onDeleteEnrollment = (row: Enrollment) => {
+    console.log('Eliminar credenciales:', row);
+    this.openModalDeleteEnrollment(row);
   }
   
-  // MÉTODOS PARA LAS ACCIONES
-  onVer = (row: Enrollment) => {
-    console.log('Ver detalles de:', row);
-    // Implementar lógica para ver detalles
+  //MODAL PARA LEER LA INSCRIPCION
+  @ViewChild('modalReadEnrollment') modalReadEnrollment?: ModalReadEnrollmentComponent;
+  openModalReadEnrollment(row: any) {
+    if (this.modalReadEnrollment) {
+      this.modalReadEnrollment.openModal(row);
+    }
   }
-  
+  onReadEnrollment = (row: Enrollment) => {
+    console.log('Leer inscripción:', row);
+    this.openModalReadEnrollment(row);
+  }
+
   onEnviarEvaluacion = (row: Enrollment) => {
     console.log('Enviar a evaluación:', row);
     // Implementar lógica para enviar a evaluación
     // Aquí podrías abrir un modal de confirmación o hacer la llamada al API
   }
-  
-  
-  
-  onMarcarPago = (row: Enrollment) => {
-    console.log('Marcar pago:', row);
-    // Implementar lógica para marcar como pagado
-  }
-  
-  onCrearCredenciales = (row: Enrollment) => {
-    console.log('Crear credenciales:', row);
-    // Implementar lógica para crear credenciales de usuario
-  }
-
-
 
   ongroupAssigned(data: AssignGroupData) {
     console.log('Grupo asignado:', data);

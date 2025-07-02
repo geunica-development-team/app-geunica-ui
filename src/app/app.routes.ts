@@ -11,5 +11,5 @@ export const routes: Routes = [
     },
     ... authRoutes,
     ... studentPanelRoutes,
-    ... adminPanelRoutes
+    ... adminPanelRoutes,
 ];
