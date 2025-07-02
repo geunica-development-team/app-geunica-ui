@@ -14,7 +14,7 @@ export interface Announcement {
   cuerpo: string;
   creado_por: string;
   fecha_creacion: string; // ISO 8601 format, e.g. "2025-07-02T09:00:00Z"
-  estado: 'Visto' | 'publicado';
+  estado: 'visto' | 'publicado';
 }
 // …añade interfaces para Attendance, Payment, etc.
 
