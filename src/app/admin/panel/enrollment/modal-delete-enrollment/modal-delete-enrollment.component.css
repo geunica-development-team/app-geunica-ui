@@ -1,23 +1,5 @@
-.modal-header {
-  border-bottom: 1px solid #dee2e6;
-  padding: 1.5rem;
-  background-color: #fff5f5;
-}
-
-.modal-title {
-  font-weight: 600;
-  font-size: 1.25rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
 .warning-icon {
   font-size: 1.2rem;
-}
-
-.modal-body {
-  padding: 2rem 1.5rem;
 }
 
 .warning-content {
@@ -60,75 +42,6 @@
 
 .student-info p:last-child {
   margin-bottom: 0;
-}
-
-.modal-footer {
-  border-top: 1px solid #dee2e6;
-  padding: 1rem 1.5rem;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.btn {
-  padding: 10px 24px;
-  border-radius: 8px;
-  font-weight: 500;
-  font-size: 14px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  min-width: 100px;
-}
-
-.btn-secondary {
-  background-color: #6c757d;
-  color: white;
-}
-
-.btn-secondary:hover {
-  background-color: #545b62;
-}
-
-.btn-danger {
-  background-color: #dc3545;
-  color: white;
-}
-
-.btn-danger:hover {
-  background-color: #c82333;
-}
-
-.btn:active {
-  transform: scale(0.98);
-}
-
-/* Responsive adjustments */
-@media (max-width: 576px) {
-  .modal-body {
-    padding: 1.5rem 1rem;
-  }
-  
-  .modal-footer {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .modal-footer .btn {
-    width: 100%;
-  }
-  
-  .warning-icon-large {
-    font-size: 2.5rem;
-  }
-  
-  .warning-content h5 {
-    font-size: 1rem;
-  }
-}
-
-/* Animación de entrada */
-.modal-content {
-  animation: modalSlideIn 0.3s ease-out;
 }
 
 @keyframes modalSlideIn {

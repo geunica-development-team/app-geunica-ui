@@ -1,0 +1,19 @@
+/* === RESPONSIVE MODAL === */
+@media (max-width: 768px) {
+  .modal-body {
+    padding: 1rem;
+  }
+
+  .modal-footer {
+    flex-direction: column;
+  }
+
+  .modal-footer .btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+
+  .input-group {
+    flex-direction: column;
+  }
+}

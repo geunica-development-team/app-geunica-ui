@@ -1,0 +1,25 @@
+/* === MODAL STRUCTURE === */
+.modal-header {
+  border-bottom: 1px solid #dee2e6;
+  padding: 1.5rem;
+  background-color: #f8fafc;
+}
+
+.modal-title {
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: #212529;
+}
+
+.modal-body {
+  padding: 1.5rem;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.modal-footer {
+  border-top: 1px solid #dee2e6;
+  padding: 1rem 1.5rem;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}

@@ -1,0 +1,14 @@
+/* === FORM LABELS & HEADERS === */
+.form-label {
+  font-weight: 500;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #495057;
+}
+
+.section-header h5,
+h6.fw-bold {
+  color: #212529;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}

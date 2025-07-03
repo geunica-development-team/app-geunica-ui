@@ -137,8 +137,8 @@
             name="academicLevel"
             (change)="onLevelChange()">
             <option value="">Nivel</option>
-            @for (gender of genres; track gender.value) {
-              <option [value]="gender.value">{{ gender.label }}</option>
+            @for (level of levels; track level.value) {
+              <option [value]="level.value">{{ level.label }}</option>
             }
           </select>
         </div>
