@@ -1,9 +1,15 @@
 /* Tabla con esquinas redondeadas y borde exterior destacado */
+.section-title {
+  display: inline-block;
+  border-bottom: 3px solid #919191;
+  padding-bottom: 0.25rem;
+}
+
 .table-rounded {
   border-collapse: separate;
   border-spacing: 0;
   /* Borde exterior */
-  border: 1px solid #04080e;  /* color azul de Bootstrap “primary” */
+  border: 1px solid #d3d3d3;  /* color azul de Bootstrap “primary” */
   border-radius: 0.5rem;      /* radio para todas las esquinas */
   overflow: hidden;           /* para que el radio se aplique */
 }
@@ -28,4 +34,37 @@
 .table-rounded th,
 .table-rounded td {
   border: 1px solid #dee2e6;
+}
+
+
+
+
+/* Opcional: al pasar el ratón */
+.nav-pills .nav-link:hover {
+  color: #184818bf;
+}
+
+.nav-pills .nav-link {
+  background: transparent;
+  color: #000;
+  display: inline-block;    /* para que el border-bottom solo abarque el texto */
+  padding: 0.5rem 0;        /* ajusta el padding vertical si lo necesitas */
+}
+
+.nav-pills .nav-link.active {
+  font-weight: 700;
+  color: #000000 !important;
+  border: none;
+  border-bottom: 2px solid #000000;
+}
+
+.nav-pills .nav-item {
+  /* aseguramos que cada item pueda crecer un poco, pero no tanto como para llenar todo el ancho */
+  flex: 1;
+  text-align: center;
+}
+
+.nav-pills {
+  background: transparent;
+  border-bottom: none;      /* sin borde extra en el contenedor */
 }
