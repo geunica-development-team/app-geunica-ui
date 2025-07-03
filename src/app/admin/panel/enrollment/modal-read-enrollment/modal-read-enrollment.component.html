@@ -1,0 +1,92 @@
+<ng-template #modalReadEnrollment let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">
+      Leer inscripción a: {{ currentStudent?.student || 'Estudiante' }}
+    </h4>
+    <button 
+      type="button" 
+      class="btn-close" 
+      aria-label="Close"
+      (click)="onCancel()">
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <!-- Selector de Nivel -->
+    <div class="form-group mb-3">
+      <label for="level" class="form-label">Nivel:</label>
+      <select 
+        id="level"
+        class="form-select"
+        [(ngModel)]="selectedLevel"
+        (change)="onLevelChange()">
+        @for (level of levels; track level.value) {
+          <option [value]="level.value">{{ level.label }}</option>
+        }
+      </select>
+    </div>
+
+    <!-- Selector de Grado -->
+    <div class="form-group mb-3">
+      <label for="grade" class="form-label">Grado:</label>
+      <select 
+        id="grade"
+        class="form-select"
+        [(ngModel)]="selectedGrade"
+        (change)="onGradeChange()">
+        @for (grade of grades; track grade.value) {
+          <option [value]="grade.value">{{ grade.label }}</option>
+        }
+      </select>
+    </div>
+
+    <!-- Selector de Grupo -->
+    <div class="form-group mb-3">
+      <label class="form-label">Grupo:</label>
+      <div class="group-options">
+        @for (group of availableGroups; track group.id) {
+          <div class="group-option" [class.disabled]="isGroupDisabled(group)">
+            <label class="group-radio-label">
+              <input 
+                type="radio" 
+                name="group"
+                [value]="group.id"
+                [(ngModel)]="selectedGroupId"
+                [disabled]="isGroupDisabled(group)"
+                (change)="onGroupSelect(group.id)"
+                class="form-check-input me-3">
+              <div class="group-info">
+                <div class="d-flex align-items-center gap-2 mb-1">
+                  <span class="group-name fw-bold">{{ group.name }}</span>
+                  <span [class]="'badge ' + getGroupStatusClass(group)">
+                    {{ group.status }}
+                  </span>
+                </div>
+                <small class="group-details text-muted">
+                  Cupo condición {{ group.conditionQuota }}/{{ group.maxConditionQuota }} - 
+                  Total: {{ group.totalStudents }}/{{ group.maxCapacity }}
+                </small>
+              </div>
+            </label>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button 
+      type="button" 
+      class="btn btn-secondary"
+      (click)="onCancel()">
+      Cancelar
+    </button>
+    <button 
+      type="button" 
+      class="btn btn-success"
+      (click)="onConfirm()"
+      [disabled]="!selectedGroupId">
+      Generar Ticket
+    </button>
+  </div>
+</ng-template>
