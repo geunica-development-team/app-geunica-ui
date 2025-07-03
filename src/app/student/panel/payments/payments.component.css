@@ -4,8 +4,7 @@
   border: 1px solid #314732;    /* mismo verde “success” */
   border-radius: 0.5rem;
   background-color: #e9f7ef;    /* verde muy suave */
-  width: 29rem;
-  height: 7.5rem;
+
 }
 
 .cuota-box i {
@@ -20,7 +19,7 @@
   font-size: 0.875rem;
 }
 
-.cuota-box .fs-3 {
+.cuota-box .fs-1 {
   color: #0f5132;               /* verde oscuro para el precio */
 }
 
