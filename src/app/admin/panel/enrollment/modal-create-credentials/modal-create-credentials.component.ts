@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, inject, Output, TemplateRef, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AssignGroupData, GroupOption } from '../../../services/enrollment.service';
+import { CredentialsData } from '../../../services/enrollment.service';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -10,71 +10,49 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './modal-create-credentials.component.css'
 })
 export class ModalCreateCredentialsComponent {
-//INYECCIONES
   private modalService = inject(NgbModal);
+  
+  @Output() credentialsCreated = new EventEmitter<CredentialsData>();
 
-  @Output() groupAssigned = new EventEmitter<AssignGroupData>();
-
-// Datos del estudiante seleccionado
+  // Datos del estudiante (solo lectura)
   currentStudent: any = null;
-  selectedLevel: string = 'Primaria';
-  selectedGrade: string = '2do';
-  selectedGroupId: string = '';
 
-  levels = [
-    { value: 'Inicial', label: 'Inicial' },
-    { value: 'Primaria', label: 'Primaria' },
-    { value: 'Secundaria', label: 'Secundaria' }
-  ];
+  // Datos de acceso
+  credentialsData = {
+    username: '',
+    password: '',
+    status: 'Activo',
+    notifyGuardianBy: 'whatsapp'
+  };
 
-  grades = [
-    { value: '1ro', label: '1ro' },
-    { value: '2do', label: '2do' },
-    { value: '3ro', label: '3ro' },
-    { value: '4to', label: '4to' },
-    { value: '5to', label: '5to' },
-    { value: '6to', label: '6to' }
-  ];
-
-  // Grupos disponibles (esto normalmente vendría de un servicio)
-  availableGroups: GroupOption[] = [
-    {
-      id: '2do-a',
-      name: '2do A',
-      available: true,
-      conditionQuota: 0,
-      maxConditionQuota: 1,
-      totalStudents: 25,
-      maxCapacity: 30,
-      status: 'Disponible'
-    },
-    {
-      id: '2do-b',
-      name: '2do B',
-      available: true,
-      conditionQuota: 1,
-      maxConditionQuota: 1,
-      totalStudents: 30,
-      maxCapacity: 30,
-      status: 'Disponible'
-    }
+  // Opciones para dropdowns
+  statusOptions = [
+    { value: 'Activo', label: 'Activo' },
+    { value: 'Inactivo', label: 'Inactivo' },
+    { value: 'Suspendido', label: 'Suspendido' },
+    { value: 'Bloqueado', label: 'Bloqueado' }
   ];
 
   @ViewChild('modalCreateCredentials') modalCreateCredentials!: TemplateRef<ElementRef>;
 
   openModal(studentData: any) {
-    console.log('Abriendo modal para:', studentData); // Para debug
+    console.log('Abriendo modal de crear credenciales para:', studentData);
     
     this.currentStudent = studentData;
-    this.selectedLevel = studentData.application_level || 'Primaria';
-    this.selectedGrade = '2do';
     
-    // Seleccionar el primer grupo disponible por defecto
-    const firstAvailable = this.availableGroups.find(g => g.available);
-    if (firstAvailable) {
-      this.selectedGroupId = firstAvailable.id;
-    }
+    // Generar username y password por defecto
+    const studentName = studentData?.student || 'Carlos Zuñiga';
+    const defaultUsername = this.generateUsername(studentName);
+    const defaultPassword = this.generatePassword();
     
+    // Inicializar datos de credenciales
+    this.credentialsData = {
+      username: defaultUsername,
+      password: defaultPassword,
+      status: 'Activo',
+      notifyGuardianBy: 'whatsapp'
+    };
+
     this.modalService.open(this.modalCreateCredentials, { 
       centered: true,
       size: 'lg',
@@ -82,59 +60,84 @@ export class ModalCreateCredentialsComponent {
     });
   }
 
-
-
-
-
-  onLevelChange() {
-    console.log('Nivel cambiado a:', this.selectedLevel);
-  }
-
-  onGradeChange() {
-    console.log('Grado cambiado a:', this.selectedGrade);
-  }
-
-  onGroupSelect(groupId: string) {
-    this.selectedGroupId = groupId;
-    console.log('Grupo seleccionado:', groupId);
-  }
-
-  getGroupStatusClass(group: GroupOption): string {
-    switch (group.status) {
-      case 'Disponible':
-        return 'badge-success';
-      case 'Saturado':
-        return 'badge-warning';
-      case 'Completo':
-        return 'badge-danger';
-      default:
-        return 'badge-secondary';
-    }
-  }
-
-  isGroupDisabled(group: GroupOption): boolean {
-    return !group.available || group.status === 'Saturado';
-  }
-
-  onConfirm() {
-    const selectedGroup = this.availableGroups.find(g => g.id === this.selectedGroupId);
+  generateUsername(studentName: string): string {
+    // Generar username basado en el nombre del estudiante
+    const cleanName = studentName.toLowerCase()
+      .replace(/\s+/g, '')
+      .replace(/[áàäâ]/g, 'a')
+      .replace(/[éèëê]/g, 'e')
+      .replace(/[íìïî]/g, 'i')
+      .replace(/[óòöô]/g, 'o')
+      .replace(/[úùüû]/g, 'u')
+      .replace(/ñ/g, 'n')
+      .replace(/[^a-z0-9]/g, '');
     
-    if (!selectedGroup) {
-      alert('Por favor selecciona un grupo');
+    const randomNum = Math.floor(Math.random() * 100);
+    return `${cleanName}${randomNum}@gmail.com`;
+  }
+
+  generatePassword(): string {
+    // Generar password aleatorio
+    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let password = '';
+    for (let i = 0; i < 12; i++) {
+      password += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return password;
+  }
+
+  regenerateCredentialsUsername() {
+    const studentName = this.currentStudent?.student || 'Carlos Zuñiga';
+    this.credentialsData.username = this.generateUsername(studentName);
+  }
+
+  regenerateCredentialsPassword() {
+    this.credentialsData.password = this.generatePassword();
+  }
+
+  onCreateCredentials() {
+    // Validaciones básicas
+    if (!this.credentialsData.username.trim()) {
+      alert('Por favor ingresa un usuario válido');
       return;
     }
 
-    const assignData: AssignGroupData = {
+    if (!this.credentialsData.password.trim()) {
+      alert('Por favor ingresa una contraseña válida');
+      return;
+    }
+
+    if (this.credentialsData.password.length < 6) {
+      alert('La contraseña debe tener al menos 6 caracteres');
+      return;
+    }
+
+    // Validar formato de email si el username es un email
+    if (this.credentialsData.username.includes('@')) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(this.credentialsData.username)) {
+        alert('Por favor ingresa un email válido');
+        return;
+      }
+    }
+
+    const credentialsInfo: CredentialsData = {
       studentId: this.currentStudent.id,
       studentName: this.currentStudent.student,
-      level: this.selectedLevel,
-      grade: this.selectedGrade,
-      selectedGroup: selectedGroup
+      level: this.currentStudent.application_level,
+      grade: '2do A', // Esto debería venir de los datos del estudiante
+      username: this.credentialsData.username,
+      password: this.credentialsData.password,
+      status: this.credentialsData.status,
+      notifyGuardianBy: this.credentialsData.notifyGuardianBy
     };
 
-    console.log('Datos a enviar:', assignData);
-    this.groupAssigned.emit(assignData);
+    console.log('Datos de credenciales:', credentialsInfo);
+    this.credentialsCreated.emit(credentialsInfo);
     this.modalService.dismissAll();
+
+    // Mostrar mensaje de confirmación
+    alert('Credenciales creadas exitosamente. Se notificará al apoderado.');
   }
 
   onCancel() {

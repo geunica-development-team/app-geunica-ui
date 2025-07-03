@@ -1,8 +1,6 @@
 <ng-template #modalAddEnrollment let-modal>
   <div class="modal-header">
-    <h4 class="modal-title">
-      Añadir inscripcion:
-    </h4>
+    <h4 class="modal-title">Añadir inscripción manualmente</h4>
     <button 
       type="button" 
       class="btn-close" 
@@ -12,26 +10,298 @@
   </div>
 
   <div class="modal-body">
-    <!-- Selector de Nivel -->
-    <div class="form-group mb-3">
-      <label for="level" class="form-label">Nivel:</label>
-    </div>
+    <form>
+      <!-- DATOS DEL ESTUDIANTE -->
+      <div class="section-header mb-3">
+        <h5 class="fw-bold mb-3">Datos del Estudiante</h5>
+      </div>
 
-    <!-- Selector de Grado -->
-    <div class="form-group mb-3">
-      <label for="grade" class="form-label">Grado:</label>
-    </div>
+      <!-- Fila 1: Nombres y Apellidos -->
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <label class="form-label">Nombre</label>
+          <input 
+            type="text" 
+            class="form-control custom-input" 
+            placeholder="Nombre"
+            [(ngModel)]="studentData.firstName"
+            name="studentFirstName">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Apellido Paterno</label>
+          <input 
+            type="text" 
+            class="form-control custom-input" 
+            placeholder="Apellido Paterno"
+            [(ngModel)]="studentData.paternalLastName"
+            name="studentPaternalLastName">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Apellido Materno</label>
+          <input 
+            type="text" 
+            class="form-control custom-input" 
+            placeholder="Apellido Materno"
+            [(ngModel)]="studentData.maternalLastName"
+            name="studentMaternalLastName">
+        </div>
+      </div>
 
-    <!-- Selector de Grupo -->
-    <div class="form-group mb-3">
-      <label class="form-label">Grupo:</label>
-    </div>
+      <!-- Fila 2: Documento, Fecha y Sexo -->
+      <div class="row mb-3">
+        <div class="col-md-3">
+          <label class="form-label">Tipo de Documento</label>
+          <select 
+            class="form-select custom-select" 
+            [(ngModel)]="studentData.documentType"
+            name="studentDocumentType">
+            <option value="">Tipo de Documento</option>
+            @for (type of documentTypes; track type.value) {
+              <option [value]="type.value">{{ type.label }}</option>
+            }
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">N° documento</label>
+          <input 
+            type="text" 
+            class="form-control custom-input" 
+            placeholder="Nro Documento"
+            [(ngModel)]="studentData.documentNumber"
+            name="studentDocumentNumber">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Fecha de Nacimiento</label>
+          <input 
+            type="date" 
+            class="form-control custom-input"
+            [(ngModel)]="studentData.birthDate"
+            name="studentBirthDate">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Sexo</label>
+          <select 
+            class="form-select custom-select" 
+            [(ngModel)]="studentData.gender"
+            name="studentGender">
+            <option value="">Sexo</option>
+            @for (gender of genres; track gender.value) {
+              <option [value]="gender.value">{{ gender.label }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <!-- Fila 3: Contacto -->
+      <div class="row mb-4">
+        <div class="col-md-4">
+          <label class="form-label">Celular</label>
+          <input 
+            type="text" 
+            class="form-control custom-input" 
+            placeholder="Celular"
+            [(ngModel)]="studentData.phone"
+            name="studentPhone">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Dirección</label>
+          <input 
+            type="text" 
+            class="form-control custom-input" 
+            placeholder="Dirección"
+            [(ngModel)]="studentData.address"
+            name="studentAddress">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Correo Personal</label>
+          <input 
+            type="email" 
+            class="form-control custom-input" 
+            placeholder="Correo Personal"
+            [(ngModel)]="studentData.email"
+            name="studentEmail">
+        </div>
+      </div>
+
+      <!-- NIVEL ACADÉMICO -->
+      <div class="section-header mb-3">
+        <h5 class="fw-bold mb-3">Nivel académico</h5>
+      </div>
+
+      <div class="row mb-4">
+        <div class="col-md-4">
+          <label class="form-label">Nivel</label>
+          <select 
+            class="form-select custom-select" 
+            [(ngModel)]="academicData.level"
+            name="academicLevel"
+            (change)="onLevelChange()">
+            <option value="">Nivel</option>
+            @for (gender of genres; track gender.value) {
+              <option [value]="gender.value">{{ gender.label }}</option>
+            }
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Grado</label>
+          <select 
+            class="form-select custom-select" 
+            [(ngModel)]="academicData.grade"
+            name="academicGrade">
+            <option value="">Grado</option>
+            @for (grade of grades; track grade.value) {
+              <option [value]="grade.value">{{ grade.label }}</option>
+            }
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Turno</label>
+          <select 
+            class="form-select custom-select" 
+            [(ngModel)]="academicData.shift"
+            name="academicShift">
+            <option value="">Turno</option>
+            @for (shift of shifts; track shift.value) {
+              <option [value]="shift.value">{{ shift.label }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <!-- DATOS DEL APODERADO -->
+      <div class="section-header mb-3">
+        <h5 class="fw-bold mb-3">Datos del Apoderado</h5>
+      </div>
+
+      <!-- Fila 1: Nombres y Apellidos del Apoderado -->
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <label class="form-label">Nombre</label>
+          <input 
+            type="text" 
+            class="form-control custom-input" 
+            placeholder="Nombre"
+            [(ngModel)]="guardianData.firstName"
+            name="guardianFirstName">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Apellido Paterno</label>
+          <input 
+            type="text" 
+            class="form-control custom-input" 
+            placeholder="Apellido Paterno"
+            [(ngModel)]="guardianData.paternalLastName"
+            name="guardianPaternalLastName">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Apellido Materno</label>
+          <input 
+            type="text" 
+            class="form-control custom-input" 
+            placeholder="Apellido Materno"
+            [(ngModel)]="guardianData.maternalLastName"
+            name="guardianMaternalLastName">
+        </div>
+      </div>
+
+      <!-- Fila 2: Documento, Fecha y Sexo del Apoderado -->
+      <div class="row mb-3">
+        <div class="col-md-3">
+          <label class="form-label">Tipo de Documento</label>
+          <select 
+            class="form-select custom-select" 
+            [(ngModel)]="guardianData.documentType"
+            name="guardianDocumentType">
+            <option value="">Documento de identidad</option>
+            @for (type of documentTypes; track type.value) {
+              <option [value]="type.value">{{ type.label }}</option>
+            }
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">N° documento</label>
+          <input 
+            type="text" 
+            class="form-control custom-input" 
+            placeholder="Nro Documento"
+            [(ngModel)]="guardianData.documentNumber"
+            name="guardianDocumentNumber">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Fecha de Nacimiento</label>
+          <input 
+            type="date" 
+            class="form-control custom-input"
+            [(ngModel)]="guardianData.birthDate"
+            name="guardianBirthDate">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Sexo</label>
+          <select 
+            class="form-select custom-select" 
+            [(ngModel)]="guardianData.gender"
+            name="guardianGender">
+            <option value="">Sexo</option>
+            @for (gender of genres; track gender.value) {
+              <option [value]="gender.value">{{ gender.label }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <!-- Fila 3: Contacto del Apoderado -->
+      <div class="row mb-4">
+        <div class="col-md-4">
+          <label class="form-label">Celular</label>
+          <input 
+            type="text" 
+            class="form-control custom-input" 
+            placeholder="Celular"
+            [(ngModel)]="guardianData.phone"
+            name="guardianPhone">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Dirección</label>
+          <input 
+            type="text" 
+            class="form-control custom-input" 
+            placeholder="Dirección"
+            [(ngModel)]="guardianData.address"
+            name="guardianAddress">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Correo Personal</label>
+          <input 
+            type="email" 
+            class="form-control custom-input" 
+            placeholder="Correo Personal"
+            [(ngModel)]="guardianData.email"
+            name="guardianEmail">
+        </div>
+      </div>
+
+      <!-- ESTADO DE INSCRIPCIÓN -->
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label class="form-label">Cambiar estado de inscripción</label>
+          <select 
+            class="form-select custom-select" 
+            [(ngModel)]="enrollmentStatus"
+            name="enrollmentStatus">
+            <option value="">Estado</option>
+            @for (state of states; track state.value) {
+              <option [value]="state.value">{{ state.label }}</option>
+            }
+          </select>
+        </div>
+      </div>
+    </form>
   </div>
 
   <div class="modal-footer">
     <button 
       type="button" 
-      class="btn btn-secondary"
+      class="btn btn-secondary me-2"
       (click)="onCancel()">
       Cancelar
     </button>
@@ -39,7 +309,7 @@
       type="button" 
       class="btn btn-success"
       (click)="onConfirm()">
-      Generar Ticket
+      Añadir Inscripción
     </button>
   </div>
 </ng-template>

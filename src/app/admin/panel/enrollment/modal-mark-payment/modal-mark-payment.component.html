@@ -1,8 +1,6 @@
 <ng-template #modalMarkPayment let-modal>
   <div class="modal-header">
-    <h4 class="modal-title">
-      Marcar pago a: {{ currentStudent?.student || 'Estudiante' }}
-    </h4>
+    <h4 class="modal-title">Marcar pago de Matrícula</h4>
     <button 
       type="button" 
       class="btn-close" 
@@ -12,64 +10,125 @@
   </div>
 
   <div class="modal-body">
-    <!-- Selector de Nivel -->
-    <div class="form-group mb-3">
-      <label for="level" class="form-label">Nivel:</label>
-      <select 
-        id="level"
-        class="form-select"
-        [(ngModel)]="selectedLevel"
-        (change)="onLevelChange()">
-        @for (level of levels; track level.value) {
-          <option [value]="level.value">{{ level.label }}</option>
-        }
-      </select>
+    <!-- DATOS DEL ESTUDIANTE -->
+     <div class="alert alert-info mb-3">
+      <h6 class="fw-bold mb-2">Datos del estudiante:</h6>
+      <ul class="student-details">
+        <li><strong>Nombres y apellidos:</strong> {{ currentStudent?.student || 'Carlos Zuñiga' }}</li>
+        <li><strong>Nivel:</strong> {{ currentStudent?.application_level || 'Primaria' }}</li>
+        <li><strong>Grado / Grupo:</strong> 2do A</li>
+      </ul>
     </div>
 
-    <!-- Selector de Grado -->
-    <div class="form-group mb-3">
-      <label for="grade" class="form-label">Grado:</label>
-      <select 
-        id="grade"
-        class="form-select"
-        [(ngModel)]="selectedGrade"
-        (change)="onGradeChange()">
-        @for (grade of grades; track grade.value) {
-          <option [value]="grade.value">{{ grade.label }}</option>
-        }
-      </select>
+    <!-- INFORMACIÓN DEL PAGO -->
+    <div class="payment-info mb-4">
+      <h6 class="fw-bold mb-3">Información del pago:</h6>
+      
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <label class="form-label">Monto</label>
+          <input 
+            type="number" 
+            class="form-control custom-input" 
+            [(ngModel)]="paymentData.amount"
+            name="amount"
+            min="0"
+            step="0.01"
+            placeholder="350">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Fecha de pago</label>
+          <input 
+            type="date" 
+            class="form-control custom-input"
+            [(ngModel)]="paymentData.paymentDate"
+            name="paymentDate">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Método de pago</label>
+          <select 
+            class="form-select custom-select"
+            [(ngModel)]="paymentData.paymentMethod"
+            name="paymentMethod">
+            @for (method of paymentMethods; track method.value) {
+              <option [value]="method.value">{{ method.label }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="row mb-4">
+        <div class="col-12">
+          <label class="form-label">Observaciones</label>
+          <textarea 
+            class="form-control custom-textarea"
+            rows="3"
+            [(ngModel)]="paymentData.observations"
+            name="observations"
+            placeholder="Agregar observaciones sobre el pago..."></textarea>
+        </div>
+      </div>
     </div>
 
-    <!-- Selector de Grupo -->
-    <div class="form-group mb-3">
-      <label class="form-label">Grupo:</label>
-      <div class="group-options">
-        @for (group of availableGroups; track group.id) {
-          <div class="group-option" [class.disabled]="isGroupDisabled(group)">
-            <label class="group-radio-label">
-              <input 
-                type="radio" 
-                name="group"
-                [value]="group.id"
-                [(ngModel)]="selectedGroupId"
-                [disabled]="isGroupDisabled(group)"
-                (change)="onGroupSelect(group.id)"
-                class="form-check-input me-3">
-              <div class="group-info">
-                <div class="d-flex align-items-center gap-2 mb-1">
-                  <span class="group-name fw-bold">{{ group.name }}</span>
-                  <span [class]="'badge ' + getGroupStatusClass(group)">
-                    {{ group.status }}
-                  </span>
-                </div>
-                <small class="group-details text-muted">
-                  Cupo condición {{ group.conditionQuota }}/{{ group.maxConditionQuota }} - 
-                  Total: {{ group.totalStudents }}/{{ group.maxCapacity }}
-                </small>
-              </div>
-            </label>
-          </div>
-        }
+    <!-- GENERAR CREDENCIALES -->
+    <div class="credentials-section mb-4">
+      <h6 class="fw-bold mb-3">Generar credenciales:</h6>
+      <div class="radio-group">
+        <div class="form-check">
+          <input 
+            class="form-check-input" 
+            type="radio" 
+            name="generateCredentials"
+            id="automatic"
+            value="automatic"
+            [(ngModel)]="paymentData.generateCredentials">
+          <label class="form-check-label" for="automatic">
+            Crear automáticamente
+          </label>
+        </div>
+        <div class="form-check">
+          <input 
+            class="form-check-input" 
+            type="radio" 
+            name="generateCredentials"
+            id="manual"
+            value="manual"
+            [(ngModel)]="paymentData.generateCredentials">
+          <label class="form-check-label" for="manual">
+            Crear manualmente
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTIFICAR AL APODERADO -->
+    <div class="notification-section mb-4">
+      <h6 class="fw-bold mb-3">Notificar al apoderado por:</h6>
+      <div class="radio-group">
+        <div class="form-check">
+          <input 
+            class="form-check-input" 
+            type="radio" 
+            name="notifyGuardianBy"
+            id="whatsapp"
+            value="whatsapp"
+            [(ngModel)]="paymentData.notifyGuardianBy">
+          <label class="form-check-label" for="whatsapp">
+            WhatsApp
+          </label>
+        </div>
+        <div class="form-check">
+          <input 
+            class="form-check-input" 
+            type="radio" 
+            name="notifyGuardianBy"
+            id="email"
+            value="email"
+            [(ngModel)]="paymentData.notifyGuardianBy">
+          <label class="form-check-label" for="email">
+            Correo electrónico
+          </label>
+        </div>
       </div>
     </div>
   </div>
@@ -77,16 +136,15 @@
   <div class="modal-footer">
     <button 
       type="button" 
-      class="btn btn-secondary"
+      class="btn btn-primary"
       (click)="onCancel()">
       Cancelar
     </button>
     <button 
       type="button" 
       class="btn btn-success"
-      (click)="onConfirm()"
-      [disabled]="!selectedGroupId">
-      Generar Ticket
+      (click)="onConfirm()">
+      Confirmar pago y continuar
     </button>
   </div>
 </ng-template>

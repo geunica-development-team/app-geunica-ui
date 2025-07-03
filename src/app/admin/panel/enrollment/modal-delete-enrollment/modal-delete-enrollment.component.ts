@@ -9,32 +9,38 @@ import { AssignGroupData, GroupOption } from '../../../services/enrollment.servi
   styleUrl: './modal-delete-enrollment.component.css'
 })
 export class ModalDeleteEnrollmentComponent {
-//INYECCIONES
   private modalService = inject(NgbModal);
+  
+  @Output() enrollmentDeleted = new EventEmitter<any>();
 
-  @Output() groupAssigned = new EventEmitter<AssignGroupData>();
-
-// Datos del estudiante seleccionado
+  // Datos del estudiante a eliminar
   currentStudent: any = null;
-  selectedLevel: string = 'Primaria';
-  selectedGrade: string = '2do';
-  selectedGroupId: string = '';
 
   @ViewChild('modalDeleteEnrollment') modalDeleteEnrollment!: TemplateRef<ElementRef>;
 
   openModal(studentData: any) {
-    console.log('Abriendo modal para:', studentData); // Para debug
+    console.log('Abriendo modal de eliminar inscripción para:', studentData);
     
+    this.currentStudent = studentData;
+
     this.modalService.open(this.modalDeleteEnrollment, { 
       centered: true,
-      size: 'lg',
+      size: 'md',
       backdrop: 'static'
     });
   }
 
-  onConfirm() {
-    console.log('Datos a enviar: wi');
+  onConfirmDelete() {
+    console.log('Eliminando inscripción de:', this.currentStudent);
+    
+    // Emitir evento con los datos del estudiante eliminado
+    this.enrollmentDeleted.emit(this.currentStudent);
+    
+    // Cerrar modal
     this.modalService.dismissAll();
+    
+    // Mostrar mensaje de confirmación
+    alert('Inscripción eliminada exitosamente');
   }
 
   onCancel() {

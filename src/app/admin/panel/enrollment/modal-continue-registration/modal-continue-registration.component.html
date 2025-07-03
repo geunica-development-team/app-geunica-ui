@@ -12,65 +12,114 @@
   </div>
 
   <div class="modal-body">
-    <!-- Selector de Nivel -->
-    <div class="form-group mb-3">
-      <label for="level" class="form-label">Nivel:</label>
-      <select 
-        id="level"
-        class="form-select"
-        [(ngModel)]="selectedLevel"
-        (change)="onLevelChange()">
-        @for (level of levels; track level.value) {
-          <option [value]="level.value">{{ level.label }}</option>
-        }
-      </select>
+    <!-- Información del estudiante -->
+    <div class="alert alert-info mb-3">
+      <strong>Estudiante:</strong> {{ currentStudent?.student }}<br>
+      <strong>Resultado de evaluación:</strong> {{ currentStudent?.eval_result || 'Sin evaluar' }}
     </div>
 
-    <!-- Selector de Grado -->
-    <div class="form-group mb-3">
-      <label for="grade" class="form-label">Grado:</label>
-      <select 
-        id="grade"
-        class="form-select"
-        [(ngModel)]="selectedGrade"
-        (change)="onGradeChange()">
-        @for (grade of grades; track grade.value) {
-          <option [value]="grade.value">{{ grade.label }}</option>
-        }
-      </select>
+    <!-- Filtros -->
+    <div class="row mb-4">
+      <!-- Filtro de Nivel -->
+      <div class="col-md-4">
+        <label for="level" class="form-label">Filtrar por Nivel:</label>
+        <select 
+          id="level"
+          class="form-select"
+          [(ngModel)]="selectedLevel"
+          (change)="onLevelChange()">
+          <option value="">Todos los niveles</option>
+          @for (level of levels; track level.value) {
+            <option [value]="level.value">{{ level.label }}</option>
+          }
+        </select>
+      </div>
+
+      <!-- Filtro de Grado -->
+      <div class="col-md-4">
+        <label for="grade" class="form-label">Filtrar por Grado:</label>
+        <select 
+          id="grade"
+          class="form-select"
+          [(ngModel)]="selectedGrade"
+          (change)="onGradeChange()">
+          <option value="">Todos los grados</option>
+          @for (grade of grades; track grade.value) {
+            <option [value]="grade.value">{{ grade.label }}</option>
+          }
+        </select>
+      </div>
+
+      <!-- Filtro de Turno -->
+      <div class="col-md-4">
+        <label for="shift" class="form-label">Filtrar por Turno:</label>
+        <select 
+          id="shift"
+          class="form-select"
+          [(ngModel)]="selectedShift"
+          (change)="onShiftChange()">
+          <option value="">Todos los turnos</option>
+          @for (shift of shifts; track shift.value) {
+            <option [value]="shift.value">{{ shift.label }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <!-- Contador de grupos filtrados -->
+    <div class="mb-3">
+      <small class="text-muted">
+        Mostrando {{ filteredGroups.length }} de {{ availableGroups.length }} grupos
+      </small>
     </div>
 
     <!-- Selector de Grupo -->
     <div class="form-group mb-3">
-      <label class="form-label">Grupo:</label>
-      <div class="group-options">
-        @for (group of availableGroups; track group.id) {
-          <div class="group-option" [class.disabled]="isGroupDisabled(group)">
-            <label class="group-radio-label">
-              <input 
-                type="radio" 
-                name="group"
-                [value]="group.id"
-                [(ngModel)]="selectedGroupId"
-                [disabled]="isGroupDisabled(group)"
-                (change)="onGroupSelect(group.id)"
-                class="form-check-input me-3">
-              <div class="group-info">
-                <div class="d-flex align-items-center gap-2 mb-1">
-                  <span class="group-name fw-bold">{{ group.name }}</span>
-                  <span [class]="'badge ' + getGroupStatusClass(group)">
-                    {{ group.status }}
-                  </span>
+      <label class="form-label">Seleccionar Grupo:</label>
+      
+      @if (filteredGroups.length === 0) {
+        <div class="alert alert-warning">
+          <i class="fas fa-exclamation-triangle me-2"></i>
+          No hay grupos disponibles con los filtros seleccionados.
+        </div>
+      } @else {
+        <div class="group-options">
+          @for (group of filteredGroups; track group.id) {
+            <div class="group-option" [class.disabled]="isGroupDisabled(group)">
+              <label class="group-radio-label">
+                <input 
+                  type="radio" 
+                  name="group"
+                  [value]="group.id"
+                  [(ngModel)]="selectedGroupId"
+                  [disabled]="isGroupDisabled(group)"
+                  (change)="onGroupSelect(group.id)"
+                  class="form-check-input me-3">
+                
+                <div class="group-info">
+                  <div class="d-flex align-items-center gap-2 mb-1">
+                    <span class="group-name fw-bold">
+                      {{ group.name }} - {{ group.shift }} ({{ group.level }})
+                    </span>
+                    <span [class]="'badge ' + getGroupStatusClass(group)">
+                      {{ group.status }}
+                    </span>
+                  </div>
+                  
+                  <small class="group-details text-muted d-block">
+                    Estudiantes especiales: {{ group.total_special_students }}/{{ group.special_capacity }} - 
+                    Total: {{ group.total_students }}/{{ group.capacity }}
+                  </small>
+                  
+                  <small class="availability-info text-muted d-block">
+                    {{ getGroupAvailabilityInfo(group) }}
+                  </small>
                 </div>
-                <small class="group-details text-muted">
-                  Cupo condición {{ group.conditionQuota }}/{{ group.maxConditionQuota }} - 
-                  Total: {{ group.totalStudents }}/{{ group.maxCapacity }}
-                </small>
-              </div>
-            </label>
-          </div>
-        }
-      </div>
+              </label>
+            </div>
+          }
+        </div>
+      }
     </div>
   </div>
 
@@ -85,7 +134,7 @@
       type="button" 
       class="btn btn-success"
       (click)="onConfirm()"
-      [disabled]="!selectedGroupId">
+      [disabled]="isSelectedGroupDisabled">
       Generar Ticket
     </button>
   </div>

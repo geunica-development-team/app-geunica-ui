@@ -10,13 +10,16 @@ export interface Enrollment {
 
 export interface GroupOption {
   id: string;
+  area_id: string;
+  cycle_id: string;
   name: string;
-  available: boolean;
-  conditionQuota: number;
-  maxConditionQuota: number;
-  totalStudents: number;
-  maxCapacity: number;
-  status: 'Disponible' | 'Saturado' | 'Completo';
+  level: string;
+  shift: string;
+  capacity: number;
+  special_capacity: number;
+  total_students: number;
+  total_special_students: number;
+  status: string;
 }
 
 export interface AssignGroupData {
@@ -25,4 +28,100 @@ export interface AssignGroupData {
   level: string;
   grade: string;
   selectedGroup: GroupOption | null;
+}
+
+export interface StudentData {
+  firstName: string;
+  paternalLastName: string;
+  maternalLastName: string;
+  documentType: string;
+  documentNumber: string;
+  birthDate: string;
+  gender: string;
+  phone: string;
+  address: string;
+  email: string;
+}
+
+export interface GuardianData {
+  firstName: string;
+  paternalLastName: string;
+  maternalLastName: string;
+  documentType: string;
+  documentNumber: string;
+  birthDate: string;
+  gender: string;
+  phone: string;
+  address: string;
+  email: string;
+}
+
+export interface AcademicData {
+  level: string;
+  grade: string;
+  shift: string;
+}
+
+export interface EnrollmentData {
+  // Datos básicos
+  studentName: string;
+  enrollmentDate: string;
+  level: string;
+  grade: string;
+  shift: string;
+  
+  // Datos del estudiante
+  student: {
+    firstName: string;
+    paternalLastName: string;
+    maternalLastName: string;
+    documentType: string;
+    documentNumber: string;
+    birthDate: string;
+    gender: string;
+    phone: string;
+    address: string;
+    email: string;
+  };
+  
+  // Datos del apoderado
+  guardian: {
+    firstName: string;
+    paternalLastName: string;
+    maternalLastName: string;
+    documentType: string;
+    documentNumber: string;
+    birthDate: string;
+    gender: string;
+    phone: string;
+    address: string;
+    email: string;
+  };
+  
+  // Estado
+  enrollmentStatus: string;
+}
+
+export interface PaymentData {
+  studentId: number;
+  studentName: string;
+  level: string;
+  grade: string;
+  amount: number;
+  paymentDate: string;
+  paymentMethod: string;
+  observations: string;
+  generateCredentials: string;
+  notifyGuardianBy: string;
+}
+
+export interface CredentialsData {
+  studentId: number;
+  studentName: string;
+  level: string;
+  grade: string;
+  username: string;
+  password: string;
+  status: string;
+  notifyGuardianBy: string;
 }

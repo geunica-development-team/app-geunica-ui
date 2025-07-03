@@ -1,7 +1,8 @@
 <ng-template #modalDeleteEnrollment let-modal>
   <div class="modal-header">
-    <h4 class="modal-title">
-      Eliminar credenciales a: {{ currentStudent?.student || 'Estudiante' }}
+    <h4 class="modal-title text-danger">
+      <i class="warning-icon">⚠️</i>
+      Eliminar Inscripción
     </h4>
     <button 
       type="button" 
@@ -11,20 +12,24 @@
     </button>
   </div>
 
-  <div class="modal-body">
-    <!-- Selector de Nivel -->
-    <div class="form-group mb-3">
-      <label for="level" class="form-label">Nivel:</label>
-    </div>
-
-    <!-- Selector de Grado -->
-    <div class="form-group mb-3">
-      <label for="grade" class="form-label">Grado:</label>
-    </div>
-
-    <!-- Selector de Grupo -->
-    <div class="form-group mb-3">
-      <label class="form-label">Grupo:</label>
+  <div class="modal-body text-center">
+    <div class="warning-content">
+      <div class="warning-icon-large mb-3">
+        🗑️
+      </div>
+      
+      <h5 class="mb-3">¿Estás seguro de que quieres eliminar?</h5>
+      
+      <p class="warning-text mb-3">
+        Los datos no se podrán recuperar
+      </p>
+      
+      @if (currentStudent) {
+        <div class="student-info w-100">
+          <p class="mb-1"><strong>Estudiante:</strong> {{ currentStudent.student }}</p>
+          <p class="mb-0"><strong>Nivel:</strong> {{ currentStudent.application_level }}</p>
+        </div>
+      }
     </div>
   </div>
 
@@ -37,9 +42,9 @@
     </button>
     <button 
       type="button" 
-      class="btn btn-success"
-      (click)="onConfirm()">
-      Generar Ticket
+      class="btn btn-danger"
+      (click)="onConfirmDelete()">
+      Eliminar
     </button>
   </div>
 </ng-template>

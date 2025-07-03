@@ -1,7 +1,7 @@
 <ng-template #modalAddUser let-modal>
   <div class="modal-header">
     <h4 class="modal-title">
-      Añadir inscripcion:
+      Crear Usuario
     </h4>
     <button 
       type="button" 
@@ -12,20 +12,281 @@
   </div>
 
   <div class="modal-body">
-    <!-- Selector de Nivel -->
-    <div class="form-group mb-3">
-      <label for="level" class="form-label">Nivel:</label>
-    </div>
+    <form>
+      <!-- SELECCIÓN DE ROL -->
+      <div class="section-header mb-4">
+        <h5 class="fw-bold">
+          Tipo de Usuario
+        </h5>
+      </div>
 
-    <!-- Selector de Grado -->
-    <div class="form-group mb-3">
-      <label for="grade" class="form-label">Grado:</label>
-    </div>
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <label class="form-label required">Rol</label>
+          <select 
+            class="form-select custom-select"
+            [(ngModel)]="userData.role_id"
+            name="role"
+            (change)="onRoleChange()"
+            required>
+            <option [value]="0">Seleccionar rol...</option>
+            @for (rol of roles; track rol.id) {
+              <option [value]="rol.id">{{ rol.name }}</option>
+            }
+          </select>
+          <small class="text-muted">Rol seleccionado: {{ getRoleCode() }}</small>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label required">Estado</label>
+          <select 
+            class="form-select custom-select"
+            [(ngModel)]="userData.status"
+            name="status">
+            @for (status of statuses; track status.value) {
+              <option [value]="status.value">{{ status.label }}</option>
+            }
+          </select>
+        </div>
+      </div>
 
-    <!-- Selector de Grupo -->
-    <div class="form-group mb-3">
-      <label class="form-label">Grupo:</label>
-    </div>
+      <!-- DATOS DE ACCESO -->
+      <div class="section-header mb-3">
+        <h5 class="fw-bold">
+          Datos de Acceso
+        </h5>
+      </div>
+
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <label class="form-label required">Usuario</label>
+          <div class="input-group">
+            <input 
+              type="text" 
+              class="form-control custom-input"
+              [(ngModel)]="userData.username"
+              name="username"
+              placeholder="Nro DNI"
+              required>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label required">Contraseña</label>
+          <div class="input-group">
+            <input 
+              type="text" 
+              class="form-control custom-input"
+              [(ngModel)]="userData.password"
+              name="password"
+              placeholder="Contraseña"
+              required>
+            <button 
+              class="btn btn-outline-secondary" 
+              type="button"
+              (click)="generatePassword()"
+              title="Generar contraseña automáticamente">
+              🔄
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- DATOS PERSONALES -->
+      <div class="section-header mb-3">
+        <h5 class="fw-bold">
+          Datos Personales
+        </h5>
+      </div>
+
+      <!-- Nombres y Apellidos -->
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <label class="form-label required">Nombres</label>
+          <input 
+            type="text" 
+            class="form-control custom-input"
+            [(ngModel)]="userData.first_name"
+            name="firstName"
+            placeholder="Nombres"
+            required>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label required">Apellido Paterno</label>
+          <input 
+            type="text" 
+            class="form-control custom-input"
+            [(ngModel)]="userData.paternal_lastname"
+            name="paternalLastname"
+            placeholder="Apellido Paterno"
+            required>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Apellido Materno</label>
+          <input 
+            type="text" 
+            class="form-control custom-input"
+            [(ngModel)]="userData.maternal_lastname"
+            name="maternalLastname"
+            placeholder="Apellido Materno">
+        </div>
+      </div>
+
+      <!-- Documento y Datos Básicos -->
+      <div class="row mb-3">
+        <div class="col-md-3">
+          <label class="form-label required">Tipo de Documento</label>
+          <select 
+            class="form-select custom-select"
+            [(ngModel)]="userData.document_type_id"
+            name="documentType">
+            @for (type of documentTypes; track type.id) {
+              <option [value]="type.id">{{ type.name }}</option>
+            }
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label required">N° Documento</label>
+          <input 
+            type="text" 
+            class="form-control custom-input"
+            [(ngModel)]="userData.document_number"
+            name="documentNumber"
+            placeholder="12345678"
+            required>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Fecha de Nacimiento</label>
+          <input 
+            type="date" 
+            class="form-control custom-input"
+            [(ngModel)]="userData.birth_date"
+            name="birthDate">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label required">Género</label>
+          <select 
+            class="form-select custom-select"
+            [(ngModel)]="userData.gender"
+            name="gender">
+            @for (gender of genders; track gender.value) {
+              <option [value]="gender.value">{{ gender.label }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <!-- Contacto -->
+      <div class="row mb-4">
+        <div class="col-md-4">
+          <label class="form-label">Celular</label>
+          <input 
+            type="text" 
+            class="form-control custom-input"
+            [(ngModel)]="userData.phone"
+            name="phone"
+            placeholder="987654321">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label required">Correo</label>
+          <input 
+            type="email" 
+            class="form-control custom-input"
+            [(ngModel)]="userData.email"
+            name="email"
+            placeholder="correo@ejemplo.com"
+            required>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Dirección</label>
+          <input 
+            type="text" 
+            class="form-control custom-input"
+            [(ngModel)]="userData.address"
+            name="address"
+            placeholder="Dirección completa">
+        </div>
+      </div>
+
+      <!-- CAMPOS ESPECÍFICOS POR ROL -->
+      @if (userData.role_id > 0) {
+        <div class="role-specific-section">
+          <div class="alert alert-info">
+            <small>Mostrando campos para: <strong>{{ getRoleCode() }}</strong></small>
+          </div>
+          
+          <!-- DOCENTE -->
+          @if (getRoleCode() === 'TEACHER') {
+            <div class="section-header mb-3">
+              <h5 class="fw-bold">
+                Datos del Docente
+              </h5>
+            </div>
+            
+            <div class="row mb-4">
+              <div class="col-md-6">
+                <label class="form-label required">Especialidad</label>
+                <select 
+                  class="form-select custom-select"
+                  [(ngModel)]="userData.specialty"
+                  name="specialty">
+                  <option value="">Seleccionar especialidad...</option>
+                  @for (specialty of teacherSpecialties; track specialty) {
+                    <option [value]="specialty">{{ specialty }}</option>
+                  }
+                </select>
+              </div>
+            </div>
+          }
+
+          <!-- PSICÓLOGA -->
+          @if (getRoleCode() === 'PSYCHOLOGIST') {
+            <div class="section-header mb-3">
+              <h5 class="fw-bold">
+                Datos de la Psicóloga
+              </h5>
+            </div>
+            
+            <div class="row mb-4">
+              <div class="col-md-6">
+                <label class="form-label required">Área de Especialidad</label>
+                <select 
+                  class="form-select custom-select"
+                  [(ngModel)]="userData.specialty_area"
+                  name="specialtyArea">
+                  <option value="">Seleccionar área...</option>
+                  @for (area of psychologistSpecialtyAreas; track area) {
+                    <option [value]="area">{{ area }}</option>
+                  }
+                </select>
+              </div>
+            </div>
+          }
+
+          <!-- ADMINISTRADOR -->
+          @if (getRoleCode() === 'ADMIN') {
+            <div class="section-header mb-3">
+              <h5 class="fw-bold">
+                Datos del Administrador
+              </h5>
+            </div>
+            
+            <div class="row mb-4">
+              <div class="col-md-6">
+                <label class="form-label required">Nivel de Acceso</label>
+                <select 
+                  class="form-select custom-select"
+                  [(ngModel)]="userData.access_level"
+                  name="accessLevel">
+                  <option value="">Seleccionar nivel...</option>
+                  @for (level of adminAccessLevels; track level) {
+                    <option [value]="level">{{ level }}</option>
+                  }
+                </select>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </form>
   </div>
 
   <div class="modal-footer">
@@ -38,8 +299,8 @@
     <button 
       type="button" 
       class="btn btn-success"
-      (click)="onConfirm()">
-      Generar Ticket
+      (click)="onCreateUser()">
+      Crear Usuario
     </button>
   </div>
 </ng-template>

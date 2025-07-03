@@ -58,6 +58,7 @@
 .btn-warning:hover {
   background-color: #d97706;
   border-color: #d97706;
+  color: white;
 }
 
 .btn-info {

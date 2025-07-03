@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, inject, Output, TemplateRef, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AssignGroupData, GroupOption } from '../../../services/enrollment.service';
+import { AssignGroupData, GroupOption, PaymentData } from '../../../services/enrollment.service';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -10,71 +10,49 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './modal-mark-payment.component.css'
 })
 export class ModalMarkPaymentComponent {
-//INYECCIONES
   private modalService = inject(NgbModal);
+  
+  @Output() paymentMarked = new EventEmitter<PaymentData>();
 
-  @Output() groupAssigned = new EventEmitter<AssignGroupData>();
-
-// Datos del estudiante seleccionado
+  // Datos del estudiante (solo lectura)
   currentStudent: any = null;
-  selectedLevel: string = 'Primaria';
-  selectedGrade: string = '2do';
-  selectedGroupId: string = '';
 
-  levels = [
-    { value: 'Inicial', label: 'Inicial' },
-    { value: 'Primaria', label: 'Primaria' },
-    { value: 'Secundaria', label: 'Secundaria' }
-  ];
+  // Datos del pago
+  paymentData = {
+    amount: 350,
+    paymentDate: '',
+    paymentMethod: 'Transferencia',
+    observations: '',
+    generateCredentials: 'automatic',
+    notifyGuardianBy: 'whatsapp'
+  };
 
-  grades = [
-    { value: '1ro', label: '1ro' },
-    { value: '2do', label: '2do' },
-    { value: '3ro', label: '3ro' },
-    { value: '4to', label: '4to' },
-    { value: '5to', label: '5to' },
-    { value: '6to', label: '6to' }
-  ];
-
-  // Grupos disponibles (esto normalmente vendría de un servicio)
-  availableGroups: GroupOption[] = [
-    {
-      id: '2do-a',
-      name: '2do A',
-      available: true,
-      conditionQuota: 0,
-      maxConditionQuota: 1,
-      totalStudents: 25,
-      maxCapacity: 30,
-      status: 'Disponible'
-    },
-    {
-      id: '2do-b',
-      name: '2do B',
-      available: true,
-      conditionQuota: 1,
-      maxConditionQuota: 1,
-      totalStudents: 30,
-      maxCapacity: 30,
-      status: 'Disponible'
-    }
+  // Opciones para dropdowns
+  paymentMethods = [
+    { value: 'Transferencia', label: 'Transferencia' },
+    { value: 'Efectivo', label: 'Efectivo' },
+    { value: 'Tarjeta', label: 'Tarjeta de crédito/débito' },
+    { value: 'Deposito', label: 'Depósito bancario' },
+    { value: 'Cheque', label: 'Cheque' }
   ];
 
   @ViewChild('modalMarkPayment') modalMarkPayment!: TemplateRef<ElementRef>;
 
   openModal(studentData: any) {
-    console.log('Abriendo modal para:', studentData); // Para debug
+    console.log('Abriendo modal de pago para:', studentData);
     
     this.currentStudent = studentData;
-    this.selectedLevel = studentData.application_level || 'Primaria';
-    this.selectedGrade = '2do';
     
-    // Seleccionar el primer grupo disponible por defecto
-    const firstAvailable = this.availableGroups.find(g => g.available);
-    if (firstAvailable) {
-      this.selectedGroupId = firstAvailable.id;
-    }
-    
+    // Inicializar datos del pago
+    this.paymentData = {
+      amount: 350,
+      paymentDate: this.getCurrentDate(),
+      paymentMethod: 'Transferencia',
+      observations: '',
+      generateCredentials: 'automatic',
+      notifyGuardianBy: 'whatsapp'
+    };
+
     this.modalService.open(this.modalMarkPayment, { 
       centered: true,
       size: 'lg',
@@ -82,59 +60,50 @@ export class ModalMarkPaymentComponent {
     });
   }
 
-
-
-
-
-  onLevelChange() {
-    console.log('Nivel cambiado a:', this.selectedLevel);
-  }
-
-  onGradeChange() {
-    console.log('Grado cambiado a:', this.selectedGrade);
-  }
-
-  onGroupSelect(groupId: string) {
-    this.selectedGroupId = groupId;
-    console.log('Grupo seleccionado:', groupId);
-  }
-
-  getGroupStatusClass(group: GroupOption): string {
-    switch (group.status) {
-      case 'Disponible':
-        return 'badge-success';
-      case 'Saturado':
-        return 'badge-warning';
-      case 'Completo':
-        return 'badge-danger';
-      default:
-        return 'badge-secondary';
-    }
-  }
-
-  isGroupDisabled(group: GroupOption): boolean {
-    return !group.available || group.status === 'Saturado';
+  getCurrentDate(): string {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 
   onConfirm() {
-    const selectedGroup = this.availableGroups.find(g => g.id === this.selectedGroupId);
-    
-    if (!selectedGroup) {
-      alert('Por favor selecciona un grupo');
+    // Validaciones básicas
+    if (!this.paymentData.amount || this.paymentData.amount <= 0) {
+      alert('Por favor ingresa un monto válido');
       return;
     }
 
-    const assignData: AssignGroupData = {
+    if (!this.paymentData.paymentDate) {
+      alert('Por favor selecciona una fecha de pago');
+      return;
+    }
+
+    if (!this.paymentData.paymentMethod) {
+      alert('Por favor selecciona un método de pago');
+      return;
+    }
+
+    const paymentInfo: PaymentData = {
       studentId: this.currentStudent.id,
       studentName: this.currentStudent.student,
-      level: this.selectedLevel,
-      grade: this.selectedGrade,
-      selectedGroup: selectedGroup
+      level: this.currentStudent.application_level,
+      grade: '2do A', // Esto debería venir de los datos del estudiante
+      amount: this.paymentData.amount,
+      paymentDate: this.paymentData.paymentDate,
+      paymentMethod: this.paymentData.paymentMethod,
+      observations: this.paymentData.observations,
+      generateCredentials: this.paymentData.generateCredentials,
+      notifyGuardianBy: this.paymentData.notifyGuardianBy
     };
 
-    console.log('Datos a enviar:', assignData);
-    this.groupAssigned.emit(assignData);
+    console.log('Datos del pago:', paymentInfo);
+    this.paymentMarked.emit(paymentInfo);
     this.modalService.dismissAll();
+
+    // Mostrar mensaje de confirmación
+    alert('Pago marcado exitosamente. Se procederá con la generación de credenciales.');
   }
 
   onCancel() {

@@ -16,6 +16,14 @@ import { ModalReadEnrollmentComponent } from './modal-read-enrollment/modal-read
   styleUrl: './enrollment.component.css'
 })
 export class EnrollmentComponent {
+
+  @ViewChild('modalContinueRegistration') modalContinueRegistration?: ModalContinueRegistrationComponent;
+  @ViewChild('modalMarkPayment') modalMarkPayment?: ModalMarkPaymentComponent;
+  @ViewChild('modalCreateCredentials') modalCreateCredentials?: ModalCreateCredentialsComponent;
+  @ViewChild('modalDeleteEnrollment') modalDeleteEnrollment?: ModalDeleteEnrollmentComponent;
+  @ViewChild('modalReadEnrollment') modalReadEnrollment?: ModalReadEnrollmentComponent;
+
+  
   // COLUMNAS DE LA TABLA
   columns = [
     'ID',
@@ -134,7 +142,6 @@ export class EnrollmentComponent {
   @ViewChild('enrollmentTable') enrollmentTable?: TableEnrollmentComponent;
   
   //MODAL PARA CONTINUAR CON MATRICULA
-  @ViewChild('modalContinueRegistration') modalContinueRegistration?: ModalContinueRegistrationComponent;
   openModalContinueRegistration(row: any) {
     if (this.modalContinueRegistration) {
       this.modalContinueRegistration.openModal(row);
@@ -146,7 +153,6 @@ export class EnrollmentComponent {
   }
 
   //MODAL PARA MARCAR PAGO
-  @ViewChild('modalMarkPayment') modalMarkPayment?: ModalMarkPaymentComponent;
   openModalMarkPayment(row: any) {
     if (this.modalMarkPayment) {
       this.modalMarkPayment.openModal(row);
@@ -159,7 +165,6 @@ export class EnrollmentComponent {
 
 
   //MODAL PARA CREAR CREDENCIALES
-  @ViewChild('modalCreateCredentials') modalCreateCredentials?: ModalCreateCredentialsComponent;
 
   openModalCreateCredentials(row: any) {
     if (this.modalCreateCredentials) {
@@ -172,7 +177,6 @@ export class EnrollmentComponent {
   }
 
   //MODAL PARA ELIMINAR INSCRIPCION
-  @ViewChild('modalDeleteEnrollment') modalDeleteEnrollment?: ModalDeleteEnrollmentComponent;
   openModalDeleteEnrollment(row: any) {
     if (this.modalDeleteEnrollment) {
       this.modalDeleteEnrollment.openModal(row);
@@ -184,7 +188,6 @@ export class EnrollmentComponent {
   }
   
   //MODAL PARA LEER LA INSCRIPCION
-  @ViewChild('modalReadEnrollment') modalReadEnrollment?: ModalReadEnrollmentComponent;
   openModalReadEnrollment(row: any) {
     if (this.modalReadEnrollment) {
       this.modalReadEnrollment.openModal(row);

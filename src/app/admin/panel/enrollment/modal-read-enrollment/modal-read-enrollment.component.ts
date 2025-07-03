@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, inject, Output, TemplateRef, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AssignGroupData, GroupOption } from '../../../services/enrollment.service';
+import { AssignGroupData, EnrollmentData, GroupOption } from '../../../services/enrollment.service';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -10,134 +10,116 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './modal-read-enrollment.component.css'
 })
 export class ModalReadEnrollmentComponent {
-  //INYECCIONES
   private modalService = inject(NgbModal);
+  
+  @Output() enrollmentUpdated = new EventEmitter<EnrollmentData>();
 
-  @Output() groupAssigned = new EventEmitter<AssignGroupData>();
+  // Estado del modal
+  isEditMode: boolean = false;
+  originalData: EnrollmentData | null = null;
+  currentData: EnrollmentData | null = null;
 
-// Datos del estudiante seleccionado
-  currentStudent: any = null;
-  selectedLevel: string = 'Primaria';
-  selectedGrade: string = '2do';
-  selectedGroupId: string = '';
-
-  levels = [
-    { value: 'Inicial', label: 'Inicial' },
-    { value: 'Primaria', label: 'Primaria' },
-    { value: 'Secundaria', label: 'Secundaria' }
+  // Opciones para dropdowns
+  documentTypes = [
+    { value: 'DNI', label: 'DNI' },
+    { value: 'CE', label: 'Carnet de Extranjería' },
+    { value: 'PASAPORTE', label: 'Pasaporte' }
   ];
 
-  grades = [
-    { value: '1ro', label: '1ro' },
-    { value: '2do', label: '2do' },
-    { value: '3ro', label: '3ro' },
-    { value: '4to', label: '4to' },
-    { value: '5to', label: '5to' },
-    { value: '6to', label: '6to' }
+  genders = [
+    { value: 'M', label: 'Masculino' },
+    { value: 'F', label: 'Femenino' }
   ];
 
-  // Grupos disponibles (esto normalmente vendría de un servicio)
-  availableGroups: GroupOption[] = [
-    {
-      id: '2do-a',
-      name: '2do A',
-      available: true,
-      conditionQuota: 0,
-      maxConditionQuota: 1,
-      totalStudents: 25,
-      maxCapacity: 30,
-      status: 'Disponible'
-    },
-    {
-      id: '2do-b',
-      name: '2do B',
-      available: true,
-      conditionQuota: 1,
-      maxConditionQuota: 1,
-      totalStudents: 30,
-      maxCapacity: 30,
-      status: 'Disponible'
-    }
+  enrollmentStatuses = [
+    { value: 'Pendiente', label: 'Pendiente' },
+    { value: 'Evaluado', label: 'Evaluado' },
+    { value: 'Aprobado', label: 'Aprobado' },
+    { value: 'Inscrito', label: 'Inscrito' },
+    { value: 'Rechazado', label: 'Rechazado' }
   ];
 
   @ViewChild('modalReadEnrollment') modalReadEnrollment!: TemplateRef<ElementRef>;
 
-  openModal(studentData: any) {
-    console.log('Abriendo modal para:', studentData); // Para debug
-    
-    this.currentStudent = studentData;
-    this.selectedLevel = studentData.application_level || 'Primaria';
-    this.selectedGrade = '2do';
-    
-    // Seleccionar el primer grupo disponible por defecto
-    const firstAvailable = this.availableGroups.find(g => g.available);
-    if (firstAvailable) {
-      this.selectedGroupId = firstAvailable.id;
-    }
-    
+  openModal(enrollmentData: any) {
+    // Mapear los datos recibidos al formato interno
+    this.originalData = {
+      studentName: enrollmentData.student || 'Carlos Zuñiga',
+      enrollmentDate: enrollmentData.date || '12/05/2025',
+      level: enrollmentData.application_level || 'Primaria',
+      grade: '4to',
+      shift: 'Mañana',
+      student: {
+        firstName: 'Gabriel',
+        paternalLastName: 'Echevarria',
+        maternalLastName: 'Gutierrez',
+        documentType: 'DNI',
+        documentNumber: '76251458',
+        birthDate: '2005-01-16',
+        gender: 'M',
+        phone: '987123654',
+        address: 'Cal. Amazonas 345',
+        email: 'correo@example.com'
+      },
+      guardian: {
+        firstName: 'Gabriel',
+        paternalLastName: 'Echevarria',
+        maternalLastName: 'Gutierrez',
+        documentType: 'DNI',
+        documentNumber: '76251458',
+        birthDate: '2005-01-16',
+        gender: 'M',
+        phone: '987123654',
+        address: 'Cal. Amazonas 345',
+        email: 'correo@example.com'
+      },
+      enrollmentStatus: 'Inscrito'
+    };
+
+    // Crear una copia para edición
+    this.currentData = JSON.parse(JSON.stringify(this.originalData));
+    this.isEditMode = false;
+
     this.modalService.open(this.modalReadEnrollment, { 
       centered: true,
-      size: 'lg',
+      size: 'xl',
       backdrop: 'static'
     });
   }
 
-
-
-
-
-  onLevelChange() {
-    console.log('Nivel cambiado a:', this.selectedLevel);
+  enableEditMode() {
+    this.isEditMode = true;
   }
 
-  onGradeChange() {
-    console.log('Grado cambiado a:', this.selectedGrade);
+  cancelEdit() {
+    // Restaurar datos originales
+    this.currentData = JSON.parse(JSON.stringify(this.originalData));
+    this.isEditMode = false;
   }
 
-  onGroupSelect(groupId: string) {
-    this.selectedGroupId = groupId;
-    console.log('Grupo seleccionado:', groupId);
-  }
-
-  getGroupStatusClass(group: GroupOption): string {
-    switch (group.status) {
-      case 'Disponible':
-        return 'badge-success';
-      case 'Saturado':
-        return 'badge-warning';
-      case 'Completo':
-        return 'badge-danger';
-      default:
-        return 'badge-secondary';
+  saveChanges() {
+    if (this.currentData) {
+      // Actualizar los datos originales
+      this.originalData = JSON.parse(JSON.stringify(this.currentData));
+      this.isEditMode = false;
+      
+      // Emitir evento con los datos actualizados
+      this.enrollmentUpdated.emit(this.currentData);
+      
+      // Mostrar mensaje de éxito
+      alert('Cambios guardados exitosamente');
     }
-  }
-
-  isGroupDisabled(group: GroupOption): boolean {
-    return !group.available || group.status === 'Saturado';
-  }
-
-  onConfirm() {
-    const selectedGroup = this.availableGroups.find(g => g.id === this.selectedGroupId);
-    
-    if (!selectedGroup) {
-      alert('Por favor selecciona un grupo');
-      return;
-    }
-
-    const assignData: AssignGroupData = {
-      studentId: this.currentStudent.id,
-      studentName: this.currentStudent.student,
-      level: this.selectedLevel,
-      grade: this.selectedGrade,
-      selectedGroup: selectedGroup
-    };
-
-    console.log('Datos a enviar:', assignData);
-    this.groupAssigned.emit(assignData);
-    this.modalService.dismissAll();
   }
 
   onCancel() {
-    this.modalService.dismissAll();
+    if (this.isEditMode) {
+      // Si está en modo edición, preguntar si quiere descartar cambios
+      if (confirm('¿Estás seguro de que quieres descartar los cambios?')) {
+        this.cancelEdit();
+        this.modalService.dismissAll();
+      }
+    } else {
+      this.modalService.dismissAll();
+    }
   }
 }

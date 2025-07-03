@@ -1,8 +1,14 @@
 <ng-template #modalReadEnrollment let-modal>
   <div class="modal-header">
-    <h4 class="modal-title">
-      Leer inscripción a: {{ currentStudent?.student || 'Estudiante' }}
-    </h4>
+    <div class="w-100">
+      <h4 class="modal-title mb-2">{{ currentData?.studentName }}</h4>
+      <div class="enrollment-info">
+        <p class="mb-1"><strong>Fecha de inscripción:</strong> {{ currentData?.enrollmentDate }}</p>
+        <p class="mb-0"><strong>Nivel, Grado y Turno seleccionado:</strong> 
+          {{ currentData?.level }} - {{ currentData?.grade }} - {{ currentData?.shift }}
+        </p>
+      </div>
+    </div>
     <button 
       type="button" 
       class="btn-close" 
@@ -12,66 +18,270 @@
   </div>
 
   <div class="modal-body">
-    <!-- Selector de Nivel -->
-    <div class="form-group mb-3">
-      <label for="level" class="form-label">Nivel:</label>
-      <select 
-        id="level"
-        class="form-select"
-        [(ngModel)]="selectedLevel"
-        (change)="onLevelChange()">
-        @for (level of levels; track level.value) {
-          <option [value]="level.value">{{ level.label }}</option>
-        }
-      </select>
-    </div>
-
-    <!-- Selector de Grado -->
-    <div class="form-group mb-3">
-      <label for="grade" class="form-label">Grado:</label>
-      <select 
-        id="grade"
-        class="form-select"
-        [(ngModel)]="selectedGrade"
-        (change)="onGradeChange()">
-        @for (grade of grades; track grade.value) {
-          <option [value]="grade.value">{{ grade.label }}</option>
-        }
-      </select>
-    </div>
-
-    <!-- Selector de Grupo -->
-    <div class="form-group mb-3">
-      <label class="form-label">Grupo:</label>
-      <div class="group-options">
-        @for (group of availableGroups; track group.id) {
-          <div class="group-option" [class.disabled]="isGroupDisabled(group)">
-            <label class="group-radio-label">
-              <input 
-                type="radio" 
-                name="group"
-                [value]="group.id"
-                [(ngModel)]="selectedGroupId"
-                [disabled]="isGroupDisabled(group)"
-                (change)="onGroupSelect(group.id)"
-                class="form-check-input me-3">
-              <div class="group-info">
-                <div class="d-flex align-items-center gap-2 mb-1">
-                  <span class="group-name fw-bold">{{ group.name }}</span>
-                  <span [class]="'badge ' + getGroupStatusClass(group)">
-                    {{ group.status }}
-                  </span>
-                </div>
-                <small class="group-details text-muted">
-                  Cupo condición {{ group.conditionQuota }}/{{ group.maxConditionQuota }} - 
-                  Total: {{ group.totalStudents }}/{{ group.maxCapacity }}
-                </small>
-              </div>
-            </label>
-          </div>
-        }
+    <form>
+      <!-- DATOS DEL ESTUDIANTE -->
+      <div class="section-header mb-3">
+        <h5 class="fw-bold">Datos del Estudiante</h5>
       </div>
-    </div>
+
+      <!-- Fila 1: Nombres y Apellidos -->
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <label class="form-label">Nombre</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            [class.disabled-input]="!isEditMode"
+            [disabled]="!isEditMode"
+            [(ngModel)]="currentData!.student.firstName"
+            name="studentFirstName">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Apellido Paterno</label>
+          <input 
+            type="text" 
+            class="form-control"
+            [class.disabled-input]="!isEditMode"
+            [disabled]="!isEditMode"
+            [(ngModel)]="currentData!.student.paternalLastName"
+            name="studentPaternalLastName">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Apellido Materno</label>
+          <input 
+            type="text" 
+            class="form-control"
+            [class.disabled-input]="!isEditMode"
+            [disabled]="!isEditMode"
+            [(ngModel)]="currentData!.student.maternalLastName"
+            name="studentMaternalLastName">
+        </div>
+      </div>
+
+      <!-- Fila 2: Documento, Fecha y Sexo -->
+      <div class="row mb-3">
+        <div class="col-md-3">
+          <label class="form-label">Tipo de Documento</label>
+          <select 
+            class="form-select"
+            [class.disabled-input]="!isEditMode"
+            [disabled]="!isEditMode"
+            [(ngModel)]="currentData!.student.documentType"
+            name="studentDocumentType">
+            @for (docType of documentTypes; track docType.value) {
+              <option [value]="docType.value">{{ docType.label }}</option>
+            }
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">N° documento</label>
+          <input 
+            type="text" 
+            class="form-control"
+            [class.disabled-input]="!isEditMode"
+            [disabled]="!isEditMode"
+            [(ngModel)]="currentData!.student.documentNumber"
+            name="studentDocumentNumber">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Fecha de Nacimiento</label>
+          <input 
+            type="date" 
+            class="form-control"
+            [class.disabled-input]="!isEditMode"
+            [disabled]="!isEditMode"
+            [(ngModel)]="currentData!.student.birthDate"
+            name="studentBirthDate">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Sexo</label>
+          <select 
+            class="form-select"
+            [class.disabled-input]="!isEditMode"
+            [disabled]="!isEditMode"
+            [(ngModel)]="currentData!.student.gender"
+            name="studentGender">
+            @for (gender of genders; track gender.value) {
+              <option [value]="gender.value">{{ gender.label }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <!-- Fila 3: Contacto -->
+      <div class="row mb-4">
+        <div class="col-md-4">
+          <label class="form-label">Celular</label>
+          <input 
+            type="text" 
+            class="form-control"
+            [class.disabled-input]="!isEditMode"
+            [disabled]="!isEditMode"
+            [(ngModel)]="currentData!.student.phone"
+            name="studentPhone">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Dirección</label>
+          <input 
+            type="text" 
+            class="form-control"
+            [class.disabled-input]="!isEditMode"
+            [disabled]="!isEditMode"
+            [(ngModel)]="currentData!.student.address"
+            name="studentAddress">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Correo Personal</label>
+          <input 
+            type="email" 
+            class="form-control"
+            [class.disabled-input]="!isEditMode"
+            [disabled]="!isEditMode"
+            [(ngModel)]="currentData!.student.email"
+            name="studentEmail">
+        </div>
+      </div>
+
+      <!-- DATOS DEL APODERADO -->
+      <div class="section-header mb-3">
+        <h5 class="fw-bold">Datos del Apoderado</h5>
+      </div>
+
+      <!-- Fila 1: Nombres y Apellidos del Apoderado -->
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <label class="form-label">Nombre</label>
+          <input 
+            type="text" 
+            class="form-control"
+            [class.disabled-input]="!isEditMode"
+            [disabled]="!isEditMode"
+            [(ngModel)]="currentData!.guardian.firstName"
+            name="guardianFirstName">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Apellido Paterno</label>
+          <input 
+            type="text" 
+            class="form-control"
+            [class.disabled-input]="!isEditMode"
+            [disabled]="!isEditMode"
+            [(ngModel)]="currentData!.guardian.paternalLastName"
+            name="guardianPaternalLastName">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Apellido Materno</label>
+          <input 
+            type="text" 
+            class="form-control"
+            [class.disabled-input]="!isEditMode"
+            [disabled]="!isEditMode"
+            [(ngModel)]="currentData!.guardian.maternalLastName"
+            name="guardianMaternalLastName">
+        </div>
+      </div>
+
+      <!-- Fila 2: Documento, Fecha y Sexo del Apoderado -->
+      <div class="row mb-3">
+        <div class="col-md-3">
+          <label class="form-label">Tipo de Documento</label>
+          <select 
+            class="form-select"
+            [class.disabled-input]="!isEditMode"
+            [disabled]="!isEditMode"
+            [(ngModel)]="currentData!.guardian.documentType"
+            name="guardianDocumentType">
+            @for (docType of documentTypes; track docType.value) {
+              <option [value]="docType.value">{{ docType.label }}</option>
+            }
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">N° documento</label>
+          <input 
+            type="text" 
+            class="form-control"
+            [class.disabled-input]="!isEditMode"
+            [disabled]="!isEditMode"
+            [(ngModel)]="currentData!.guardian.documentNumber"
+            name="guardianDocumentNumber">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Fecha de Nacimiento</label>
+          <input 
+            type="date" 
+            class="form-control"
+            [class.disabled-input]="!isEditMode"
+            [disabled]="!isEditMode"
+            [(ngModel)]="currentData!.guardian.birthDate"
+            name="guardianBirthDate">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Sexo</label>
+          <select 
+            class="form-select"
+            [class.disabled-input]="!isEditMode"
+            [disabled]="!isEditMode"
+            [(ngModel)]="currentData!.guardian.gender"
+            name="guardianGender">
+            @for (gender of genders; track gender.value) {
+              <option [value]="gender.value">{{ gender.label }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <!-- Fila 3: Contacto del Apoderado -->
+      <div class="row mb-4">
+        <div class="col-md-4">
+          <label class="form-label">Celular</label>
+          <input 
+            type="text" 
+            class="form-control"
+            [class.disabled-input]="!isEditMode"
+            [disabled]="!isEditMode"
+            [(ngModel)]="currentData!.guardian.phone"
+            name="guardianPhone">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Dirección</label>
+          <input 
+            type="text" 
+            class="form-control"
+            [class.disabled-input]="!isEditMode"
+            [disabled]="!isEditMode"
+            [(ngModel)]="currentData!.guardian.address"
+            name="guardianAddress">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Correo Personal</label>
+          <input 
+            type="email" 
+            class="form-control"
+            [class.disabled-input]="!isEditMode"
+            [disabled]="!isEditMode"
+            [(ngModel)]="currentData!.guardian.email"
+            name="guardianEmail">
+        </div>
+      </div>
+
+      <!-- ESTADO DE INSCRIPCIÓN -->
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label class="form-label">Cambiar estado de inscripción</label>
+          <select 
+            class="form-select"
+            [class.disabled-input]="!isEditMode"
+            [disabled]="!isEditMode"
+            [(ngModel)]="currentData!.enrollmentStatus"
+            name="enrollmentStatus">
+            @for (status of enrollmentStatuses; track status.value) {
+              <option [value]="status.value">{{ status.label }}</option>
+            }
+          </select>
+        </div>
+      </div>
+    </form>
   </div>
 
   <div class="modal-footer">
@@ -81,12 +291,21 @@
       (click)="onCancel()">
       Cancelar
     </button>
-    <button 
-      type="button" 
-      class="btn btn-success"
-      (click)="onConfirm()"
-      [disabled]="!selectedGroupId">
-      Generar Ticket
-    </button>
+    
+    @if (!isEditMode) {
+      <button 
+        type="button" 
+        class="btn btn-warning"
+        (click)="enableEditMode()">
+        Editar
+      </button>
+    } @else {
+      <button 
+        type="button" 
+        class="btn btn-success"
+        (click)="saveChanges()">
+        Guardar cambios
+      </button>
+    }
   </div>
 </ng-template>

@@ -39,29 +39,7 @@ export class ModalEditUserComponent {
     { value: '6to', label: '6to' }
   ];
 
-  // Grupos disponibles (esto normalmente vendría de un servicio)
-  availableGroups: GroupOption[] = [
-    {
-      id: '2do-a',
-      name: '2do A',
-      available: true,
-      conditionQuota: 0,
-      maxConditionQuota: 1,
-      totalStudents: 25,
-      maxCapacity: 30,
-      status: 'Disponible'
-    },
-    {
-      id: '2do-b',
-      name: '2do B',
-      available: true,
-      conditionQuota: 1,
-      maxConditionQuota: 1,
-      totalStudents: 30,
-      maxCapacity: 30,
-      status: 'Disponible'
-    }
-  ];
+  
 
   @ViewChild('modalEditUser') modalEditUser!: TemplateRef<ElementRef>;
 
@@ -72,11 +50,7 @@ export class ModalEditUserComponent {
     this.selectedLevel = studentData.application_level || 'Primaria';
     this.selectedGrade = '2do';
     
-    // Seleccionar el primer grupo disponible por defecto
-    const firstAvailable = this.availableGroups.find(g => g.available);
-    if (firstAvailable) {
-      this.selectedGroupId = firstAvailable.id;
-    }
+    
     
     this.modalService.open(this.modalEditUser, { 
       centered: true,
@@ -115,30 +89,7 @@ export class ModalEditUserComponent {
     }
   }
 
-  isGroupDisabled(group: GroupOption): boolean {
-    return !group.available || group.status === 'Saturado';
-  }
-
-  onConfirm() {
-    const selectedGroup = this.availableGroups.find(g => g.id === this.selectedGroupId);
-    
-    if (!selectedGroup) {
-      alert('Por favor selecciona un grupo');
-      return;
-    }
-
-    const assignData: AssignGroupData = {
-      studentId: this.currentStudent.id,
-      studentName: this.currentStudent.student,
-      level: this.selectedLevel,
-      grade: this.selectedGrade,
-      selectedGroup: selectedGroup
-    };
-
-    console.log('Datos a enviar:', assignData);
-    this.groupAssigned.emit(assignData);
-    this.modalService.dismissAll();
-  }
+  
 
   onCancel() {
     this.modalService.dismissAll();
