@@ -1,0 +1,46 @@
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+/* Backdrop semitransparente con fadeIn */
+.modal-asistencia-derecha-backdrop {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2000;
+
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Panel anclado a la derecha con slideIn */
+.modal-asistencia-derecha-panel {
+  position: absolute;
+  top: 0; right: 0;
+  height: 100%;
+  width: 450px;
+  max-width: 80vw;
+  background-color: #fff;
+  box-shadow: -4px 0 12px rgba(0,0,0,0.3);
+  padding: 1.5rem;
+  overflow-y: auto;
+
+  animation: slideInRight 0.3s ease-out forwards;
+}
+
+/* Botón de cierre */
+.modal-asistencia-derecha-close {
+  position: absolute;
+  top: 0.5rem; right: 0.75rem;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}

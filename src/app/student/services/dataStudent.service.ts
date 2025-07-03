@@ -16,6 +16,24 @@ export interface Announcement {
   fecha_creacion: string; // ISO 8601 format, e.g. "2025-07-02T09:00:00Z"
   estado: 'visto' | 'publicado';
 }
+/** Nuevo: cada sesión de asistencia en un mes */
+export interface Session {
+  date: string;       // ISO YYYY-MM-DD
+  status: 'asistió' | 'faltó' | 'tardanza';
+}
+
+/** Nuevo: definición de cada mes de asistencia */
+export interface Month {
+  month: string;      // e.g. "enero 2025"
+  sessions: Session[];
+}
+
+/** Nuevo: objeto de attendance completo */
+export interface Attendance {
+  startDate: string;  // ISO YYYY-MM-DD
+  endDate: string;    // ISO YYYY-MM-DD
+  months: Month[];
+}
 // …añade interfaces para Attendance, Payment, etc.
 
 @Injectable({ providedIn: 'root' })
@@ -44,6 +62,10 @@ export class DataService {
     //anouncements
     getAnnouncements(): Observable<Announcement[]> {
     return this.http.get<Announcement[]>(`${this.base}/announcement`);
+  }
+
+    getAttendance(): Observable<Attendance[]> {
+    return this.http.get<Attendance[]>(`${this.base}/attendance`);
   }
 
 
