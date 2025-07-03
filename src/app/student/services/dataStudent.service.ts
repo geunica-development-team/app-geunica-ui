@@ -34,6 +34,27 @@ export interface Attendance {
   endDate: string;    // ISO YYYY-MM-DD
   months: Month[];
 }
+// Exámenes
+export interface Exam {
+  id_examen: number;
+  courseId: number;
+  id_ciclo: number;
+  categoria: string;
+  nombre_examen: string;
+  fecha_examen: string; // ISO YYYY-MM-DD
+  peso: number;
+  estado_examen: 'activo' | 'anulado';
+}
+
+// Notas de examen
+export interface Grade {
+  id_nota: number;
+  id_examen: number;
+  id_matricula: number;
+  valor: number;
+  estado_nota: 'activa' | 'anulada';
+  fecha_registro: string; // ISO YYYY-MM-DD
+}
 // …añade interfaces para Attendance, Payment, etc.
 
 @Injectable({ providedIn: 'root' })
@@ -46,8 +67,18 @@ export class DataService {
   }
 
   getCourseById(id: number): Observable<Course> {
-    return this.http.get<Course>(`${this.base}/course/${id}`);
+    return this.http
+      .get<Course[]>(`${this.base}/course?id=${id}`)    // devuelve un array
+      .pipe(
+        map(arr => {
+          if (arr.length === 0) {
+            throw new Error(`Curso con id ${id} no encontrado`);
+          }
+          return arr[0];
+        })
+      );
   }
+
 
     //curriculum
     getCurriculums(): Observable<Curriculum[]> {
@@ -66,6 +97,25 @@ export class DataService {
 
     getAttendance(): Observable<Attendance[]> {
     return this.http.get<Attendance[]>(`${this.base}/attendance`);
+  }
+
+    // Exámenes
+  getExams(): Observable<Exam[]> {
+    return this.http.get<Exam[]>(`${this.base}/exams`);
+  }
+  getExamById(id: number): Observable<Exam> {
+    return this.http.get<Exam>(`${this.base}/exams/${id}`);
+  }
+
+  // Notas de examen
+  getGrades(): Observable<Grade[]> {
+    return this.http.get<Grade[]>(`${this.base}/grades`);
+  }
+  getGradesByExamId(examId: number): Observable<Grade[]> {
+    return this.http.get<Grade[]>(`${this.base}/grades?examenId=${examId}`);
+  }
+  getGradesByStudentId(studentId: number): Observable<Grade[]> {
+    return this.http.get<Grade[]>(`${this.base}/grades?matriculaId=${studentId}`);
   }
 
 

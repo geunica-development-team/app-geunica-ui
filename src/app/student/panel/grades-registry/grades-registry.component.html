@@ -1,1 +1,43 @@
-<p>grades-registry works!</p>
+
+
+
+<ng-container *ngIf="course; else cargando">
+  <h2 class="mb-3">{{ course.title }}</h2>
+  
+    <!---columna izquierda-->
+    <div class="col-12 col-md-6 text-center">
+    
+        <div class="card p-4 mb-4">
+            <h5 class="mb-3">Informacion del semestre</h5>
+                <div class="table-responsive">
+                    
+                    <table class="table table-rounded">
+                        <thead class="table-success ">
+                            <tr>
+                            <th scope="col">NRO</th>
+                            <th scope="col">Concepto</th>
+                            <th scope="col">Nota</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider rounded-end">
+                            <tr *ngFor="let item of registryItems; let i = index">
+                            <td>{{ i + 1 }}</td>
+                            <td>{{ item.concepto }}</td>
+                            <td>{{ item.valor }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+        </div>
+    </div>
+
+
+
+
+</ng-container>
+
+<ng-template #cargando>
+  <div class="text-center py-4">
+    <div class="spinner-border" role="status"></div>
+  </div>
+</ng-template>

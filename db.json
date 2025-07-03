@@ -51,10 +51,103 @@
       "imageUrl": "https://picsum.photos/300/150"
     }
   ],
-  "grades": [
-    { "id": 1, "courseId": 1, "studentId": 101, "grade": 15.5 },
-    { "id": 2, "courseId": 1, "studentId": 102, "grade": 18.0 }
+
+  "exams": [
+    {
+      "id_examen": 1,
+      "courseId": 1,
+      "id_ciclo": 20251,
+      "categoria": "Cuaderno",
+      "nombre_examen": "Cuaderno de tareas",
+      "fecha_examen": "2025-03-05",
+      "peso": 10.00,
+      "estado_examen": "activo"
+    },
+    {
+      "id_examen": 2,
+      "courseId": 1,
+      "id_ciclo": 20251,
+      "categoria": "Actitudes",
+      "nombre_examen": "Participación en clase",
+      "fecha_examen": "2025-03-30",
+      "peso": 5.00,
+      "estado_examen": "activo"
+    },
+    {
+      "id_examen": 3,
+      "courseId": 1,
+      "id_ciclo": 20251,
+      "categoria": "Examen parcial",
+      "nombre_examen": "Parcial I",
+      "fecha_examen": "2025-04-15",
+      "peso": 30.00,
+      "estado_examen": "activo"
+    },
+    {
+      "id_examen": 4,
+      "courseId": 1,
+      "id_ciclo": 20251,
+      "categoria": "Examen parcial",
+      "nombre_examen": "Parcial II",
+      "fecha_examen": "2025-04-30",
+      "peso": 30.00,
+      "estado_examen": "activo"
+    },
+    {
+      "id_examen": 5,
+      "courseId": 1,
+      "id_ciclo": 20251,
+      "categoria": "Examen final",
+      "nombre_examen": "Final",
+      "fecha_examen": "2025-05-15",
+      "peso": 25.00,
+      "estado_examen": "activo"
+    }
   ],
+  "grades": [
+    {
+      "id_nota": 1,
+      "id_examen": 1,
+      "id_matricula": 101,
+      "valor": 15.50,
+      "estado_nota": "activa",
+      "fecha_registro": "2025-03-06"
+    },
+    {
+      "id_nota": 2,
+      "id_examen": 2,
+      "id_matricula": 101,
+      "valor": 18.00,
+      "estado_nota": "activa",
+      "fecha_registro": "2025-03-31"
+    },
+    {
+      "id_nota": 3,
+      "id_examen": 3,
+      "id_matricula": 101,
+      "valor": 12.00,
+      "estado_nota": "activa",
+      "fecha_registro": "2025-04-16"
+    },
+    {
+      "id_nota": 4,
+      "id_examen": 4,
+      "id_matricula": 101,
+      "valor": 19.00,
+      "estado_nota": "activa",
+      "fecha_registro": "2025-05-01"
+    },
+    {
+      "id_nota": 5,
+      "id_examen": 5,
+      "id_matricula": 101,
+      "valor": 17.50,
+      "estado_nota": "activa",
+      "fecha_registro": "2025-05-16"
+    }
+  ],
+
+  
   "announcement": [
     {
       "id": 1,
