@@ -8,6 +8,7 @@ import { AttendanceComponent } from "./panel/attendance/attendance.component";
 import { PaymentsComponent } from "./panel/payments/payments.component";
 import { AnnouncementComponent } from "./panel/announcement/announcement.component";
 import { ScheduleComponent } from "./panel/schedule/schedule.component";
+import { GradesRegistryComponent } from "./panel/grades-registry/grades-registry.component";
 
 export const studentPanelRoutes: Routes = [
     {
@@ -36,7 +37,14 @@ export const studentPanelRoutes: Routes = [
             },
             {
                 path: 'grades',
-                component: GradesComponent
+                children: [
+                    { path: '', 
+                        component: GradesComponent 
+                    },
+                    { path: 'gradesRegistry', 
+                        component: GradesRegistryComponent
+                    },
+                ]
             },
             {
                 path: 'attendance',
