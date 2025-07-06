@@ -58,17 +58,12 @@ export const menuItemsTeacher = [
     },
     { 
       icon: 'fas fa-clock', 
-      label: 'Reportes y estadsiticas', 
-      route: '/Reportes' 
-    },
-    { 
-      icon: 'fas fa-bullhorn', 
       label: 'Gestion de asistencias', 
       route: '/GestionAsistencias',
       badge: 24 
     },
     { 
-      icon: 'fas fa-calendar-alt', 
+      icon: 'fas fa-bullhorn', 
       label: 'Anuncios', 
       route: '/Anuncios' 
     },

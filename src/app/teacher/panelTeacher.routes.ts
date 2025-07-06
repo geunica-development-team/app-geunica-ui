@@ -1,5 +1,5 @@
 import { Routes } from "@angular/router";
-import { PanelComponent } from "./panel.component";
+import { PanelComponent } from "./panel/panel.component";
 
 export const teacherPanelRoutes: Routes = [
     {
