@@ -34,51 +34,60 @@
 
 
 <!-- Modal personalizado -->
-<div 
-  *ngIf="selectedMonth" 
+<div
+  *ngIf="selectedMonth"
   class="modal-asistencia-derecha-backdrop"
+  [class.closing]="isClosing"
   (click)="closeModal()"
 >
-  <div 
-    class="modal-asistencia-derecha-panel"
+  <div
+    class="modal-asistencia-derecha-wrapper"
+    [class.closing]="isClosing"
     (click)="$event.stopPropagation()"
   >
-    <button class="modal-asistencia-derecha-close" (click)="closeModal()">×</button>
+    <div class="modal-asistencia-derecha-panel">
+      <!-- 1) Mes -->
+      <h5 class="mb-3 text-center">{{ selectedMonth.month | titlecase }}</h5>
 
-    <!-- 1) Mes -->
-    <h5 class="mb-3 text-center">{{ selectedMonth.month | titlecase }}</h5>
+      <!-- 2) Calificación general -->
+      <h3 class="mb-2 pb-2 border-bottom text-center">Calificación general</h3>
+      <p class="mb-4 mt-4 text-center">
+        {{ presentCount }} presente(s) <strong>|</strong>
+        {{ absentCount  }} ausente(s) <strong>|</strong>
+        {{ tardyCount   }} atrasado(s)
+      </p>
 
-    <!-- 2) Calificación general -->
-    <h3 class="mb-2 pb-2 border-bottom text-center">Calificación general</h3>
-    <p class="mb-4 mt-4 text-center">
-      {{ presentCount }} presente(s) <strong>|</strong>
-      {{ absentCount  }} ausente(s) <strong>|</strong>
-      {{ tardyCount   }} atrasado(s)
-    </p>
-
-    <!-- 3) Tabla de sesiones -->
-    <div class="table-responsive text-center">
-      <table class="table table-sm mb-0">
-        <thead class="table-light fw-bolder">
-          <tr>
-            <th scope="col"><strong>Fecha</strong></th>
-            <th><strong>Estado</strong></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let s of selectedMonth.sessions">
-            <td>{{ s.date | date:'dd/MM/yyyy' }}</td>
-            <td [ngClass]="{
-                'text-success': s.status === 'asistió',
-                'text-danger' : s.status === 'faltó',
-                'text-warning': s.status === 'tardanza'}">
+      <!-- 3) Tabla de sesiones -->
+      <div class="table-responsive text-center">
+        <table class="table table-sm mb-0">
+          <thead class="table-light fw-bolder">
+            <tr>
+              <th scope="col"><strong>Fecha</strong></th>
+              <th><strong>Estado</strong></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let s of selectedMonth.sessions">
+              <td>{{ s.date | date:'dd/MM/yyyy' }}</td>
+              <td [ngClass]="{
+                  'text-success': s.status === 'asistió',
+                  'text-danger' : s.status === 'faltó',
+                  'text-warning': s.status === 'tardanza'}">
                 {{ s.status }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
+    <button
+      class="modal-asistencia-derecha-close"
+      (click)="closeModal()"
+      aria-label="Cerrar asistencia"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
   </div>
 </div>
 

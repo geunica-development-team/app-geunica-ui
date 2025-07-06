@@ -16,6 +16,9 @@ export class AttendanceComponent implements OnInit {
   // Mes seleccionado cuando hacemos clic
   selectedMonth: Month | null = null;
 
+  // Para controlar la animación de salida
+  isClosing = false;
+
   // Nuevos contadores
   presentCount = 0;
   absentCount = 0;
@@ -34,6 +37,7 @@ export class AttendanceComponent implements OnInit {
     /** Al hacer clic en la card, abrimos el modal */
   openMonth(month: Month) {
     this.selectedMonth = month;
+    this.isClosing = false;   // aseguramos que no esté en modo closing
     // recalcular contadores
     this.presentCount = month.sessions.filter(s => s.status === 'asistió').length;
     this.absentCount  = month.sessions.filter(s => s.status === 'faltó').length;
@@ -42,7 +46,18 @@ export class AttendanceComponent implements OnInit {
 
   /** Cierra el modal */
   closeModal() {
-    this.selectedMonth = null;
+    // en lugar de quitarlo inmediatamente, arrancamos la animación de salida
+        if (this.isClosing) { return; }
+    this.isClosing = true;
+
+    // Termina la animación (300ms) y entonces quitamos el modal
+    setTimeout(() => {
+      this.selectedMonth = null;
+      this.isClosing = false;
+      // si habías bloqueado el scroll del body, lo desbloqueas aquí:
+      document.body.style.overflow = '';
+    }, 300);
   }
+
 
 }
