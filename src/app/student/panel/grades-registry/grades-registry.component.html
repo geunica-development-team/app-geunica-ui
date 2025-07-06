@@ -1,58 +1,65 @@
-
-
-
 <ng-container *ngIf="course; else cargando">
-  <h2 class="section-title mb-3">{{ course.title }}</h2>
+  <h2 class="section-title ">{{ course.title }}</h2>
 
-  <!---barra de semestres-->
-    <nav class="mb-4">
+<div class="container mb-4">
+  <!-- Barra de semestres -->
+  <nav class="mb-5">
     <ul class="nav nav-pills justify-content-between">
-        <li class="nav-item">
+      <li class="nav-item">
         <a class="nav-link active" href="#">1er Bimestre</a>
-        </li>
-        <li class="nav-item">
+      </li>
+      <li class="nav-item">
         <a class="nav-link" href="#">2do Bimestre</a>
-        </li>
-        <li class="nav-item">
+      </li>
+      <li class="nav-item">
         <a class="nav-link" href="#">3er Bimestre</a>
-        </li>
-        <li class="nav-item">
+      </li>
+      <li class="nav-item">
         <a class="nav-link" href="#">4to Bimestre</a>
-        </li>
-        <li class="nav-item">
+      </li>
+      <li class="nav-item">
         <a class="nav-link" href="#">Bimestre Final</a>
-        </li>
+      </li>
     </ul>
-    </nav>
-  
-    <!---columna izquierda-->
-    <div class="col-12 col-md-6 text-center">
-    
-        <div class="card p-4 mb-4">
-            <h5 class="mb-3">Informacion del semestre</h5>
-                <div class="table-responsive">
-                    
-                    <table class="table table-rounded">
-                        <thead class="table-success ">
-                            <tr>
-                            <th scope="col">NRO</th>
-                            <th scope="col">Concepto</th>
-                            <th scope="col">Nota</th>
-                            </tr>
-                        </thead>
-                        <tbody class="table-group-divider rounded-end">
-                            <tr *ngFor="let item of registryItems; let i = index">
-                            <td>{{ i + 1 }}</td>
-                            <td>{{ item.concepto }}</td>
-                            <td>{{ item.valor }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+  </nav>
+
+  <!-- Fila que agrupa las dos columnas -->
+  <div class="row gy-4">
+    <!-- Columna izquierda -->
+    <div class="col-12 col-md-6 mb-4">
+      <div class="card p-4 h-100">
+        <h5 class="mb-3">Notas del bimestre</h5>
+        <div class="table-responsive">
+          <table class="table table-rounded">
+            <thead class="table-success">
+              <tr>
+                <th scope="col">NRO</th>
+                <th scope="col">Concepto</th>
+                <th scope="col">Nota</th>
+              </tr>
+            </thead>
+            <tbody class="table-group-divider">
+              <tr *ngFor="let item of registryItems; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ item.concepto }}</td>
+                <td>{{ item.valor }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Columna derecha -->
+    <div class="col-12 col-md-6 mb-4">
+        <div class="card p-4 h-100 d-flex align-items-center justify-content-center">
+            <h5 class="mb-3">Notas del bimestre</h5>
+            <div class="donut-chart" role="img" aria-label="Gráfico de pastel con 30% rojo, 50% azul, 20% amarillo"></div>
         </div>
     </div>
 
-
+  </div>
+</div>
 
 
 </ng-container>
