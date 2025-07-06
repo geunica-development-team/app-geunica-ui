@@ -69,11 +69,11 @@
           <tbody>
             <tr *ngFor="let s of selectedMonth.sessions">
               <td>{{ s.date | date:'dd/MM/yyyy' }}</td>
-              <td [ngClass]="{
-                  'text-success': s.status === 'asistió',
-                  'text-danger' : s.status === 'faltó',
-                  'text-warning': s.status === 'tardanza'}">
-                {{ s.status }}
+              <td>
+                  <span class="badge bg-dark rounded-pill text-white d-inline-flex justify-content-center align-items-center"
+                        style="width: 5rem; height: 1.7rem;">
+                    {{ s.status }}
+                  </span>
               </td>
             </tr>
           </tbody>
