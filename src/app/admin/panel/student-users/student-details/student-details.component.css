@@ -1,0 +1,277 @@
+/* ===== MODERN NAV STYLES ===== */
+
+/* Contenedor principal del nav */
+.nav.nav-tabs.card-header-tabs {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 8px;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  gap: 4px;
+  margin-bottom: 1.5rem !important;
+}
+
+/* Botones del nav */
+.nav.nav-tabs .nav-link {
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  color: #6c757d;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 12px 20px;
+  transition: all 0.3s ease;
+  position: relative;
+  white-space: nowrap;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0;
+}
+
+/* Hover effect */
+.nav.nav-tabs .nav-link:hover {
+  background: rgba(0, 140, 98, 0.1);
+  color: #008c62;
+  transform: translateY(-1px);
+  border: none;
+}
+
+/* Active state */
+.nav.nav-tabs .nav-link.active {
+  background-color: #008c62;
+  color: white !important;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 140, 98, 0.3);
+}
+
+.nav.nav-tabs .nav-link.active:hover {
+  background-color: #006b4a;
+  transform: translateY(-1px);
+}
+
+/* Iconos en los tabs */
+.nav.nav-tabs .nav-link i {
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+}
+
+/* Badge de notificación con animación */
+.nav.nav-tabs .nav-link .badge {
+  font-size: 10px;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
+  }
+  70% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 8px rgba(220, 53, 69, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+  }
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+  .nav.nav-tabs.card-header-tabs {
+    flex-direction: column;
+    padding: 12px;
+  }
+
+  .nav.nav-tabs .nav-link {
+    justify-content: flex-start;
+    width: 100%;
+    margin-bottom: 4px;
+  }
+}
+
+@media (max-width: 576px) {
+  .nav.nav-tabs .nav-link {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+
+  .nav.nav-tabs .nav-link i {
+    font-size: 14px;
+    width: 18px;
+  }
+}
+
+/* ===== MEJORAS ADICIONALES PARA EL COMPONENTE ===== */
+
+/* Mejorar las cards del contenido */
+.card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+/* Mejorar las stat-cards */
+.stat-card {
+  border-radius: 12px;
+  padding: 1.5rem;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.stat-card .stat-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  opacity: 0.8;
+}
+
+.stat-card h4 {
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+
+.stat-card p {
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+}
+
+.stat-card small {
+  opacity: 0.9;
+}
+
+/* Mejorar las secciones de información */
+.info-section {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 1.5rem;
+  height: 100%;
+}
+
+.section-title {
+  color: #495057;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.info-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-item label {
+  font-weight: 500;
+  color: #6c757d;
+  margin-bottom: 0;
+  min-width: 140px;
+}
+
+.info-item span {
+  font-weight: 500;
+  color: #495057;
+  text-align: right;
+}
+
+/* Mejorar la tabla */
+.table th, .table td{
+    vertical-align: middle;
+}
+
+/* Estilo para el fondo del encabezado */
+.table th {
+    font-size: 15px;
+    font-weight: 600;
+    border-bottom: none;
+    background-color: #F1F4F9;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+  
+/* Añadir borde redondeado en la parte superior */
+.table thead th:first-child {
+    border-top-left-radius: 0.75rem;
+    border-bottom-left-radius: 0.75rem;
+}
+
+.table thead th:last-child {
+    border-top-right-radius: 0.75rem;
+    border-bottom-right-radius: 0.75rem;
+}
+
+.table td {
+    font-size: 16px;
+}
+
+/* Mejorar los badges */
+.badge {
+  font-weight: 500;
+  padding: 0.5em 0.75em;
+  border-radius: 6px;
+}
+
+/* Mejorar el loading */
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+/* Estados de las filas de la tabla */
+.table-success {
+  background-color: rgba(25, 135, 84, 0.1) !important;
+}
+
+.table-danger {
+  background-color: rgba(220, 53, 69, 0.1) !important;
+}
+
+/* Mejorar los alerts */
+.alert {
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Espaciado mejorado */
+.mb-4 {
+  margin-bottom: 1.5rem !important;
+}
+
+/* Contenido de tabs */
+.tab-content {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

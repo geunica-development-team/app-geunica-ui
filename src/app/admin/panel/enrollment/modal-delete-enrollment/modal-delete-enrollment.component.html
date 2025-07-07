@@ -1,7 +1,6 @@
 <ng-template #modalDeleteEnrollment let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title text-danger">
-      <i class="warning-icon">⚠️</i>
+  <div class="modal-header bg-white border-bottom px-4">
+    <h4 class="modal-title fw-semibold text-danger mb-0">
       Eliminar Inscripción
     </h4>
     <button 
@@ -12,37 +11,35 @@
     </button>
   </div>
 
-  <div class="modal-body text-center">
-    <div class="warning-content">
-      <div class="warning-icon-large mb-3">
-        🗑️
-      </div>
-      
-      <h5 class="mb-3">¿Estás seguro de que quieres eliminar?</h5>
-      
-      <p class="warning-text mb-3">
-        Los datos no se podrán recuperar
-      </p>
-      
-      @if (currentStudent) {
-        <div class="student-info w-100">
-          <p class="mb-1"><strong>Estudiante:</strong> {{ currentStudent.student }}</p>
-          <p class="mb-0"><strong>Nivel:</strong> {{ currentStudent.application_level }}</p>
-        </div>
-      }
+  <div class="modal-body bg-white p-4 text-center">
+    <div class="warning-icon-large mb-3">
+      🗑️
     </div>
+    
+    <h5 class="mb-3">¿Estás seguro de que quieres eliminar?</h5>
+    
+    <p class="text-muted mb-3">
+      Los datos no se podrán recuperar
+    </p>
+    
+    @if (currentStudent) {
+      <div class="bg-light rounded p-3 text-start">
+        <p class="mb-1 small"><strong>Estudiante:</strong> {{ currentStudent.student }}</p>
+        <p class="mb-0 small"><strong>Nivel:</strong> {{ currentStudent.application_level }}</p>
+      </div>
+    }
   </div>
 
-  <div class="modal-footer">
+  <div class="modal-footer bg-white border-top d-flex justify-content-end gap-2 p-3">
     <button 
       type="button" 
-      class="btn btn-secondary"
+      class="btn btn-secondary rounded px-4"
       (click)="onCancel()">
       Cancelar
     </button>
     <button 
       type="button" 
-      class="btn btn-danger"
+      class="btn btn-danger rounded px-4"
       (click)="onConfirmDelete()">
       Eliminar
     </button>

@@ -1,0 +1,47 @@
+/* CLASES CSS MÍNIMAS - Solo lo que Bootstrap no puede hacer */
+
+/* Bordes y espaciado específico para secciones */
+.section-divider {
+  border-bottom: 1px solid #e9ecef;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Estilo específico para las opciones de grupo */
+.group-option {
+  border: 1px solid #dee2e6;
+  transition: all 0.15s ease-in-out;
+}
+
+.group-option:hover {
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.125rem rgba(13, 110, 253, 0.1);
+}
+
+.group-option.disabled {
+  opacity: 0.6;
+}
+
+/* Contenedor con scroll para grupos */
+.group-scroll-container {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* Icono de información */
+.info-icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+/* Icono de advertencia grande */
+.warning-icon-large {
+  font-size: 3rem;
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+  .group-scroll-container {
+    max-height: 250px;
+  }
+}

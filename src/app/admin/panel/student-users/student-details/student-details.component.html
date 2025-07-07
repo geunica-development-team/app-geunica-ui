@@ -1,0 +1,372 @@
+<app-panel-header 
+  title="Información detallada del estudiante" />
+
+@if (student) {
+  <div class="row">
+    <!-- Header con información básica del estudiante -->
+    <div class="col-12 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <div class="row align-items-center px-3">
+            <div class="col-md-8">
+              <div class="d-flex align-items-center">
+                <div class="student-avatar me-3">
+                  <i class="fas fa-user-graduate fa-2x text-green"></i>
+                </div>
+                <div>
+                  <h4 class="mb-1">{{ student.person.firstName }} {{ student.person.lastName }} {{ student.person.middleName }}</h4>
+                  <div class="student-meta">
+                    <span class="me-3">
+                      <i class="fas fa-id-card me-1"></i>
+                      {{ student.person.documentNumber }}
+                    </span>
+                    <span [class]="getStudentStatusClass(student.student?.studentStatus || '')">
+                      {{ getStudentStatusText(student.student?.studentStatus || '') }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <nav class="nav nav-tabs card-header-tabs mb-4">
+      @for (tab of tabs; track tab.id) {
+        <button 
+          class="nav-link"
+          [class.active]="activeTab === tab.id"
+          (click)="setActiveTab(tab.id)">
+          <i [class]="tab.icon + ' me-2'"></i>
+          {{ tab.label }}
+          @if (tab.id === 'pagos' && hasDebt) {
+            <span class="badge bg-danger ms-2">!</span>
+          }
+        </button>
+      }
+    </nav>
+    <!-- Navegación por tabs -->
+    <div class="col-12 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <!-- TAB: Ficha Personal -->
+          @if (activeTab === 'ficha') {
+            <div class="tab-content">
+              <div class="row">
+                <!-- Información Personal -->
+                <div class="col-lg-6 mb-4">
+                  <div class="info-section">
+                    <h5 class="section-title">
+                      <i class="fas fa-user me-2"></i>
+                      Información Personal
+                    </h5>
+                    <div class="info-grid">
+                      <div class="info-item">
+                        <label>Nombres:</label>
+                        <span>{{ student.person.firstName }}</span>
+                      </div>
+                      <div class="info-item">
+                        <label>Apellido Paterno:</label>
+                        <span>{{ student.person.lastName || '-' }}</span>
+                      </div>
+                      <div class="info-item">
+                        <label>Apellido Materno:</label>
+                        <span>{{ student.person.middleName || '-' }}</span>
+                      </div>
+                      <div class="info-item">
+                        <label>DNI:</label>
+                        <span>{{ student.person.documentNumber || '-' }}</span>
+                      </div>
+                      <div class="info-item">
+                        <label>Fecha de Nacimiento:</label>
+                        <span>{{ formatBirthDate(student.person.birthDate) }}</span>
+                      </div>
+                      <div class="info-item">
+                        <label>Género:</label>
+                        <span>{{ student.person.gender === 'M' ? 'Masculino' : student.person.gender === 'F' ? 'Femenino' : '-' }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Información de Contacto -->
+                <div class="col-lg-6 mb-4">
+                  <div class="info-section">
+                    <h5 class="section-title">
+                      <i class="fas fa-address-book me-2"></i>
+                      Información de Contacto
+                    </h5>
+                    <div class="info-grid">
+                      <div class="info-item">
+                        <label>Teléfono:</label>
+                        <span>{{ student.person.phone || '-' }}</span>
+                      </div>
+                      <div class="info-item">
+                        <label>Dirección:</label>
+                        <span>{{ student.person.address || '-' }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Información Académica -->
+                <div class="col-lg-6 mb-4">
+                  <div class="info-section">
+                    <h5 class="section-title">
+                      <i class="fas fa-graduation-cap me-2"></i>
+                      Información Académica
+                    </h5>
+                    <div class="info-grid">
+                      <div class="info-item">
+                        <label>Código Estudiante:</label>
+                        <span>{{ student.student?.studentCode || '-' }}</span>
+                      </div>
+                      <div class="info-item">
+                        <label>Fecha de Matrícula:</label>
+                        <span>{{ formatBirthDate(student.student?.enrollmentDate) }}</span>
+                      </div>
+                      <div class="info-item">
+                        <label>Estado Académico:</label>
+                        <span [class]="getStudentStatusClass(student.student?.studentStatus || '')">
+                          {{ getStudentStatusText(student.student?.studentStatus || '') }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Información del Usuario -->
+                <div class="col-lg-6 mb-4">
+                  <div class="info-section">
+                    <h5 class="section-title">
+                      <i class="fas fa-key me-2"></i>
+                      Información de Usuario
+                    </h5>
+                    <div class="info-grid">
+                      <div class="info-item">
+                        <label>Usuario:</label>
+                        <span>{{ student.username || '-' }}</span>
+                      </div>
+                      <div class="info-item">
+                        <label>Estado:</label>
+                        <span [class]="getStatusClass(student.status || '')">
+                          {{ getStatusText(student.status || '') }}
+                        </span>
+                      </div>
+                      <div class="info-item">
+                        <label>Último Acceso:</label>
+                        <span>{{ formatDateTime(student.lastLogin) }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+          
+          <!-- TAB: Pagos -->
+          @if (activeTab === 'pagos') {
+            <!-- Acciones de Pagos -->
+            <div class="mb-4 d-flex justify-content-center justify-content-md-end">
+              <div class="d-flex gap-2 flex-wrap">
+                <button class="btn btn-success">
+                  <i class="fas fa-plus me-2"></i>
+                  Registrar Pago
+                </button>
+                <button class="btn btn-info">
+                  <i class="fas fa-file-pdf me-2"></i>
+                  Generar Reporte
+                </button>
+                <button class="btn btn-warning">
+                  <i class="fas fa-envelope me-2"></i>
+                  Enviar Recordatorio
+                </button>
+              </div>
+            </div>
+            <div class="tab-content">
+              @if (allPayments.length > 0) {
+                <!-- Resumen de Pagos -->
+                <div class="row mb-4">
+                  <div class="col-md-3 mb-3">
+                    <div class="stat-card bg-success">
+                      <div class="stat-content">
+                        <h4>S/ {{ totalPaid.toFixed(2) }}</h4>
+                        <p>Total Pagado</p>
+                        <small>{{ completedPayments.length }} pagos</small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <div class="stat-card bg-warning">
+                      <div class="stat-content">
+                        <h4>S/ {{ totalPending.toFixed(2) }}</h4>
+                        <p>Total Pendiente</p>
+                        <small>{{ upcomingPayments.length + overduePayments.length }} pagos</small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <div class="stat-card bg-danger">
+                      <div class="stat-content">
+                        <h4>{{ overduePayments.length }}</h4>
+                        <p>Pagos Vencidos</p>
+                        <small>
+                          @if (overduePayments.length > 0) {
+                            S/ {{ getOverduePaymentsTotal().toFixed(2) }}
+                          } @else {
+                            Sin deudas
+                          }
+                        </small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <div class="stat-card" [class]="hasDebt ? 'bg-danger' : 'bg-success'">
+                      <div class="stat-content">
+                        <h4>
+                          <i [class]="hasDebt ? 'fas fa-exclamation-triangle' : 'fas fa-check'"></i>
+                        </h4>
+                        <p>Estado General</p>
+                        <small>{{ hasDebt ? 'Con deuda' : 'Al día' }}</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Tabla de Pagos -->
+                <div class="table-responsive">
+                  <table class="table align-middle">
+                    <thead>
+                      <tr>
+                        <th>Nivel</th>
+                        <th>Período</th>
+                        <th>Fecha Vencimiento</th>
+                        <th>Estado</th>
+                        <th>Fecha Pago</th>
+                        <th>Monto</th>
+                        <th>Observaciones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (payment of allPayments; track $index) {
+                        <tr>
+                          <td>
+                            <span>{{ payment.level }}</span>
+                          </td>
+                          <td>{{ payment.month }} {{ payment.year }}</td>
+                          <td>{{ formatDate(payment.dueDate) }}</td>
+                          <td>
+                            <span [class]="getPaymentStatusClass(payment)">
+                              {{ getPaymentStatusText(payment) }}
+                            </span>
+                            @if (payment.isOverdue && !payment.paid) {
+                              <br>
+                              <small class="text-danger">
+                                <i class="fas fa-clock me-1"></i>
+                                {{ getDaysOverdue(payment) }} días de retraso
+                              </small>
+                            }
+                          </td>
+                          <td>
+                            @if (payment.paid && payment.paidDate) {
+                              {{ formatDate(payment.paidDate) }}
+                            } @else {
+                              <span class="text-muted">-</span>
+                            }
+                          </td>
+                          <td>
+                            <span>S/ {{ payment.amount.toFixed(2) }}</span>
+                          </td>
+                          <td>
+                            @if (payment.paid) {
+                              <small class="text-success">
+                                <i class="fas fa-check me-1"></i>
+                                Pago completado
+                              </small>
+                            } @else if (payment.isOverdue) {
+                              <small class="text-danger">
+                                <i class="fas fa-exclamation-triangle me-1"></i>
+                                Pago vencido
+                              </small>
+                            } @else {
+                              <small class="text-warning">
+                                <i class="fas fa-clock me-1"></i>
+                                Pendiente de pago
+                              </small>
+                            }
+                          </td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+
+              } @else {
+                <!-- Sin información de pagos -->
+                <div class="text-center py-5">
+                  <i class="fas fa-credit-card fa-3x text-muted mb-3"></i>
+                  <h5 class="text-muted">Sin Información de Pagos</h5>
+                  <p class="text-muted">No se encontraron registros de pagos para este estudiante.</p>
+                </div>
+              }
+            </div>
+          }
+
+          <!-- TAB: Cursos -->
+          @if (activeTab === 'cursos') {
+            <div class="tab-content">
+              <div class="text-center py-5">
+                <i class="fas fa-book fa-3x text-muted mb-3"></i>
+                <h5 class="text-muted">Información de Cursos</h5>
+                <p class="text-muted">Esta sección estará disponible próximamente.</p>
+              </div>
+            </div>
+          }
+
+          <!-- TAB: Notas -->
+          @if (activeTab === 'notas') {
+            <div class="tab-content">
+              <div class="text-center py-5">
+                <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
+                <h5 class="text-muted">Registro de Notas</h5>
+                <p class="text-muted">Esta sección estará disponible próximamente.</p>
+              </div>
+            </div>
+          }
+
+          <!-- TAB: Asistencia -->
+          @if (activeTab === 'asistencia') {
+            <div class="tab-content">
+              <div class="text-center py-5">
+                <i class="fas fa-calendar-check fa-3x text-muted mb-3"></i>
+                <h5 class="text-muted">Control de Asistencia</h5>
+                <p class="text-muted">Esta sección estará disponible próximamente.</p>
+              </div>
+            </div>
+          }
+
+          <!-- TAB: Documentos -->
+          @if (activeTab === 'documentos') {
+            <div class="tab-content">
+              <div class="text-center py-5">
+                <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
+                <h5 class="text-muted">Documentos del Estudiante</h5>
+                <p class="text-muted">Esta sección estará disponible próximamente.</p>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="d-flex justify-content-center align-items-center" style="min-height: 400px;">
+    <div class="text-center">
+      <div class="spinner-border text-primary mb-3" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="text-muted">Cargando información del estudiante...</p>
+    </div>
+  </div>
+}

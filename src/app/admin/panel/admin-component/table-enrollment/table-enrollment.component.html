@@ -28,20 +28,19 @@
               <div class="d-flex justify-content-center gap-2">
                 <!-- Botón Ver (siempre visible) -->
                 <button 
-                  type="button" 
-                  class="btn btn-outline-secondary btn-sm" 
+                  type="button"
+                  class="btn btn-outline-secondary btn-sm"
                   (click)="actionReadEnrollment(row)"
                   title="Ver detalles">
                   <i class="fas fa-eye"></i>
                   Ver
                 </button>
-
                 <!-- Botón condicional según el estado -->
                 @if (getActionButtonForState(row[columnMappings['Estado Inscripción']]) !== null) {
                   @let actionButton = getActionButtonForState(row[columnMappings['Estado Inscripción']]);
                   <button 
-                    type="button" 
-                    [class]="'btn btn-sm ' + actionButton!.class" 
+                    type="button"
+                    [class]="'btn btn-sm ' + actionButton!.class"
                     (click)="executeAction(actionButton!.action, row)"
                     [title]="actionButton!.text">
                     @switch (actionButton!.action) {
@@ -54,21 +53,16 @@
                       @case ('marcarPago') {
                         <i class="fas fa-check-circle me-1"></i>
                       }
-                      @case ('crearCredenciales') {
-                        <i class="fas fa-user-plus me-1"></i>
-                      }
                     }
                     {{ actionButton!.text }}
                   </button>
                 }
-
                 <!-- Botón eliminar (opcional) -->
                 <button 
-                  type="button" 
-                  class="btn btn-outline-danger btn-sm" 
+                  type="button"
+                  class="btn btn-outline-danger btn-sm"
                   title="Eliminar"
-                  (click)="actionDeleteEnrollment(row)"
-                  >
+                  (click)="actionDeleteEnrollment(row)">
                   <i class="fa-solid fa-trash"></i>
                 </button>
               </div>

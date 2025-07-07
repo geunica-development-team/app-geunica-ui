@@ -30,3 +30,46 @@ export interface UserData {
   specialty_area?: string // Para PSYCHOLOGIST
   access_level?: string // Para ADMIN
 }
+
+
+
+
+export interface UserDataAll {
+  userId: number
+  username: string
+  status: "active" | "inactive"
+  lastLogin: string
+  role: "student" | "teacher" | "admin"
+  person: {
+    personId: number
+    firstName: string
+    lastName: string
+    middleName: string
+    documentNumber: string
+    phone: string
+    address: string
+    birthDate: string
+    gender: string
+  }
+  student?: {
+    studentId: number
+    studentCode: string
+    enrollmentDate: string
+    studentStatus: "enrolled" | "withdrawn" | "conditional"
+    levels: {
+      levelName: string // Ej: "1ro Primaria"
+      isCurrent: boolean
+      payments: {
+        year: number
+        month: string // Ej: "Marzo"
+        dueDate: string // Fecha límite
+        paid: boolean // Si está pagado
+        paidDate?: string // Fecha de pago (opcional)
+      }[]
+    }[]
+  }
+  teacher?: {
+    teacherId: number
+    specialty: string
+  }
+}

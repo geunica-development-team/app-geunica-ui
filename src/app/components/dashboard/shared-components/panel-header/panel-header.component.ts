@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, Input } from '@angular/core';
 
 @Component({
@@ -8,5 +9,10 @@ import { Component, Input } from '@angular/core';
 })
 export class PanelHeaderComponent {
   @Input({required : true}) title!: string;
+  
+  constructor(private location: Location) {}
 
+  goBack(): void {
+      this.location.back();
+  }
 }

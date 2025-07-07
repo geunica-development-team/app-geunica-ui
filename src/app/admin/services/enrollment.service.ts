@@ -103,16 +103,21 @@ export interface EnrollmentData {
 }
 
 export interface PaymentData {
-  studentId: number;
-  studentName: string;
-  level: string;
-  grade: string;
-  amount: number;
-  paymentDate: string;
-  paymentMethod: string;
-  observations: string;
-  generateCredentials: string;
-  notifyGuardianBy: string;
+  studentId: number
+  studentName: string
+  level: string
+  grade: string
+  amount: number
+  paymentDate: string
+  paymentMethod: string
+  observations: string
+  generateCredentials: string
+  notifyGuardianBy: string
+  credentials?: {
+    // Agregar esta propiedad opcional
+    username: string
+    password: string
+  }
 }
 
 export interface CredentialsData {

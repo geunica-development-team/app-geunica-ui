@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { HeaderComponent } from '../../../components/dashboard/header/header.component';
 import { PanelHeaderComponent } from "../../../components/dashboard/shared-components/panel-header/panel-header.component";
 
 @Component({

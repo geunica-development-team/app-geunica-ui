@@ -1,5 +1,5 @@
 .app-layout {
-  background-color: #F5F4F9;
+  background-color: #f5f4f9;
 }
 
 .main-content {
@@ -20,8 +20,9 @@
 @media (max-width: 768px) {
   .main-content {
     margin-left: 0;
+    margin-top: 70px; /* Altura del header móvil del sidenav */
   }
-  
+
   .page-content {
     padding: 1rem;
   }

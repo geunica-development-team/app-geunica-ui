@@ -1,0 +1,168 @@
+<ng-template #modalDebtDetails let-modal>
+  <div class="modal-header bg-white border-bottom">
+    <h4 class="modal-title fw-semibold mb-0">
+      @if (hasDebt) {
+        <i class="fas fa-exclamation-triangle text-danger me-2"></i>
+        Información de Deuda
+      } @else {
+        <i class="fas fa-check-circle text-success me-2"></i>
+        Estado de Pagos
+      }
+    </h4>
+    <button 
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="onClose()">
+    </button>
+  </div>
+
+  <div class="modal-body bg-white p-4">
+    <!-- Información del estudiante -->
+    @if (currentStudent) {
+      <div class="alert alert-info border rounded mb-4">
+        <h6 class="fw-semibold mb-2">
+          <i class="fas fa-user me-2"></i>
+          Información del Estudiante
+        </h6>
+        <div class="row">
+          <div class="col-md-6">
+            <p class="mb-1"><strong>Nombre:</strong> {{ currentStudent.person.firstName }} {{ currentStudent.person.lastName }}</p>
+            <p class="mb-0"><strong>Código:</strong> {{ currentStudent.student?.studentCode || '-' }}</p>
+          </div>
+          <div class="col-md-6">
+            <p class="mb-1"><strong>DNI:</strong> {{ currentStudent.person.documentNumber }}</p>
+            <p class="mb-0"><strong>Estado:</strong> {{ getStudentStatusText(currentStudent.student?.studentStatus || '') }}</p>
+          </div>
+        </div>
+      </div>
+    }
+
+    @if (hasDebt) {
+      <!-- Mostrar información de deuda -->
+      <div class="alert alert-danger border rounded mb-4">
+        <h6 class="fw-semibold mb-3">
+          <i class="fas fa-exclamation-triangle me-2"></i>
+          Deudas Vencidas
+        </h6>
+        
+        @for (debt of getDebtInfo(); track $index) {
+          <div class="border rounded p-3 mb-2 bg-light">
+            <div class="row align-items-center">
+              <div class="col-md-8">
+                <p class="mb-1 fw-semibold">{{ debt.level }} - {{ debt.month }} {{ debt.year }}</p>
+                <p class="mb-0 text-muted small">
+                  <i class="fas fa-calendar-times me-1"></i>
+                  Venció el: {{ formatDate(debt.dueDate) }}
+                </p>
+              </div>
+              <div class="col-md-4 text-end">
+                <span class="badge bg-danger fs-6">
+                  <i class="fas fa-clock me-1"></i>
+                  {{ debt.daysOverdue }} días de retraso
+                </span>
+                <div class="mt-1">
+                  <small class="text-muted">Monto: S/ {{ debt.amount.toFixed(2) }}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- Resumen de deuda -->
+        <div class="mt-3 p-3 bg-danger bg-opacity-10 border border-danger rounded">
+          <div class="row">
+            <div class="col-md-6">
+              <strong class="text-danger">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                Total de deudas vencidas: {{ getDebtInfo().length }}
+              </strong>
+            </div>
+            <div class="col-md-6 text-end">
+              <strong class="text-danger">
+                Monto total: S/ {{ getTotalDebtAmount().toFixed(2) }}
+              </strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    } @else {
+      <!-- Mostrar último pago o estado sin deuda -->
+      @if (getLastPayment(); as lastPayment) {
+        <div class="alert alert-success border rounded mb-4">
+          <h6 class="fw-semibold mb-3">
+            <i class="fas fa-check-circle me-2"></i>
+            Último Pago Realizado
+          </h6>
+          
+          <div class="border rounded p-3 bg-light">
+            <div class="row align-items-center">
+              <div class="col-md-8">
+                <p class="mb-1 fw-semibold">{{ lastPayment.level }} - {{ lastPayment.month }} {{ lastPayment.year }}</p>
+                <p class="mb-0 text-muted small">
+                  <i class="fas fa-calendar-check me-1"></i>
+                  Pagado el: {{ formatDate(lastPayment.paidDate) }}
+                </p>
+              </div>
+              <div class="col-md-4 text-end">
+                <span class="badge bg-success fs-6">
+                  <i class="fas fa-check me-1"></i>
+                  Pagado
+                </span>
+                <div class="mt-1">
+                  <strong class="text-success">S/ {{ lastPayment.amount.toFixed(2) }}</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Estado general positivo -->
+        <div class="mt-3 p-3 bg-success bg-opacity-10 border border-success rounded">
+          <div class="text-center">
+            <i class="fas fa-check-circle text-success fa-2x mb-2"></i>
+            <p class="mb-0 fw-semibold text-success">
+              El estudiante está al día con sus pagos
+            </p>
+          </div>
+        </div>
+      } @else {
+        <div class="alert alert-warning border rounded mb-4">
+          <div class="text-center">
+            <i class="fas fa-info-circle fa-2x text-warning mb-3"></i>
+            <h6 class="fw-semibold mb-2">Sin Información de Pagos</h6>
+            <p class="mb-0">
+              No se encontraron registros de pagos para este estudiante.
+            </p>
+          </div>
+        </div>
+      }
+    }
+
+    <!-- Información adicional -->
+    <div class="mt-4 p-3 bg-light rounded">
+      <small class="text-muted">
+        <i class="fas fa-info-circle me-1"></i>
+        <strong>Nota:</strong> Para ver el historial completo de pagos, utiliza el botón "Ver Historial Completo" o haz clic en "Ver Ficha" desde la tabla principal.
+      </small>
+    </div>
+  </div>
+
+  <div class="modal-footer bg-white border-top d-flex justify-content-end gap-2 p-3">
+    <button 
+      type="button"
+      class="btn btn-primary rounded px-4"
+      (click)="showPayments()">
+      <i class="fas fa-credit-card me-2"></i>
+      Ver Historial Completo
+    </button>
+    
+    <button 
+      type="button"
+      class="btn btn-secondary rounded px-4"
+      (click)="onClose()">
+      <i class="fas fa-times me-2"></i>
+      Cerrar
+    </button>
+  </div>
+</ng-template>

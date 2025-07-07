@@ -1,10 +1,7 @@
 @import url(../public/css/fonts.css);
 @import url(../public/css/colors.css);
 @import url(../public/css/buttons.css);
-@import url(../public/css/inputs.css);
-@import url(../public/css/labels-headers.css);
-@import url(../public/css/modals.css);
-@import url(../public/css/responsive.css);
+@import url(../public/css/enrollment.css);
 
 html, body {
   margin: 0;

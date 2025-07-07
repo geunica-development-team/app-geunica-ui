@@ -1,109 +1,131 @@
 <!--SOLO TABLA-->
 <div class="table-responsive">
-	@defer {
-		<table class="table align-middle mb-0">
-			<thead>
-				<tr>
-					@for (column of columns; track $index) {
-						<th>{{ column }}</th>
-					}
-					@if (acciones) {
-						<th class="text-center">ACCIONES</th>
-					}
-				</tr>
-			</thead>
-			<tbody>
-				@for (row of rows; track $index) {
-					<tr>
-						@for (column of columns; track $index) {
-							<td>
-								{{ row[columnMappings[column]] }}
-							</td>
-						}
-						@if (acciones) {
-							<td class="text-center">
-								@if (editarFila) {
-									<div class="me-2" role="group">
-										<button type="button" class="btn pt-2" (click)="accionEditar(row)">
-											<i class="fa-solid fa-pencil"></i>
-										</button>
-									</div>
-								}
-								@else if (eliminarFila) {
-									<div class="me-2" role="group">
-										<button type="button" class="btn pt-2" (click)="accionEliminar(row)">
-											<i class="fa-solid fa-trash"></i>
-										</button>
-									</div>
-								}
-								@else {
-									<div class="me-2" role="group">
-										<button type="button" class="btn pt-2" (click)="accionEditar(row)">
-											<i class="fa-solid fa-pencil"></i>
-										</button>
-										<button type="button" class="btn pt-2" (click)="accionEliminar(row)">
-											<i class="fa-solid fa-trash"></i>
-										</button>
-									</div>
-								}
-							</td>
-						}
-					</tr>
-				}
-			</tbody>
-		</table>
-	}
+    @defer {
+        <table class="table align-middle mb-0">
+            <thead>
+                <tr>
+                    @for (column of columns; track $index) {
+                        <th>{{ column }}</th>
+                    }
+                    @if (acciones) {
+                        <th class="text-center">ACCIONES</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @for (row of rows; track $index) {
+                    <tr>
+                        @for (column of columns; track $index) {
+                            <td>
+                                <!-- Mostrar badges para columnas de estado -->
+                                @if (isStatusColumn(column)) {
+                                    <span [class]="getStatusClass(row, column)">
+                                        {{ row[columnMappings[column]] }}
+                                    </span>
+                                }
+                                 <!-- Mostrar estado de deuda (SIEMPRE CLICKEABLE) -->
+                                @else if (isDebtColumn(column)) {
+                                    <button
+                                        type="button"
+                                        [class]="getDebtClass(row) + ' debt-button'"
+                                        (click)="accionVerDeuda(row)"
+                                        title="Ver información de pagos">
+                                        {{ row[columnMappings[column]] }}
+                                    </button>
+                                }
+                                 @else {
+                                    {{ row[columnMappings[column]] }}
+                                }
+                            </td>
+                        }
+                        @if (acciones) {
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center" role="group">
+                                    @if (verFila) {
+                                        <button type="button" class="btn pt-2" (click)="accionVer(row)" title="Ver ficha">
+                                            <i class="fa-solid fa-eye"></i>
+                                        </button>
+                                    }
+                                    <!-- Botón para ver pagos
+                                    @if (verPagos) {
+                                        <button type="button" class="btn pt-2" (click)="accionVerPagos(row)" title="Ver pagos">
+                                            <i class="fa-solid fa-credit-card"></i>
+                                        </button>
+                                    }
+                                    -->
+                                    @if (editarFila) {
+                                        <button type="button" class="btn pt-2 me-1" (click)="accionEditar(row)">
+                                            <i class="fa-solid fa-pencil"></i>
+                                        </button>
+                                    }
+                                    @if (eliminarFila) {
+                                        <button type="button" class="btn pt-2 me-1" (click)="accionEliminar(row)">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    }
+                                </div>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
 </div>
-@if (rows.length === 0) {
-	<div class="no-results">No se encontraron resultados</div>
+
+@if (filteredRows.length === 0 && originalRows.length > 0) {
+    <div class="no-results">No se encontraron resultados con los filtros aplicados</div>
+} @else if (originalRows.length === 0) {
+    <div class="no-results">No hay datos disponibles</div>
 }
+
 <div class="d-flex justify-content-center justify-content-md-between mt-3">
-	<div>
-		<button
-			class="btn-pagination"
-			(click)="goToFirstPage()"
-			[disabled]="currentPage === 1"
-		>
+    <div>
+        <button
+            class="btn-pagination"
+            (click)="goToFirstPage()"
+            [disabled]="currentPage === 1"
+        >
             <i class="fa-solid fa-backward-fast"></i>
         </button>
-		<button
-			class="btn-pagination"
-			(click)="changePage(currentPage - 1)"
-			[disabled]="currentPage <= 1"
-		>
-			<i class="fa-solid fa-left-long"></i>
-		</button>
+        <button
+            class="btn-pagination"
+            (click)="changePage(currentPage - 1)"
+            [disabled]="currentPage <= 1"
+        >
+            <i class="fa-solid fa-left-long"></i>
+        </button>
         <span class="mx-4"
             >{{ startIndex + 1 }}-{{ endIndex }} de
-            {{ originalRows.length }}</span
+            {{ filteredRows.length }}</span
         >
-		<button
-			class="btn-pagination"
-			(click)="changePage(currentPage + 1)"
-			[disabled]="currentPage * pageSize >= originalRows.length"
-		>
-			<i class="fa-solid fa-right-long"></i>
-		</button>
-		<button
-			class="btn-pagination"
-			(click)="goToLastPage()"
-			[disabled]="currentPage === totalPages"
-		>
+        <button
+            class="btn-pagination"
+            (click)="changePage(currentPage + 1)"
+            [disabled]="currentPage >= totalPages"
+        >
+            <i class="fa-solid fa-right-long"></i>
+        </button>
+        <button
+            class="btn-pagination"
+            (click)="goToLastPage()"
+            [disabled]="currentPage === totalPages"
+        >
             <i class="fa-solid fa-forward-fast"></i>
-		</button>
-	</div>
+        </button>
+    </div>
     <div class="d-flex me-4">
-		<label class="me-2" for="itemsPage">Mostrar:</label>
-		<select
-			class="select-items"
-			id="itemsPage"
-			(change)="changePageSize($event)"
-		>
-			@for (item of [5, 10, 20]; track $index) {
-				<option [value]="item" [selected]="item === pageSize">
-					{{ item }}
-				</option>
-			}
-		</select>
-	</div>
+        <label class="me-2" for="itemsPage">Mostrar:</label>
+        <select
+            class="select-items"
+            id="itemsPage"
+            (change)="changePageSize($event)"
+        >
+            @for (item of [5, 10, 20]; track $index) {
+                <option [value]="item" [selected]="item === pageSize">
+                    {{ item }}
+                </option>
+            }
+        </select>
+    </div>
 </div>

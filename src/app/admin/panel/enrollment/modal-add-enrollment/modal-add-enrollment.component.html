@@ -1,6 +1,6 @@
 <ng-template #modalAddEnrollment let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title">Añadir inscripción manualmente</h4>
+  <div class="modal-header bg-white border-bottom px-4">
+    <h4 class="modal-title fw-semibold text-dark mb-0">Añadir inscripción manualmente</h4>
     <button 
       type="button" 
       class="btn-close" 
@@ -9,38 +9,38 @@
     </button>
   </div>
 
-  <div class="modal-body">
+  <div class="modal-body bg-white p-4">
     <form>
       <!-- DATOS DEL ESTUDIANTE -->
-      <div class="section-header mb-3">
-        <h5 class="fw-bold mb-3">Datos del Estudiante</h5>
+      <div class="section-divider">
+        <h5 class="fw-semibold mb-0">Datos del Estudiante</h5>
       </div>
 
       <!-- Fila 1: Nombres y Apellidos -->
       <div class="row mb-3">
         <div class="col-md-4">
-          <label class="form-label">Nombre</label>
+          <label class="form-label fw-medium small">Nombre</label>
           <input 
             type="text" 
-            class="form-control custom-input" 
+            class="form-control rounded" 
             placeholder="Nombre"
             [(ngModel)]="studentData.firstName"
             name="studentFirstName">
         </div>
         <div class="col-md-4">
-          <label class="form-label">Apellido Paterno</label>
+          <label class="form-label fw-medium small">Apellido Paterno</label>
           <input 
             type="text" 
-            class="form-control custom-input" 
+            class="form-control rounded" 
             placeholder="Apellido Paterno"
             [(ngModel)]="studentData.paternalLastName"
             name="studentPaternalLastName">
         </div>
         <div class="col-md-4">
-          <label class="form-label">Apellido Materno</label>
+          <label class="form-label fw-medium small">Apellido Materno</label>
           <input 
             type="text" 
-            class="form-control custom-input" 
+            class="form-control rounded" 
             placeholder="Apellido Materno"
             [(ngModel)]="studentData.maternalLastName"
             name="studentMaternalLastName">
@@ -50,9 +50,9 @@
       <!-- Fila 2: Documento, Fecha y Sexo -->
       <div class="row mb-3">
         <div class="col-md-3">
-          <label class="form-label">Tipo de Documento</label>
+          <label class="form-label fw-medium small">Tipo de Documento</label>
           <select 
-            class="form-select custom-select" 
+            class="form-select rounded" 
             [(ngModel)]="studentData.documentType"
             name="studentDocumentType">
             <option value="">Tipo de Documento</option>
@@ -62,26 +62,26 @@
           </select>
         </div>
         <div class="col-md-3">
-          <label class="form-label">N° documento</label>
+          <label class="form-label fw-medium small">N° documento</label>
           <input 
             type="text" 
-            class="form-control custom-input" 
+            class="form-control rounded" 
             placeholder="Nro Documento"
             [(ngModel)]="studentData.documentNumber"
             name="studentDocumentNumber">
         </div>
         <div class="col-md-3">
-          <label class="form-label">Fecha de Nacimiento</label>
+          <label class="form-label fw-medium small">Fecha de Nacimiento</label>
           <input 
             type="date" 
-            class="form-control custom-input"
+            class="form-control rounded"
             [(ngModel)]="studentData.birthDate"
             name="studentBirthDate">
         </div>
         <div class="col-md-3">
-          <label class="form-label">Sexo</label>
+          <label class="form-label fw-medium small">Sexo</label>
           <select 
-            class="form-select custom-select" 
+            class="form-select rounded" 
             [(ngModel)]="studentData.gender"
             name="studentGender">
             <option value="">Sexo</option>
@@ -95,28 +95,28 @@
       <!-- Fila 3: Contacto -->
       <div class="row mb-4">
         <div class="col-md-4">
-          <label class="form-label">Celular</label>
+          <label class="form-label fw-medium small">Celular</label>
           <input 
             type="text" 
-            class="form-control custom-input" 
+            class="form-control rounded" 
             placeholder="Celular"
             [(ngModel)]="studentData.phone"
             name="studentPhone">
         </div>
         <div class="col-md-4">
-          <label class="form-label">Dirección</label>
+          <label class="form-label fw-medium small">Dirección</label>
           <input 
             type="text" 
-            class="form-control custom-input" 
+            class="form-control rounded" 
             placeholder="Dirección"
             [(ngModel)]="studentData.address"
             name="studentAddress">
         </div>
         <div class="col-md-4">
-          <label class="form-label">Correo Personal</label>
+          <label class="form-label fw-medium small">Correo Personal</label>
           <input 
             type="email" 
-            class="form-control custom-input" 
+            class="form-control rounded" 
             placeholder="Correo Personal"
             [(ngModel)]="studentData.email"
             name="studentEmail">
@@ -124,15 +124,15 @@
       </div>
 
       <!-- NIVEL ACADÉMICO -->
-      <div class="section-header mb-3">
-        <h5 class="fw-bold mb-3">Nivel académico</h5>
+      <div class="section-divider">
+        <h5 class="fw-semibold mb-0">Nivel académico</h5>
       </div>
 
       <div class="row mb-4">
         <div class="col-md-4">
-          <label class="form-label">Nivel</label>
+          <label class="form-label fw-medium small">Nivel</label>
           <select 
-            class="form-select custom-select" 
+            class="form-select rounded" 
             [(ngModel)]="academicData.level"
             name="academicLevel"
             (change)="onLevelChange()">
@@ -143,9 +143,9 @@
           </select>
         </div>
         <div class="col-md-4">
-          <label class="form-label">Grado</label>
+          <label class="form-label fw-medium small">Grado</label>
           <select 
-            class="form-select custom-select" 
+            class="form-select rounded" 
             [(ngModel)]="academicData.grade"
             name="academicGrade">
             <option value="">Grado</option>
@@ -155,9 +155,9 @@
           </select>
         </div>
         <div class="col-md-4">
-          <label class="form-label">Turno</label>
+          <label class="form-label fw-medium small">Turno</label>
           <select 
-            class="form-select custom-select" 
+            class="form-select rounded" 
             [(ngModel)]="academicData.shift"
             name="academicShift">
             <option value="">Turno</option>
@@ -169,35 +169,35 @@
       </div>
 
       <!-- DATOS DEL APODERADO -->
-      <div class="section-header mb-3">
-        <h5 class="fw-bold mb-3">Datos del Apoderado</h5>
+      <div class="section-divider">
+        <h5 class="fw-semibold mb-0">Datos del Apoderado</h5>
       </div>
 
       <!-- Fila 1: Nombres y Apellidos del Apoderado -->
       <div class="row mb-3">
         <div class="col-md-4">
-          <label class="form-label">Nombre</label>
+          <label class="form-label fw-medium small">Nombre</label>
           <input 
             type="text" 
-            class="form-control custom-input" 
+            class="form-control rounded" 
             placeholder="Nombre"
             [(ngModel)]="guardianData.firstName"
             name="guardianFirstName">
         </div>
         <div class="col-md-4">
-          <label class="form-label">Apellido Paterno</label>
+          <label class="form-label fw-medium small">Apellido Paterno</label>
           <input 
             type="text" 
-            class="form-control custom-input" 
+            class="form-control rounded" 
             placeholder="Apellido Paterno"
             [(ngModel)]="guardianData.paternalLastName"
             name="guardianPaternalLastName">
         </div>
         <div class="col-md-4">
-          <label class="form-label">Apellido Materno</label>
+          <label class="form-label fw-medium small">Apellido Materno</label>
           <input 
             type="text" 
-            class="form-control custom-input" 
+            class="form-control rounded" 
             placeholder="Apellido Materno"
             [(ngModel)]="guardianData.maternalLastName"
             name="guardianMaternalLastName">
@@ -207,9 +207,9 @@
       <!-- Fila 2: Documento, Fecha y Sexo del Apoderado -->
       <div class="row mb-3">
         <div class="col-md-3">
-          <label class="form-label">Tipo de Documento</label>
+          <label class="form-label fw-medium small">Tipo de Documento</label>
           <select 
-            class="form-select custom-select" 
+            class="form-select rounded" 
             [(ngModel)]="guardianData.documentType"
             name="guardianDocumentType">
             <option value="">Documento de identidad</option>
@@ -219,26 +219,26 @@
           </select>
         </div>
         <div class="col-md-3">
-          <label class="form-label">N° documento</label>
+          <label class="form-label fw-medium small">N° documento</label>
           <input 
             type="text" 
-            class="form-control custom-input" 
+            class="form-control rounded" 
             placeholder="Nro Documento"
             [(ngModel)]="guardianData.documentNumber"
             name="guardianDocumentNumber">
         </div>
         <div class="col-md-3">
-          <label class="form-label">Fecha de Nacimiento</label>
+          <label class="form-label fw-medium small">Fecha de Nacimiento</label>
           <input 
             type="date" 
-            class="form-control custom-input"
+            class="form-control rounded"
             [(ngModel)]="guardianData.birthDate"
             name="guardianBirthDate">
         </div>
         <div class="col-md-3">
-          <label class="form-label">Sexo</label>
+          <label class="form-label fw-medium small">Sexo</label>
           <select 
-            class="form-select custom-select" 
+            class="form-select rounded" 
             [(ngModel)]="guardianData.gender"
             name="guardianGender">
             <option value="">Sexo</option>
@@ -252,28 +252,28 @@
       <!-- Fila 3: Contacto del Apoderado -->
       <div class="row mb-4">
         <div class="col-md-4">
-          <label class="form-label">Celular</label>
+          <label class="form-label fw-medium small">Celular</label>
           <input 
             type="text" 
-            class="form-control custom-input" 
+            class="form-control rounded" 
             placeholder="Celular"
             [(ngModel)]="guardianData.phone"
             name="guardianPhone">
         </div>
         <div class="col-md-4">
-          <label class="form-label">Dirección</label>
+          <label class="form-label fw-medium small">Dirección</label>
           <input 
             type="text" 
-            class="form-control custom-input" 
+            class="form-control rounded" 
             placeholder="Dirección"
             [(ngModel)]="guardianData.address"
             name="guardianAddress">
         </div>
         <div class="col-md-4">
-          <label class="form-label">Correo Personal</label>
+          <label class="form-label fw-medium small">Correo Personal</label>
           <input 
             type="email" 
-            class="form-control custom-input" 
+            class="form-control rounded" 
             placeholder="Correo Personal"
             [(ngModel)]="guardianData.email"
             name="guardianEmail">
@@ -283,9 +283,9 @@
       <!-- ESTADO DE INSCRIPCIÓN -->
       <div class="row mb-3">
         <div class="col-md-6">
-          <label class="form-label">Cambiar estado de inscripción</label>
+          <label class="form-label fw-medium small">Cambiar estado de inscripción</label>
           <select 
-            class="form-select custom-select" 
+            class="form-select rounded" 
             [(ngModel)]="enrollmentStatus"
             name="enrollmentStatus">
             <option value="">Estado</option>
@@ -298,16 +298,16 @@
     </form>
   </div>
 
-  <div class="modal-footer">
+  <div class="modal-footer bg-white border-top d-flex justify-content-end gap-2 p-3">
     <button 
       type="button" 
-      class="btn btn-secondary me-2"
+      class="btn btn-secondary rounded px-4"
       (click)="onCancel()">
       Cancelar
     </button>
     <button 
       type="button" 
-      class="btn btn-success"
+      class="btn btn-success rounded px-4"
       (click)="onConfirm()">
       Añadir Inscripción
     </button>

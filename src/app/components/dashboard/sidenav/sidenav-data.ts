@@ -46,15 +46,22 @@ export const menuItemsAdmin = [
       route: '/admin/panel/inscripciones',
       active: true 
     },
+    {
+      icon: 'fa-solid fa-users', 
+      label: 'Gestión de estudiantes', 
+      route: '/admin/panel/estudiantes-matriculados',
+      active: true 
+    },
+    {
+      icon: 'fa-solid fa-person-chalkboard', 
+      label: 'Gestión de equipo académico', 
+      route: '/admin/panel/equipo-academico',
+      active: true 
+    },
     { 
       icon: 'fa-solid fa-users', 
       label: 'Usuarios', 
       route: '/admin/panel/usuarios' 
-    },
-    { 
-      icon: 'fa-solid fa-school', 
-      label: 'Gestión Académica', 
-      route: '/admin/panel/gestion-academica' 
     },
     { 
       icon: 'fa-solid fa-user-plus', 

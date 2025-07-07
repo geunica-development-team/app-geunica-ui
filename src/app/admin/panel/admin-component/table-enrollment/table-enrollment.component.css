@@ -1,4 +1,5 @@
-.table th, .table td {
+.table th,
+.table td {
   vertical-align: middle;
 }
 
@@ -7,7 +8,7 @@
   font-size: 15px;
   font-weight: 600;
   border-bottom: none;
-  background-color: #F1F4F9;
+  background-color: #f1f4f9;
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
@@ -61,17 +62,6 @@
   color: white;
 }
 
-.btn-info {
-  background-color: #06b6d4;
-  border-color: #06b6d4;
-  color: white;
-}
-
-.btn-info:hover {
-  background-color: #0891b2;
-  border-color: #0891b2;
-}
-
 /* Paginado */
 .btn-pagination {
   border: none !important;
@@ -102,7 +92,7 @@
     padding: 0.2rem 0.4rem;
     font-size: 0.8rem;
   }
-  
+
   .btn-sm i {
     display: none;
   }

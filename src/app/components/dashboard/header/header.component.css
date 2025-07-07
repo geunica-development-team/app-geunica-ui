@@ -5,6 +5,7 @@
   z-index: 999;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   width: 100%;
+  position: relative; /* Asegurar posicionamiento correcto */
 }
 
 .header-icon-btn {
@@ -92,12 +93,18 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+  .app-header {
+    padding: 1rem 0;
+    /* El header se mantiene en su posición normal, 
+       pero el main-content se ajusta con margin-top */
+  }
+
   .header-icon-btn {
     width: 36px;
     height: 36px;
     margin: 0 0.1rem;
   }
-  
+
   .header-avatar {
     width: 36px;
     height: 36px;
@@ -106,6 +113,23 @@
 
 @media (max-width: 576px) {
   .app-header {
-    padding: 0.75rem 0;
+    padding: 1rem 0;
+  }
+
+  .header-icon-btn {
+    width: 32px;
+    height: 32px;
+    margin: 0 0.05rem;
+  }
+
+  .header-avatar {
+    width: 32px;
+    height: 32px;
+  }
+
+  /* Reducir padding en pantallas muy pequeñas */
+  .container-fluid {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
   }
 }

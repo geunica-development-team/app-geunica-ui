@@ -1,57 +1,54 @@
 <ng-template #modalReadEnrollment let-modal>
-  <div class="modal-header">
+  <div class="modal-header bg-white border-bottom px-4">
     <div class="w-100">
-      <h4 class="modal-title mb-2">{{ currentData?.studentName }}</h4>
-      <div class="enrollment-info">
-        <p class="mb-1"><strong>Fecha de inscripción:</strong> {{ currentData?.enrollmentDate }}</p>
-        <p class="mb-0"><strong>Nivel, Grado y Turno seleccionado:</strong> 
-          {{ currentData?.level }} - {{ currentData?.grade }} - {{ currentData?.shift }}
-        </p>
-      </div>
+      <h4 class="modal-title fw-semibold text-dark">{{ currentData?.studentName }}</h4>
     </div>
     <button 
-      type="button" 
-      class="btn-close" 
-      aria-label="Close"
-      (click)="onCancel()">
-    </button>
-  </div>
+    type="button" 
+    class="btn-close" 
+    aria-label="Close"
+    (click)="onCancel()">
+  </button>
+</div>
 
-  <div class="modal-body">
+<div class="modal-body bg-white p-4">
+    <div class="small mb-3">
+      <p class="mb-1"><strong>Fecha de inscripción:</strong> {{ currentData?.enrollmentDate }}</p>
+      <p class="mb-0"><strong>Nivel, Grado y Turno seleccionado:</strong> 
+        {{ currentData?.level }} - {{ currentData?.grade }} - {{ currentData?.shift }}
+      </p>
+    </div>
     <form>
       <!-- DATOS DEL ESTUDIANTE -->
-      <div class="section-header mb-3">
-        <h5 class="fw-bold">Datos del Estudiante</h5>
+      <div class="section-divider">
+        <h5 class="fw-semibold mb-0">Datos del Estudiante</h5>
       </div>
 
       <!-- Fila 1: Nombres y Apellidos -->
       <div class="row mb-3">
         <div class="col-md-4">
-          <label class="form-label">Nombre</label>
+          <label class="form-label fw-medium small">Nombre</label>
           <input 
             type="text" 
-            class="form-control" 
-            [class.disabled-input]="!isEditMode"
+            class="form-control rounded" 
             [disabled]="!isEditMode"
             [(ngModel)]="currentData!.student.firstName"
             name="studentFirstName">
         </div>
         <div class="col-md-4">
-          <label class="form-label">Apellido Paterno</label>
+          <label class="form-label fw-medium small">Apellido Paterno</label>
           <input 
             type="text" 
-            class="form-control"
-            [class.disabled-input]="!isEditMode"
+            class="form-control rounded"
             [disabled]="!isEditMode"
             [(ngModel)]="currentData!.student.paternalLastName"
             name="studentPaternalLastName">
         </div>
         <div class="col-md-4">
-          <label class="form-label">Apellido Materno</label>
+          <label class="form-label fw-medium small">Apellido Materno</label>
           <input 
             type="text" 
-            class="form-control"
-            [class.disabled-input]="!isEditMode"
+            class="form-control rounded"
             [disabled]="!isEditMode"
             [(ngModel)]="currentData!.student.maternalLastName"
             name="studentMaternalLastName">
@@ -61,10 +58,9 @@
       <!-- Fila 2: Documento, Fecha y Sexo -->
       <div class="row mb-3">
         <div class="col-md-3">
-          <label class="form-label">Tipo de Documento</label>
+          <label class="form-label fw-medium small">Tipo de Documento</label>
           <select 
-            class="form-select"
-            [class.disabled-input]="!isEditMode"
+            class="form-select rounded"
             [disabled]="!isEditMode"
             [(ngModel)]="currentData!.student.documentType"
             name="studentDocumentType">
@@ -74,30 +70,27 @@
           </select>
         </div>
         <div class="col-md-3">
-          <label class="form-label">N° documento</label>
+          <label class="form-label fw-medium small">N° documento</label>
           <input 
             type="text" 
-            class="form-control"
-            [class.disabled-input]="!isEditMode"
+            class="form-control rounded"
             [disabled]="!isEditMode"
             [(ngModel)]="currentData!.student.documentNumber"
             name="studentDocumentNumber">
         </div>
         <div class="col-md-3">
-          <label class="form-label">Fecha de Nacimiento</label>
+          <label class="form-label fw-medium small">Fecha de Nacimiento</label>
           <input 
             type="date" 
-            class="form-control"
-            [class.disabled-input]="!isEditMode"
+            class="form-control rounded"
             [disabled]="!isEditMode"
             [(ngModel)]="currentData!.student.birthDate"
             name="studentBirthDate">
         </div>
         <div class="col-md-3">
-          <label class="form-label">Sexo</label>
+          <label class="form-label fw-medium small">Sexo</label>
           <select 
-            class="form-select"
-            [class.disabled-input]="!isEditMode"
+            class="form-select rounded"
             [disabled]="!isEditMode"
             [(ngModel)]="currentData!.student.gender"
             name="studentGender">
@@ -111,31 +104,28 @@
       <!-- Fila 3: Contacto -->
       <div class="row mb-4">
         <div class="col-md-4">
-          <label class="form-label">Celular</label>
+          <label class="form-label fw-medium small">Celular</label>
           <input 
             type="text" 
-            class="form-control"
-            [class.disabled-input]="!isEditMode"
+            class="form-control rounded"
             [disabled]="!isEditMode"
             [(ngModel)]="currentData!.student.phone"
             name="studentPhone">
         </div>
         <div class="col-md-4">
-          <label class="form-label">Dirección</label>
+          <label class="form-label fw-medium small">Dirección</label>
           <input 
             type="text" 
-            class="form-control"
-            [class.disabled-input]="!isEditMode"
+            class="form-control rounded"
             [disabled]="!isEditMode"
             [(ngModel)]="currentData!.student.address"
             name="studentAddress">
         </div>
         <div class="col-md-4">
-          <label class="form-label">Correo Personal</label>
+          <label class="form-label fw-medium small">Correo Personal</label>
           <input 
             type="email" 
-            class="form-control"
-            [class.disabled-input]="!isEditMode"
+            class="form-control rounded"
             [disabled]="!isEditMode"
             [(ngModel)]="currentData!.student.email"
             name="studentEmail">
@@ -143,38 +133,35 @@
       </div>
 
       <!-- DATOS DEL APODERADO -->
-      <div class="section-header mb-3">
-        <h5 class="fw-bold">Datos del Apoderado</h5>
+      <div class="section-divider">
+        <h5 class="fw-semibold mb-0">Datos del Apoderado</h5>
       </div>
 
       <!-- Fila 1: Nombres y Apellidos del Apoderado -->
       <div class="row mb-3">
         <div class="col-md-4">
-          <label class="form-label">Nombre</label>
+          <label class="form-label fw-medium small">Nombre</label>
           <input 
             type="text" 
-            class="form-control"
-            [class.disabled-input]="!isEditMode"
+            class="form-control rounded"
             [disabled]="!isEditMode"
             [(ngModel)]="currentData!.guardian.firstName"
             name="guardianFirstName">
         </div>
         <div class="col-md-4">
-          <label class="form-label">Apellido Paterno</label>
+          <label class="form-label fw-medium small">Apellido Paterno</label>
           <input 
             type="text" 
-            class="form-control"
-            [class.disabled-input]="!isEditMode"
+            class="form-control rounded"
             [disabled]="!isEditMode"
             [(ngModel)]="currentData!.guardian.paternalLastName"
             name="guardianPaternalLastName">
         </div>
         <div class="col-md-4">
-          <label class="form-label">Apellido Materno</label>
+          <label class="form-label fw-medium small">Apellido Materno</label>
           <input 
             type="text" 
-            class="form-control"
-            [class.disabled-input]="!isEditMode"
+            class="form-control rounded"
             [disabled]="!isEditMode"
             [(ngModel)]="currentData!.guardian.maternalLastName"
             name="guardianMaternalLastName">
@@ -184,10 +171,9 @@
       <!-- Fila 2: Documento, Fecha y Sexo del Apoderado -->
       <div class="row mb-3">
         <div class="col-md-3">
-          <label class="form-label">Tipo de Documento</label>
+          <label class="form-label fw-medium small">Tipo de Documento</label>
           <select 
-            class="form-select"
-            [class.disabled-input]="!isEditMode"
+            class="form-select rounded"
             [disabled]="!isEditMode"
             [(ngModel)]="currentData!.guardian.documentType"
             name="guardianDocumentType">
@@ -197,30 +183,27 @@
           </select>
         </div>
         <div class="col-md-3">
-          <label class="form-label">N° documento</label>
+          <label class="form-label fw-medium small">N° documento</label>
           <input 
             type="text" 
-            class="form-control"
-            [class.disabled-input]="!isEditMode"
+            class="form-control rounded"
             [disabled]="!isEditMode"
             [(ngModel)]="currentData!.guardian.documentNumber"
             name="guardianDocumentNumber">
         </div>
         <div class="col-md-3">
-          <label class="form-label">Fecha de Nacimiento</label>
+          <label class="form-label fw-medium small">Fecha de Nacimiento</label>
           <input 
             type="date" 
-            class="form-control"
-            [class.disabled-input]="!isEditMode"
+            class="form-control rounded"
             [disabled]="!isEditMode"
             [(ngModel)]="currentData!.guardian.birthDate"
             name="guardianBirthDate">
         </div>
         <div class="col-md-3">
-          <label class="form-label">Sexo</label>
+          <label class="form-label fw-medium small">Sexo</label>
           <select 
-            class="form-select"
-            [class.disabled-input]="!isEditMode"
+            class="form-select rounded"
             [disabled]="!isEditMode"
             [(ngModel)]="currentData!.guardian.gender"
             name="guardianGender">
@@ -234,31 +217,28 @@
       <!-- Fila 3: Contacto del Apoderado -->
       <div class="row mb-4">
         <div class="col-md-4">
-          <label class="form-label">Celular</label>
+          <label class="form-label fw-medium small">Celular</label>
           <input 
             type="text" 
-            class="form-control"
-            [class.disabled-input]="!isEditMode"
+            class="form-control rounded"
             [disabled]="!isEditMode"
             [(ngModel)]="currentData!.guardian.phone"
             name="guardianPhone">
         </div>
         <div class="col-md-4">
-          <label class="form-label">Dirección</label>
+          <label class="form-label fw-medium small">Dirección</label>
           <input 
             type="text" 
-            class="form-control"
-            [class.disabled-input]="!isEditMode"
+            class="form-control rounded"
             [disabled]="!isEditMode"
             [(ngModel)]="currentData!.guardian.address"
             name="guardianAddress">
         </div>
         <div class="col-md-4">
-          <label class="form-label">Correo Personal</label>
+          <label class="form-label fw-medium small">Correo Personal</label>
           <input 
             type="email" 
-            class="form-control"
-            [class.disabled-input]="!isEditMode"
+            class="form-control rounded"
             [disabled]="!isEditMode"
             [(ngModel)]="currentData!.guardian.email"
             name="guardianEmail">
@@ -268,10 +248,9 @@
       <!-- ESTADO DE INSCRIPCIÓN -->
       <div class="row mb-3">
         <div class="col-md-6">
-          <label class="form-label">Cambiar estado de inscripción</label>
+          <label class="form-label fw-medium small">Cambiar estado de inscripción</label>
           <select 
-            class="form-select"
-            [class.disabled-input]="!isEditMode"
+            class="form-select rounded"
             [disabled]="!isEditMode"
             [(ngModel)]="currentData!.enrollmentStatus"
             name="enrollmentStatus">
@@ -284,10 +263,10 @@
     </form>
   </div>
 
-  <div class="modal-footer">
+  <div class="modal-footer bg-white border-top d-flex justify-content-end gap-2 p-3">
     <button 
       type="button" 
-      class="btn btn-secondary"
+      class="btn btn-secondary rounded px-4"
       (click)="onCancel()">
       Cancelar
     </button>
@@ -295,14 +274,14 @@
     @if (!isEditMode) {
       <button 
         type="button" 
-        class="btn btn-warning"
+        class="btn btn-warning rounded px-4"
         (click)="enableEditMode()">
         Editar
       </button>
     } @else {
       <button 
         type="button" 
-        class="btn btn-success"
+        class="btn btn-success rounded px-4"
         (click)="saveChanges()">
         Guardar cambios
       </button>

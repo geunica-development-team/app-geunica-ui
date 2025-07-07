@@ -1,11 +1,30 @@
-<div class="sidenav">
-  <!-- Header -->
-  <div class="sidenav-header">
+<!-- Header móvil (solo visible en pantallas pequeñas) -->
+<div class="mobile-header d-md-none">
+  <div class="d-flex align-items-center justify-content-between">
+    <button 
+      class="header-toggle-btn me-2"
+      (click)="toggleSidenav()"
+      type="button">
+      <i class="fas" [class.fa-bars]="isCollapsed" [class.fa-times]="!isCollapsed"></i>
+    </button>
     <div class="d-flex align-items-center">
       <div class="logo-icon">
         <i class="fas fa-graduation-cap"></i>
       </div>
-      <h5 class="mb-0 ms-2 text-white">Colegio</h5>
+      <h5 class="mb-0 ms-2 text-white">GEUNICA</h5>
+    </div>
+  </div>
+</div>
+
+<!-- Sidenav -->
+<div class="sidenav" [class.collapsed]="isCollapsed">
+  <!-- Header (solo visible en desktop) -->
+  <div class="sidenav-header d-none d-md-block">
+    <div class="d-flex align-items-center">
+      <div class="logo-icon">
+        <i class="fas fa-graduation-cap"></i>
+      </div>
+      <h5 class="mb-0 ms-2 text-white">GEUNICA</h5>
     </div>
   </div>
 
@@ -15,20 +34,19 @@
     <ul class="nav flex-column">
       <li class="nav-item">
         @for (item of menuItems; track $index) {
-            <a 
-              class="nav-link sidenav-link"
-              [routerLink]="item.route"
-              routerLinkActive="active"
-              [routerLinkActiveOptions]="{exact: item.exactMatch || false}"
-              >
-              <i [class]="item.icon"></i>
-              <span class="ms-3">{{ item.label }}</span>
-              @if (item.badge) {
-                <span class="badge bg-light text-success ms-auto">
-                    {{ item.badge }}
-                </span>
-              }
-            </a>
+          <a 
+            class="nav-link sidenav-link"
+            [routerLink]="item.route"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{exact: item.exactMatch || false}">
+            <i [class]="item.icon"></i>
+            <span class="ms-3">{{ item.label }}</span>
+            @if (item.badge) {
+              <span class="badge bg-light text-success ms-auto">
+                {{ item.badge }}
+              </span>
+            }
+          </a>
         }
       </li>
     </ul>
@@ -40,15 +58,14 @@
     <ul class="nav flex-column">
       <li class="nav-item">
         @for (item of generalItems; track $index) {
-            <a 
-              class="nav-link sidenav-link"
-              [routerLink]="item.route"
-              routerLinkActive="active"
-              [routerLinkActiveOptions]="{exact: item.exactMatch || false}"
-              >
-              <i [class]="item.icon"></i>
-              <span class="ms-3">{{ item.label }}</span>
-            </a>
+          <a 
+            class="nav-link sidenav-link"
+            [routerLink]="item.route"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{exact: item.exactMatch || false}">
+            <i [class]="item.icon"></i>
+            <span class="ms-3">{{ item.label }}</span>
+          </a>
         }
       </li>
     </ul>

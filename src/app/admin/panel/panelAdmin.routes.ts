@@ -3,8 +3,10 @@ import { PanelComponent } from "./panel.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { UsersComponent } from "./users/users.component";
 import { FinanceComponent } from "./finance/finance.component";
-import { AcademicComponent } from "./academic/academic.component";
 import { EnrollmentComponent } from "./enrollment/enrollment.component";
+import { StudentUsersComponent } from "./student-users/student-users.component";
+import { InternalUsersComponent } from "./internal-users/internal-users.component";
+import { StudentDetailsComponent } from "./student-users/student-details/student-details.component";
 
 export const adminPanelRoutes: Routes = [
     {
@@ -25,12 +27,20 @@ export const adminPanelRoutes: Routes = [
                 component: EnrollmentComponent,
             },
             {
-                path: 'usuarios',
-                component: UsersComponent
+                path: 'estudiantes-matriculados',
+                component: StudentUsersComponent
             },
             {
-                path: 'gestion-academica',
-                component: AcademicComponent
+                path: "estudiantes-matriculados/:id",
+                component: StudentDetailsComponent,
+            },
+            {
+                path: 'equipo-academico',
+                component: InternalUsersComponent
+            },
+            {
+                path: 'usuarios',
+                component: UsersComponent
             },
             {
                 path: 'finanzas',
