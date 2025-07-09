@@ -11,24 +11,9 @@ export class SidenavComponent {
   @Input({required : true}) menuItems: any[] = [];
   @Input({required : true}) generalItems: any[] = [];
 
-  isCollapsed = false
-
-  @HostListener("window:resize", ["$event"])
-  onResize() {
-    if (window.innerWidth <= 768) {
-      this.isCollapsed = true
-    } else {
-      this.isCollapsed = false
-    }
-  }
-
-  ngOnInit() {
-    if (window.innerWidth <= 768) {
-      this.isCollapsed = true
-    }
-  }
+  isCollapsed = true;
 
   toggleSidenav() {
-    this.isCollapsed = !this.isCollapsed
+    this.isCollapsed = !this.isCollapsed;
   }
 }

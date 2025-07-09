@@ -131,19 +131,24 @@
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
-  /* Sidenav se posiciona debajo del header móvil */
+  /* En móviles, el sidenav se posiciona debajo del header */
   .sidenav {
     top: 70px;
     height: calc(100vh - 70px);
     padding-top: 1rem;
   }
-
-  /* Sidenav colapsado por defecto */
+  
+  /* Cuando está colapsado (oculto) */
   .sidenav.collapsed {
     transform: translateX(-100%);
   }
+  
+  /* Cuando NO está colapsado (visible) */
+  .sidenav:not(.collapsed) {
+    transform: translateX(0);
+  }
 
-  /* Ajustar padding del primer section para compensar la falta de header */
+  /* Ajustar padding del primer section */
   .sidenav-section:first-child {
     padding-top: 1rem;
   }
@@ -154,5 +159,10 @@
   /* Header móvil oculto en desktop */
   .mobile-header {
     display: none !important;
+  }
+  
+  /* En desktop, siempre visible sin importar el estado collapsed */
+  .sidenav {
+    transform: translateX(0) !important;
   }
 }

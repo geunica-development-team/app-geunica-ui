@@ -20,7 +20,7 @@ export class StudentUsersComponent {
 
   // FILTROS
   selectedStudentStatus = ""
-  selectedDebtStatus = "" // ✅ NUEVO FILTRO
+  selectedDebtStatus = ""
   searchValue = ""
 
   // ESTADOS DE ESTUDIANTE DISPONIBLES
@@ -30,7 +30,7 @@ export class StudentUsersComponent {
     { value: "Retirado", label: "Retirado" },
   ]
 
-  // ✅ NUEVO: OPCIONES DE FILTRO DE DEUDA
+  // OPCIONES DE FILTRO DE DEUDA
   debtStatusOptions = [
     { value: "con-deuda", label: "Con deuda" },
     { value: "sin-deuda", label: "Sin deuda" },
@@ -69,13 +69,13 @@ export class StudentUsersComponent {
       documentNumber: user.person.documentNumber,
       status: this.getStatusText(user.status),
       studentStatus: this.getStudentStatusText(user.student?.studentStatus || ""),
-      debtStatus: this.getDebtDisplay(user.student?.levels || []),
+      debtStatus: "",
       lastLoginFormatted: this.formatDate(user.lastLogin),
       // Clases CSS para los badges
       statusClass: this.getStatusClass(user.status),
       studentStatusClass: this.getStudentStatusClass(user.student?.studentStatus || ""),
       debtClass: this.getDebtClass(user.student?.levels || []),
-      // ✅ NUEVO: Agregar información de deuda para filtrado
+      // Información de deuda para filtrado y template
       hasDebt: this.hasDebt(user.student?.levels || []),
       // Mantener referencia al objeto original para el modal
       originalData: user,
@@ -96,7 +96,6 @@ export class StudentUsersComponent {
     this.applyFilters()
   }
 
-  // ✅ ACTUALIZADO: Limpiar todos los filtros incluyendo deuda
   clearFilters() {
     this.selectedStudentStatus = ""
     this.selectedDebtStatus = ""
@@ -104,7 +103,7 @@ export class StudentUsersComponent {
     this.applyFilters()
   }
 
-  // LÓGICA SIMPLE DE DEUDA
+  // LÓGICA DE DEUDA
   hasDebt(levels: any[]): boolean {
     const today = new Date()
     for (const level of levels) {
@@ -122,17 +121,11 @@ export class StudentUsersComponent {
     return false
   }
 
-  // Display simple para deuda
-  getDebtDisplay(levels: any[]): string {
-    return this.hasDebt(levels) ? "?" : "✓"
-  }
-
-  // Clase CSS simple para deuda
   getDebtClass(levels: any[]): string {
     return this.hasDebt(levels) ? "debt-status debt-overdue" : "debt-status debt-none"
   }
 
-  // Formatear fecha
+  // MÉTODOS DE FORMATO Y ESTADO
   formatDate(dateString: string): string {
     const date = new Date(dateString)
     return date.toLocaleDateString("es-ES", {
@@ -144,7 +137,6 @@ export class StudentUsersComponent {
     })
   }
 
-  // Obtener texto del estado de cuenta
   getStatusText(status: string): string {
     switch (status) {
       case "active":
@@ -158,7 +150,6 @@ export class StudentUsersComponent {
     }
   }
 
-  // Obtener texto del estado del estudiante
   getStudentStatusText(status: string): string {
     switch (status) {
       case "enrolled":
@@ -174,7 +165,6 @@ export class StudentUsersComponent {
     }
   }
 
-  // Obtener clase CSS para estado de cuenta
   getStatusClass(status: string): string {
     switch (status) {
       case "active":
@@ -188,7 +178,6 @@ export class StudentUsersComponent {
     }
   }
 
-  // Obtener clase CSS para estado del estudiante
   getStudentStatusClass(status: string): string {
     switch (status) {
       case "enrolled":
@@ -204,13 +193,12 @@ export class StudentUsersComponent {
     }
   }
 
-  // Acción para ver ficha del estudiante
+  // ACCIONES
   onVerFicha = (row: any) => {
     console.log("Ver ficha del estudiante:", row)
     this.router.navigate(["/admin/panel/estudiantes-matriculados", row.userId])
   }
 
-  // ✅ NUEVO: Acción para ver pagos (navegar al tab de pagos)
   onVerPagos = (row: any) => {
     console.log("Ver pagos del estudiante:", row)
     this.router.navigate(["/admin/panel/estudiantes-matriculados", row.userId], {
@@ -218,7 +206,6 @@ export class StudentUsersComponent {
     })
   }
 
-  // CORREGIDO: Acción para ver deuda/pagos (modal)
   onVerDeuda = (row: any) => {
     console.log("Ver deuda/pagos del estudiante:", row)
     if (this.modalDebtDetails) {
@@ -226,7 +213,6 @@ export class StudentUsersComponent {
     }
   }
 
-  // Método legacy para compatibilidad
   applyFilter(event: Event) {
     if (this.studentUsersTable) {
       this.studentUsersTable.filterValue = (event.target as HTMLInputElement).value

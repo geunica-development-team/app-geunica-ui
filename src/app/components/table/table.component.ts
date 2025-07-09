@@ -12,12 +12,11 @@ export class TableComponent {
   @Input() accionEliminar!: (row: any) => void
   @Input() accionVer!: (row: any) => void
   @Input() accionVerDeuda!: (row: any) => void
-  //@Input() accionVerPagos!: (row: any) => void // VER PAGOS
   @Input() acciones!: boolean
   @Input() editarFila!: boolean
   @Input() eliminarFila!: boolean
   @Input() verFila!: boolean
-  @Input() verPagos = false // ✅ NUEVA OPCIÓN
+  @Input() verPagos = false
   @Input() columns: string[] = []
 
   // FILTROS OPCIONALES
@@ -31,7 +30,6 @@ export class TableComponent {
     return this._statusFilter
   }
 
-  // ✅ NUEVO: Filtro de deuda
   private _debtFilter = ""
   @Input()
   set debtFilter(value: string) {
@@ -84,7 +82,7 @@ export class TableComponent {
         statusMatch = data[this.statusColumnKey] === this._statusFilter
       }
 
-      // ✅ NUEVO: Filtro por deuda
+      // Filtro por deuda
       let debtMatch = true
       if (this._debtFilter && this._debtFilter.trim() !== "") {
         if (this._debtFilter === "con-deuda") {
@@ -111,7 +109,6 @@ export class TableComponent {
     if (this.currentPage > this.totalPages && this.totalPages > 0) {
       this.currentPage = 1
     }
-
     this.startIndex = (this.currentPage - 1) * this.pageSize
     this.endIndex = Math.min(this.startIndex + this.pageSize, this.filteredRows.length)
     this.rows = this.filteredRows.slice(this.startIndex, this.endIndex)
@@ -135,16 +132,6 @@ export class TableComponent {
       return row.studentStatusClass || "badge bg-light text-dark"
     }
     return ""
-  }
-
-  // Obtener clase CSS para deuda
-  getDebtClass(row: any): string {
-    return row.debtClass || "debt-status debt-none"
-  }
-
-  // CORREGIDO: Verificar si la deuda es clickeable (siempre clickeable)
-  isDebtClickable(): boolean {
-    return true // Siempre clickeable para abrir el modal
   }
 
   applyFilter(event: Event) {

@@ -23,17 +23,21 @@
                                         {{ row[columnMappings[column]] }}
                                     </span>
                                 }
-                                 <!-- Mostrar estado de deuda (SIEMPRE CLICKEABLE) -->
+                                <!-- Mostrar estado de deuda con iconos usando @if -->
                                 @else if (isDebtColumn(column)) {
                                     <button
                                         type="button"
-                                        [class]="getDebtClass(row) + ' debt-button'"
+                                        [class]="row.debtClass + ' debt-button'"
                                         (click)="accionVerDeuda(row)"
                                         title="Ver información de pagos">
-                                        {{ row[columnMappings[column]] }}
+                                        @if (row.hasDebt) {
+                                            <i class="fa-solid fa-exclamation"></i>
+                                        } @else {
+                                            <i class="fas fa-check"></i>
+                                        }
                                     </button>
                                 }
-                                 @else {
+                                @else {
                                     {{ row[columnMappings[column]] }}
                                 }
                             </td>
@@ -46,13 +50,6 @@
                                             <i class="fa-solid fa-eye"></i>
                                         </button>
                                     }
-                                    <!-- Botón para ver pagos
-                                    @if (verPagos) {
-                                        <button type="button" class="btn pt-2" (click)="accionVerPagos(row)" title="Ver pagos">
-                                            <i class="fa-solid fa-credit-card"></i>
-                                        </button>
-                                    }
-                                    -->
                                     @if (editarFila) {
                                         <button type="button" class="btn pt-2 me-1" (click)="accionEditar(row)">
                                             <i class="fa-solid fa-pencil"></i>

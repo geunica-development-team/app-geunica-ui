@@ -10,8 +10,8 @@
     background-color: #F1F4F9;
     padding-top: 1rem;
     padding-bottom: 1rem;
-  }
-  
+}
+
 /* Añadir borde redondeado en la parte superior */
 .table thead th:first-child {
     border-top-left-radius: 0.75rem;
@@ -34,14 +34,16 @@
   color: #202224;
   text-align: center;
   cursor: pointer;
-/* Para que el estilo no se interponga con el del navegador uwu */
+  /* Para que el estilo no se interponga con el del navegador uwu */
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
 }
+
 .btn-pagination:disabled {
   color: #818181;
 }
+
 .no-results{
   width: 100%;
   margin-top: 2rem;
@@ -49,7 +51,6 @@
   padding-bottom: 2rem;
   border-bottom: 1px solid #dee2e6;
 }
-
 
 /* Estilos para badges de estado */
 .badge {
@@ -59,13 +60,10 @@
   font-weight: 500;
 }
 
-
-
-/* NUEVOS ESTILOS PARA DEUDA */
+/* ESTILOS PARA DEUDA */
 .debt-status {
   font-size: 1.2rem;
-  font-weight: bold;
-  padding: 0.5rem;
+  font-weight: 900;
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
@@ -76,21 +74,15 @@
 }
 
 .debt-none {
-  background-color: #d4edda;
-  color: #155724;
-  border: 2px solid #c3e6cb;
-}
-
-.debt-pending {
-  background-color: #fff3cd;
-  color: #856404;
-  border: 2px solid #ffeaa7;
+  background-color: #60af72;
+  color: #ffffff;
+  border: none;
 }
 
 .debt-overdue {
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 2px solid #f5c6cb;
+  background-color: #ce4a55;
+  color: #ffffff;
+  border: none;
 }
 
 .debt-button {
@@ -100,11 +92,6 @@
 }
 
 .debt-button:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-.debt-overdue.debt-button:hover {
-  background-color: #f1aeb5;
-  border-color: #e85e6c;
 }
