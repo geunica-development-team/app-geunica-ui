@@ -6,6 +6,9 @@
       <app-searcher
         [(term)]="searchTerm"
         placeholder="Buscar por curso"
+        [items]="courses"
+        field="title"
+        (filtered)="filteredCourses = $event"
         (search)="onSearch()"
       ></app-searcher>
     </div>
