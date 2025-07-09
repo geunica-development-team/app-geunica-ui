@@ -1,1 +1,34 @@
-<p>assigned-courses works!</p>
+<div class="container py-4">
+
+  <!-- 1. Fila del buscador -->
+  <div class="row mb-4">
+    <div class="col-12 col-md-6">
+      <app-searcher
+        [(term)]="searchTerm"
+        placeholder="Buscar por curso"
+        (search)="onSearch()"
+      ></app-searcher>
+    </div>
+  </div>
+
+  <!-- 2. Fila de las cards -->
+      
+    <div class="row g-4">
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let course of filteredCourses">
+        
+          <app-card-courses class="h-100"
+            [title]="course.title"
+            [code]="course.code"
+            [imageUrl]="course.imageUrl"
+            [teacher]="course.teacher"
+            [link]="['/student/panel/courses', course.id, 'curriculum']">
+            
+            <!-- este ng-content se pegará al final de card-body -->
+
+            </app-card-courses>
+      </div>
+    </div>
+
+
+
+</div>
