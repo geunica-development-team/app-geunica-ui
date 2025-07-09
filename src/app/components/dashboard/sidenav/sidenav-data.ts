@@ -101,6 +101,54 @@ export const menuItemsAdmin = [
     }
 ];
 
+export const menuItemsSecretary = [
+  { 
+    icon: 'fas fa-home', 
+    label: 'Dashboard', 
+    route: '/admin/panel/dashboard',
+    active: true 
+  },
+  {
+    icon: 'fa-solid fa-file-circle-plus', 
+    label: 'Inscripciones', 
+    route: '/admin/panel/inscripciones',
+    active: true 
+  },
+  {
+    icon: 'fa-solid fa-users', 
+    label: 'Gestión de estudiantes', 
+    route: '/admin/panel/estudiantes-matriculados',
+    active: true 
+  },
+  {
+    icon: 'fa-solid fa-person-chalkboard', 
+    label: 'Gestión de equipo académico', 
+    route: '/admin/panel/equipo-academico',
+    active: true 
+  },
+  { 
+    icon: 'fa-solid fa-people-roof', 
+    label: 'Aulas', 
+    route: '/admin/panel/aulas' 
+  },
+  { 
+    icon: 'fa-solid fa-calendar', 
+    label: 'Horarios', 
+    route: '/admin/panel/horarios' 
+  },
+  { 
+    icon: 'fa-solid fa-book', 
+    label: 'Cursos', 
+    route: '/admin/panel/cursos' 
+  },
+  { 
+    icon: 'fas fa-bullhorn', 
+    label: 'Anuncios', 
+    route: '/admin/panel/anuncios',
+    badge: 24 
+  }
+]
+
 export const generalItems = [
     { 
       icon: 'fas fa-cog', 
