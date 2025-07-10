@@ -37,4 +37,8 @@ export class InstitucionalComponent {
   onMasInformacion(): void {
     this.scrollToSection("contacto")
   }
+
+  goLogin(): void {
+    this.router.navigate(["/auth/login"])
+  }
 }
