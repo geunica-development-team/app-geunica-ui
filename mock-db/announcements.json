@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "title": "Inicio de Clases",
+    "body": "Las clases del segundo semestre inician el 15 de julio. Por favor revisa tu horario y asegúrate de estar preparado con tus materiales.",
+    "createdBy": "María López",
+    "createdAt": "2025-07-02",
+    "status": "publicado"
+  },
+  {
+    "id": 2,
+    "title": "Mantenimiento del Sistema",
+    "body": "El sistema estará en mantenimiento el sábado 5 de julio de 00:00 a 04:00. Durante este tiempo no podrás acceder a las plataformas de notas ni asistencias.",
+    "createdBy": "José Pérez",
+    "createdAt": "2025-07-01",
+    "status": "publicado"
+  },
+  {
+    "id": 3,
+    "title": "Entrega de Certificados",
+    "body": "Los certificados de cursos de verano estarán disponibles para recoger en la secretaría a partir del 10 de julio.",
+    "createdBy": "Ana García",
+    "createdAt": "2025-06-30",
+    "status": "visto"
+  },
+  {
+    "id": 4,
+    "title": "Charla Informativa de Becas",
+    "body": "Habrá una charla sobre las becas disponibles para el próximo año académico el martes 8 de julio a las 14:00 en el auditorio principal.",
+    "createdBy": "Carlos Ramírez",
+    "createdAt": "2025-07-01",
+    "status": "visto"
+  },
+  {
+    "id": 5,
+    "title": "Encuesta de Satisfacción",
+    "body": "Te invitamos a completar la encuesta de satisfacción del semestre antes del 12 de julio. Tu opinión es muy importante.",
+    "createdBy": "Lucía Torres",
+    "createdAt": "2025-07-02",
+    "status": "visto"
+  }
+]

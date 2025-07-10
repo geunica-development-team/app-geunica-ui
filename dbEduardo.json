@@ -229,6 +229,16 @@
         }
       ]
     }
+  ],
+  "sedes" : [
+    
+  {
+    "id": 1,
+    "studentId": 101,
+    "division": "primary",     
+    "grade": "first_grade"     
+  }
+
   ]
 }
 
