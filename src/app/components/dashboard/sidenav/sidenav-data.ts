@@ -64,16 +64,6 @@ export const menuItemsAdmin = [
       route: '/admin/panel/usuarios' 
     },
     { 
-      icon: 'fa-solid fa-user-plus', 
-      label: 'Matrícula', 
-      route: '/admin/panel/matricula' 
-    },
-    { 
-      icon: 'fa-solid fa-person-chalkboard', 
-      label: 'Docentes', 
-      route: '/admin/panel/docentes' 
-    },
-    { 
       icon: 'fa-solid fa-people-roof', 
       label: 'Aulas', 
       route: '/admin/panel/aulas' 
