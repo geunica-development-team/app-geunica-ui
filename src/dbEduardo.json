@@ -1,0 +1,235 @@
+{
+  "course": [
+    { "id": 1, "title": "Aritmética", "code": "Matemática", "teacher": "Juan Carlos", "imageUrl":"https://picsum.photos/300/150"},
+    { "id": 2, "title": "Física",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"},
+    { "id": 3, "title": "curso",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"},
+    { "id": 4, "title": "Lenguaje",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"},
+    { "id": 5, "title": "Trigonometria",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"},
+    { "id": 6, "title": "Ciencia y Tecnologia",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"},
+    { "id": 7, "title": "Geometria",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"},
+    { "id": 8, "title": "Historia Personal",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"},
+    { "id": 9, "title": "Historia Universal",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"},
+    { "id": 10, "title": "Física",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"},
+    { "id": 11, "title": "Física",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"},
+    { "id": 12, "title": "Física",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"}
+  ],
+  "curriculum": [
+    {
+      "id": 1,
+      "courseId": 1,
+      "topic": "Introducción a los ángulos",
+      "description": "Definición de ángulos y sus tipos básicos.",
+      "teacher": "María López",
+      "date": "2025-07-05",
+      "imageUrl": "https://picsum.photos/300/150"
+    },
+    {
+      "id": 2,
+      "courseId": 1,
+      "topic": "Ángulos suplementarios y complementarios",
+      "description": "Relaciones entre ángulos que suman 90° o 180°.",
+      "teacher": "María López",
+      "date": "2025-07-07",
+      "imageUrl": "https://picsum.photos/300/150"
+    },
+    {
+      "id": 3,
+      "courseId": 1,
+      "topic": "Sistema de coordenadas",
+      "description": "Punto, eje X, eje Y y representación en el plano.",
+      "teacher": "Juan Pérez",
+      "date": "2025-07-06",
+      "imageUrl": "https://picsum.photos/300/150"
+    },
+    {
+      "id": 4,
+      "courseId": 1,
+      "topic": "Ecuaciones de la recta",
+      "description": "Formas punto pendiente y general de la ecuación lineal.",
+      "teacher": "Juan Pérez",
+      "date": "2025-07-08",
+      "imageUrl": "https://picsum.photos/300/150"
+    }
+  ],
+
+  "exams": [
+    {
+      "id_examen": 1,
+      "courseId": 1,
+      "id_ciclo": 20251,
+      "categoria": "Cuaderno",
+      "nombre_examen": "Cuaderno de tareas",
+      "fecha_examen": "2025-03-05",
+      "peso": 10.00,
+      "estado_examen": "activo"
+    },
+    {
+      "id_examen": 2,
+      "courseId": 1,
+      "id_ciclo": 20251,
+      "categoria": "Actitudes",
+      "nombre_examen": "Participación en clase",
+      "fecha_examen": "2025-03-30",
+      "peso": 5.00,
+      "estado_examen": "activo"
+    },
+    {
+      "id_examen": 3,
+      "courseId": 1,
+      "id_ciclo": 20251,
+      "categoria": "Examen parcial",
+      "nombre_examen": "Parcial I",
+      "fecha_examen": "2025-04-15",
+      "peso": 30.00,
+      "estado_examen": "activo"
+    },
+    {
+      "id_examen": 4,
+      "courseId": 1,
+      "id_ciclo": 20251,
+      "categoria": "Examen parcial",
+      "nombre_examen": "Parcial II",
+      "fecha_examen": "2025-04-30",
+      "peso": 30.00,
+      "estado_examen": "activo"
+    },
+    {
+      "id_examen": 5,
+      "courseId": 1,
+      "id_ciclo": 20251,
+      "categoria": "Examen final",
+      "nombre_examen": "Final",
+      "fecha_examen": "2025-05-15",
+      "peso": 25.00,
+      "estado_examen": "activo"
+    }
+  ],
+  "grades": [
+    {
+      "id_nota": 1,
+      "id_examen": 1,
+      "id_matricula": 101,
+      "valor": 15.50,
+      "estado_nota": "activa",
+      "fecha_registro": "2025-03-06"
+    },
+    {
+      "id_nota": 2,
+      "id_examen": 2,
+      "id_matricula": 101,
+      "valor": 18.00,
+      "estado_nota": "activa",
+      "fecha_registro": "2025-03-31"
+    },
+    {
+      "id_nota": 3,
+      "id_examen": 3,
+      "id_matricula": 101,
+      "valor": 12.00,
+      "estado_nota": "activa",
+      "fecha_registro": "2025-04-16"
+    },
+    {
+      "id_nota": 4,
+      "id_examen": 4,
+      "id_matricula": 101,
+      "valor": 19.00,
+      "estado_nota": "activa",
+      "fecha_registro": "2025-05-01"
+    },
+    {
+      "id_nota": 5,
+      "id_examen": 5,
+      "id_matricula": 101,
+      "valor": 17.50,
+      "estado_nota": "activa",
+      "fecha_registro": "2025-05-16"
+    }
+  ],
+
+  
+  "announcement": [
+    {
+      "id": 1,
+      "title": "Inicio de Clases",
+      "cuerpo": "Las clases del segundo semestre inician el 15 de julio. Por favor revisa tu horario y asegúrate de estar preparado con tus materiales.",
+      "creado_por": "María López",
+      "fecha_creacion": "2025-07-02",
+      "estado": "publicado"
+    },
+    {
+      "id": 2,
+      "title": "Mantenimiento del Sistema",
+      "cuerpo": "El sistema estará en mantenimiento el sábado 5 de julio de 00:00 a 04:00. Durante este tiempo no podrás acceder a las plataformas de notas ni asistencias.",
+      "creado_por": "José Pérez",
+      "fecha_creacion": "2025-07-01",
+      "estado": "publicado"
+    },
+    {
+      "id": 3,
+      "title": "Entrega de Certificados",
+      "cuerpo": "Los certificados de cursos de verano estarán disponibles para recoger en la secretaría a partir del 10 de julio.",
+      "creado_por": "Ana García",
+      "fecha_creacion": "2025-06-30",
+      "estado": "visto"
+    },
+    {
+      "id": 4,
+      "title": "Charla Informativa de Becas",
+      "cuerpo": "Habrá una charla sobre las becas disponibles para el próximo año académico el martes 8 de julio a las 14:00 en el auditorio principal.",
+      "creado_por": "Carlos Ramírez",
+      "fecha_creacion": "2025-07-01",
+      "estado": "visto"
+    },
+    {
+      "id": 5,
+      "title": "Encuesta de Satisfacción",
+      "cuerpo": "Te invitamos a completar la encuesta de satisfacción del semestre antes del 12 de julio. Tu opinión es muy importante.",
+      "creado_por": "Lucía Torres",
+      "fecha_creacion": "2025-07-02",
+      "estado": "visto"
+    }
+  ],
+  "attendance": [
+    {
+      "startDate": "2025-01-15",
+      "endDate": "2025-05-15",
+      "months": [
+        {
+          "month": "enero 2025",
+          "sessions": [
+            { "date": "2025-01-15", "status": "asistió" },
+            { "date": "2025-01-16", "status": "faltó" },
+            { "date": "2025-01-17", "status": "tardanza" }
+          ]
+        },
+        {
+          "month": "febrero 2025",
+          "sessions": [
+            { "date": "2025-02-01", "status": "asistió" },
+            { "date": "2025-02-02", "status": "asistió" },
+            { "date": "2025-02-03", "status": "faltó" }
+          ]
+        },
+        {
+          "month": "marzo 2025",
+          "sessions": [
+            { "date": "2025-03-01", "status": "tardanza" },
+            { "date": "2025-03-02", "status": "asistió" },
+            { "date": "2025-03-03", "status": "asistió" }
+          ]
+        },
+        {
+          "month": "abril 2025",
+          "sessions": [
+            { "date": "2025-04-01", "status": "asistió" },
+            { "date": "2025-04-02", "status": "faltó" },
+            { "date": "2025-04-03", "status": "asistió" }
+          ]
+        }
+      ]
+    }
+  ]
+}
+
+
