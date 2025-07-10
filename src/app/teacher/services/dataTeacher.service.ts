@@ -30,5 +30,4 @@ export class DataTeacherService {
     return this.http.get<Sede>(`${this.base}/sede/${id}`);
   }
 
-
 }
