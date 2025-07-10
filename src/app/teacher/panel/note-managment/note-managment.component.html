@@ -1,1 +1,26 @@
-<p>note-managment works!</p>
+<div class="container py-4">
+
+  <!-- 1. Fila del buscador -->
+  <div class="row mb-4">
+    <div class="col-12 col-md-6">
+      <app-searcher
+        [(term)]="searchTerm"
+        placeholder="Buscar por curso"
+        
+        field="title"
+        
+        (search)="onSearch()"
+      ></app-searcher>
+    </div>
+  </div>
+
+  <!-- 2. Fila de las cards -->
+      
+    <div class="row g-4">
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3" >
+        
+
+      </div>
+    </div>
+
+</div>
