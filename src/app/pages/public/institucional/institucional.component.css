@@ -1,0 +1,15 @@
+/* Solo CSS mínimo necesario */
+:root {
+  --primary-color: #008c62;
+  --primary-dark: #007055;
+}
+
+.hero-section {
+  background: linear-gradient(135deg, #212529 0%, #343a40 50%, #212529 100%);
+  min-height: 100vh;
+  padding-top: 80px;
+}
+
+.nav-link:hover {
+  color: var(--primary-color) !important;
+}

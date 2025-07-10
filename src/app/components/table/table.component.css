@@ -75,13 +75,11 @@
 
 .debt-none {
   background-color: #60af72;
-  color: #ffffff;
   border: none;
 }
 
 .debt-overdue {
   background-color: #ce4a55;
-  color: #ffffff;
   border: none;
 }
 

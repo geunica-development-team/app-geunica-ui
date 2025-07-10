@@ -7,7 +7,7 @@ import { RecoverPasswordComponent } from "./recover-password/recover-password.co
 
 export const authRoutes: Routes = [
     {
-        path: 'auth',
+        path: '',
         component: AuthComponent,
         children: [
             {

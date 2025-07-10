@@ -1,0 +1,385 @@
+<!-- Header -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center" href="#">
+        <i class="logo-geunica"></i>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" (click)="scrollToSection('inicio')" style="cursor: pointer;">Inicio</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" (click)="scrollToSection('nosotros')" style="cursor: pointer;">Nosotros</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" (click)="scrollToSection('programas')" style="cursor: pointer;">Programas</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" (click)="scrollToSection('contacto')" style="cursor: pointer;">Contacto</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Banner -->
+<section id="inicio" class="hero-section d-flex align-items-center">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6 text-white">
+        <h1 class="display-3 mb-4">
+          ESTUDIA EN EL
+          <span class="d-block fw-bold">MEJOR COLEGIO DE ICA</span>
+        </h1>
+        <h2 class="display-5 mb-4">
+          "Formamos campeones,
+          <span class="d-block fw-bold"> construimos futuro."</span>
+        </h2>
+        <p class="fs-4 mb-4 text-light">EDUCACIÓN CON EXCELENCIA ACADÉMICA Y EDUCACIÓN INTEGRAL</p>
+        <div class="d-flex flex-column flex-sm-row gap-3">
+          <button (click)="modalVirtualEnrollment.openModal()" class="btn btn-light btn-lg px-4">
+            Inscríbete Ahora
+          </button>
+          <button (click)="onMasInformacion()" class="btn btn-outline-light btn-lg px-4">
+            Más Información
+          </button>
+        </div>
+      </div>
+      <div class="col-lg-6 mt-5 mt-lg-0">
+        <div class="position-relative">
+          <img
+            src="/src/assets/img/baner.jpg"
+            alt="Estudiante de computación"
+            class="img-fluid rounded shadow-lg"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Sobre Nosotros -->
+<section id="nosotros" class="py-5 bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center mb-5">
+        <h2 class="display-4 fw-bold mb-4">Sobre Nosotros</h2>
+        <p class="fs-5 text-muted mx-auto" style="max-width: 600px;">
+          Somos una institución educativa comprometida con la excelencia académica y el desarrollo integral de
+          nuestros estudiantes.
+        </p>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <!-- Misión -->
+      <div class="col-lg-6">
+        <div class="card h-100 shadow">
+          <div class="card-body p-4">
+            <div class="d-flex align-items-center mb-4">
+              <i class="fas fa-bullseye text-green fs-2 me-3"></i>
+              <h3 class="card-title fw-bold mb-0">Nuestra Misión</h3>
+            </div>
+            <p class="card-text text-muted">
+              Formar profesionales competentes en el área de computación e informática, brindando una educación de
+              calidad que combine conocimientos teóricos y prácticos, preparando a nuestros estudiantes para enfrentar
+              los desafíos del mundo tecnológico actual.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Visión -->
+      <div class="col-lg-6">
+        <div class="card h-100 shadow">
+          <div class="card-body p-4">
+            <div class="d-flex align-items-center mb-4">
+              <i class="fas fa-eye text-green fs-2 me-3"></i>
+              <h3 class="card-title fw-bold mb-0">Nuestra Visión</h3>
+            </div>
+            <p class="card-text text-muted">
+              Ser reconocidos como la institución líder en formación tecnológica, destacando por la excelencia
+              académica, la innovación en métodos de enseñanza y la inserción exitosa de nuestros egresados en el
+              mercado laboral nacional e internacional.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Características -->
+<section class="py-5 bg-white">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center mb-5">
+        <h2 class="display-4 fw-bold mb-4">¿Por Qué Elegirnos?</h2>
+        <p class="fs-5 text-muted">Descubre las ventajas de estudiar con nosotros</p>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3">
+        <div class="text-center p-4">
+          <div class="green rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+            <i class="fas fa-users text-white fs-2"></i>
+          </div>
+          <h4 class="fw-bold mb-3">Profesores Expertos</h4>
+          <p class="text-muted">Docentes con amplia experiencia en el sector tecnológico</p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3">
+        <div class="text-center p-4">
+          <div class="green rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+            <i class="fas fa-book-open text-white fs-2"></i>
+          </div>
+          <h4 class="fw-bold mb-3">Metodología Práctica</h4>
+          <p class="text-muted">Aprendizaje basado en proyectos reales y casos de estudio</p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3">
+        <div class="text-center p-4">
+          <div class="green rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+            <i class="fas fa-award text-white fs-2"></i>
+          </div>
+          <h4 class="fw-bold mb-3">Certificación Oficial</h4>
+          <p class="text-muted">Títulos reconocidos por el Ministerio de Educación</p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3">
+        <div class="text-center p-4">
+          <div class="green rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+            <i class="fas fa-graduation-cap text-white fs-2"></i>
+          </div>
+          <h4 class="fw-bold mb-3">Inserción Laboral</h4>
+          <p class="text-muted">Alto porcentaje de empleabilidad de nuestros egresados</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Programas -->
+<section id="programas" class="py-5 bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center mb-5">
+        <h2 class="display-4 fw-bold mb-4">Nuestros Programas</h2>
+        <p class="fs-5 text-muted">Carreras diseñadas para el futuro tecnológico</p>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow">
+          <img
+            src="/src/assets/img/primaria.jpg"
+            class="card-img-top"
+            alt="Primaria"
+            style="height: 200px; object-fit: cover;"
+          />
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title fw-bold">Primaria</h5>
+            <p class="card-text text-muted flex-grow-1">
+              Forma profesionales capaces de desarrollar, implementar y mantener sistemas informáticos.
+            </p>
+            <button class="btn-custom-green-100">Más Información</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow">
+          <img
+            src="/src/assets/img/secundaria.jpg"
+            class="card-img-top"
+            alt="Secundaria"
+            style="height: 200px; object-fit: cover;"
+          />
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title fw-bold">Secundaria</h5>
+            <p class="card-text text-muted flex-grow-1">
+              Especialízate en la creación de aplicaciones web, móviles y de escritorio.
+            </p>
+            <button class="btn-custom-green-100">Más Información</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow">
+          <img
+            src="/src/assets/img/academia.png"
+            class="card-img-top"
+            alt="Academia"
+            style="height: 200px; object-fit: cover;"
+          />
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title fw-bold">Preparación Universitaria</h5>
+            <p class="card-text text-muted flex-grow-1">
+              Conviértete en experto en infraestructura de redes y telecomunicaciones.
+            </p>
+            <button class="btn-custom-green-100">Más Información</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contacto -->
+<section id="contacto" class="py-5 bg-white">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center mb-5">
+        <h2 class="display-4 fw-bold mb-4">Contáctanos</h2>
+        <p class="fs-5 text-muted">Estamos aquí para resolver todas tus dudas</p>
+      </div>
+    </div>
+
+    <div class="row g-5">
+      <div class="col-lg-6">
+        <h3 class="fw-bold mb-4">Información de Contacto</h3>
+        <div class="row g-4">
+          <div class="col-12">
+            <div class="d-flex align-items-center">
+              <i class="fas fa-phone text-green fs-4 me-3"></i>
+              <div>
+                <h6 class="fw-bold mb-1">Teléfono</h6>
+                <p class="text-muted mb-0">+51 967 083 422</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="d-flex align-items-center">
+              <i class="fas fa-envelope text-green fs-4 me-3"></i>
+              <div>
+                <h6 class="fw-bold mb-1">Email</h6>
+                <p class="text-muted mb-0">institucioneducativaprivadageu&#64;gmail.com</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="d-flex align-items-center">
+              <i class="fas fa-map-marker-alt text-green fs-4 me-3"></i>
+              <div>
+                <h6 class="fw-bold mb-1">Dirección</h6>
+                <p class="text-muted mb-0">Calle Azahares 178, Urbanización San Isidro , Ica , Ica, Perú</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="bg-light rounded p-4">
+          <h3 class="fw-bold mb-4">Envíanos un Mensaje</h3>
+          <form (submit)="onSubmitForm($event)">
+            <div class="mb-3">
+              <label for="nombre" class="form-label fw-semibold">Nombre</label>
+              <input
+                type="text"
+                class="form-control"
+                id="nombre"
+                placeholder="Tu nombre completo"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label fw-semibold">Email</label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                placeholder="tu@email.com"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="mensaje" class="form-label fw-semibold">Mensaje</label>
+              <textarea
+                class="form-control"
+                id="mensaje"
+                rows="4"
+                placeholder="Escribe tu mensaje aquí..."
+                required
+              ></textarea>
+            </div>
+            <button type="submit" class="btn-custom-green-100 py-2">
+              Enviar Mensaje
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-dark text-white py-5">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <div class="d-flex align-items-center mb-3">
+            <div class="logo-geunica"></div>
+        </div>
+        <p class="text-light">
+          Educación con excelencia académica y formación integral.
+        </p>
+      </div>
+      <div class="col-lg-4">
+        <h5 class="fw-bold mb-3">Enlaces Rápidos</h5>
+        <ul class="list-unstyled">
+          <li class="mb-2">
+            <a (click)="scrollToSection('inicio')" class="text-light text-decoration-none" style="cursor: pointer;">
+              Inicio
+            </a>
+          </li>
+          <li class="mb-2">
+            <a (click)="scrollToSection('nosotros')" class="text-light text-decoration-none" style="cursor: pointer;">
+              Nosotros
+            </a>
+          </li>
+          <li class="mb-2">
+            <a (click)="scrollToSection('programas')" class="text-light text-decoration-none" style="cursor: pointer;">
+              Programas
+            </a>
+          </li>
+          <li class="mb-2">
+            <a (click)="scrollToSection('contacto')" class="text-light text-decoration-none" style="cursor: pointer;">
+              Contacto
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="col-lg-4">
+        <h5 class="fw-bold mb-3">Síguenos</h5>
+        <p class="text-light mb-3">Mantente conectado con nosotros</p>
+        <div class="d-flex gap-3">
+          <a href="https://www.facebook.com/ColegioGeunica" class="text-light fs-4">
+            <i class="fab fa-facebook"></i>
+          </a>
+          <a href="https://www.instagram.com/colegiogeunica_ica" class="text-light fs-4">
+            <i class="fab fa-instagram"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+    <hr class="my-4 border-secondary">
+    <div class="text-center">
+      <p class="text-light mb-0">&copy; 2025 GEÚNICA S.A.C.. Todos los derechos reservados.</p>
+    </div>
+  </div>
+</footer>
+
+<app-modal-virtual-enrollment
+  #modalVirtualEnrollment
+/>
