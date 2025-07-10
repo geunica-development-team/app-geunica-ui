@@ -60,7 +60,7 @@ export interface Grade {
 @Injectable({ providedIn: 'root' })
 export class DataService {
   private base = environment.apiBase;
-    constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {}
 
   getCourses(): Observable<Course[]> {
     return this.http.get<Course[]>(`${this.base}/course`);
