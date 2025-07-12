@@ -52,22 +52,23 @@
     </ul>
   </div>
 
-  <!-- General Section -->
+  <!-- General Section
   <div class="sidenav-section">
     <div class="section-title">GENERAL</div>
     <ul class="nav flex-column">
       <li class="nav-item">
         @for (item of generalItems; track $index) {
           <a 
-            class="nav-link sidenav-link"
-            [routerLink]="item.route"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{exact: item.exactMatch || false}">
-            <i [class]="item.icon"></i>
-            <span class="ms-3">{{ item.label }}</span>
-          </a>
-        }
-      </li>
-    </ul>
-  </div>
+          class="nav-link sidenav-link"
+          [routerLink]="item.route"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{exact: item.exactMatch || false}">
+          <i [class]="item.icon"></i>
+          <span class="ms-3">{{ item.label }}</span>
+        </a>
+      }
+    </li>
+  </ul>
+</div>
+-->
 </div>

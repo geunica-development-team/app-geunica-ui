@@ -1,0 +1,143 @@
+<div class="profile-container">
+  <!-- Header verde -->
+  <div class="bg-success position-relative" style="height: 200px; border-radius: 0 0 20px 20px;">
+    <!-- Avatar circular posicionado -->
+    <div class="position-absolute start-50 translate-middle-x" style="bottom: -60px; z-index: 10;">
+      <div class="bg-secondary rounded-circle border border-white border-4 d-flex align-items-center justify-content-center" 
+           style="width: 120px; height: 120px;">
+        @if (userProfile.avatar) {
+          <img [src]="userProfile.avatar" [alt]="userProfile.fullName" 
+               class="rounded-circle w-100 h-100" style="object-fit: cover;">
+        } @else {
+          <img 
+          class="header-avatar"
+          src="https://cdn-icons-png.freepik.com/512/9368/9368284.png"
+          alt="Perfil"
+          >        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenido principal -->
+  <div class="profile-content">
+    <div class="contaier">
+      <!-- Información del usuario (nombre y DNI) -->
+      <div class="row">
+        <div class="col-12 text-center mb-5">
+          <div class="user-info-header">
+            <h2 class="user-name mb-2">{{ userProfile.fullName }}</h2>
+            <p class="user-dni text-muted">{{ userProfile.dni }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grid de información -->
+        <div class="row g-4">
+        <!-- Información Básica -->
+        <div class="col-lg-6 mb-4">
+          <div class="info-section">
+            <h5 class="section-title">
+              <i class="fas fa-user me-2"></i>
+              Información Básica
+            </h5>
+            <div class="info-grid">
+              <div class="info-item">
+                <label>Nombre completo:</label>
+                <span>{{ userProfile.fullName }}</span>
+              </div>
+              <div class="info-item">
+                <label>DNI:</label>
+                <span>{{ userProfile.dni }}</span>
+              </div>
+              <div class="info-item">
+                <label>Fecha de Nacimiento:</label>
+                <span>{{ userProfile.birthDate }}</span>
+              </div>
+              <div class="info-item">
+                <label>Género:</label>
+                <span>{{ userProfile.gender }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Información de Contacto -->
+        <div class="col-lg-6 mb-4">
+          <div class="info-section">
+            <h5 class="section-title">
+              <i class="fas fa-address-book me-2"></i>
+              Información de Contacto
+            </h5>
+            <div class="info-grid">
+              <div class="info-item">
+                <label>Teléfono:</label>
+                <span>{{ userProfile.phone }}</span>
+              </div>
+              <div class="info-item">
+                <label>Dirección:</label>
+                <span>{{ userProfile.address }}</span>
+              </div>
+              <div class="info-item">
+                <label>Correo Electrónico:</label>
+                <span>{{ userProfile.email }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Información Académica -->
+        <div class="col-lg-6 mb-4">
+          <div class="info-section">
+            <h5 class="section-title">
+              <i class="fas fa-graduation-cap me-2"></i>
+              Información Académica
+            </h5>
+            <div class="info-grid">
+              <div class="info-item">
+                <label>Código Estudiante:</label>
+                <span>{{ userProfile.studentCode }}</span>
+              </div>
+              <div class="info-item">
+                <label>Fecha de Matrícula:</label>
+                <span>{{ userProfile.enrollmentDate }}</span>
+              </div>
+              <div class="info-item">
+                <label>Estado Académico:</label>
+                <span class="badge bg-success text-white">{{ userProfile.academicStatus }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Información de Usuario -->
+        <div class="col-lg-6 mb-4">
+          <div class="info-section">
+            <h5 class="section-title">
+              <i class="fas fa-key me-2"></i>
+              Información de Usuario
+            </h5>
+            <div class="info-grid">
+              <div class="info-item">
+                <label>Usuario:</label>
+                <span>{{ userProfile.username }}</span>
+              </div>
+              <div class="info-item">
+                <label>Contraseña:</label>
+                <button 
+                  class="btn btn-outline-primary btn-sm"
+                  (click)="modalChangePassword.openModal()">
+                  <i class="fas fa-edit me-1"></i>
+                  Cambiar contraseña
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal-change-password
+    #modalChangePassword
+/>

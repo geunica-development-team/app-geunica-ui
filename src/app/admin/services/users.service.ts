@@ -48,6 +48,7 @@ export interface UserDataAll {
     documentNumber: string
     phone: string
     address: string
+    email: string
     birthDate: string
     gender: string
   }
@@ -72,4 +73,42 @@ export interface UserDataAll {
     teacherId: number
     specialty: string
   }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+export interface UserProfile {
+  // Información básica
+  fullName: string
+  dni: string
+  birthDate: string
+  gender: string
+
+  // Información de contacto
+  phone: string
+  address: string
+  email: string
+
+  // Información académica
+  studentCode: string
+  enrollmentDate: string
+  academicStatus: string
+
+  // Información de usuario
+  username: string
+  avatar?: string
 }

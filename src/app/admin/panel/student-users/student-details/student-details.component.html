@@ -1,5 +1,4 @@
-<app-panel-header 
-  title="Información detallada del estudiante" />
+<app-panel-header title="Información detallada del estudiante" />
 
 @if (student) {
   <div class="row">
@@ -20,9 +19,16 @@
                       <i class="fas fa-id-card me-1"></i>
                       {{ student.person.documentNumber }}
                     </span>
-                    <span [class]="getStudentStatusClass(student.student?.studentStatus || '')">
-                      {{ getStudentStatusText(student.student?.studentStatus || '') }}
-                    </span>
+                    <!-- Estado del estudiante con @if -->
+                    @if (student.student?.studentStatus === 'enrolled') {
+                      <span class="badge bg-primary text-white">Matriculado</span>
+                    } @else if (student.student?.studentStatus === 'conditional') {
+                      <span class="badge bg-warning text-dark">Condicional</span>
+                    } @else if (student.student?.studentStatus === 'withdrawn') {
+                      <span class="badge bg-success">Graduado</span>
+                    } @else {
+                      <span class="badge bg-light text-dark">{{ student.student?.studentStatus || '' }}</span>
+                    }
                   </div>
                 </div>
               </div>
@@ -46,6 +52,7 @@
         </button>
       }
     </nav>
+
     <!-- Navegación por tabs -->
     <div class="col-12 mb-4">
       <div class="card">
@@ -89,7 +96,6 @@
                     </div>
                   </div>
                 </div>
-
                 <!-- Información de Contacto -->
                 <div class="col-lg-6 mb-4">
                   <div class="info-section">
@@ -106,10 +112,13 @@
                         <label>Dirección:</label>
                         <span>{{ student.person.address || '-' }}</span>
                       </div>
+                      <div class="info-item">
+                        <label>Correo Electrónico:</label>
+                        <span>{{ student.person.email || '-' }}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-
                 <!-- Información Académica -->
                 <div class="col-lg-6 mb-4">
                   <div class="info-section">
@@ -127,15 +136,25 @@
                         <span>{{ formatBirthDate(student.student?.enrollmentDate) }}</span>
                       </div>
                       <div class="info-item">
+                        <label>Nivel, Grado y Sección:</label>
+                        <span>{{ formatBirthDate(student.student?.enrollmentDate) }}</span>
+                      </div>
+                      <div class="info-item">
                         <label>Estado Académico:</label>
-                        <span [class]="getStudentStatusClass(student.student?.studentStatus || '')">
-                          {{ getStudentStatusText(student.student?.studentStatus || '') }}
-                        </span>
+                        <!-- Estado académico con @if -->
+                        @if (student.student?.studentStatus === 'enrolled') {
+                          <span class="badge bg-primary text-white">Matriculado</span>
+                        } @else if (student.student?.studentStatus === 'conditional') {
+                          <span class="badge bg-warning  text-white">Condicional</span>
+                        } @else if (student.student?.studentStatus === 'withdrawn') {
+                          <span class="badge bg-success">Graduado</span>
+                        } @else {
+                          <span class="badge bg-light text-dark">{{ student.student?.studentStatus || '' }}</span>
+                        }
                       </div>
                     </div>
                   </div>
                 </div>
-
                 <!-- Información del Usuario -->
                 <div class="col-lg-6 mb-4">
                   <div class="info-section">
@@ -150,9 +169,16 @@
                       </div>
                       <div class="info-item">
                         <label>Estado:</label>
-                        <span [class]="getStatusClass(student.status || '')">
-                          {{ getStatusText(student.status || '') }}
-                        </span>
+                        <!-- Estado del usuario con @if -->
+                        @if (student.status === 'active') {
+                          <span class="badge bg-success text-white">Activo</span>
+                        } @else if (student.status === 'inactive') {
+                          <span class="badge bg-secondary text-white">Inactivo</span>
+                        } @else if (student.status === 'suspended') {
+                          <span class="badge bg-danger text-white">Suspendido</span>
+                        } @else {
+                          <span class="badge bg-light text-dark">{{ student.status || '' }}</span>
+                        }
                       </div>
                       <div class="info-item">
                         <label>Último Acceso:</label>
@@ -164,21 +190,21 @@
               </div>
             </div>
           }
-          
+
           <!-- TAB: Pagos -->
           @if (activeTab === 'pagos') {
             <!-- Acciones de Pagos -->
             <div class="mb-4 d-flex justify-content-center justify-content-md-end">
               <div class="d-flex gap-2 flex-wrap">
-                <button class="btn btn-success">
+                <button class="btn btn-success text-white">
                   <i class="fas fa-plus me-2"></i>
                   Registrar Pago
                 </button>
-                <button class="btn btn-info">
+                <button class="btn btn-info text-white">
                   <i class="fas fa-file-pdf me-2"></i>
                   Generar Reporte
                 </button>
-                <button class="btn btn-warning">
+                <button class="btn btn-warning text-white">
                   <i class="fas fa-envelope me-2"></i>
                   Enviar Recordatorio
                 </button>
@@ -233,7 +259,6 @@
                     </div>
                   </div>
                 </div>
-
                 <!-- Tabla de Pagos -->
                 <div class="table-responsive">
                   <table class="table align-middle">
@@ -257,9 +282,14 @@
                           <td>{{ payment.month }} {{ payment.year }}</td>
                           <td>{{ formatDate(payment.dueDate) }}</td>
                           <td>
-                            <span [class]="getPaymentStatusClass(payment)">
-                              {{ getPaymentStatusText(payment) }}
-                            </span>
+                            <!-- Estado del pago con @if -->
+                            @if (payment.paid) {
+                              <span class="badge bg-success">Pagado</span>
+                            } @else if (payment.isOverdue) {
+                              <span class="badge bg-danger">Vencido</span>
+                            } @else {
+                              <span class="badge bg-warning text-dark">Pendiente</span>
+                            }
                             @if (payment.isOverdue && !payment.paid) {
                               <br>
                               <small class="text-danger">
@@ -301,7 +331,6 @@
                     </tbody>
                   </table>
                 </div>
-
               } @else {
                 <!-- Sin información de pagos -->
                 <div class="text-center py-5">

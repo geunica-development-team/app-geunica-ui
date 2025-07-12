@@ -45,6 +45,10 @@ export const adminPanelRoutes: Routes = [
             {
                 path: 'finanzas',
                 component: FinanceComponent
+            },
+            {
+                path: 'perfil',
+                loadChildren: () => import('../../pages/shared/profile/profile.routes').then(m => m.profileRoutes)
             }
         ]
     }
