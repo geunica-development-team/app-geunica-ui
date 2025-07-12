@@ -230,16 +230,46 @@
       ]
     }
   ],
-  "sedes" : [
-    
-  {
+
+  "sedes" :[
+    {
     "id": 1,
     "studentId": 101,
-    "division": "primary",     
+    "division": "primary",   
     "grade": "first_grade"     
-  }
-
+    },
+    {
+    "id": 2,
+    "studentId": 102,
+    "division": "primary",   
+    "grade": "first_grade"     
+    },
+    {
+    "id": 3,
+    "studentId": 103,
+    "division": "primary",   
+    "grade": "first_grade"     
+    },
+    {
+    "id": 4,
+    "studentId": 104,
+    "division": "primary",   
+    "grade": "first_grade"     
+    },
+    {
+    "id": 5,
+    "studentId": 105,
+    "division": "primary",   
+    "grade": "first_grade"     
+    },
+    {
+    "id": 6,
+    "studentId": 106,
+    "division": "primary",   
+    "grade": "first_grade"     
+    }
   ]
+
 }
 
 
