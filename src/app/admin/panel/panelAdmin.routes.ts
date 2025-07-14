@@ -7,11 +7,14 @@ import { EnrollmentComponent } from "./enrollment/enrollment.component";
 import { StudentUsersComponent } from "./student-users/student-users.component";
 import { InternalUsersComponent } from "./internal-users/internal-users.component";
 import { StudentDetailsComponent } from "./student-users/student-details/student-details.component";
+import { roleGuard } from "../../guards/role.guard";
 
 export const adminPanelRoutes: Routes = [
     {
         path: 'admin/panel',
         component: PanelComponent,
+        canActivate: [roleGuard],
+        data: { role: 'admin' },
         children: [
             {
                 path: '',

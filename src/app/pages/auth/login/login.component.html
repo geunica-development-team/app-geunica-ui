@@ -14,18 +14,20 @@
         <div class="col-12 col-md-6 bg-white rounded-4 px-4 py-5">
             <div class="py-3">
                 <h2 class="mb-4 fs-4 text-blue">Ingresa tus datos para iniciar sesión</h2>
-                <div class="mb-3">
-                    <label class="label text-blue fw-normal mb-2">Número de DNI:</label>
-                    <input class="input form-control" name="dni" placeholder="Número de DNI" formControlName="dni">
-                </div>
-                <div class="mb-3">
-                    <label class="label text-blue fw-normal mb-2">Contraseña:</label>
-                    <input type="password" class="input form-control" name="password" placeholder="Contraseña" formControlName="password">
-                </div>
-                <div class="my-3 d-flex flex-column flex-md-row justify-content-end align-items-center">
-                    <a routerLink="/auth/recover/email" class="text-blue fw-medium" style="font-size: 14px;">Restablecer contraseña</a>
-                </div>
-                <button routerLink="/student/panel/dashboard" type="button" class="btn-custom-green-100">Iniciar sesión</button>
+                <form [formGroup]="formLogin" (ngSubmit)="login()">
+                    <div class="mb-3">
+                        <label class="label text-blue fw-normal mb-2">Número de DNI:</label>
+                        <input class="input form-control" name="dni" placeholder="Usuario" formControlName="user">
+                    </div>
+                    <div class="mb-3">
+                        <label class="label text-blue fw-normal mb-2">Contraseña:</label>
+                        <input type="password" class="input form-control" name="password" placeholder="Contraseña" formControlName="password">
+                    </div>
+                    <div class="my-3 d-flex flex-column flex-md-row justify-content-end align-items-center">
+                        <a routerLink="/auth/recover/email" class="text-blue fw-medium" style="font-size: 14px;">Restablecer contraseña</a>
+                    </div>
+                    <button class="btn-custom-green-100" [disabled]="formLogin.invalid">Iniciar sesión</button>
+                </form>
             </div>
         </div>
     </div>

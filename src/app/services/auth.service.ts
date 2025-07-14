@@ -1,9 +1,11 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { catchError, throwError } from "rxjs";
+import { catchError, tap, throwError } from "rxjs";
+import { jwtDecode } from 'jwt-decode';
+import { AuthStorageService } from "./auth-storage.service";
 
 interface DataLogin {
-    studentCode: string,
+    user: string,
     password: string
 }
 
@@ -11,10 +13,28 @@ interface DataLogin {
     providedIn: 'root'
 })
 export class AuthService {
-    private httpService = inject(HttpClient)
-    private auth_end_point = 'http://localhost:3000'
+    private httpService = inject(HttpClient);
+    private auth_end_point = 'http://localhost:3000';
+    private authStorage = inject(AuthStorageService);
 
     constructor() {}
+
+    //PARA MANEJAR ROLES Y EL TOKEN
+    getDecodedToken(): any {
+        const token = localStorage.getItem('accessToken');
+        if (!token) return null;
+
+        try {
+            return jwtDecode(token);
+        } catch (error) {
+            console.error('Token inválido o corrupto', error);
+            return null;
+        }
+    }
+    getUserRole(): string {
+        const decoded = this.getDecodedToken();
+        return decoded?.rol ?? '';
+    }
 
     // Función para manejar errores
     private handleError(error: HttpErrorResponse) {
@@ -24,26 +44,17 @@ export class AuthService {
             // Error del cliente
             errorMessage = `Error: ${error.error.message}`;
         } else {
-            // Error del servidor: se usa el mensaje de error proporcionado por el backend
-            switch (error.error.errorCode) {
-                case "USER_NOT_FOUND":
-                    errorMessage = error.error.error; // "Usuario no encontrado"
+            const backend = error.error;
+
+            switch (backend.message) {
+                case "Usuario no encontrado":
+                    errorMessage = backend.message;
                     break;
-                case "INVALID_TOKEN":
-                    errorMessage = error.error.error; // "Código o token no válido"
-                    break;
-                case "TOKEN_EXPIRED":
-                    errorMessage = error.error.error; // "El token ha expirado"
-                    break;
-                case "TOKEN_ALREADY_USED":
-                    errorMessage = error.error.error; // "El token ya ha sido utilizado"
-                    break;
-                case "PASSWORD_INCORRECT":
-                    errorMessage = error.error.error; // "Contraseña incorrecta. Verifica tus credenciales."
+                case "Contraseña incorrecta":
+                    errorMessage = backend.message;
                     break;
                 default:
-                    // En caso de que no haya un código específico, usa el mensaje del backend o uno genérico
-                    errorMessage = error.error.error || 'Error interno del servidor.';
+                    errorMessage = backend.message || 'Error interno del servidor';
                     break;
             }
         }
@@ -51,8 +62,14 @@ export class AuthService {
     }
 
     login(data: DataLogin) {
-      return this.httpService
-      .post(this.auth_end_point+'/routes_person/login', {...data})
-      .pipe(catchError(this.handleError));
+        return this.httpService
+        .post(this.auth_end_point+'/auth/login', {...data})
+        .pipe(
+            tap((res: any) => {
+                //GUARDAMOS EL TOKEN DEVUELTO POR EL BACKEND
+                this.authStorage.setToken(res.token);
+            }),
+            catchError(this.handleError)
+        );
     }
 }

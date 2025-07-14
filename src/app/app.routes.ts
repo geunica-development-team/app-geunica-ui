@@ -28,5 +28,10 @@ export const routes: Routes = [
       path: 'public',
       loadChildren: () => 
         import('./pages/public/public.routes').then(m => m.publicRoutes) 
+    },
+    {
+      path: 'unauthorized',
+      loadComponent: () =>
+        import('./pages/shared/unauthorized/unauthorized.component').then(m => m.UnauthorizedComponent)
     }
 ];

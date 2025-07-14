@@ -1,0 +1,25 @@
+<div class="container-fluid vh-100 d-flex align-items-center justify-content-center bg-light">
+  <div class="text-center">
+    <!-- Icono -->
+    <div class="mb-4">
+      <i class="fas fa-lock unauthorized-icon"></i>
+    </div>
+    
+    <!-- Título -->
+    <h1 class="unauthorized-title mb-3">No Autorizado</h1>
+    
+    <!-- Mensaje -->
+    <p class="text-muted mb-4 fs-5">
+      No tienes permisos para acceder a esta página
+    </p>
+    
+    <!-- Botón regresar -->
+    <button 
+      type="button" 
+      class="btn btn-custom btn-lg px-4"
+      (click)="goBack()">
+      <i class="fas fa-arrow-left me-2"></i>
+      Regresar
+    </button>
+  </div>
+</div>

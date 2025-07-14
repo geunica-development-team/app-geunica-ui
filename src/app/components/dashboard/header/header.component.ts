@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { AuthStorageService } from '../../../services/auth-storage.service';
 
 @Component({
   selector: 'app-header',
@@ -8,5 +9,11 @@ import { RouterLink } from '@angular/router';
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
+  private authStorage = inject(AuthStorageService);
+  private router = inject(Router);
 
+  logOut() {
+    this.authStorage.logOut();
+    this.router.navigateByUrl('/auth/login');
+  }
 }
