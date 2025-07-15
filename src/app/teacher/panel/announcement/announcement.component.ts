@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { Announcement, DataService } from '../../../student/services/dataStudent.service';
 import { CommonModule } from '@angular/common';
 import { AppModalComponent } from '../../../components/app-modal/app-modal.component';
+import { SearcherComponent } from '../../../components/searcher/searcher.component';
 
 @Component({
   selector: 'app-announcement',
