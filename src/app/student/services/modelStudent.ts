@@ -71,12 +71,13 @@ export interface NotaActividad {
 
 /** Anuncio */
 export interface Anuncio {
-  id: number;
-  title: string;
+  id_anuncio: number;
+  titulo: string;
+  estado: 'visto' | 'publicado';
   cuerpo: string;
   creado_por: string;
   fecha_creacion: string; // ISO 8601, e.g. "2025-07-02T09:00:00Z"
-  estado: 'visto' | 'publicado';
+  
 }
 
 /** Registro plano de asistencia */

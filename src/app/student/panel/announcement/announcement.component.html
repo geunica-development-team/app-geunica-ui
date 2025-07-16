@@ -47,7 +47,7 @@
                   <i class="fa-solid fa-bell fs-4"></i>
                 </div>
                 <!-- Título a la derecha -->
-                <h5 class="mb-0 ms-3 flex-grow-1">{{ a.title }}</h5>
+                <h5 class="mb-0 ms-3 flex-grow-1">{{ a.titulo }}</h5>
               </div>
             </div>
           </ng-container>
@@ -80,7 +80,7 @@
   <ng-container *ngIf="selectedAnnouncement">
     <!-- Detalle completo dentro del modal -->
     <div class="p-3">
-      <h2 class="mb-3">{{ selectedAnnouncement.title }}</h2>
+      <h2 class="mb-3">{{ selectedAnnouncement.titulo }}</h2>
       <h6 class="text-muted">{{ selectedAnnouncement.fecha_creacion | date:'longDate' }}</h6>
       <hr>
       <p>{{ selectedAnnouncement.cuerpo }}</p>
