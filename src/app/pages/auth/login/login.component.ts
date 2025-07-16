@@ -1,10 +1,13 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, PLATFORM_ID } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink, Router } from '@angular/router';
+import { RouterLink, Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/auth.service';
 import { jwtDecode } from 'jwt-decode';
 import { AuthStorageService } from '../../../services/auth-storage.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalSessionExpiredComponent } from './modal-session-expired/modal-session-expired.component';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-login',
@@ -16,11 +19,42 @@ import { AuthStorageService } from '../../../services/auth-storage.service';
 export class LoginComponent {
 
   //INJECCION DE HERRAMIENTAS
+  private platformId = inject(PLATFORM_ID);
   private toolsForm = inject(FormBuilder);
   private notifycation = inject(ToastrService);
   private authService = inject(AuthService);
   private router = inject(Router);
-  private authStorage = inject(AuthStorageService)
+  private authStorage = inject(AuthStorageService);
+  private activatedRoute = inject(ActivatedRoute);
+  private modalService = inject(NgbModal);
+
+  ngOnInit(): void {
+    const isBrowser = isPlatformBrowser(this.platformId);
+
+    if (isBrowser) {
+      this.activatedRoute.queryParams.subscribe(params => {
+        if (params['sessionExpired']) {
+          //Se elimina el token
+          this.authStorage.logOut();
+
+          this.modalService.open(ModalSessionExpiredComponent, {
+            centered: true,
+            backdrop: 'static',
+            keyboard: false
+          })
+
+          //Limpiar el query param para eliminar la "sessionexpired" de la URL
+          this.router.navigate([], {
+            queryParams: {
+              sessionExpired: null
+            },
+            queryParamsHandling: 'merge',
+            replaceUrl: true
+          })
+        }
+      })
+    }
+  }
 
   formLogin = this.toolsForm.group({
     'user': ['', [Validators.required]],
