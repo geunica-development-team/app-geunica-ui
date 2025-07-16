@@ -81,21 +81,6 @@ export const menuItemsAdmin = [
       route: '/admin/panel/dashboard',
       active: true 
     },
-    { 
-      icon: 'fa-solid fa-school', 
-      label: 'Gestión Académica', 
-      route: '/admin/panel/gestion-academica' 
-    },
-    { 
-      icon: 'fa-solid fa-user-plus', 
-      label: 'Matrícula', 
-      route: '/admin/panel/matricula' 
-    },
-    { 
-      icon: 'fa-solid fa-person-chalkboard', 
-      label: 'Docentes', 
-      route: '/admin/panel/docentes' 
-    },
     {
       icon: 'fa-solid fa-file-circle-plus', 
       label: 'Inscripciones', 
@@ -133,11 +118,6 @@ export const menuItemsAdmin = [
       icon: 'fa-solid fa-book', 
       label: 'Cursos', 
       route: '/admin/panel/cursos' 
-    },
-    { 
-      icon: 'fa-solid fa-users', 
-      label: 'Usuarios', 
-      route: '/admin/panel/usuarios' 
     },
     { 
       icon: 'fa-solid fa-coins', 
