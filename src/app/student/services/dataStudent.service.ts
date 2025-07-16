@@ -32,16 +32,7 @@ export class DataStudentService {
   }
 
   getCourseById(id: number): Observable<Curso> {
-    return this.http
-      .get<Curso[]>(`${this.base}/curso?id=${id}`)
-      .pipe(
-        map(arr => {
-          if (!arr.length) {
-            throw new Error(`Curso con id ${id} no encontrado`);
-          }
-          return arr[0];
-        })
-      );
+    return this.http.get<Curso>(`${this.base}/curso?id=${id}`);//lamamos a un id del curso
   }
 
   getTeacher(): Observable<Docente[]> {
