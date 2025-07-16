@@ -1,8 +1,9 @@
 import { Component, ElementRef, EventEmitter, inject, Output, TemplateRef, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AcademicData, AssignGroupData, GuardianData, StudentData } from '../../../services/enrollment.service';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, Validators } from '@angular/forms';
 import { ESTADOS, GRADO, NIVEL, SEXO, TIPO_DOCUMENTO, TURNO } from '../../../utility/personal-data';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-modal-add-enrollment',
@@ -11,13 +12,24 @@ import { ESTADOS, GRADO, NIVEL, SEXO, TIPO_DOCUMENTO, TURNO } from '../../../uti
   styleUrl: './modal-add-enrollment.component.css'
 })
 export class ModalAddEnrollmentComponent {
-
   @Output() enrollmentAdded = new EventEmitter<any>();
 
   //INYECCIONES
   private modalService = inject(NgbModal);
+  private toolsForm = inject(FormBuilder);
+  private notifycation = inject(ToastrService);
 
   @ViewChild('modalAddEnrollment') modalAddEnrollment!: TemplateRef<ElementRef>;  
+
+    formAddEnrollment = this.toolsForm.group({
+      'namesStudent': ['', [Validators.required]],
+      'paternalSurnameStudent': ['', [Validators.required]],
+      'maternalSurnameStudent': ['', [Validators.required]],
+      'typeDocument': ['', [Validators.required]],
+      'nroDocument': ['', [Validators.required]],
+      'birthdate': [Date],
+      'gender': ['', [Validators.required]],
+    })
 
   documentTypes = TIPO_DOCUMENTO;
   levels = NIVEL;
