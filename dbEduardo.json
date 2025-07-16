@@ -33,6 +33,13 @@
     { "id": 1, "id_curso": 1, "topic": "Ecuaciones", "description": "Tipos de ángulos básicos" },
     { "id": 1, "id_curso": 1, "topic": "Plano cartesiano", "description": "Tipos de ángulos básicos" }
   ],
+  "horario": [
+    { "id_horario": 1, "id_asignacion_de_clase": 1, "dia": "Lunes", "hora_inicio": "08:00", "hora_fin": "12:00" },
+    { "id_horario": 2, "id_asignacion_de_clase": 1, "dia": "Martes", "hora_inicio": "08:00", "hora_fin": "12:00" },
+    { "id_horario": 3, "id_asignacion_de_clase": 1, "dia": "Miercoles", "hora_inicio": "08:00", "hora_fin": "12:00" },
+    { "id_horario": 4, "id_asignacion_de_clase": 1, "dia": "Jueves", "hora_inicio": "08:00", "hora_fin": "12:00" },
+    { "id_horario": 5, "id_asignacion_de_clase": 1, "dia": "Viernes", "hora_inicio": "08:00", "hora_fin": "12:00" }
+  ],
   "persona": [
     { "id_persona": 1, "nombres": "Ana", "apell_paterno": "Pérez", "correo": "ana.perez@mail.com" },
     { "id_persona": 2, "nombres": "Luis", "apell_paterno": "Ramírez", "correo": "luis.ramirez@mail.com" },
@@ -80,13 +87,7 @@
     { "id_nota_examen": 3, "id_examen": 3, "id_matricula": 1, "valor": 10.0 }
   ],
 
-  "horario": [
-    { "id_horario": 1, "id_asignacion_de_clase": 1, "dia": "Lunes", "hora_inicio": "08:00", "hora_fin": "12:00" },
-    { "id_horario": 2, "id_asignacion_de_clase": 1, "dia": "Martes", "hora_inicio": "08:00", "hora_fin": "12:00" },
-    { "id_horario": 3, "id_asignacion_de_clase": 1, "dia": "Miercoles", "hora_inicio": "08:00", "hora_fin": "12:00" },
-    { "id_horario": 4, "id_asignacion_de_clase": 1, "dia": "Jueves", "hora_inicio": "08:00", "hora_fin": "12:00" },
-    { "id_horario": 5, "id_asignacion_de_clase": 1, "dia": "Viernes", "hora_inicio": "08:00", "hora_fin": "12:00" }
-  ],
+
 
   "rol": [
     { "id_rol": 1, "rol": "Admin"},
