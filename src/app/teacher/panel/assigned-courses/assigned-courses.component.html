@@ -21,9 +21,9 @@
         
           <app-card-courses class="h-100"
             [title]="course.nombre"
-            [code]="course.codigo"
+            [subtitulo1]="course.codigo"
             
-            [teacher]="course.descripcion_curso"
+            [subtitulo2]="course.descripcion_curso"
             [link]="['/student/panel/courses', course.id_curso, 'curriculum']">
             
             <!-- este ng-content se pegará al final de card-body -->

@@ -17,11 +17,13 @@
       <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let course of filteredCourses">
         
           <app-card-courses class="h-100"
-            [title]="course.title"
-            
-            [imageUrl]="course.imageUrl"
-            [teacher]="course.teacher"
-            [link]="['/student/panel/grades', course.id, 'gradesRegistry']">
+            [etiquetaTitulo]="'CURSO'"
+            [titulo]="course.nombre"
+            [etiquetaSubtitulo1]="'CÓDIGO'"
+            [subtitulo1]="course.codigo"
+            [etiquetaSubtitulo2]="'DOCENTE'"
+            [subtitulo2]="getDocenteAsignado()"
+            [link]="['/student/panel/grades', course.id_curso, 'gradesRegistry']">
             
             <!-- este ng-content se pegará al final de card-body -->
 

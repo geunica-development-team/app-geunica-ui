@@ -9,13 +9,13 @@ import { Router } from '@angular/router';
   styleUrl: './card-courses.component.css'
 })
 export class CardCoursesComponent {
-  @Input() title = '';
-  @Input() imageUrl?: string;
-  @Input() code?: string;
-  @Input() teacher!: string;
-
-    /** Nueva propiedad: array de segmentos de ruta */
-  @Input() link: any[] = [];
+  @Input() titulo: string = '';
+  @Input() subtitulo1: string = '';
+  @Input() subtitulo2: string = '';
+  @Input() etiquetaTitulo: string = 'TÍTULO';
+  @Input() etiquetaSubtitulo1: string = 'SUBTÍTULO 1';
+  @Input() etiquetaSubtitulo2: string = 'SUBTÍTULO 2';
+  @Input() link: any[] = [];// es el link
 
   constructor(private router: Router) {}
 

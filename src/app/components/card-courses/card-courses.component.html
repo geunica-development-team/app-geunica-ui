@@ -1,9 +1,12 @@
 <div class="card h-100"   (click)="goToLink()" [ngClass]="{ 'clickable-card': link.length > 0 }">
-      <img *ngIf="imageUrl" [src]="imageUrl" class="card-img-top" [alt]="title">
+      
   <div class="card-body d-flex flex-column">
-    <h5 class="card-title">{{ title }}</h5>
-    <h6 *ngIf="code" class="card-subtitle mb-2 text-muted">C0D1G0: {{ code }}</h6><br>
-    <h6 *ngIf="teacher" class="card-subtitle mb-1 text-muted">DOCENTE: {{ teacher }}</h6>
+    <!-- Título -->
+    <h5 *ngIf="titulo"  class="card-title">{{ etiquetaTitulo }}: {{ titulo }}</h5>
+    <!-- Subtítulo 1 -->
+    <h6 *ngIf="subtitulo1" class="card-subtitle mb-2 text-muted">{{ etiquetaSubtitulo1 }}: {{ subtitulo1 }}</h6>
+    <!-- Subtítulo 2 -->
+    <h6 *ngIf="subtitulo2" class="card-subtitle mb-1 text-muted">{{ etiquetaSubtitulo2 }}: {{ subtitulo2 }}</h6>
     <!-- Slot para contenido libre -->
     <div class="flex-grow-1">
       <ng-content></ng-content>

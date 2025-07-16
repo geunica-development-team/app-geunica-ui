@@ -2,11 +2,10 @@
 
 /** Curso */
 export interface Curso {
-  id: number;
-  title: string;
-  code: string;
-  teacher: string;
-  imageUrl?: string;
+  id_curso: number;
+  nombre: string;
+  codigo: string;
+  descripcion_curso: string;
 }
 
 /** Temas del plan de estudios */
@@ -18,6 +17,18 @@ export interface Curriculum {
   teacher: string;
   date: string; // ISO YYYY-MM-DD
   imageUrl?: string;
+}
+
+export interface PersonaDocente {
+  id_persona: number;
+  nombres: string;
+  apell_paterno: string;
+}
+
+export interface Docente {
+  id_docente: number;
+  especialidad: string;
+  persona: PersonaDocente;
 }
 
 /** Examen */

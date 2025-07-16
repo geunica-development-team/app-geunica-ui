@@ -41,8 +41,23 @@
     { "id_persona": 5, "nombres": "Marcelo", "apell_paterno": "Ñusta", "correo": "MarcelinoÑusta@mail.com" }
   ],
   "docente": [
-    { "id_docente": 1, "id_persona": 2, "especialidad": "Matemáticas" },
-    { "id_docente": 2, "id_persona": 3, "especialidad": "Comunicacion" }
+    {
+      "id_docente": 1,"especialidad": "Matemáticas",
+      "persona": {"id_persona": 2,"nombres": "Luis","apell_paterno": "Ramírez"}
+    },
+    {
+      "id_docente": 2,"especialidad": "Comunicación",
+      "persona": {"id_persona": 3,"nombres": "Carmen","apell_paterno": "Torres"}
+    }
+  ],
+    "estudiante": [
+    { "id_estudiante": 1, "id_persona": 4, "id_usuario": 3, "codigo_estudiante": "EST001", "fecha_ingreso": "2025-01-15", "estado": "activo" }
+  ],
+  "apoderado": [
+    { "id_apoderado": 1, "id_persona": 5 }
+  ],
+  "estudiante_apoderado": [
+    { "id_apoderado": 1, "id_estudiante": 1, "relacion": "Padre" }
   ],
   "asignacion_de_clase": [
     { "id_asignacion_de_clase": 1, "id_curso": 1, "id_salon": 1, "id_docente": 1 },
@@ -100,16 +115,6 @@
     { "id_asistencia": 6, "id_estudiante": 1, "status": "Tardanza", "date": "2025-03-06" },
     { "id_asistencia": 7, "id_estudiante": 1, "status": "asistió", "date": "2025-03-07" },
     { "id_asistencia": 8, "id_estudiante": 1, "status": "asistió", "date": "2025-03-08" }
-  ],
-
-  "estudiante": [
-    { "id_estudiante": 1, "id_persona": 4, "id_usuario": 3, "codigo_estudiante": "EST001", "fecha_ingreso": "2025-01-15", "estado": "activo" }
-  ],
-  "apoderado": [
-    { "id_apoderado": 1, "id_persona": 5 }
-  ],
-  "estudiante_apoderado": [
-    { "id_apoderado": 1, "id_estudiante": 1, "relacion": "Padre" }
   ],
   "evaluacion_psicologica": [
     { "id_evaluacion": 1, "id_inscripcion": 1, "resultado": true, "fecha_evaluacion": "2025-04-01" }

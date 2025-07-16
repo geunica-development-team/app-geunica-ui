@@ -8,6 +8,7 @@ import { environment } from '../../../enviroments/environment';
 import {
   Curso,
   Curriculum,
+  Docente,
   Anuncio,
   FlatAsistencia,
   Session,
@@ -41,6 +42,10 @@ export class DataStudentService {
           return arr[0];
         })
       );
+  }
+
+  getTeacher(): Observable<Docente[]> {
+    return this.http.get<Docente[]>(`${this.base}/docente`);
   }
 
   getCurriculums(): Observable<Curriculum[]> {
