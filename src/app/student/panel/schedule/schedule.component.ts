@@ -13,39 +13,19 @@ import dayGridPlugin from '@fullcalendar/daygrid';
   styleUrl: './schedule.component.css'
   })
 export class ScheduleComponent {
-  /* Plugins que queremos usar
-  plugins = [ dayGridPlugin, timeGridPlugin, interactionPlugin ];
 
-  // Eventos de ejemplo
-  events = [
-    {
-      title: 'Aritmética 5to primaria',
-      start: '2022-07-11T07:00:00',
-      end:   '2022-07-11T08:00:00',
-      color: '#8e44ad'
-    },
-    {
-      title: 'RECREO',
-      start: '2022-07-11T10:00:00',
-      end:   '2022-07-11T11:00:00',
-      display: 'background',
-      color: '#8e44ad'
-    }
-    // …añade más eventos según necesites
-  ];*/
-
-    calendarOptions: CalendarOptions = {
+  calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth',
     plugins: [dayGridPlugin, interactionPlugin],
     dateClick: (arg) => this.handleDateClick(arg),
     events: [
-      { title: 'event 1', date: '2019-04-01' },
-      { title: 'event 2', date: '2019-04-02' }
+      { title: 'Aritmética 5to primaria', date: '2025-07-16', color: '#8e44ar' },
+      { title: 'Geometria 5to primaria', date: '2025-07-17', display: 'background', color: '#8e44ad'}
     ]
   };
 
   handleDateClick(arg: DateClickArg) {
     alert('date click! ' + arg.dateStr)
   }
-
+  
 }
