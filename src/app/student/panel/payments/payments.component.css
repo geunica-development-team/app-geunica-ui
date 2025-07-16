@@ -1,0 +1,34 @@
+/* Estilos globales o en tu componente SCSS */
+
+.cuota-box {
+  border: 1px solid #314732;    /* mismo verde “success” */
+  border-radius: 0.5rem;
+  background-color: #e9f7ef;    /* verde muy suave */
+
+}
+
+.cuota-box i {
+  color: #198754;               /* icono verde */
+}
+
+.cuota-box .fw-semibold {
+  font-size: 1rem;
+}
+
+.cuota-box small {
+  font-size: 0.875rem;
+}
+
+.cuota-box .fs-1 {
+  color: #0f5132;               /* verde oscuro para el precio */
+}
+
+
+.advertencia-box {
+  border: 1px solid #474531;    
+  border-radius: 0.5rem;
+  background-color: #fff9c4;    
+  width: 32rem;
+  height: 10.7rem;
+}
+

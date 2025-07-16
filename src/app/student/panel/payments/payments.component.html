@@ -1,0 +1,108 @@
+<div class="card p-4 shadow-sm">
+  <div class="row g-3">
+    <!-- Columna izquierda -->
+    <div class="col-12 col-md-6">
+      
+      <!-- Detalle de la cuenta -->
+      <div class="card p-4 mb-4">
+        <h3 class="card-title border-bottom pb-2 mb-3">Detalle de la cuenta</h3>
+        <h6>Nombre del usuario</h6>
+        <p class="text-muted">Número de documento | ID del usuario</p>
+        <p class="text-muted">Grado | Año</p>
+        <p class="text-muted">Sede de la institución</p>
+      </div>
+
+      <!-- Siguiente pago -->
+        <div class="card p-4 mb-4">
+            <h3 class="card-title border-bottom pb-2 mb-3">Siguiente pago</h3>
+            
+            <!-- Cuota -->
+            <button 
+                class="cuota-box btn p-3 mb-4 text-start" 
+                type="button"
+                style="width: 100%; max-width: 20rem;">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                <div class="d-flex align-items-center">
+                    <i class="fa-solid fa-circle-exclamation me-2"></i>
+                    <span class="fw-semibold">Cuota 1</span>
+                </div>
+                <small class="text-muted">Vencimiento: 15/07/2025</small>
+                </div>
+                <div class="text-center">
+                <span class="fs-1 fw-bold">$ 400</span>
+                </div>
+            </button>
+
+            <!-- Botón -->
+            <div class="row">
+            <div class="col-12 col-md-8">
+                <button 
+                class="btn btn-success text-dark btn-lg d-flex align-items-center p-3 w-100" 
+                type="button"
+                >
+                <i class="fa-solid fa-circle-exclamation fs-3 me-3"></i>
+                <div class="flex-grow-1 text-start">
+                    <div class="fw-bold mb-1 text-center">Pagar en Línea</div>
+                    <small>Click aquí para pagar con tarjeta de débito, crédito o app de pagos</small>
+                </div>
+                </button>
+            </div>
+            </div>
+
+      </div><!-- /Siguiente pago -->
+
+
+        <!-- Advertencia -->
+        <div class="card p-4 mb-4">
+            <h3 class="card-title border-bottom pb-2 mb-3">Advertencia</h3>
+            <div class="advertencia-box p-3 mb-4 col-12 col-md-8">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div class="d-flex align-items-center">
+                    <i class="fa-solid fa-circle-exclamation me-2"></i>
+                    <p class="mb-0 fs-5">Recuerda que si pagas antes de la fecha estipuladatienes un descuento del precio normal, 
+                        si pagas el dia limite el precio es el acordado y si pagas despues del dialimite se te aplica una mora 
+                        progresiva
+                    </p>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /advertencia -->
+
+    </div><!-- /Columna izquierda -->
+
+    <!-- Columna derecha -->
+    <div class="col-12 col-md-6 text-center">
+    <h5 class="mb-3">Cronograma de pagos</h5>
+        <div class="card p-4 mb-4">
+            <div class="table-responsive">
+            <table class="table mb-0">
+                <thead class="table-light">
+                <tr>
+                    <th>Vencimiento</th>
+                    <th>Concepto</th>
+                    <th>Acción</th>
+                    <th class="text-end">Monto</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let item of schedule">
+                    <td>{{ item.vencimiento | date:'dd/MM/yyyy' }}</td>
+                    <td>{{ item.concepto }}</td>
+                    <td>
+                    <button class="btn btn-sm btn-primary">
+                        {{ item.accion }}
+                    </button>
+                    </td>
+                    <td class="text-end">
+                    {{ item.monto | currency:'USD':'symbol':'1.0-0' }}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+
+
+  </div><!-- /row -->
+</div><!-- /card -->

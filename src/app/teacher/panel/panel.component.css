@@ -1,0 +1,28 @@
+.app-layout {
+  background-color: #F5F4F9;
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 280px; /* Mismo ancho que el sidenav */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.page-content {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+  }
+  
+  .page-content {
+    padding: 1rem;
+  }
+}

@@ -1,0 +1,21 @@
+    <!-- Backdrop -->
+    <div 
+      class="modal-backdrop" 
+      [class.visible]="visible"
+      (click)="onBackdropClick()">
+    </div>
+
+    <!-- Wrapper for modal content -->
+    <div class="modal-wrapper" [ngStyle]="{ 'width': width, 'max-width': maxWidth, 'border-radius': borderRadius }"
+      [class.visible]="visible" (click)="$event.stopPropagation()">
+
+      <!-- Close button -->
+      <button class="modal-close" aria-label="Close modal" (click)="close()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Dynamic content -->
+      <div class="modal-content">
+        <ng-content></ng-content>
+      </div>
+    </div>

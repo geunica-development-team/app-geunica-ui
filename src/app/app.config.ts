@@ -7,7 +7,7 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { authRoutes } from './pages/auth/auth.routes';
-import { studentPanelRoutes } from './student/panel/panelStudent.routes';
+import { studentPanelRoutes } from './student/panelStudent.routes';
 import { adminPanelRoutes } from './admin/panel/panelAdmin.routes';
 
 
@@ -15,14 +15,18 @@ import { adminPanelRoutes } from './admin/panel/panelAdmin.routes';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
-    provideRouter(authRoutes),
-    provideRouter(studentPanelRoutes),
-    provideRouter(adminPanelRoutes),
+    provideRouter([
+      ...routes,
+      ...authRoutes,
+      ...studentPanelRoutes,
+      ...adminPanelRoutes
+    ]),
+
     provideClientHydration(
       withHttpTransferCacheOptions({
 				includePostRequests: true,
-			}),
+			}), 
+      withEventReplay()
     ),
     provideAnimations(),
     provideToastr(),

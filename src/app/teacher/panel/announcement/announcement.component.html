@@ -1,0 +1,140 @@
+<ng-container *ngIf="announcements$ | async as announcements; else cargando">
+
+  <h2 class="text-center mb-4">Anuncios</h2>
+
+  
+
+  <div class="container">
+    <div class="row justify-content-center">
+      <!-- Columna central con cards verticales -->
+      <div class="col-12 col-md-6">
+        <!-- Filtro -->
+        <div class="mb-3 d-flex justify-content-end gap-2">
+
+          <div class="dropdown"> 
+            <button 
+              class="btn btn-outline-success dropdown-toggle" 
+              type="button" 
+              id="dropdownMenuButton" 
+              data-bs-toggle="dropdown" 
+              aria-expanded="false"
+              style="min-width: 6rem;">
+              Filtro
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end mt-2" aria-labelledby="dropdownMenuButton">
+              <li><a class="dropdown-item py-1">Completados</a></li>
+              <li><a class="dropdown-item py-1">Por completar</a></li>
+            </ul>
+          </div>
+          <div class="dropdown"> 
+            <button 
+              class="btn btn-outline-success dropdown-toggle" 
+              type="button" 
+              id="dropdownMenuButton" 
+              data-bs-toggle="dropdown" 
+              aria-expanded="false"
+              style="min-width: 6rem;">
+              Estado
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end mt-2" aria-labelledby="dropdownMenuButton">
+              <li><a class="dropdown-item py-1">Completados</a></li>
+              <li><a class="dropdown-item py-1">Por completar</a></li>
+            </ul>
+          </div>
+          <div class="dropdown"> 
+            <button 
+              class="btn btn-outline-success dropdown-toggle" 
+              type="button" 
+              id="dropdownMenuButton" 
+              data-bs-toggle="dropdown" 
+              aria-expanded="false"
+              style="min-width: 6rem;">
+              Nivel
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end mt-2" aria-labelledby="dropdownMenuButton">
+              <li><a class="dropdown-item py-1">Completados</a></li>
+              <li><a class="dropdown-item py-1">Por completar</a></li>
+            </ul>
+          </div>
+
+          <button class="btn btn-dark">
+            + Nuevo anuncio
+          </button>
+
+
+        </div>
+
+        <!-- Card contenedora grande -->
+        <div class="card p-4 shadow-sm">
+        <!-- Lista de mini‐cards -->
+          <ng-container *ngFor="let a of announcements">
+            <div 
+              class="card mb-4 clickable-card" 
+              (click)="openAnnouncement(a)" 
+              style="cursor: pointer;"
+            >
+              <div class="d-flex align-items-center p-3">
+                <!-- Icono a la izquierda -->
+                <div 
+                  class="d-flex align-items-center justify-content-center border rounded text-white"
+                  [ngClass]="{
+                    'bg-warning': a.estado === 'publicado',
+                    'bg-success': a.estado === 'visto'
+                  }"
+                  style="width: 4rem; height: 4rem; border: .25rem solid rgba(0,0,0,0.125);"
+                >
+                  <i class="fa-solid fa-bell fs-4"></i>
+                </div>
+                <!-- Título a la derecha -->
+                <h5 class="mb-0 ms-3 flex-grow-1">{{ a.titulo }}</h5>
+              </div>
+            </div>
+          </ng-container>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</ng-container>
+
+<ng-template #cargando>
+  <div class="d-flex justify-content-center my-5">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Modal reutilizable -->
+<app-app-modal
+  [visible]="!!selectedAnnouncement"
+  (closed)="closeModal()"
+  width="600px"
+  maxWidth="90vw"
+  borderRadius="0.75rem"
+>
+  <ng-container *ngIf="selectedAnnouncement">
+    <!-- Detalle completo dentro del modal -->
+    <div class="p-3">
+      <h2 class="mb-3">{{ selectedAnnouncement.titulo }}</h2>
+      <h6 class="text-muted">{{ selectedAnnouncement.fecha_creacion | date:'longDate' }}</h6>
+      <hr>
+      <p>{{ selectedAnnouncement.cuerpo }}</p>
+      <hr>
+      <div class="d-flex justify-content-between align-items-center">
+        <small class="text-muted">Creado por {{ selectedAnnouncement.id_usuario }}</small>
+        <span 
+          class="badge"
+          [ngClass]="{
+            'bg-warning': selectedAnnouncement.estado === 'publicado',
+            'bg-success': selectedAnnouncement.estado === 'visto'
+          }">
+          {{ selectedAnnouncement.estado }}
+        </span>
+      </div>
+    </div>
+  </ng-container>
+</app-app-modal>

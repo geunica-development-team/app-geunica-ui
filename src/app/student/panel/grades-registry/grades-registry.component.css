@@ -1,0 +1,105 @@
+/* Tabla con esquinas redondeadas y borde exterior destacado */
+.section-title {
+  display: inline-block;
+  border-bottom: 3px solid #919191;
+  padding-bottom: 0.25rem;
+}
+
+.table-rounded {
+  border-collapse: separate;
+  border-spacing: 0;
+  /* Borde exterior */
+  border: 1px solid #d3d3d3;  /* color azul de Bootstrap “primary” */
+  border-radius: 0.5rem;      /* radio para todas las esquinas */
+  overflow: hidden;           /* para que el radio se aplique */
+}
+
+/* Esquinas superiores */
+.table-rounded thead tr th:first-child {
+  border-top-left-radius: 0.5rem;
+}
+.table-rounded thead tr th:last-child {
+  border-top-right-radius: 0.5rem;
+}
+
+/* Esquinas inferiores */
+.table-rounded tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 0.5rem;
+}
+.table-rounded tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 0.5rem;
+}
+
+/* Opcional: quitar bordes dobles internos si lo deseas */
+.table-rounded th,
+.table-rounded td {
+  border: 1px solid #dee2e6;
+}
+
+
+
+
+/* Opcional: al pasar el ratón */
+.nav-pills .nav-link:hover {
+  color: #184818bf;
+}
+
+.nav-pills .nav-link {
+  background: transparent;
+  color: #000;
+  display: inline-block;    /* para que el border-bottom solo abarque el texto */
+  padding: 0.5rem 0;        /* ajusta el padding vertical si lo necesitas */
+}
+
+.nav-pills .nav-link.active {
+  font-weight: 700;
+  color: #000000 !important;
+  border: none;
+  border-bottom: 2px solid #000000;
+}
+
+.nav-pills .nav-item {
+  /* aseguramos que cada item pueda crecer un poco, pero no tanto como para llenar todo el ancho */
+  flex: 1;
+  text-align: center;
+}
+
+.nav-pills {
+  background: transparent;
+  border-bottom: none;      /* sin borde extra en el contenedor */
+}
+
+
+
+/* css del grafico pstel*/
+
+/* Define el tamaño y el pastel con porcentajes */
+.donut-chart {
+  --size: 250px;            /* diámetro total */
+  --cutout: 190px;           /* diámetro del hueco */
+  --p1: 30;  /* porcentaje primer color */
+  --p2: 50;  /* porcentaje segundo color */
+  /* el resto (100 - p1 - p2) será el tercer color */
+
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  background: conic-gradient(
+    red 0% calc(var(--p1) * 1%),
+    rgb(18, 133, 18) calc(var(--p1) * 1%) calc((var(--p1) + var(--p2)) * 1%)
+  );
+  position: relative;
+}
+
+/* Crea el hueco centrado */
+.donut-chart::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(var(--cutout));
+  height: calc(var(--cutout));
+  background: white;       /* color del fondo de tu tarjeta */
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}

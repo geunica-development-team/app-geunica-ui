@@ -2,34 +2,75 @@ export const menuItemsStudent = [
     { 
       icon: 'fas fa-home', 
       label: 'Dashboard', 
-      route: '/dashboard',
+      route: 'dashboard',
       active: true 
     },
     { 
       icon: 'fas fa-chart-bar', 
       label: 'Mis cursos', 
-      route: '/cursos' 
+      route: 'courses',
+      active: true
     },
     { 
       icon: 'fas fa-sticky-note', 
-      label: 'Notas', 
-      route: '/notas' 
+      label: 'Mis notas', 
+      route: 'grades' 
+    },
+    { 
+      icon: 'fas fa-solid fa-money-bill-wave', 
+      label: 'Pagos', 
+      route: 'payments' 
     },
     { 
       icon: 'fas fa-clock', 
       label: 'Asistencia', 
-      route: '/asistencia' 
+      route: 'attendance' 
     },
     { 
       icon: 'fas fa-bullhorn', 
       label: 'Anuncios', 
-      route: '/anuncios',
+      route: 'announcement',
       badge: 24 
     },
     { 
       icon: 'fas fa-calendar-alt', 
-      label: 'Cronograma', 
-      route: '/cronograma' 
+      label: 'Horario', 
+      route: 'schedule' 
+    }
+];
+
+export const menuItemsTeacher = [
+    { 
+      icon: 'fas fa-home', 
+      label: 'Dashboard', 
+      route: 'dashboard',
+      active: true 
+    },
+    { 
+      icon: 'fas fa-chart-bar', 
+      label: 'Cursos Asignados', 
+      route: 'coursesAsigned' 
+    },
+    { 
+      icon: 'fas fa-sticky-note', 
+      label: 'Gestion de Notas', 
+      route: 'NoteManagment' 
+    },
+    { 
+      icon: 'fas fa-clock', 
+      label: 'Gestion de asistencias', 
+      route: 'attendanceManagment',
+      badge: 24 
+    },
+    { 
+      icon: 'fas fa-bullhorn', 
+      label: 'Anuncios', 
+      route: 'announcement' 
+    },
+        { 
+      icon: 'fas fa-calendar-alt', 
+      label: 'Horario', 
+      route: 'schedule' 
     }
 ];
 
@@ -39,6 +80,21 @@ export const menuItemsAdmin = [
       label: 'Dashboard', 
       route: '/admin/panel/dashboard',
       active: true 
+    },
+    { 
+      icon: 'fa-solid fa-school', 
+      label: 'Gestión Académica', 
+      route: '/admin/panel/gestion-academica' 
+    },
+    { 
+      icon: 'fa-solid fa-user-plus', 
+      label: 'Matrícula', 
+      route: '/admin/panel/matricula' 
+    },
+    { 
+      icon: 'fa-solid fa-person-chalkboard', 
+      label: 'Docentes', 
+      route: '/admin/panel/docentes' 
     },
     {
       icon: 'fa-solid fa-file-circle-plus', 
@@ -77,6 +133,11 @@ export const menuItemsAdmin = [
       icon: 'fa-solid fa-book', 
       label: 'Cursos', 
       route: '/admin/panel/cursos' 
+    },
+    { 
+      icon: 'fa-solid fa-users', 
+      label: 'Usuarios', 
+      route: '/admin/panel/usuarios' 
     },
     { 
       icon: 'fa-solid fa-coins', 
@@ -143,6 +204,11 @@ export const generalItems = [
     { 
       icon: 'fas fa-cog', 
       label: 'Configuración', 
+      route: '/configuracion' 
+    },
+        { 
+      icon: 'fas fa-cog', 
+      label: 'Salir', 
       route: '/configuracion' 
     },
   ];

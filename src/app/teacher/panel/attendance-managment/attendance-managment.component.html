@@ -1,0 +1,45 @@
+<div class="container py-4">
+
+  <!-- 1. Fila del buscador -->
+  <div class="row mb-4">
+    <div class="col-12 col-md-6">
+      <app-searcher
+        [(term)]="searchTerm"
+        placeholder="Buscar por curso"
+        
+        field="title"
+        
+        (search)="onSearch()"
+      ></app-searcher>
+    </div>
+  </div>
+
+  <!-- 2. Fila de las cards -->
+      
+  <div class="row g-4">
+    <div
+      class="col-12 col-sm-6 col-md-4 col-lg-3"
+      *ngFor="let g of filteredGrades"
+    >
+      <div class="card h-100 shadow-sm">
+        <div class="card-body d-flex flex-column">
+          <!-- Título: Grado y Nivel -->
+          <h5 class="card-title mb-2">
+            {{ g.grado }} <small class="text-muted">– {{ g.nivel }}</small>
+          </h5>
+
+          <!-- (Opcional) Icono o imagen representativa -->
+          <!-- <img src="ruta/a/icono.png" class="card-img-top mb-3" alt="Ícono de aula"> -->
+
+          <!-- Sede al pie de la card -->
+          <p class="card-text mt-auto">
+            <i class="bi bi-geo-alt-fill"></i>
+            <small class="text-muted">Sede: {{ g.sede }}</small>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>

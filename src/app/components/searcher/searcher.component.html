@@ -1,0 +1,14 @@
+<form class="d-flex" (ngSubmit)="onSubmit()" style="width:100%;">
+  <input
+    class="form-control me-2 search-input"
+    type="search"
+    [placeholder]="placeholder"
+    [(ngModel)]="term"
+    (ngModelChange)="onInputChange($event)"
+    name="search"
+  >
+  <button class="btn btn-outline-success" type="submit">
+    <i class="fas fa-search"></i>
+  </button>
+</form>
+
