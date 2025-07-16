@@ -2,14 +2,16 @@
 
   <h2 class="text-center mb-4">Anuncios</h2>
 
+  
+
   <div class="container">
     <div class="row justify-content-center">
       <!-- Columna central con cards verticales -->
       <div class="col-12 col-md-6">
         <!-- Filtro -->
-        <div class="mb-3 d-flex justify-content-end">
-          <div class="dropdown">
-            <label class="me-2">Filtrar por:</label>
+        <div class="mb-3 d-flex justify-content-end gap-2">
+
+          <div class="dropdown"> 
             <button 
               class="btn btn-outline-success dropdown-toggle" 
               type="button" 
@@ -17,14 +19,51 @@
               data-bs-toggle="dropdown" 
               aria-expanded="false"
               style="min-width: 6rem;">
-              Ver todos 
+              Filtro
             </button>
             <ul class="dropdown-menu dropdown-menu-end mt-2" aria-labelledby="dropdownMenuButton">
               <li><a class="dropdown-item py-1">Completados</a></li>
               <li><a class="dropdown-item py-1">Por completar</a></li>
             </ul>
           </div>
+          <div class="dropdown"> 
+            <button 
+              class="btn btn-outline-success dropdown-toggle" 
+              type="button" 
+              id="dropdownMenuButton" 
+              data-bs-toggle="dropdown" 
+              aria-expanded="false"
+              style="min-width: 6rem;">
+              Estado
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end mt-2" aria-labelledby="dropdownMenuButton">
+              <li><a class="dropdown-item py-1">Completados</a></li>
+              <li><a class="dropdown-item py-1">Por completar</a></li>
+            </ul>
+          </div>
+          <div class="dropdown"> 
+            <button 
+              class="btn btn-outline-success dropdown-toggle" 
+              type="button" 
+              id="dropdownMenuButton" 
+              data-bs-toggle="dropdown" 
+              aria-expanded="false"
+              style="min-width: 6rem;">
+              Nivel
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end mt-2" aria-labelledby="dropdownMenuButton">
+              <li><a class="dropdown-item py-1">Completados</a></li>
+              <li><a class="dropdown-item py-1">Por completar</a></li>
+            </ul>
+          </div>
+
+          <button class="btn btn-dark">
+            + Nuevo anuncio
+          </button>
+
+
         </div>
+
         <!-- Card contenedora grande -->
         <div class="card p-4 shadow-sm">
         <!-- Lista de mini‐cards -->
@@ -47,7 +86,7 @@
                   <i class="fa-solid fa-bell fs-4"></i>
                 </div>
                 <!-- Título a la derecha -->
-                <h5 class="mb-0 ms-3 flex-grow-1">{{ a.title }}</h5>
+                <h5 class="mb-0 ms-3 flex-grow-1">{{ a.titulo }}</h5>
               </div>
             </div>
           </ng-container>
@@ -80,13 +119,13 @@
   <ng-container *ngIf="selectedAnnouncement">
     <!-- Detalle completo dentro del modal -->
     <div class="p-3">
-      <h2 class="mb-3">{{ selectedAnnouncement.title }}</h2>
+      <h2 class="mb-3">{{ selectedAnnouncement.titulo }}</h2>
       <h6 class="text-muted">{{ selectedAnnouncement.fecha_creacion | date:'longDate' }}</h6>
       <hr>
       <p>{{ selectedAnnouncement.cuerpo }}</p>
       <hr>
       <div class="d-flex justify-content-between align-items-center">
-        <small class="text-muted">Creado por {{ selectedAnnouncement.creado_por }}</small>
+        <small class="text-muted">Creado por {{ selectedAnnouncement.id_usuario }}</small>
         <span 
           class="badge"
           [ngClass]="{

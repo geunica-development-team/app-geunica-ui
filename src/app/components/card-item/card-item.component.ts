@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { Announcement, Curriculum } from '../../student/services/dataStudent.service';
 import { CommonModule } from '@angular/common';
+import { Anuncio,Curriculum } from '../../student/services/modelStudent';
 
 @Component({
   selector: 'app-card-item',

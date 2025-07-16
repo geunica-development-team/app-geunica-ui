@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Announcement, DataService } from '../../services/dataStudent.service';
+import {  DataStudentService } from '../../services/dataStudent.service';
 import { CommonModule } from '@angular/common';
 import { map, Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from '../../../app.component';
 import { AppModalComponent } from '../../../components/app-modal/app-modal.component';
+import { Anuncio } from '../../services/modelStudent';
 
 
 @Component({
@@ -16,16 +17,16 @@ import { AppModalComponent } from '../../../components/app-modal/app-modal.compo
 })
 export class AnnouncementComponent implements OnInit{
   
-  announcements$!: Observable<Announcement[]>;
-  selectedAnnouncement: Announcement | null = null;
+  announcements$!: Observable<Anuncio[]>;
+  selectedAnnouncement: Anuncio | null = null;
 
-  constructor(private dataService: DataService) {}
+  constructor(private dataService: DataStudentService) {}
 
   ngOnInit() {
     this.announcements$ = this.dataService.getAnnouncements();
   }
 
-    openAnnouncement(a: Announcement) {
+    openAnnouncement(a: Anuncio) {
     this.selectedAnnouncement = a;
   }
 

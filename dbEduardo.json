@@ -1,245 +1,131 @@
 {
-  "course": [
-    { "id": 1, "title": "Aritmética", "code": "Matemática", "teacher": "Juan Carlos", "imageUrl":"https://picsum.photos/300/150"},
-    { "id": 2, "title": "Física",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"},
-    { "id": 3, "title": "curso",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"},
-    { "id": 4, "title": "Lenguaje",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"},
-    { "id": 5, "title": "Trigonometria",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"},
-    { "id": 6, "title": "Ciencia y Tecnologia",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"},
-    { "id": 7, "title": "Geometria",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"},
-    { "id": 8, "title": "Historia Personal",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"},
-    { "id": 9, "title": "Historia Universal",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"},
-    { "id": 10, "title": "Física",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"},
-    { "id": 11, "title": "Física",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"},
-    { "id": 12, "title": "Física",      "code": "Física",      "teacher": "María Pérez" , "imageUrl":"https://picsum.photos/300/150"}
+  "sede": [
+    { "id_sede": 1, "nombre": "Central", "localizacion": "ICA" },
+    { "id_sede": 2, "nombre": "Avenida", "localizacion": "ICA" }
+  ],
+  "nivel": [
+    { "id_nivel": 1, "nombre": "Primaria" },
+    { "id_nivel": 2, "nombre": "secundaria" }
+  ],
+  "grado": [
+    { "id_grado": 1, "nombre": "1°", "id_nivel": 1 },
+    { "id_grado": 2, "nombre": "2°", "id_nivel": 1 },
+    { "id_grado": 3, "nombre": "3°", "id_nivel": 1 }
+  ],
+  "seccion": [
+    { "id_seccion": 1, "nombre": "A" },
+    { "id_seccion": 2, "nombre": "B" }
+  ],
+  "salon": [
+    { "id_salon": 1, "id_sede": 1, "id_grado": 1, "id_seccion": 1, "nombre": "101", "turno": "mañana", "capacidad": 30 }
+  ],
+  "curso": [
+    { "id_curso": 1, "nombre": "Matemáticas", "codigo": "MAT01", "descripcion_curso": "numeros" },
+    { "id_curso": 2, "nombre": "Ciencias", "codigo": "CIEN01", "descripcion_curso": "curiosidad" },
+    { "id_curso": 3, "nombre": "Computacion", "codigo": "CMP01", "descripcion_curso": "maquinas" },
+    { "id_curso": 4, "nombre": "Comunicacion", "codigo": "COM01", "descripcion_curso": "escritura y eso" },
+    { "id_curso": 5, "nombre": "Arte", "codigo": "ART01", "descripcion_curso": "dibujos" }
   ],
   "curriculum": [
+    { "id": 1, "id_curso": 1, "topic": "Ángulos", "description": "Tipos de ángulos básicos" },
+    { "id": 1, "id_curso": 1, "topic": "Ángulos I", "description": "Tipos de ángulos básicos" },
+    { "id": 1, "id_curso": 1, "topic": "Ángulos II", "description": "Tipos de ángulos básicos" },
+    { "id": 1, "id_curso": 1, "topic": "Ecuaciones", "description": "Tipos de ángulos básicos" },
+    { "id": 1, "id_curso": 1, "topic": "Plano cartesiano", "description": "Tipos de ángulos básicos" }
+  ],
+  "horario": [
+    { "id_horario": 1, "id_asignacion_de_clase": 1, "dia": "Lunes", "hora_inicio": "08:00", "hora_fin": "12:00" },
+    { "id_horario": 2, "id_asignacion_de_clase": 1, "dia": "Martes", "hora_inicio": "08:00", "hora_fin": "12:00" },
+    { "id_horario": 3, "id_asignacion_de_clase": 1, "dia": "Miercoles", "hora_inicio": "08:00", "hora_fin": "12:00" },
+    { "id_horario": 4, "id_asignacion_de_clase": 1, "dia": "Jueves", "hora_inicio": "08:00", "hora_fin": "12:00" },
+    { "id_horario": 5, "id_asignacion_de_clase": 1, "dia": "Viernes", "hora_inicio": "08:00", "hora_fin": "12:00" }
+  ],
+  "persona": [
+    { "id_persona": 1, "nombres": "Ana", "apell_paterno": "Pérez", "correo": "ana.perez@mail.com" },
+    { "id_persona": 2, "nombres": "Luis", "apell_paterno": "Ramírez", "correo": "luis.ramirez@mail.com" },
+    { "id_persona": 3, "nombres": "Carmen", "apell_paterno": "Torres", "correo": "carmen.torres@mail.com" },
+    { "id_persona": 4, "nombres": "pepe", "apell_paterno": "Torres", "correo": "Pepe.torres@mail.com" },
+    { "id_persona": 5, "nombres": "Marcelo", "apell_paterno": "Ñusta", "correo": "MarcelinoÑusta@mail.com" }
+  ],
+  "docente": [
     {
-      "id": 1,
-      "courseId": 1,
-      "topic": "Introducción a los ángulos",
-      "description": "Definición de ángulos y sus tipos básicos.",
-      "teacher": "María López",
-      "date": "2025-07-05",
-      "imageUrl": "https://picsum.photos/300/150"
+      "id_docente": 1,"especialidad": "Matemáticas",
+      "persona": {"id_persona": 2,"nombres": "Luis","apell_paterno": "Ramírez"}
     },
     {
-      "id": 2,
-      "courseId": 1,
-      "topic": "Ángulos suplementarios y complementarios",
-      "description": "Relaciones entre ángulos que suman 90° o 180°.",
-      "teacher": "María López",
-      "date": "2025-07-07",
-      "imageUrl": "https://picsum.photos/300/150"
-    },
-    {
-      "id": 3,
-      "courseId": 1,
-      "topic": "Sistema de coordenadas",
-      "description": "Punto, eje X, eje Y y representación en el plano.",
-      "teacher": "Juan Pérez",
-      "date": "2025-07-06",
-      "imageUrl": "https://picsum.photos/300/150"
-    },
-    {
-      "id": 4,
-      "courseId": 1,
-      "topic": "Ecuaciones de la recta",
-      "description": "Formas punto pendiente y general de la ecuación lineal.",
-      "teacher": "Juan Pérez",
-      "date": "2025-07-08",
-      "imageUrl": "https://picsum.photos/300/150"
+      "id_docente": 2,"especialidad": "Comunicación",
+      "persona": {"id_persona": 3,"nombres": "Carmen","apell_paterno": "Torres"}
     }
+  ],
+    "estudiante": [
+    { "id_estudiante": 1, "id_persona": 4, "id_usuario": 3, "codigo_estudiante": "EST001", "fecha_ingreso": "2025-01-15", "estado": "activo" }
+  ],
+  "apoderado": [
+    { "id_apoderado": 1, "id_persona": 5 }
+  ],
+  "estudiante_apoderado": [
+    { "id_apoderado": 1, "id_estudiante": 1, "relacion": "Padre" }
+  ],
+  "asignacion_de_clase": [
+    { "id_asignacion_de_clase": 1, "id_curso": 1, "id_salon": 1, "id_docente": 1 },
+    { "id_asignacion_de_clase": 2, "id_curso": 4, "id_salon": 1, "id_docente": 2 }
+  ],
+  "actividad": [
+    { "id_actividad": 1, "id_asignacion_de_clase": 1, "nombre_tarea": "Tarea 1", "peso": 10.0 }
+  ],
+  "nota_actividad": [
+    { "id_nota_actividad": 1, "id_actividad": 1, "id_matricula": 1, "valor": 15.5 }
+  ],
+  "examen": [
+    { "id_examen": 1, "id_asignacion_de_clase": 1, "nombre_examen": "Examen Parcial I", "peso": 30.0 },
+    { "id_examen": 2, "id_asignacion_de_clase": 1, "nombre_examen": "Examen Parcial II", "peso": 30.0 },
+    { "id_examen": 3, "id_asignacion_de_clase": 1, "nombre_examen": "Examen Final", "peso": 30.0 }
+  ],
+  "nota_examen": [
+    { "id_nota_examen": 1, "id_examen": 1, "id_matricula": 1, "valor": 10.0 },
+    { "id_nota_examen": 2, "id_examen": 2, "id_matricula": 1, "valor": 10.0 },
+    { "id_nota_examen": 3, "id_examen": 3, "id_matricula": 1, "valor": 10.0 }
   ],
 
-  "exams": [
-    {
-      "id_examen": 1,
-      "courseId": 1,
-      "id_ciclo": 20251,
-      "categoria": "Cuaderno",
-      "nombre_examen": "Cuaderno de tareas",
-      "fecha_examen": "2025-03-05",
-      "peso": 10.00,
-      "estado_examen": "activo"
-    },
-    {
-      "id_examen": 2,
-      "courseId": 1,
-      "id_ciclo": 20251,
-      "categoria": "Actitudes",
-      "nombre_examen": "Participación en clase",
-      "fecha_examen": "2025-03-30",
-      "peso": 5.00,
-      "estado_examen": "activo"
-    },
-    {
-      "id_examen": 3,
-      "courseId": 1,
-      "id_ciclo": 20251,
-      "categoria": "Examen parcial",
-      "nombre_examen": "Parcial I",
-      "fecha_examen": "2025-04-15",
-      "peso": 30.00,
-      "estado_examen": "activo"
-    },
-    {
-      "id_examen": 4,
-      "courseId": 1,
-      "id_ciclo": 20251,
-      "categoria": "Examen parcial",
-      "nombre_examen": "Parcial II",
-      "fecha_examen": "2025-04-30",
-      "peso": 30.00,
-      "estado_examen": "activo"
-    },
-    {
-      "id_examen": 5,
-      "courseId": 1,
-      "id_ciclo": 20251,
-      "categoria": "Examen final",
-      "nombre_examen": "Final",
-      "fecha_examen": "2025-05-15",
-      "peso": 25.00,
-      "estado_examen": "activo"
-    }
-  ],
-  "grades": [
-    {
-      "id_nota": 1,
-      "id_examen": 1,
-      "id_matricula": 101,
-      "valor": 15.50,
-      "estado_nota": "activa",
-      "fecha_registro": "2025-03-06"
-    },
-    {
-      "id_nota": 2,
-      "id_examen": 2,
-      "id_matricula": 101,
-      "valor": 18.00,
-      "estado_nota": "activa",
-      "fecha_registro": "2025-03-31"
-    },
-    {
-      "id_nota": 3,
-      "id_examen": 3,
-      "id_matricula": 101,
-      "valor": 12.00,
-      "estado_nota": "activa",
-      "fecha_registro": "2025-04-16"
-    },
-    {
-      "id_nota": 4,
-      "id_examen": 4,
-      "id_matricula": 101,
-      "valor": 19.00,
-      "estado_nota": "activa",
-      "fecha_registro": "2025-05-01"
-    },
-    {
-      "id_nota": 5,
-      "id_examen": 5,
-      "id_matricula": 101,
-      "valor": 17.50,
-      "estado_nota": "activa",
-      "fecha_registro": "2025-05-16"
-    }
-  ],
 
-  
-  "announcement": [
-    {
-      "id": 1,
-      "title": "Inicio de Clases",
-      "cuerpo": "Las clases del segundo semestre inician el 15 de julio. Por favor revisa tu horario y asegúrate de estar preparado con tus materiales.",
-      "creado_por": "María López",
-      "fecha_creacion": "2025-07-02",
-      "estado": "publicado"
-    },
-    {
-      "id": 2,
-      "title": "Mantenimiento del Sistema",
-      "cuerpo": "El sistema estará en mantenimiento el sábado 5 de julio de 00:00 a 04:00. Durante este tiempo no podrás acceder a las plataformas de notas ni asistencias.",
-      "creado_por": "José Pérez",
-      "fecha_creacion": "2025-07-01",
-      "estado": "publicado"
-    },
-    {
-      "id": 3,
-      "title": "Entrega de Certificados",
-      "cuerpo": "Los certificados de cursos de verano estarán disponibles para recoger en la secretaría a partir del 10 de julio.",
-      "creado_por": "Ana García",
-      "fecha_creacion": "2025-06-30",
-      "estado": "visto"
-    },
-    {
-      "id": 4,
-      "title": "Charla Informativa de Becas",
-      "cuerpo": "Habrá una charla sobre las becas disponibles para el próximo año académico el martes 8 de julio a las 14:00 en el auditorio principal.",
-      "creado_por": "Carlos Ramírez",
-      "fecha_creacion": "2025-07-01",
-      "estado": "visto"
-    },
-    {
-      "id": 5,
-      "title": "Encuesta de Satisfacción",
-      "cuerpo": "Te invitamos a completar la encuesta de satisfacción del semestre antes del 12 de julio. Tu opinión es muy importante.",
-      "creado_por": "Lucía Torres",
-      "fecha_creacion": "2025-07-02",
-      "estado": "visto"
-    }
-  ],
-  "attendance": [
-    {
-      "startDate": "2025-01-15",
-      "endDate": "2025-05-15",
-      "months": [
-        {
-          "month": "enero 2025",
-          "sessions": [
-            { "date": "2025-01-15", "status": "asistió" },
-            { "date": "2025-01-16", "status": "faltó" },
-            { "date": "2025-01-17", "status": "tardanza" }
-          ]
-        },
-        {
-          "month": "febrero 2025",
-          "sessions": [
-            { "date": "2025-02-01", "status": "asistió" },
-            { "date": "2025-02-02", "status": "asistió" },
-            { "date": "2025-02-03", "status": "faltó" }
-          ]
-        },
-        {
-          "month": "marzo 2025",
-          "sessions": [
-            { "date": "2025-03-01", "status": "tardanza" },
-            { "date": "2025-03-02", "status": "asistió" },
-            { "date": "2025-03-03", "status": "asistió" }
-          ]
-        },
-        {
-          "month": "abril 2025",
-          "sessions": [
-            { "date": "2025-04-01", "status": "asistió" },
-            { "date": "2025-04-02", "status": "faltó" },
-            { "date": "2025-04-03", "status": "asistió" }
-          ]
-        }
-      ]
-    }
-  ],
-  "sedes" : [
-    
-  {
-    "id": 1,
-    "studentId": 101,
-    "division": "primary",     
-    "grade": "first_grade"     
-  }
 
+  "rol": [
+    { "id_rol": 1, "rol": "Admin"},
+    { "id_rol": 2, "rol": "Docente"},
+    { "id_rol": 3, "rol": "Alumno"},
+    { "id_rol": 4, "rol": "Apoderado"}
+  ],
+  "usuario": [
+    { "id_usuario": 1, "usuario": "Administrador", "id_persona": 1, "id_rol": 1 },
+    { "id_usuario": 2, "usuario": "Profesor", "id_persona": 2, "id_rol": 2 },
+    { "id_usuario": 2, "usuario": "Profesor", "id_persona": 3, "id_rol": 2 },
+    { "id_usuario": 3, "usuario": "Alumnado", "id_persona": 4, "id_rol": 3 },
+    { "id_usuario": 3, "usuario": "Familiar", "id_persona": 5, "id_rol": 4 }
+  ],
+  "anuncio": [
+    { "id_anuncio": 1, "id_usuario": 2, "id_salon": 1, "titulo": "Inicio de Clases", "estado": "visto", "cuerpo": "Empieza el 15 de agosto.", "fecha_creacion": "2025-03-01" },
+    { "id_anuncio": 2, "id_usuario": 2, "id_salon": 1, "titulo": "Falta de tareas", "estado": "publicado", "cuerpo": "no entrego la tarea.", "fecha_creacion": "2025-03-01"},
+    { "id_anuncio": 3, "id_usuario": 2, "id_salon": 1, "titulo": "Pelea en el aula","estado": "publicado", "cuerpo": "El muchacho se peleo con 2 alumnos.", "fecha_creacion": "2025-03-03" }
+  ],
+  "asistencia": [
+    { "id_asistencia": 1, "id_estudiante": 1, "status": "asistió", "date": "2025-03-01" },
+    { "id_asistencia": 2, "id_estudiante": 1, "status": "asistió", "date": "2025-03-02" },
+    { "id_asistencia": 3, "id_estudiante": 1, "status": "falto", "date": "2025-03-03" },
+    { "id_asistencia": 4, "id_estudiante": 1, "status": "Tardanza", "date": "2025-03-04" },
+    { "id_asistencia": 5, "id_estudiante": 1, "status": "asistió", "date": "2025-03-05" },
+    { "id_asistencia": 6, "id_estudiante": 1, "status": "Tardanza", "date": "2025-03-06" },
+    { "id_asistencia": 7, "id_estudiante": 1, "status": "asistió", "date": "2025-03-07" },
+    { "id_asistencia": 8, "id_estudiante": 1, "status": "asistió", "date": "2025-03-08" }
+  ],
+  "evaluacion_psicologica": [
+    { "id_evaluacion": 1, "id_inscripcion": 1, "resultado": true, "fecha_evaluacion": "2025-04-01" }
+  ],
+  "inscripcion_virtual": [
+    { "id_inscripcion": 1, "id_estudiante_pers": 1, "id_nivel": 1, "id_grado": 1, "estado": "activo" }
+  ],
+  "matricula": [
+    { "id_matricula": 1, "id_inscripcion": 1, "id_sede": 1, "id_salon": 1, "estado": "vigente", "condicion": true }
   ]
-}
 
+}
 

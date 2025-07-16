@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Course, DataService } from '../../services/dataStudent.service';
+import {  DataStudentService } from '../../services/dataStudent.service';
 import { FormsModule } from '@angular/forms';
 import { CardCoursesComponent } from '../../../components/card-courses/card-courses.component';
 import { SearcherComponent } from '../../../components/searcher/searcher.component';
 import { RouterModule } from '@angular/router';
+import { Curso, Docente } from '../../services/modelStudent';
 
 @Component({
   selector: 'app-grades',
@@ -13,18 +14,25 @@ import { RouterModule } from '@angular/router';
   styleUrl: './grades.component.css'
 })
 export class GradesComponent implements OnInit {
-    [x: string]: any;
   
-    courses: Course[] = [];
-    searchTerm: string = '';
+  courses: Curso[] = [];
+  teacher: Docente[] = [];
+  searchTerm: string = '';
   
-    constructor(private dataSvc: DataService) {}    // <-- aquí
-    ngOnInit() {
-      this.dataSvc.getCourses().subscribe(c => this.courses = c);
-    }
+  constructor(private dataSvc: DataStudentService) {}    // <-- aquí
+
+  getDocenteAsignado(): string {//hasta que no tengamos claro la logica al agregar docente sera esto nomas
+    return this.teacher.length
+      ? `${this.teacher[0].persona.nombres} ${this.teacher[0].persona.apell_paterno}`
+      : 'Sin docente asignado';
+  }
+
+  ngOnInit() {
+    this.dataSvc.getCourses().subscribe(c => this.courses = c);
+  }
   
     // getter que devuelve sólo los que coinciden con la busqeuda
-    get filteredCourses(): Course[] {
+    get filteredCourses(): Curso[] {
       const raw = this.searchTerm.toLowerCase().trim();
   
       // Si hay menos de 4 caracteres, no filtramos
@@ -42,7 +50,7 @@ export class GradesComponent implements OnInit {
   
       // Para cada curso, comprobamos que todas las palabras aparezcan
       return this.courses.filter(c => {
-        const title = c.title
+        const title = c.nombre
         .trim()
         .toLowerCase()
         .normalize('NFD')
@@ -53,7 +61,7 @@ export class GradesComponent implements OnInit {
       });
     }
   
-      onSearch() {
-      // ya tenemos el getter filteredCourses que reacciona a searchTerm,
-    }
+  onSearch() {
+    // ya tenemos el getter filteredCourses que reacciona a searchTerm,
+  }
 }

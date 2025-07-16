@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { Course, Curriculum, DataService } from '../../services/dataStudent.service';
+import { DataStudentService } from '../../services/dataStudent.service';
 import { CommonModule } from '@angular/common';
 import { CardListComponent } from '../../../components/card-list/card-list.component';
+import { Curriculum, Curso } from '../../services/modelStudent';
 
 @Component({
   selector: 'app-curriculum',
@@ -11,13 +12,13 @@ import { CardListComponent } from '../../../components/card-list/card-list.compo
   styleUrl: './curriculum.component.css'
 })
 export class CurriculumComponent implements OnInit {
-    course!: Course;
+    course!: Curso;
   curriculum: Curriculum[] = [];
   mostrarDetalle = false;
 
   constructor(
     private route: ActivatedRoute,
-    private dataSvc: DataService
+    private dataSvc: DataStudentService
   ) {}
 
   ngOnInit(): void {

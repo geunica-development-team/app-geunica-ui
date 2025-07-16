@@ -1,9 +1,9 @@
 import { Component, Input } from '@angular/core';
-import { Announcement, Curriculum } from '../../student/services/dataStudent.service';
 import { CommonModule } from '@angular/common';
 import { CurriculumComponent } from '../../student/panel/curriculum/curriculum.component';
 import { RouterModule } from '@angular/router';
 import { CardItemComponent } from '../card-item/card-item.component';
+import { Anuncio, Curriculum } from '../../student/services/modelStudent';
 
 @Component({
   selector: 'app-card-list',
@@ -14,5 +14,5 @@ import { CardItemComponent } from '../card-item/card-item.component';
 export class CardListComponent {
   @Input() title = 'Temario del curso';
   @Input() items: Curriculum[] = [];
-  @Input() Anuncio: Announcement[] = [];
+  @Input() Anuncio: Anuncio[] = [];
  }

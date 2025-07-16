@@ -1,1 +1,10 @@
-<p>schedule works!</p>
+<full-calendar
+  [plugins]="plugins"
+  [headerToolbar]="{
+    left: 'prev,today,next',
+    center: 'title',
+    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+  }"
+  initialView="timeGridWeek"
+  [events]="events">
+</full-calendar>
