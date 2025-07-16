@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/app-geunica-ui/browser",
+            "outputPath": "dist/app-geunica-ui",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
