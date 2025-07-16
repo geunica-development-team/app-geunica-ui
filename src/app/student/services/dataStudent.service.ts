@@ -1,77 +1,41 @@
+// readonly-data.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from '../../../enviroments/environment';
 
-export interface Course { id: number; title: string; code: string; teacher: string; imageUrl?: string;}
-export interface Curriculum { id: number; courseId: number; topic: string; description: string; teacher: string; date: string; imageUrl?: string;}
-                                                                                                                // ISO YYYY-MM-DD
-export interface Grade  { id: number; courseId: number; studentId: number; grade: number; }
-export interface Announcement {
-  id: number;
-  title: string;
-  cuerpo: string;
-  creado_por: string;
-  fecha_creacion: string; // ISO 8601 format, e.g. "2025-07-02T09:00:00Z"
-  estado: 'visto' | 'publicado';
-}
-/** Nuevo: cada sesión de asistencia en un mes */
-export interface Session {
-  date: string;       // ISO YYYY-MM-DD
-  status: 'asistió' | 'faltó' | 'tardanza';
-}
+import {
+  Curso,
+  Curriculum,
+  Anuncio,
+  FlatAsistencia,
+  Session,
+  Month,
+  Attendance,
+  Examen,
+  NotaExamen,
+  Actividad,
+  NotaActividad
+} from './modelStudent';
 
-/** Nuevo: definición de cada mes de asistencia */
-export interface Month {
-  month: string;      // e.g. "enero 2025"
-  sessions: Session[];
-}
-
-/** Nuevo: objeto de attendance completo */
-export interface Attendance {
-  startDate: string;  // ISO YYYY-MM-DD
-  endDate: string;    // ISO YYYY-MM-DD
-  months: Month[];
-}
-// Exámenes
-export interface Exam {
-  id_examen: number;
-  courseId: number;
-  id_ciclo: number;
-  categoria: string;
-  nombre_examen: string;
-  fecha_examen: string; // ISO YYYY-MM-DD
-  peso: number;
-  estado_examen: 'activo' | 'anulado';
-}
-
-// Notas de examen
-export interface Grade {
-  id_nota: number;
-  id_examen: number;
-  id_matricula: number;
-  valor: number;
-  estado_nota: 'activa' | 'anulada';
-  fecha_registro: string; // ISO YYYY-MM-DD
-}
-// …añade interfaces para Attendance, Payment, etc.
-
-@Injectable({ providedIn: 'root' })
-export class DataService {
+@Injectable({
+  providedIn: 'root'
+})
+export class DataStudentService {
   private base = environment.apiBase;
   constructor(private http: HttpClient) {}
 
-  getCourses(): Observable<Course[]> {
-    return this.http.get<Course[]>(`${this.base}/course`);
+  getCourses(): Observable<Curso[]> {
+    return this.http.get<Curso[]>(`${this.base}/curso`);
   }
 
-  getCourseById(id: number): Observable<Course> {
+  getCourseById(id: number): Observable<Curso> {
     return this.http
-      .get<Course[]>(`${this.base}/course?id=${id}`)    // devuelve un array
+      .get<Curso[]>(`${this.base}/curso?id=${id}`)
       .pipe(
         map(arr => {
-          if (arr.length === 0) {
+          if (!arr.length) {
             throw new Error(`Curso con id ${id} no encontrado`);
           }
           return arr[0];
@@ -79,44 +43,78 @@ export class DataService {
       );
   }
 
-
-    //curriculum
-    getCurriculums(): Observable<Curriculum[]> {
+  getCurriculums(): Observable<Curriculum[]> {
     return this.http.get<Curriculum[]>(`${this.base}/curriculum`);
   }
 
-    /** Temas de un curso concreto */
   getCurriculumByCourseId(courseId: number): Observable<Curriculum[]> {
     return this.http.get<Curriculum[]>(`${this.base}/curriculum?courseId=${courseId}`);
   }
 
-    //anouncements
-    getAnnouncements(): Observable<Announcement[]> {
-    return this.http.get<Announcement[]>(`${this.base}/announcement`);
+  getAnnouncements(): Observable<Anuncio[]> {
+    return this.http.get<Anuncio[]>(`${this.base}/anuncio`);
   }
 
-    getAttendance(): Observable<Attendance[]> {
-    return this.http.get<Attendance[]>(`${this.base}/attendance`);
+  /**
+   * Obtiene el array plano de asistencia y lo transforma
+   * en un objeto Attendance con meses agrupados.
+   */
+  getAttendance(): Observable<Attendance> {
+    return this.http
+      .get<FlatAsistencia[]>(`${this.base}/asistencia`)
+      .pipe(
+        map(flat => {
+          if (!flat || flat.length === 0) {
+            return { startDate: '', endDate: '', months: [] } as Attendance;
+          }
+          // Ordenar cronológicamente
+          flat.sort((a, b) => a.date.localeCompare(b.date));
+          const startDate = flat[0].date;
+          const endDate = flat[flat.length - 1].date;
+          // Agrupar por mes
+          const monthsMap = new Map<string, Session[]>();
+          flat.forEach(item => {
+            const dateObj = new Date(item.date);
+            const monthName = dateObj.toLocaleString('es-ES', { month: 'long' });
+            const year = dateObj.getFullYear();
+            const key = `${monthName} ${year}`;
+            const session: Session = { date: item.date, status: item.status };
+            if (!monthsMap.has(key)) {
+              monthsMap.set(key, []);
+            }
+            monthsMap.get(key)!.push(session);
+          });
+          const months: Month[] = [];
+          monthsMap.forEach((sessions, month) => {
+            months.push({ month, sessions });
+          });
+          return { startDate, endDate, months } as Attendance;
+        })
+      );
   }
 
-    // Exámenes
-  getExams(): Observable<Exam[]> {
-    return this.http.get<Exam[]>(`${this.base}/exams`);
-  }
-  getExamById(id: number): Observable<Exam> {
-    return this.http.get<Exam>(`${this.base}/exams/${id}`);
+  getExams(): Observable<Examen[]> {
+    return this.http.get<Examen[]>(`${this.base}/examen`);
   }
 
-  // Notas de examen
-  getGrades(): Observable<Grade[]> {
-    return this.http.get<Grade[]>(`${this.base}/grades`);
-  }
-  getGradesByExamId(examId: number): Observable<Grade[]> {
-    return this.http.get<Grade[]>(`${this.base}/grades?examenId=${examId}`);
-  }
-  getGradesByStudentId(studentId: number): Observable<Grade[]> {
-    return this.http.get<Grade[]>(`${this.base}/grades?matriculaId=${studentId}`);
+  getExamById(id: number): Observable<Examen> {
+    return this.http.get<Examen>(`${this.base}/examen/${id}`);
   }
 
+  getGrades(): Observable<NotaExamen[]> {
+    return this.http.get<NotaExamen[]>(`${this.base}/nota_examen`);
+  }
+
+  getGradesByExamId(examId: number): Observable<NotaExamen[]> {
+    return this.http.get<NotaExamen[]>(`${this.base}/nota_examen?examenId=${examId}`);
+  }
+
+  getGradesByStudentId(studentId: number): Observable<NotaExamen[]> {
+    return this.http.get<NotaExamen[]>(`${this.base}/nota_examen?matriculaId=${studentId}`);
+  }
 
 }
+
+
+
+

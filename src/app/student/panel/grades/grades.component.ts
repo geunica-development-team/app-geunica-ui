@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Course, DataService } from '../../services/dataStudent.service';
+import {  DataStudentService } from '../../services/dataStudent.service';
 import { FormsModule } from '@angular/forms';
 import { CardCoursesComponent } from '../../../components/card-courses/card-courses.component';
 import { SearcherComponent } from '../../../components/searcher/searcher.component';
 import { RouterModule } from '@angular/router';
+import { Curso } from '../../services/modelStudent';
 
 @Component({
   selector: 'app-grades',
@@ -15,16 +16,16 @@ import { RouterModule } from '@angular/router';
 export class GradesComponent implements OnInit {
     [x: string]: any;
   
-    courses: Course[] = [];
+    courses: Curso[] = [];
     searchTerm: string = '';
   
-    constructor(private dataSvc: DataService) {}    // <-- aquí
+    constructor(private dataSvc: DataStudentService) {}    // <-- aquí
     ngOnInit() {
       this.dataSvc.getCourses().subscribe(c => this.courses = c);
     }
   
     // getter que devuelve sólo los que coinciden con la busqeuda
-    get filteredCourses(): Course[] {
+    get filteredCourses(): Curso[] {
       const raw = this.searchTerm.toLowerCase().trim();
   
       // Si hay menos de 4 caracteres, no filtramos

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { SearcherComponent } from '../../../components/searcher/searcher.component';
-import { DataService } from '../../../student/services/dataStudent.service';
+import { DataTeacherService } from '../../services/dataTeacher.service';
 
 interface GradeInfo {
   grado: string;
@@ -19,7 +19,7 @@ export class NoteManagmentComponent {
   filteredGrades: GradeInfo[] = [];
   searchTerm: string = '';
 
-  constructor(private dataSvc: DataService) {}
+  constructor(private dataSvc: DataTeacherService) {}
 
   ngOnInit() {
        // Ejemplo de datos; luego podrías cargarlos desde un servicio

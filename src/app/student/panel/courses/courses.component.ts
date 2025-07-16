@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CardCoursesComponent } from '../../../components/card-courses/card-courses.component';
-import { Course, DataService } from '../../services/dataStudent.service';
+import { DataStudentService } from '../../services/dataStudent.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { SearcherComponent } from '../../../components/searcher/searcher.component';
+import { Curso } from '../../services/modelStudent';
 
 @Component({
   selector: 'app-courses',
@@ -14,11 +15,11 @@ import { SearcherComponent } from '../../../components/searcher/searcher.compone
   styleUrls: ['./courses.component.css']
 })
 export class CoursesComponent implements OnInit {
-  courses: Course[] = [];
-  filteredCourses: Course[] = [];
+  courses: Curso[] = [];
+  filteredCourses: Curso[] = [];
   searchTerm: string = '';
 
-  constructor(private dataSvc: DataService) {}
+  constructor(private dataSvc: DataStudentService) {}
 
   ngOnInit() {
     this.dataSvc.getCourses().subscribe(c => {

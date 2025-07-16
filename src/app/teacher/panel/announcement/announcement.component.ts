@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Announcement, DataService } from '../../../student/services/dataStudent.service';
 import { CommonModule } from '@angular/common';
 import { AppModalComponent } from '../../../components/app-modal/app-modal.component';
 import { SearcherComponent } from '../../../components/searcher/searcher.component';
+import { Anuncio } from '../../services/modelTeacher';
+import { DataTeacherService } from '../../services/dataTeacher.service';
 
 @Component({
   selector: 'app-announcement',
@@ -12,16 +13,16 @@ import { SearcherComponent } from '../../../components/searcher/searcher.compone
   styleUrl: './announcement.component.css'
 })
 export class AnnouncementComponent implements OnInit {
-  announcements$!: Observable<Announcement[]>;
-  selectedAnnouncement: Announcement | null = null;
+  announcements$!: Observable<Anuncio[]>;
+  selectedAnnouncement: Anuncio | null = null;
 
-  constructor(private dataService: DataService) {}
+  constructor(private dataService: DataTeacherService) {}
 
   ngOnInit() {
     this.announcements$ = this.dataService.getAnnouncements();
   }
 
-    openAnnouncement(a: Announcement) {
+    openAnnouncement(a: Anuncio) {
     this.selectedAnnouncement = a;
   }
 

@@ -2,7 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { CoursesComponent } from '../courses/courses.component';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { Course, DataService } from '../../services/dataStudent.service';
+import { DataStudentService } from '../../services/dataStudent.service';
+import { Curso } from '../../services/modelStudent';
 
 interface RegistryItem {
   concepto: string;
@@ -17,13 +18,13 @@ interface RegistryItem {
 })
 export class GradesRegistryComponent implements OnInit {
 
-  course!: Course;
+  course!: Curso;
   registryItems: RegistryItem[] = [];
   loading = true;
 
   constructor(
     private route: ActivatedRoute,
-    private dataSvc: DataService
+    private dataSvc: DataStudentService
   ) {}
 
 
