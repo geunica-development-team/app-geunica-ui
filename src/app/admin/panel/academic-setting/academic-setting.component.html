@@ -1,0 +1,71 @@
+<app-panel-header title="Configuración académica" />
+
+<app-menu-tabs
+    [tabs]="tabs"
+    [activeTabId]="activeTab"
+    (tabChanged)="setActiveTab($event)"
+>
+@if (activeTab === 'sedes') {
+    <div class="mb-4 d-flex justify-content-center justify-content-md-end">
+        <button class="btn-custom-green" (click)="modalAdd.openModal()">
+            + Registrar nueva sede
+        </button>
+    </div>
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Sedes</h5>
+                <div class="input-group" style="width: 250px;">
+                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                <input (input)="applyFilter($event)" type="text" class="form-control" placeholder="Buscar usuario...">
+                </div>
+            </div>
+            <div class="card-body p-3">
+                <app-table
+                    #campusTable
+                    [columns]="columnsCampus"
+                    [originalRows]="rowsCampus"
+                    [columnMappings]="columnMappingsCampus"
+                    [pageSize]="10"
+                    [acciones]="true"
+                    [editarFila]="true"
+                />
+            </div>
+        </div>
+    </div>
+}
+@if (activeTab === 'niveles') {
+    <div class="mb-4 d-flex justify-content-center justify-content-md-end">
+        <button class="btn-custom-green">
+            + Registrar nuevo nivel/programa
+        </button>
+    </div>
+    <div>
+        b
+    </div>
+}
+@if (activeTab === 'grados') {
+    <div class="mb-4 d-flex justify-content-center justify-content-md-end">
+        <button class="btn-custom-green">
+            + Registrar nuevo grado
+        </button>
+    </div>
+    <div>
+        b
+    </div>
+}
+@if (activeTab === 'secciones') {
+    <div class="mb-4 d-flex justify-content-center justify-content-md-end">
+        <button class="btn-custom-green">
+            + Registrar nueva seccion
+        </button>
+    </div>
+    <div>
+        b
+    </div>
+}
+</app-menu-tabs>
+
+<app-modal-add 
+    #modalAdd
+/>

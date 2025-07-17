@@ -24,14 +24,10 @@
 </nav>
 
 <!-- Tab Content (diseño fijo como en student-details) -->
-<div class="card">
-  <div class="card-body">
-    @for (tab of tabs; track tab.id) {
-      @if (isTabActive(tab.id)) {
-        <div class="tab-content-item" [attr.data-tab]="tab.id">
-          <ng-content [select]="'[data-tab=\'' + tab.id + '\']'"></ng-content>
-        </div>
-      }
+  @for (tab of tabs; track tab.id) {
+    @if (isTabActive(tab.id)) {
+      <div class="tab-content-item" [attr.data-tab]="tab.id">
+        <ng-content [select]="'[data-tab=\'' + tab.id + '\']'"></ng-content>
+      </div>
     }
-  </div>
-</div>
+  }

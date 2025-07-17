@@ -1,0 +1,50 @@
+<ng-template #modalAdd let-modal>
+    <div class="modal-header bg-white border-bottom px-4">
+        <h4 class="modal-title fw-semibold text-dark mb-0">Añadir sede</h4>
+        <button 
+        type="button" 
+        class="btn-close" 
+        aria-label="Close"
+        (click)="onCancel()">
+        </button>
+    </div>
+
+    <form [formGroup]="formAddCampus" (ngSubmit)="addCampus()" id="formAddCampus">
+        <div class="modal-body bg-white p-4">
+            <div class="mb-3">     
+                <label class="form-label fw-medium small">Nombre de la sede:</label>
+                <input 
+                type="text" 
+                class="form-control rounded" 
+                placeholder="Nombre de la sede"
+                name="campusName"
+                formControlName="name">
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-medium small">Locación</label>
+                <input 
+                type="text" 
+                class="form-control rounded" 
+                placeholder="Locación"
+                name="locationCampus"
+                formControlName="location"
+                >
+            </div>
+        </div>
+    </form>
+    <div class="modal-footer bg-white border-top d-flex justify-content-end gap-2 p-3">
+        <button 
+        type="button" 
+        class="btn btn-secondary rounded px-4"
+        (click)="onCancel()">
+        Cancelar
+        </button>
+        <button 
+        type="submit" 
+        class="btn btn-success rounded px-4"
+        form="formAddCampus"
+        [disabled]="formAddCampus.invalid">
+        Añadir Sede
+        </button>
+    </div>
+</ng-template>

@@ -128,7 +128,7 @@ export const menuItemsAdmin = [
     { 
       icon: 'fas fa-cog', 
       label: 'Configuración académica', 
-      route: 'academic-configuration' 
+      route: 'academic-settings'
     }
 ];
 

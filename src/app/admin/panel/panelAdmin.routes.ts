@@ -8,6 +8,7 @@ import { StudentUsersComponent } from "./student-users/student-users.component";
 import { InternalUsersComponent } from "./internal-users/internal-users.component";
 import { StudentDetailsComponent } from "./student-users/student-details/student-details.component";
 import { roleGuard } from "../../guards/role.guard";
+import { AcademicSettingComponent } from "./academic-setting/academic-setting.component";
 
 export const adminPanelRoutes: Routes = [
     {
@@ -48,6 +49,10 @@ export const adminPanelRoutes: Routes = [
             {
                 path: 'finanzas',
                 component: FinanceComponent
+            },
+            {
+                path: 'academic-settings',
+                component: AcademicSettingComponent
             },
             {
                 path: 'perfil',

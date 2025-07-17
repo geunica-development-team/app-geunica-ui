@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { USERS } from '../../../utility/db-simulator';
 import { PanelHeaderComponent } from '../../../../components/dashboard/shared-components/panel-header/panel-header.component';
 import { CommonModule } from '@angular/common';
-import { MenuTabsComponent } from '../../../../components/dashboard/menu-tabs/menu-tabs.component';
+import { MenuTabsComponent, TabItem } from '../../../../components/dashboard/menu-tabs/menu-tabs.component';
 
 @Component({
   selector: 'app-student-details',
@@ -13,28 +13,38 @@ import { MenuTabsComponent } from '../../../../components/dashboard/menu-tabs/me
   styleUrl: './student-details.component.css'
 })
 export class StudentDetailsComponent implements OnInit {
-  private route = inject(ActivatedRoute)
-  private router = inject(Router)
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
   student: UserDataAll | null = null
   studentId = 0
-  activeTab = "ficha" // Tab activo por defecto
 
-  // Datos procesados para pagos
-  allPayments: any[] = []
-  totalPaid = 0
-  totalPending = 0
-  hasDebt = false
-
-  // Tabs disponibles
-  tabs = [
+  tabs: TabItem[] = [
     { id: "ficha", label: "Ficha Personal", icon: "fas fa-user" },
     { id: "pagos", label: "Pagos", icon: "fas fa-credit-card" },
     { id: "cursos", label: "Cursos", icon: "fas fa-book" },
     { id: "notas", label: "Notas", icon: "fas fa-chart-line" },
     { id: "asistencia", label: "Asistencia", icon: "fas fa-calendar-check" },
     { id: "documentos", label: "Documentos", icon: "fas fa-file-alt" },
-  ]
+  ];
+  
+  activeTab = "ficha" // Tab activo por defecto
+  // Cambiar tab activo
+  setActiveTab(tabId: string) {
+    this.activeTab = tabId
+    // Actualizar URL con query param
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { tab: tabId },
+      queryParamsHandling: "merge",
+    })
+  }
+  
+  // Datos procesados para pagos
+  allPayments: any[] = []
+  totalPaid = 0
+  totalPending = 0
+  hasDebt = false
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
@@ -148,16 +158,6 @@ export class StudentDetailsComponent implements OnInit {
     return this.allPayments.filter((payment) => payment.paid)
   }
 
-  // Cambiar tab activo
-  setActiveTab(tabId: string) {
-    this.activeTab = tabId
-    // Actualizar URL con query param
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { tab: tabId },
-      queryParamsHandling: "merge",
-    })
-  }
 
   // ✅ MÉTODO SEGURO PARA FORMATEAR FECHA
   formatDate(dateString: string | undefined): string {

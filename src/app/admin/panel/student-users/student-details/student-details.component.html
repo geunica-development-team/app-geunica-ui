@@ -37,27 +37,16 @@
         </div>
       </div>
     </div>
+    
 
-    <nav class="nav nav-tabs card-header-tabs mb-4">
-      @for (tab of tabs; track tab.id) {
-        <button 
-          class="nav-link"
-          [class.active]="activeTab === tab.id"
-          (click)="setActiveTab(tab.id)">
-          <i [class]="tab.icon + ' me-2'"></i>
-          {{ tab.label }}
-          @if (tab.id === 'pagos' && hasDebt) {
-            <span class="badge bg-danger ms-2">!</span>
-          }
-        </button>
-      }
-    </nav>
-
-    <!-- Navegación por tabs -->
-    <div class="col-12 mb-4">
+    <app-menu-tabs
+      [tabs]="tabs"
+      [activeTabId]="activeTab"
+      (tabChanged)="setActiveTab($event)"
+    >
       <div class="card">
         <div class="card-body">
-          <!-- TAB: Ficha Personal -->
+
           @if (activeTab === 'ficha') {
             <div class="tab-content">
               <div class="row">
@@ -190,7 +179,7 @@
               </div>
             </div>
           }
-
+    
           <!-- TAB: Pagos -->
           @if (activeTab === 'pagos') {
             <!-- Acciones de Pagos -->
@@ -341,7 +330,7 @@
               }
             </div>
           }
-
+              
           <!-- TAB: Cursos -->
           @if (activeTab === 'cursos') {
             <div class="tab-content">
@@ -352,7 +341,7 @@
               </div>
             </div>
           }
-
+          
           <!-- TAB: Notas -->
           @if (activeTab === 'notas') {
             <div class="tab-content">
@@ -363,7 +352,7 @@
               </div>
             </div>
           }
-
+          
           <!-- TAB: Asistencia -->
           @if (activeTab === 'asistencia') {
             <div class="tab-content">
@@ -374,7 +363,6 @@
               </div>
             </div>
           }
-
           <!-- TAB: Documentos -->
           @if (activeTab === 'documentos') {
             <div class="tab-content">
@@ -387,7 +375,8 @@
           }
         </div>
       </div>
-    </div>
+      
+    </app-menu-tabs>
   </div>
 } @else {
   <div class="d-flex justify-content-center align-items-center" style="min-height: 400px;">
@@ -399,3 +388,20 @@
     </div>
   </div>
 }
+
+  <!-- ESTO QUEDA PENDIENTE PARA AGREGAR EL BADGE SI HAY PAGOS PENDIENTES O DEUDAS
+   <nav class="nav nav-tabs card-header-tabs mb-4">
+    @for (tab of tabs; track tab.id) {
+      <button 
+        class="nav-link"
+        [class.active]="activeTab === tab.id"
+        (click)="setActiveTab(tab.id)">
+        <i [class]="tab.icon + ' me-2'"></i>
+        {{ tab.label }}
+        @if (tab.id === 'pagos' && hasDebt) {
+          <span class="badge bg-danger ms-2">!</span>
+        }
+      </button>
+    }
+  </nav>
+  -->
