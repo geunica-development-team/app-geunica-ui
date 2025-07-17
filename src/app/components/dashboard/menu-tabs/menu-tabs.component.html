@@ -1,0 +1,37 @@
+<!-- Navigation Tabs (diseño fijo como en student-details) -->
+<nav class="nav nav-tabs card-header-tabs mb-4">
+  @for (tab of tabs; track tab.id) {
+    <button 
+      class="nav-link"
+      [class.active]="isTabActive(tab.id)"
+      [class.disabled]="tab.disabled"
+      [disabled]="tab.disabled"
+      (click)="setActiveTab(tab.id)">
+      
+      @if (tab.icon) {
+        <i [class]="tab.icon + ' me-2'"></i>
+      }
+      
+      {{ tab.label }}
+      
+      @if (tab.badge) {
+        <span [class]="'badge ms-2 ' + (tab.badgeClass || 'bg-danger')">
+          {{ tab.badge }}
+        </span>
+      }
+    </button>
+  }
+</nav>
+
+<!-- Tab Content (diseño fijo como en student-details) -->
+<div class="card">
+  <div class="card-body">
+    @for (tab of tabs; track tab.id) {
+      @if (isTabActive(tab.id)) {
+        <div class="tab-content-item" [attr.data-tab]="tab.id">
+          <ng-content [select]="'[data-tab=\'' + tab.id + '\']'"></ng-content>
+        </div>
+      }
+    }
+  </div>
+</div>

@@ -4,10 +4,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { USERS } from '../../../utility/db-simulator';
 import { PanelHeaderComponent } from '../../../../components/dashboard/shared-components/panel-header/panel-header.component';
 import { CommonModule } from '@angular/common';
+import { MenuTabsComponent } from '../../../../components/dashboard/menu-tabs/menu-tabs.component';
 
 @Component({
   selector: 'app-student-details',
-  imports: [PanelHeaderComponent, CommonModule],
+  imports: [PanelHeaderComponent, CommonModule, MenuTabsComponent],
   templateUrl: './student-details.component.html',
   styleUrl: './student-details.component.css'
 })
