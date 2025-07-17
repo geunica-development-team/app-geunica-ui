@@ -39,8 +39,8 @@ export class ScheduleComponent {
     plugins: [dayGridPlugin, interactionPlugin],
     dateClick: (arg) => this.handleDateClick(arg),
     events: [
-      { title: 'event 1', date: '2019-04-01' },
-      { title: 'event 2', date: '2019-04-02' }
+      { title: 'event 1', date: '2019-04-01', display: 'background', color: '#8e44ad' },
+      { title: 'event 2', date: '2019-04-02', color: '#8e44ad' }
     ]
   };
 
