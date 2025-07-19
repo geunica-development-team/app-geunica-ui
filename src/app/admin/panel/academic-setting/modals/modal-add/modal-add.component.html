@@ -1,6 +1,6 @@
 <ng-template #modalAdd let-modal>
     <div class="modal-header bg-white border-bottom px-4">
-        <h4 class="modal-title fw-semibold text-dark mb-0">Añadir sede</h4>
+        <h4 class="modal-title fw-semibold text-dark mb-0">{{ getTitle() }}</h4>
         <button 
         type="button" 
         class="btn-close" 
@@ -9,42 +9,169 @@
         </button>
     </div>
 
-    <form [formGroup]="formAddCampus" (ngSubmit)="addCampus()" id="formAddCampus">
-        <div class="modal-body bg-white p-4">
-            <div class="mb-3">     
-                <label class="form-label fw-medium small">Nombre de la sede:</label>
-                <input 
-                type="text" 
-                class="form-control rounded" 
-                placeholder="Nombre de la sede"
-                name="campusName"
-                formControlName="name">
+    @if (activeTab === 'sedes') {
+        <form [formGroup]="formAddCampus" (ngSubmit)="addCampus()" id="formAddCampus">
+            <div class="modal-body bg-white p-4">
+                <div class="mb-3">     
+                    <label class="form-label fw-medium small">Nombre de la sede</label>
+                    <input 
+                    type="text" 
+                    class="form-control rounded" 
+                    placeholder="Nombre de la sede"
+                    name="campusName"
+                    formControlName="name">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-medium small">Localización</label>
+                    <input 
+                    type="text" 
+                    class="form-control rounded" 
+                    placeholder="Localización"
+                    name="locationCampus"
+                    formControlName="location"
+                    >
+                </div>
             </div>
-            <div class="mb-3">
-                <label class="form-label fw-medium small">Locación</label>
-                <input 
-                type="text" 
-                class="form-control rounded" 
-                placeholder="Locación"
-                name="locationCampus"
-                formControlName="location"
-                >
-            </div>
+        </form>
+        <div class="modal-footer bg-white border-top d-flex justify-content-end gap-2 p-3">
+            <button 
+            type="button" 
+            class="btn btn-secondary rounded px-4"
+            (click)="onCancel()">
+            Cancelar
+            </button>
+            <button 
+            type="submit" 
+            class="btn btn-success rounded px-4"
+            form="formAddCampus"
+            [disabled]="formAddCampus.invalid">
+            Registrar sede
+            </button>
         </div>
-    </form>
-    <div class="modal-footer bg-white border-top d-flex justify-content-end gap-2 p-3">
-        <button 
-        type="button" 
-        class="btn btn-secondary rounded px-4"
-        (click)="onCancel()">
-        Cancelar
-        </button>
-        <button 
-        type="submit" 
-        class="btn btn-success rounded px-4"
-        form="formAddCampus"
-        [disabled]="formAddCampus.invalid">
-        Añadir Sede
-        </button>
-    </div>
+    }
+    @if (activeTab === 'niveles') {
+        <form [formGroup]="formAddLevel" (ngSubmit)="addLevel()" id="formAddLevel">
+            <div class="modal-body bg-white p-4">
+                <div class="mb-3">     
+                    <label class="form-label fw-medium small">Nombre del nivel/programa</label>
+                    <input 
+                    type="text" 
+                    class="form-control rounded" 
+                    placeholder="Nombre del nivel/programa"
+                    name="levelName"
+                    formControlName="name">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-medium small">Costo</label>
+                    <input 
+                    type="number" 
+                    class="form-control rounded" 
+                    placeholder="Costo"
+                    name="levelCost"
+                    formControlName="cost"
+                    >
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-medium small">Estado</label>
+                    <select
+                        id="stateSelect"
+                        class="form-select form-control"
+                        formControlName="state"
+                    >
+                        <option value="" disabled>Selecciona un estado</option>
+                        <option value="En curso">En curso</option>
+                        <option value="Finalizado">Finalizado</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+        <div class="modal-footer bg-white border-top d-flex justify-content-end gap-2 p-3">
+            <button 
+            type="button" 
+            class="btn btn-secondary rounded px-4"
+            (click)="onCancel()">
+            Cancelar
+            </button>
+            <button 
+            type="submit" 
+            class="btn btn-success rounded px-4"
+            form="formAddLevel"
+            [disabled]="formAddLevel.invalid">
+            Registrar nivel/programa
+            </button>
+        </div>
+    }
+    @if (activeTab === 'grados') {
+        <form [formGroup]="formAddGrade" (ngSubmit)="addGrade()" id="formAddGrade">
+            <div class="modal-body bg-white p-4">
+                <div class="mb-3">     
+                    <label class="form-label fw-medium small">Nombre del grado</label>
+                    <input 
+                    type="text" 
+                    class="form-control rounded" 
+                    placeholder="Nombre del grado"
+                    name="gradeName"
+                    formControlName="name">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-medium small">Nivel</label>
+                    <select
+                        id="levelSelect"
+                        class="form-select form-control"
+                        formControlName="level"
+                    >
+                        <option value="" disabled>Selecciona un nivel</option>
+                        @for (level of levels; track level.id) {
+                            <option [value]="level.id"> {{level.name}} </option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </form>
+        <div class="modal-footer bg-white border-top d-flex justify-content-end gap-2 p-3">
+            <button 
+            type="button" 
+            class="btn btn-secondary rounded px-4"
+            (click)="onCancel()">
+            Cancelar
+            </button>
+            <button 
+            type="submit" 
+            class="btn btn-success rounded px-4"
+            form="formAddGrade"
+            [disabled]="formAddGrade.invalid">
+            Registrar grado
+            </button>
+        </div>
+    }
+    @if (activeTab === 'secciones') {
+        <form [formGroup]="formAddSection" (ngSubmit)="addSection()" id="formAddSection">
+            <div class="modal-body bg-white p-4">
+                <div class="mb-3">     
+                    <label class="form-label fw-medium small">Nombre de la sección</label>
+                    <input 
+                    type="text" 
+                    class="form-control rounded" 
+                    placeholder="Nombre de la sección"
+                    name="sectionName"
+                    formControlName="name">
+                </div>
+            </div>
+        </form>
+        <div class="modal-footer bg-white border-top d-flex justify-content-end gap-2 p-3">
+            <button 
+            type="button" 
+            class="btn btn-secondary rounded px-4"
+            (click)="onCancel()">
+            Cancelar
+            </button>
+            <button 
+            type="submit" 
+            class="btn btn-success rounded px-4"
+            form="formAddSection"
+            [disabled]="formAddSection.invalid">
+            Registrar sección
+            </button>
+        </div>
+    }
 </ng-template>

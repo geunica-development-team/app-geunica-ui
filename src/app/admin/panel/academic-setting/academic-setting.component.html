@@ -17,7 +17,7 @@
                 <h5 class="card-title mb-0">Sedes</h5>
                 <div class="input-group" style="width: 250px;">
                 <span class="input-group-text"><i class="fas fa-search"></i></span>
-                <input (input)="applyFilter($event)" type="text" class="form-control" placeholder="Buscar usuario...">
+                <input (input)="applyFilter($event)" type="text" class="form-control" placeholder="Buscar sede...">
                 </div>
             </div>
             <div class="card-body p-3">
@@ -29,6 +29,10 @@
                     [pageSize]="10"
                     [acciones]="true"
                     [editarFila]="true"
+                    [accionEditar]="openModalEdit.bind(this)"
+                    [verFila]="false"
+                    [eliminarFila]="true"
+                    [accionEliminar]="openModalDelete.bind(this)"
                 />
             </div>
         </div>
@@ -36,36 +40,120 @@
 }
 @if (activeTab === 'niveles') {
     <div class="mb-4 d-flex justify-content-center justify-content-md-end">
-        <button class="btn-custom-green">
+        <button class="btn-custom-green" (click)="modalAdd.openModal()">
             + Registrar nuevo nivel/programa
         </button>
     </div>
-    <div>
-        b
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Niveles/Programas</h5>
+                <div class="input-group" style="width: 250px;">
+                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                <input (input)="applyFilter($event)" type="text" class="form-control" placeholder="Buscar nivel/programa...">
+                </div>
+            </div>
+            <div class="card-body p-3">
+                <app-table
+                    #levelsTable
+                    [columns]="columnsLevels"
+                    [originalRows]="rowsLevels"
+                    [columnMappings]="columnMappingsLevels"
+                    [pageSize]="10"
+                    [acciones]="true"
+                    [editarFila]="true"
+                    [accionEditar]="openModalEdit.bind(this)"
+                    [verFila]="false"
+                    [eliminarFila]="true"
+                    [accionEliminar]="openModalDelete.bind(this)"
+                />
+            </div>
+        </div>
     </div>
 }
 @if (activeTab === 'grados') {
     <div class="mb-4 d-flex justify-content-center justify-content-md-end">
-        <button class="btn-custom-green">
+        <button class="btn-custom-green" (click)="modalAdd.openModal()">
             + Registrar nuevo grado
         </button>
     </div>
-    <div>
-        b
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Grados</h5>
+                <div class="input-group" style="width: 250px;">
+                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                <input (input)="applyFilter($event)" type="text" class="form-control" placeholder="Buscar grado...">
+                </div>
+            </div>
+            <div class="card-body p-3">
+                <app-table
+                    #gradesTable
+                    [columns]="columnsGrades"
+                    [originalRows]="rowsGrades"
+                    [columnMappings]="columnMappingsGrades"
+                    [pageSize]="10"
+                    [acciones]="true"
+                    [editarFila]="true"
+                    [accionEditar]="openModalEdit.bind(this)"
+                    [verFila]="false"
+                    [eliminarFila]="true"
+                    [accionEliminar]="openModalDelete.bind(this)"                    
+                />
+            </div>
+        </div>
     </div>
 }
 @if (activeTab === 'secciones') {
     <div class="mb-4 d-flex justify-content-center justify-content-md-end">
-        <button class="btn-custom-green">
+        <button class="btn-custom-green" (click)="modalAdd.openModal()">
             + Registrar nueva seccion
         </button>
     </div>
-    <div>
-        b
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Secciones</h5>
+                <div class="input-group" style="width: 250px;">
+                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                <input (input)="applyFilter($event)" type="text" class="form-control" placeholder="Buscar sección...">
+                </div>
+            </div>
+            <div class="card-body p-3">
+                <app-table
+                    #sectionsTable
+                    [columns]="columnsSections"
+                    [originalRows]="rowsSections"
+                    [columnMappings]="columnMappingsSections"
+                    [pageSize]="10"
+                    [acciones]="true"
+                    [editarFila]="true"
+                    [accionEditar]="openModalEdit.bind(this)"
+                    [verFila]="false"
+                    [eliminarFila]="true"
+                    [accionEliminar]="openModalDelete.bind(this)"
+                />
+            </div>
+        </div>
     </div>
 }
+
 </app-menu-tabs>
 
-<app-modal-add 
+<app-modal-add
     #modalAdd
+    [activeTab]="activeTab"
+    (added)="onCreatedOrEditedOrDeleted()"
+/>
+
+<app-modal-edit
+    #modalEdit
+    [activeTab]="activeTab"
+    (updated)="onCreatedOrEditedOrDeleted()"
+/>
+
+<app-modal-delete
+    #modalDelete
+    [activeTab]="activeTab"
+    (deleted)="onCreatedOrEditedOrDeleted()"
 />

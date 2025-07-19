@@ -1,20 +1,19 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { catchError, tap, throwError } from "rxjs";
+import { catchError, throwError } from "rxjs";
 
-export interface dataCampus {
-    name: string,
-    location: string
+export interface dataSection {
+    name: string
 }
 
-export interface dataCampusAll extends dataCampus {
+export interface dataSectionAll extends dataSection {
     id: number
 }
 
 @Injectable({
     providedIn: 'root'
 })
-export class CampusService {
+export class SectionService {
     private httpService = inject(HttpClient);
     private auth_end_point = 'https://app-geunica-backend.onrender.com';
     
@@ -31,43 +30,38 @@ export class CampusService {
             const backend = error.error;
             
             switch (backend.message) {
-                case "Sede no encontrada":
+                case "Sección no encontrado":
                     errorMessage = backend.message;
                     break;
-                case "Contraseña incorrecta":
-                    errorMessage = backend.message;
+                default:
+                    errorMessage = backend.message || 'Error interno del servidor';
                     break;
-                    default:
-                        errorMessage = backend.message || 'Error interno del servidor';
-                        break;
-                    }
+            }
         }
         return throwError(() => new Error(errorMessage));
     }
                 
-    addCampus(data: dataCampus) {
+    addSection(data: dataSection) {
         return this.httpService
-        .post(this.auth_end_point+'/campus', {...data})
+        .post(this.auth_end_point+'/section', {...data})
         .pipe(catchError(this.handleError)
         );
     }
-    getAllCampus() {
+    getAllSections() {
         return this.httpService
-        .get<dataCampusAll[]>(this.auth_end_point+'/campus')
+        .get<dataSectionAll[]>(this.auth_end_point+'/section')
         .pipe(catchError(this.handleError)
         );
     }
-    getCampusById(id:number) {
+    getSectionById(id: number) {
         return this.httpService
-        .get<dataCampus>(`${this.auth_end_point}/campus/${id}`)
+        .get<dataSection>(`${this.auth_end_point}/section/${id}`)
         .pipe(catchError(this.handleError));
     }
-    updateCampus(id: number, data: dataCampus) {
+    updateSection(id: number, data: dataSection) {
         return this.httpService
-        .patch(`${this.auth_end_point}/campus/${id}`, { ...data})
+        .patch(`${this.auth_end_point}/section/${id}`, { ...data})
         .pipe(catchError(this.handleError));
     }
 }
             
-
-        

@@ -1,20 +1,21 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { catchError, tap, throwError } from "rxjs";
+import { catchError, throwError } from "rxjs";
 
-export interface dataCampus {
+export interface dataLevel {
     name: string,
-    location: string
+    cost: number,
+    state: string
 }
 
-export interface dataCampusAll extends dataCampus {
+export interface dataLevelAll extends dataLevel {
     id: number
 }
 
 @Injectable({
     providedIn: 'root'
 })
-export class CampusService {
+export class LevelService {
     private httpService = inject(HttpClient);
     private auth_end_point = 'https://app-geunica-backend.onrender.com';
     
@@ -31,40 +32,37 @@ export class CampusService {
             const backend = error.error;
             
             switch (backend.message) {
-                case "Sede no encontrada":
+                case "Nivel/Programa no encontrado":
                     errorMessage = backend.message;
                     break;
-                case "Contraseña incorrecta":
-                    errorMessage = backend.message;
+                default:
+                    errorMessage = backend.message || 'Error interno del servidor';
                     break;
-                    default:
-                        errorMessage = backend.message || 'Error interno del servidor';
-                        break;
-                    }
+            }
         }
         return throwError(() => new Error(errorMessage));
     }
                 
-    addCampus(data: dataCampus) {
+    addLevel(data: dataLevel) {
         return this.httpService
-        .post(this.auth_end_point+'/campus', {...data})
+        .post(this.auth_end_point+'/level', {...data})
         .pipe(catchError(this.handleError)
         );
     }
-    getAllCampus() {
+    getAllLevels() {
         return this.httpService
-        .get<dataCampusAll[]>(this.auth_end_point+'/campus')
+        .get<dataLevelAll[]>(this.auth_end_point+'/level')
         .pipe(catchError(this.handleError)
         );
     }
-    getCampusById(id:number) {
+    getLevelById(id:number) {
         return this.httpService
-        .get<dataCampus>(`${this.auth_end_point}/campus/${id}`)
+        .get<dataLevel>(`${this.auth_end_point}/level/${id}`)
         .pipe(catchError(this.handleError));
     }
-    updateCampus(id: number, data: dataCampus) {
+    updateLevel(id: number, data: dataLevel) {
         return this.httpService
-        .patch(`${this.auth_end_point}/campus/${id}`, { ...data})
+        .patch(`${this.auth_end_point}/level/${id}`, { ...data})
         .pipe(catchError(this.handleError));
     }
 }
