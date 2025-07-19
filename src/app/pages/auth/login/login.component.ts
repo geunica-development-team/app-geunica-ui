@@ -28,6 +28,8 @@ export class LoginComponent {
   private activatedRoute = inject(ActivatedRoute);
   private modalService = inject(NgbModal);
 
+  showPassword = false;
+
   ngOnInit(): void {
     const isBrowser = isPlatformBrowser(this.platformId);
 
@@ -56,9 +58,13 @@ export class LoginComponent {
     }
   }
 
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
+  }
+
   formLogin = this.toolsForm.group({
-    'user': ['', [Validators.required]],
-    'password': ['', [Validators.required, Validators.minLength(5)]]
+    'user': ['', [Validators.required, Validators.minLength(6)]],
+    'password': ['', [Validators.required, Validators.minLength(6)]]
   })
 
   login() {

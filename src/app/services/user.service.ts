@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { catchError, throwError } from "rxjs";
+import { AuthStorageService } from "./auth-storage.service";
 
 export interface UserSession {
   id: number;
@@ -58,11 +59,17 @@ export interface TeacherInfo {
   // Otros campos docentes...
 }
 
+export interface dataChangePassword {
+  currentPassword: string;
+  newPassword: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
   private httpService = inject(HttpClient);
+  private authStorage = inject(AuthStorageService);
   private auth_end_point = 'https://app-geunica-backend.onrender.com';
 
   constructor() {}
@@ -88,6 +95,18 @@ export class UserService {
 
     return this.httpService
       .get<UserSession>(`${this.auth_end_point}/user/${id}`, { headers })
+      .pipe(catchError(this.handleError));
+  }
+
+  changePassword(data: dataChangePassword) {
+    const token = this.authStorage.getToken();
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.httpService
+    .patch(`${this.auth_end_point}/user/change-password`, data, { headers })
       .pipe(catchError(this.handleError));
   }
 }
