@@ -102,33 +102,33 @@ export const menuItemsAdmin = [
     { 
       icon: 'fa-solid fa-users', 
       label: 'Usuarios', 
-      route: '/admin/panel/usuarios' 
+      route: 'usuarios' 
     },
     { 
       icon: 'fa-solid fa-people-roof', 
-      label: 'Salones', 
-      route: '/admin/panel/aulas' 
+      label: 'Aulas', 
+      route: 'aulas' 
     },
     { 
       icon: 'fa-solid fa-calendar', 
       label: 'Horarios', 
-      route: '/admin/panel/horarios' 
+      route: 'horarios' 
     },
     { 
       icon: 'fa-solid fa-coins', 
       label: 'Finanzas', 
-      route: '/admin/panel/finanzas' 
+      route: 'finanzas' 
     },
     { 
       icon: 'fas fa-bullhorn', 
       label: 'Anuncios', 
-      route: '/admin/panel/anuncios',
+      route: 'anuncios',
       badge: 24 
     },
     { 
       icon: 'fas fa-cog', 
       label: 'Configuración académica', 
-      route: 'academic-settings'
+      route: 'configuracion-academica'
     }
 ];
 

@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import { PanelHeaderComponent } from "../../../components/dashboard/shared-components/panel-header/panel-header.component";
 
 @Component({
-  selector: 'app-internal-users',
+  selector: 'app-classrooms',
   imports: [PanelHeaderComponent],
-  templateUrl: './internal-users.component.html',
-  styleUrl: './internal-users.component.css'
+  templateUrl: './classrooms.component.html',
+  styleUrl: './classrooms.component.css'
 })
-export class InternalUsersComponent {
+export class ClassroomsComponent {
 
 }
