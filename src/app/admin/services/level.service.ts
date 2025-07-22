@@ -4,13 +4,11 @@ import { catchError, throwError } from "rxjs";
 
 export interface dataLevel {
     name: string,
-    cost: number,
-    state: string
+    cost: number
 }
 
 export interface dataLevelAll extends dataLevel {
-    id: number,
-    state: string
+    id: number
 }
 
 @Injectable({

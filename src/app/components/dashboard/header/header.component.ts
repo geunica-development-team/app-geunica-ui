@@ -3,6 +3,7 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthStorageService } from '../../../services/auth-storage.service';
 import { jwtDecode } from 'jwt-decode';
 import { ToastrService } from 'ngx-toastr';
+import { UserService, UserSession } from '../../../services/user.service';
 
 @Component({
   selector: 'app-header',
@@ -12,9 +13,18 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class HeaderComponent {
   private authStorage = inject(AuthStorageService);
+  private userService = inject(UserService);
   private router = inject(Router);
-  private notifycation = inject(ToastrService);
-  
+
+
+  nameUser() {
+    const token = this.authStorage.getToken();
+    if (token) {
+      const decoded: any = jwtDecode(token);
+      const name = decoded.username;
+      return name;
+    }
+  }
 
   goProfile() {
     const token = this.authStorage.getToken();

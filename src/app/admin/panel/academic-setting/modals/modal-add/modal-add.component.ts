@@ -3,10 +3,10 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { CampusService } from '../../../../services/campus.service';
-import { error } from 'console';
 import { dataLevelAll, LevelService } from '../../../../services/level.service';
 import { GradeService } from '../../../../services/grade.service';
 import { SectionService } from '../../../../services/section.service';
+import { PeriodService } from '../../../../services/period.service';
 
 @Component({
   selector: 'app-modal-add',
@@ -25,6 +25,7 @@ export class ModalAddComponent {
   private levelService = inject(LevelService);
   private gradeService = inject(GradeService);
   private sectionService = inject(SectionService);
+  private periodService = inject(PeriodService);
 
   ngOnInit() {
     this.loadLevels();
@@ -70,8 +71,7 @@ export class ModalAddComponent {
   //PARA AGREGAR NIVEL/PROGRAMA
   formAddLevel = this.toolsForm.group({
     'name': ['', [Validators.required]],
-    'cost': ['', [Validators.required]],
-    'state': ['', [Validators.required]]
+    'cost': ['', [Validators.required]]
   })
 
   addLevel() {
@@ -81,8 +81,7 @@ export class ModalAddComponent {
     }
     this.levelService.addLevel({
       name: this.formAddLevel.get('name')?.value ?? '',
-      cost: Number(this.formAddLevel.get('cost')?.value) ?? 0,
-      state: this.formAddLevel.get('state')?.value ?? '',
+      cost: Number(this.formAddLevel.get('cost')?.value) ?? 0
     }).subscribe({
       next: (value: any) => {
         this.notifycation.success('Nivel/programa agregado', 'Éxito')
@@ -161,9 +160,41 @@ export class ModalAddComponent {
     })
   }
 
+  //PARA AGREGAR PERIODO
+  formAddPeriod = this.toolsForm.group({
+    'name': ['', [Validators.required]],
+    'startDate': ['', [Validators.required]],
+    'endDate': ['', [Validators.required]],
+    'state': [true, [Validators.required]]
+  })
+
+  addPeriod() {
+    if (this.formAddPeriod.invalid) {
+      this.notifycation.error('Debes completar todos los campos correctamente', 'Error');
+      return;
+    }
+    this.periodService.addPeriod({
+      name: this.formAddPeriod.get('name')?.value ?? '',
+      startDate: this.formAddPeriod.get('startDate')?.value ?? '',
+      endDate: this.formAddPeriod.get('endDate')?.value ?? '',
+      state: this.formAddPeriod.get('state')?.value ?? false
+    }).subscribe({
+      next: (value: any) => {
+        this.notifycation.success('Periodo agregado', 'Éxito')
+        this.added.emit();
+        this.modalService.dismissAll();
+        this.formAddPeriod.reset();
+      },
+      error: (error: Error) => {
+        this.notifycation.error(error.message, 'Error');
+      }
+    })
+  }
+
   @ViewChild('modalAdd') modalAdd!: TemplateRef<ElementRef>;  
 
   openModal() {
+    this.loadLevels();
     this.modalService.open(this.modalAdd, { 
       centered: true,
       size: 'lg',
@@ -177,9 +208,7 @@ export class ModalAddComponent {
         this.formAddCampus.reset();
         break;
       case 'niveles':
-        this.formAddLevel.reset({
-          state: '',
-        });
+        this.formAddLevel.reset();
         break;
       case 'grados':
         this.formAddGrade.reset({

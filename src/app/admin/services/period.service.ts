@@ -1,22 +1,29 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { catchError, tap, throwError } from "rxjs";
+import { catchError, throwError } from "rxjs";
 
-export interface dataCampus {
-    name: string,
-    location: string
+export interface dataPeriod {
+  name: string;
+  startDate: string;
+  endDate: string;
+  state: boolean;
 }
 
-export interface dataCampusAll extends dataCampus {
+export interface dataPeriodById extends dataPeriod {
+    id: number
+}
+
+export interface dataPeriodAll extends dataPeriod {
     id: number
 }
 
 @Injectable({
     providedIn: 'root'
 })
-export class CampusService {
+export class PeriodService {
     private httpService = inject(HttpClient);
     private auth_end_point = 'https://app-geunica-backend.onrender.com';
+    
     constructor() {}
     
     // Función para manejar errores
@@ -30,43 +37,38 @@ export class CampusService {
             const backend = error.error;
             
             switch (backend.message) {
-                case "Sede no encontrada":
+                case "Periodo no encontrado":
                     errorMessage = backend.message;
                     break;
-                case "Contraseña incorrecta":
-                    errorMessage = backend.message;
+                default:
+                    errorMessage = backend.message || 'Error interno del servidor';
                     break;
-                    default:
-                        errorMessage = backend.message || 'Error interno del servidor';
-                        break;
-                    }
+            }
         }
         return throwError(() => new Error(errorMessage));
     }
                 
-    addCampus(data: dataCampus) {
+    addPeriod(data: dataPeriod) {
         return this.httpService
-        .post(this.auth_end_point+'/campus', {...data})
+        .post(this.auth_end_point+'/period', {...data})
         .pipe(catchError(this.handleError)
         );
     }
-    getAllCampus() {
+    getAllPeriods() {
         return this.httpService
-        .get<dataCampusAll[]>(this.auth_end_point+'/campus')
+        .get<dataPeriodAll[]>(this.auth_end_point+'/period')
         .pipe(catchError(this.handleError)
         );
     }
-    getCampusById(id:number) {
+    getPeriodById(id: number) {
         return this.httpService
-        .get<dataCampus>(`${this.auth_end_point}/campus/${id}`)
+        .get<dataPeriodById>(`${this.auth_end_point}/period/${id}`)
         .pipe(catchError(this.handleError));
     }
-    updateCampus(id: number, data: dataCampus) {
+    updatePeriod(id: number, data: dataPeriod) {
         return this.httpService
-        .patch(`${this.auth_end_point}/campus/${id}`, { ...data})
+        .patch(`${this.auth_end_point}/period/${id}`, { ...data})
         .pipe(catchError(this.handleError));
     }
 }
             
-
-        

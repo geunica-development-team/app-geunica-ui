@@ -42,7 +42,7 @@
                 >
                     <option value="" disabled selected>Selecciona un nivel/programa</option>
                     @for (level of levels; track level.id) {
-                        <option [value]="level.id"> {{level.name}} | {{ level.state }} </option>
+                        <option [value]="level.id"> {{level.name}} </option>
                     }
                 </select>
             </div>

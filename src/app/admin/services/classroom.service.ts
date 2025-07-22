@@ -63,7 +63,7 @@ export interface dataClassroomAll {
 export class ClassroomService {
     private httpService = inject(HttpClient);
     private auth_end_point = 'https://app-geunica-backend.onrender.com';
-    
+
     constructor() {}
     
     // Función para manejar errores

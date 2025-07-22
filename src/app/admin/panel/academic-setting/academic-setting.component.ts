@@ -10,6 +10,7 @@ import { dataGradeAll, GradeService } from '../../services/grade.service';
 import { dataSectionAll, SectionService } from '../../services/section.service';
 import { ModalEditComponent } from "./modals/modal-edit/modal-edit.component";
 import { ModalDeleteComponent } from './modals/modal-delete/modal-delete.component';
+import { dataPeriodAll, PeriodService } from '../../services/period.service';
 
 @Component({
   selector: 'app-academic-setting',
@@ -22,6 +23,7 @@ export class AcademicSettingComponent {
   private levelService = inject(LevelService);
   private gradeService = inject(GradeService);
   private sectionService = inject(SectionService);
+  private periodService = inject(PeriodService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
@@ -29,7 +31,8 @@ export class AcademicSettingComponent {
     { id: "sedes", label: "Sedes", icon: "fa-solid fa-tents"},
     { id: "niveles", label: "Niveles/Programas", icon: "fa-solid fa-layer-group"},
     { id: "grados", label: "Grados", icon: "fa-solid fa-chart-simple" },
-    { id: "secciones", label: "Secciones", icon: "fa-solid fa-users-rectangle" }
+    { id: "secciones", label: "Secciones", icon: "fa-solid fa-users-rectangle" },
+    { id: "periodos", label: "Periodos", icon: "fa-solid fa-calendar" }
   ];
 
   activeTab = "sedes";
@@ -116,16 +119,14 @@ export class AcademicSettingComponent {
   columnsLevels = [
   'ID',
   'Nombre del nivel/programa',
-  'Costo',
-  'Estado'
+  'Costo'
   ];
   
   // MAPEO PARA COLUMNAS Y FILAS
   columnMappingsLevels = {
   'ID': 'id',
   'Nombre del nivel/programa': 'name',
-  'Costo': 'cost',
-  'Estado': 'state'
+  'Costo': 'cost'
   };
 
   rowsLevels: dataLevelAll[] = [];
@@ -138,8 +139,7 @@ export class AcademicSettingComponent {
         this.rowsLevels = level.map((level: any): dataLevelAll => ({
           id: level.id,
           name: level.name,
-          cost: level.cost,
-          state: level.state
+          cost: level.cost
         }));
         if (this.levelsTable) {
           this.levelsTable.updateTable();
@@ -222,6 +222,50 @@ export class AcademicSettingComponent {
     });
   }
 
+  //PARA TABLA PERIODOS:
+  // COLUMNAS DE LA TABLA
+  columnsPeriods = [
+  'ID',
+  'Nombre',
+  'Fecha Inicio',
+  'Fecha Fin',
+  'Estado'
+  ];
+  
+  // MAPEO PARA COLUMNAS Y FILAS
+  columnMappingsPeriods = {
+  'ID': 'id',
+  'Nombre': 'name',
+  'Fecha Inicio': 'startDate',
+  'Fecha Fin': 'endDate',
+  'Estado': 'state'
+  };
+
+  rowsPeriods: dataSectionAll[] = [];
+
+  @ViewChild('periodsTable') periodsTable?: TableComponent;
+
+  loadPeriods() {
+    this.periodService.getAllPeriods().subscribe({
+      next:(period) => {
+        this.rowsPeriods = period.map((period: any): dataPeriodAll => ({
+          id: period.id,
+          name: period.name,
+          startDate: period.startDate,
+          endDate: period.endDate,
+          state: period.state
+        }));
+        if (this.periodsTable) {
+          this.periodsTable.updateTable();
+        }
+      },
+        error: (error) => {
+          console.error('Error al cargar la lista de niveles/programas: ', error);
+        }
+    });
+  }
+
+
   //PARA EL FILTRO DE LA TABLA (BUSCADOR)
   applyFilter(event: Event) {
     if (this.campusTable) {
@@ -248,6 +292,12 @@ export class AcademicSettingComponent {
       ).value;
       this.sectionsTable.updateTable();
     }
+    else if (this.periodsTable) {
+      this.periodsTable.filterValue = (
+        event.target as HTMLInputElement
+      ).value;
+      this.periodsTable.updateTable();
+    }
   }
 
   onCreatedOrEditedOrDeleted() {
@@ -263,6 +313,9 @@ export class AcademicSettingComponent {
         break;
       case 'secciones':
         this.loadSections();
+        break;
+      case 'periodos':
+        this.loadPeriods();
         break;
     }
   }

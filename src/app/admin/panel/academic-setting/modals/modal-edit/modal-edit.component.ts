@@ -86,8 +86,7 @@ export class ModalEditComponent {
   //PARA EDITAR NIVEL/PROGRAMA
   formEditLevel = this.toolsForm.group({
     'name': ['', [Validators.required]],
-    'cost': ['', [Validators.required]],
-    'state': ['', [Validators.required]]
+    'cost': ['', [Validators.required]]
   })
 
   loadLevelDetails() {
@@ -96,8 +95,7 @@ export class ModalEditComponent {
         next: (level) => {
           this.formEditLevel.patchValue({
             name: level.name,
-            cost: String(level.cost),
-            state: level.state
+            cost: String(level.cost)
           });
         },
         error: (error) => {
@@ -113,8 +111,7 @@ export class ModalEditComponent {
     if (this.formEditLevel.valid && this.rowId) {
       const updatedLevel: dataLevel = {
         name: this.formEditLevel.get('name')?.value ?? '',
-        cost: Number(this.formEditLevel.get('cost')?.value) ?? 0,
-        state: this.formEditLevel.get('state')?.value ?? '',
+        cost: Number(this.formEditLevel.get('cost')?.value) ?? 0
       }
       this.levelService.updateLevel(this.rowId, updatedLevel).subscribe({
         next: (value: any) => {
