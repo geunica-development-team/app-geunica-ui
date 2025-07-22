@@ -27,13 +27,6 @@ export class ModalEditComponent {
   private gradeService = inject(GradeService);
   private sectionService = inject(SectionService);
 
-
-  ngOnInit(): void {
-    if (this.rowId) {
-      this.loadGradeDetails();
-    }
-  }
-
   getTitle(): string {
     switch (this.activeTab) {
       case 'sedes': return 'Editar sede';
@@ -163,7 +156,6 @@ export class ModalEditComponent {
     if (this.rowId && !isNaN(this.rowId)) {
       this.gradeService.getGradeById(this.rowId).subscribe({
         next: (grade) => {
-          this.loadLevels()
           this.formEditGrade.patchValue({
             name: grade.name,
             level: grade.level?.id

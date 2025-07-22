@@ -1,0 +1,124 @@
+<ng-template #modalAddClassroom let-modal>
+    <div class="modal-header bg-white border-bottom px-4">
+        <h4 class="modal-title fw-semibold text-dark mb-0">Registrar nueva aula</h4>
+        <button 
+        type="button" 
+        class="btn-close" 
+        aria-label="Close"
+        (click)="onCancel()">
+        </button>
+    </div>
+
+    <form [formGroup]="formAddClassroom" (ngSubmit)="addClassroom()" id="formAddClassroom">
+        <div class="modal-body bg-white p-4">
+            <div class="mb-3">     
+                <label class="form-label fw-medium small">Nombre (opcional)</label>
+                <input 
+                type="text" 
+                class="form-control rounded" 
+                placeholder="Nombre del aula"
+                name="name"
+                formControlName="name">
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-medium small">Sede</label>
+                <select
+                    id="campus"
+                    class="form-select form-control"
+                    formControlName="campus"
+                >
+                    <option value="" disabled>Selecciona una sede</option>
+                    @for (campus of campus; track campus.id) {
+                        <option [value]="campus.id"> {{campus.name}} </option>
+                    }
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-medium small">Nivel/programa</label>
+                <select
+                    id="level"
+                    class="form-select form-control"
+                    (change)="selectedLevelId = +$any($event.target).value"
+                >
+                    <option value="" disabled selected>Selecciona un nivel/programa</option>
+                    @for (level of levels; track level.id) {
+                        <option [value]="level.id"> {{level.name}} | {{ level.state }} </option>
+                    }
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-medium small">Grado</label>
+                <select
+                    id="grade"
+                    class="form-select form-control"
+                    formControlName="grade"
+                >
+                    <option value="" disabled>Selecciona un grado</option>
+                    @for (grade of filteredGrades; track grade.id) {
+                        <option [value]="grade.id"> {{grade.name}} </option>
+                    }
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-medium small">Sección</label>
+                <select
+                    id="section"
+                    class="form-select form-control"
+                    formControlName="section"
+                >
+                    <option value="" disabled>Selecciona una sección</option>
+                    @for (section of sections; track section.id) {
+                        <option [value]="section.id"> {{section.name}} </option>
+                    }
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-medium small">Turno</label>
+                <select
+                    id="shift"
+                    class="form-select form-control"
+                    formControlName="shift"
+                >
+                    <option value="" disabled>Selecciona un turno</option>
+                    <option value="Mañana">Mañana</option>
+                    <option value="Tarde">Tarde</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-medium small">Capacidad total</label>
+                <input 
+                type="number" 
+                class="form-control rounded" 
+                placeholder="Capacidad total"
+                name="capacity"
+                formControlName="capacity"
+                >
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-medium small">N° de alumnos con apoyo educativo</label>
+                <input 
+                type="number" 
+                class="form-control rounded" 
+                placeholder="N° de alumnos con apoyo educativo"
+                name="specialCapacity"
+                formControlName="specialCapacity"
+                >
+            </div>
+        </div>
+    </form>
+    <div class="modal-footer bg-white border-top d-flex justify-content-end gap-2 p-3">
+        <button 
+        type="button" 
+        class="btn btn-secondary rounded px-4"
+        (click)="onCancel()">
+        Cancelar
+        </button>
+        <button 
+        type="submit" 
+        class="btn btn-success rounded px-4"
+        form="formAddClassroom"
+        [disabled]="formAddClassroom.invalid">
+        Registrar aula
+        </button>
+    </div>
+</ng-template>

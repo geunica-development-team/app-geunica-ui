@@ -1,33 +1,66 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { catchError, throwError } from "rxjs";
+import { catchError, tap, throwError } from "rxjs";
 
-export interface dataGrade {
+export interface dataClassroom {
+    idCampus: number,
+    idGrade: number,
+    idSection: number,
     name: string,
-    idLevel: number
+    shift: string,
+    capacity: number,
+    specialCapacity: number
 }
 
-export interface dataGradeById {
+export interface dataClassroomById {
     id: number,
     name: string,
-    level: {
-        id: number
-    }
+    shift: string,
+    capacity: number,
+    specialCapacity: number
+    campus: {
+        id: number,
+        name: string
+    },
+    grade: {
+        id: number,
+        name: string,
+        level: {
+        id: number,
+        name: string
+        }
+    },
+    section: {
+        id: number,
+        name: string
+    },
 }
 
-export interface dataGradeAll {
+export interface dataClassroomAll {
     id: number,
     name: string,
+    shift: string,
+    capacity: number,
+    specialCapacity: number
+    campus: {
+        name: string
+    },
     level: {
         id: number,
-        name: number
+        name: string
+    }
+    grade: {
+        name: string
+    },
+    section: {
+        name: string
     }
 }
 
 @Injectable({
     providedIn: 'root'
 })
-export class GradeService {
+export class ClassroomService {
     private httpService = inject(HttpClient);
     private auth_end_point = 'https://app-geunica-backend.onrender.com';
     
@@ -44,38 +77,43 @@ export class GradeService {
             const backend = error.error;
             
             switch (backend.message) {
-                case "Grado no encontrado":
+                case "Aula no encontrada":
+                    errorMessage = backend.message;
+                    break;
+                case "Contraseña incorrecta":
                     errorMessage = backend.message;
                     break;
                 default:
                     errorMessage = backend.message || 'Error interno del servidor';
                     break;
-            }
+                }
         }
         return throwError(() => new Error(errorMessage));
     }
                 
-    addGrade(data: dataGrade) {
+    addClassroom(data: dataClassroom) {
         return this.httpService
-        .post(this.auth_end_point+'/grade', {...data})
+        .post(this.auth_end_point+'/classroom', {...data})
         .pipe(catchError(this.handleError)
         );
     }
-    getAllGrades() {
+    getAllClassrooms() {
         return this.httpService
-        .get<dataGradeAll[]>(this.auth_end_point+'/grade')
+        .get<dataClassroomAll[]>(this.auth_end_point+'/classroom')
         .pipe(catchError(this.handleError)
         );
     }
-    getGradeById(id: number) {
+    getClassroomById(id:number) {
         return this.httpService
-        .get<dataGradeById>(`${this.auth_end_point}/grade/${id}`)
+        .get<dataClassroomById>(`${this.auth_end_point}/classroom/${id}`)
         .pipe(catchError(this.handleError));
     }
-    updateGrade(id: number, data: dataGrade) {
+    updateClassroom(id: number, data: dataClassroom) {
         return this.httpService
-        .patch(`${this.auth_end_point}/grade/${id}`, { ...data})
+        .patch(`${this.auth_end_point}/classroom/${id}`, { ...data})
         .pipe(catchError(this.handleError));
     }
 }
             
+
+        

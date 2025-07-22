@@ -9,7 +9,8 @@ export interface dataLevel {
 }
 
 export interface dataLevelAll extends dataLevel {
-    id: number
+    id: number,
+    state: string
 }
 
 @Injectable({

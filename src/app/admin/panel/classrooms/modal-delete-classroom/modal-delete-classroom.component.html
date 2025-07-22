@@ -1,0 +1,30 @@
+<ng-template #modalDeleteClassroom let-modal>
+    <div class="modal-header bg-white border-bottom px-4">
+        <h4 class="modal-title fw-semibold text-dark mb-0">Eliminar aula</h4>
+        <button 
+        type="button" 
+        class="btn-close" 
+        aria-label="Close"
+        (click)="onCancel()">
+        </button>
+    </div>
+    <form (ngSubmit)="deleteCampus()" id="formDeleteCampus">
+        <div class="modal-body bg-white p-4 text-center">
+            <h5>¿Estás seguro de que deseas eliminar esta aula?</h5>
+        </div>
+    </form>
+    <div class="modal-footer bg-white border-top d-flex justify-content-end gap-2 p-3">
+        <button 
+        type="button" 
+        class="btn btn-secondary rounded px-4"
+        (click)="onCancel()">
+        Cancelar
+        </button>
+        <button 
+        type="submit" 
+        class="btn btn-success rounded px-4"
+        form="formDeleteCampus">
+        Eliminar sede
+        </button>
+    </div>
+</ng-template>

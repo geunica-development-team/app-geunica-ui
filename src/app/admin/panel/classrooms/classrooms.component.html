@@ -1,3 +1,49 @@
 <app-panel-header 
     title="Aulas"
 />
+<div class="mb-4 d-flex justify-content-center justify-content-md-end">
+    <button class="btn-custom-green" (click)="modalAddClassroom.openModal()">
+        + Registrar nueva aula
+    </button>
+</div>
+<div class="col-12">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">Aulas</h5>
+            <div class="input-group" style="width: 250px;">
+            <span class="input-group-text"><i class="fas fa-search"></i></span>
+            <input (input)="applyFilter($event)" type="text" class="form-control" placeholder="Buscar aula...">
+            </div>
+        </div>
+        <div class="card-body p-3">
+            <app-table
+                #classroomTable
+                [columns]="columns"
+                [originalRows]="rows"
+                [columnMappings]="columnMappings"
+                [pageSize]="10"
+                [acciones]="true"
+                [editarFila]="true"
+                [accionEditar]="openModalEditClassroom.bind(this)"
+                [verFila]="false"
+                [eliminarFila]="true"
+                [accionEliminar]="openModalDeleteClassroom.bind(this)"
+            />
+        </div>
+    </div>
+</div>
+
+<app-modal-add-classroom
+    #modalAddClassroom
+    (classroomAdded)="onCreatedOrEditedOrDeleted()"
+/>
+
+<app-modal-edit-classroom
+    #modalEditClassroom
+    (classroomEdited)="onCreatedOrEditedOrDeleted()"
+/>
+
+<app-modal-delete-classroom
+    #modalDeleteClassroom
+    (classroomDeleted)="onCreatedOrEditedOrDeleted()"
+/>
