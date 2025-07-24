@@ -38,39 +38,6 @@
 
 
 
-
-/* Opcional: al pasar el ratón */
-.nav-pills .nav-link:hover {
-  color: #184818bf;
-}
-
-.nav-pills .nav-link {
-  background: transparent;
-  color: #000;
-  display: inline-block;    /* para que el border-bottom solo abarque el texto */
-  padding: 0.5rem 0;        /* ajusta el padding vertical si lo necesitas */
-}
-
-.nav-pills .nav-link.active {
-  font-weight: 700;
-  color: #000000 !important;
-  border: none;
-  border-bottom: 2px solid #000000;
-}
-
-.nav-pills .nav-item {
-  /* aseguramos que cada item pueda crecer un poco, pero no tanto como para llenar todo el ancho */
-  flex: 1;
-  text-align: center;
-}
-
-.nav-pills {
-  background: transparent;
-  border-bottom: none;      /* sin borde extra en el contenedor */
-}
-
-
-
 /* css del grafico pstel*/
 
 /* Define el tamaño y el pastel con porcentajes */

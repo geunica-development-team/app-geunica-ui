@@ -34,24 +34,19 @@ export interface Docente {
 /** Examen */
 export interface Examen {
   id_examen: number;
-  courseId: number;
-  id_ciclo: number;
-  categoria: string;
+  id_asignacion_de_clase: number;
   nombre_examen: string;
-  fecha_examen: string; // ISO YYYY-MM-DD
   peso: number;
-  estado_examen: 'activo' | 'anulado';
 }
 
 /** Nota de examen */
 export interface NotaExamen {
-  id_nota: number;
+  id_nota_examen: number;
   id_examen: number;
   id_matricula: number;
   valor: number;
-  estado_nota: 'activa' | 'anulada';
-  fecha_registro: string; // ISO YYYY-MM-DD
 }
+
 
 /** Actividad o tarea */
 export interface Actividad {

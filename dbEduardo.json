@@ -83,14 +83,18 @@
     { "id_nota_actividad": 1, "id_actividad": 1, "id_matricula": 1, "valor": 15.5 }
   ],
   "examen": [
-    { "id_examen": 1, "id_asignacion_de_clase": 1, "nombre_examen": "Examen Parcial I", "peso": 30.0 },
-    { "id_examen": 2, "id_asignacion_de_clase": 1, "nombre_examen": "Examen Parcial II", "peso": 30.0 },
-    { "id_examen": 3, "id_asignacion_de_clase": 1, "nombre_examen": "Examen Final", "peso": 30.0 }
+    { "id_examen": 1, "id_asignacion_de_clase": 1, "nombre_examen": "Cuadernos", "peso": 15.0 },
+    { "id_examen": 2, "id_asignacion_de_clase": 1, "nombre_examen": "Comportamiento", "peso": 15.0 },
+    { "id_examen": 3, "id_asignacion_de_clase": 1, "nombre_examen": "Examen Parcial I", "peso": 20.0 },
+    { "id_examen": 4, "id_asignacion_de_clase": 1, "nombre_examen": "Examen Parcial II", "peso": 20.0 },
+    { "id_examen": 5, "id_asignacion_de_clase": 1, "nombre_examen": "Examen Final", "peso": 30.0 }
   ],
   "nota_examen": [
-    { "id_nota_examen": 1, "id_examen": 1, "id_matricula": 1, "valor": 10.0 },
-    { "id_nota_examen": 2, "id_examen": 2, "id_matricula": 1, "valor": 10.0 },
-    { "id_nota_examen": 3, "id_examen": 3, "id_matricula": 1, "valor": 10.0 }
+    { "id_nota_examen": 1, "id_examen": 1, "id_matricula": 1, "valor": 13.0 },
+    { "id_nota_examen": 2, "id_examen": 2, "id_matricula": 1, "valor": 14.0 },
+    { "id_nota_examen": 3, "id_examen": 3, "id_matricula": 1, "valor": 15.0 },
+    { "id_nota_examen": 4, "id_examen": 4, "id_matricula": 1, "valor": 12.0 },
+    { "id_nota_examen": 5, "id_examen": 5, "id_matricula": 1, "valor": 15.0 }
   ],
 
   "rol": [

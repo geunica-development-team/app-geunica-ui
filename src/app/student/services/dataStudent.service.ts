@@ -101,19 +101,33 @@ export class DataStudentService {
   }
 
   getExamById(id: number): Observable<Examen> {
-    return this.http.get<Examen>(`${this.base}/examen/${id}`);
+    return this.http
+      .get<Examen[]>(`${this.base}/examen?id_examen=${id}`)
+      .pipe(
+        map(arr => {
+          if (!arr.length) {
+            throw new Error(`Examen con id ${id} no encontrado`);
+          }
+          return arr[0];
+        })
+      );
   }
+
 
   getGrades(): Observable<NotaExamen[]> {
     return this.http.get<NotaExamen[]>(`${this.base}/nota_examen`);
   }
 
   getGradesByExamId(examId: number): Observable<NotaExamen[]> {
-    return this.http.get<NotaExamen[]>(`${this.base}/nota_examen?examenId=${examId}`);
+    return this.http.get<NotaExamen[]>(
+      `${this.base}/nota_examen?id_examen=${examId}`
+    );
   }
 
   getGradesByStudentId(studentId: number): Observable<NotaExamen[]> {
-    return this.http.get<NotaExamen[]>(`${this.base}/nota_examen?matriculaId=${studentId}`);
+    return this.http.get<NotaExamen[]>(
+      `${this.base}/nota_examen?id_matricula=${studentId}`
+    );
   }
 
 }

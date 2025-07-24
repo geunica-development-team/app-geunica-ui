@@ -5,6 +5,7 @@ import { DataStudentService } from '../../services/dataStudent.service';
 import { Curso } from '../../services/modelStudent';
 import { HeaderDinamicComponent } from '../../../components/header-dinamic/header-dinamic.component';
 import { TabContentDirective } from '../../../components/header-dinamic/tab-content.directive';
+import { forkJoin } from 'rxjs';
 
 interface RegistryItem {
   concepto: string;
@@ -30,40 +31,42 @@ export class GradesRegistryComponent implements OnInit {
 
 
   ngOnInit(): void {
-    const idParam = this.route.snapshot.paramMap.get('id');
-    const courseId = idParam ? +idParam : null;
-    if (!courseId) return;
+  const idParam = this.route.snapshot.paramMap.get('id');
+  const courseId = idParam ? +idParam : null;
+  if (!courseId) return;
 
-    // 1) obtengo datos del curso
-    this.dataSvc.getCourseById(courseId).subscribe(c => this.course = c);
+  // 1) Cargo curso + exámenes + notas en paralelo
+  forkJoin({
+    course: this.dataSvc.getCourseById(courseId),
+    exams: this.dataSvc.getExams(),
+    grades: this.dataSvc.getGrades(),
+  }).subscribe(({ course, exams, grades }) => {
+    this.course = course;
 
-    // 2) obtengo exámenes para este curso
-    this.dataSvc.getExams().subscribe(exams => {
-      console.log('Exams loaded:', exams);
-      const courseExams = exams.filter(e => e.courseId === courseId);
-      console.log('Course exams:', courseExams);
+    // 2) Filtrar exámenes de este curso
+    const courseExams = exams.filter(e => e.id_asignacion_de_clase === courseId);
 
-      // 3) obtengo notas y filtro por exámenes del curso
-      this.dataSvc.getGrades().subscribe(grades => {
-        console.log('Grades loaded:', grades);
-        const relevantGrades = grades.filter(g =>
-          courseExams.some(e => e.id_examen === g.id_examen)
-        );
-        console.log('Relevant grades:', relevantGrades);
+    // 3) Filtrar notas de esos exámenes
+    const relevantGrades = grades.filter(g =>
+      courseExams.some(e => e.id_examen === g.id_examen)
+    );
 
-        // 4) construyo el arreglo para la tabla
-        this.registryItems = relevantGrades.map(g => {
-          const exam = courseExams.find(e => e.id_examen === g.id_examen);
-          return {
-            concepto: exam ? exam.nombre_examen : '---',
-            valor: g.valor
-          };
-        });
-
-        this.loading = false;
-      });
-      
+    // 4) Mapear a tu tabla
+    this.registryItems = relevantGrades.map(g => {
+      const exam = courseExams.find(e => e.id_examen === g.id_examen)!;
+      return {
+        concepto: exam.nombre_examen,
+        valor:    g.valor
+      };
     });
+
+    this.loading = false;
+  }, err => {
+    console.error('Error cargando datos:', err);
+    this.loading = false;
+  });
+
   }
 
+  
 }
