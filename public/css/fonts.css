@@ -6,6 +6,10 @@
   font-style: normal;
 }
 
+option {
+  font-weight: 400 !important;
+}
+
 .text-span-invalid {
   font-size: 13px;
   font-weight: 500;

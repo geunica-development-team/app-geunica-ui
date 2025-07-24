@@ -104,6 +104,8 @@ export class TableComponent {
       return statusMatch && debtMatch && searchMatch
     })
 
+    this.filteredRows.sort((a, b) => a.id - b.id)
+
     // Calcular paginación
     this.totalPages = Math.ceil(this.filteredRows.length / this.pageSize)
     if (this.currentPage > this.totalPages && this.totalPages > 0) {
@@ -116,7 +118,7 @@ export class TableComponent {
 
   // Verificar si una columna es de estado
   isStatusColumn(column: string): boolean {
-    return column === "Estado Cuenta" || column === "Estado Estudiante"
+    return column === "Estado Cuenta" || column === "Estado Estudiante" || column === "Estado"
   }
 
   // Verificar si es columna de deuda
@@ -130,6 +132,8 @@ export class TableComponent {
       return row.statusClass || "badge bg-light text-dark"
     } else if (column === "Estado Estudiante") {
       return row.studentStatusClass || "badge bg-light text-dark"
+    } else if (column === "Estado") {
+      return row.stateClass || "badge bg-light text-dark"
     }
     return ""
   }

@@ -165,7 +165,7 @@ export class ModalAddComponent {
     'name': ['', [Validators.required]],
     'startDate': ['', [Validators.required]],
     'endDate': ['', [Validators.required]],
-    'state': [true, [Validators.required]]
+    'state': [null, [Validators.required]]
   })
 
   addPeriod() {
@@ -177,13 +177,15 @@ export class ModalAddComponent {
       name: this.formAddPeriod.get('name')?.value ?? '',
       startDate: this.formAddPeriod.get('startDate')?.value ?? '',
       endDate: this.formAddPeriod.get('endDate')?.value ?? '',
-      state: this.formAddPeriod.get('state')?.value ?? false
+      state: this.formAddPeriod.get('state')?.value ?? false,
     }).subscribe({
       next: (value: any) => {
         this.notifycation.success('Periodo agregado', 'Éxito')
         this.added.emit();
         this.modalService.dismissAll();
-        this.formAddPeriod.reset();
+        this.formAddPeriod.reset({
+          state: null
+        });
       },
       error: (error: Error) => {
         this.notifycation.error(error.message, 'Error');
@@ -217,6 +219,9 @@ export class ModalAddComponent {
         break;
       case 'secciones':
         this.formAddSection.reset();
+        break;
+      case 'periodos':
+        this.formAddPeriod.reset();
         break;
     }
     this.modalService.dismissAll();

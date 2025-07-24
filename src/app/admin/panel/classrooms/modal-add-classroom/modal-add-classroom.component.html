@@ -21,6 +21,24 @@
                 formControlName="name">
             </div>
             <div class="mb-3">
+                <label class="form-label fw-medium small">Periodo</label>
+                <select
+                    id="period"
+                    class="form-select form-control"
+                    formControlName="period"
+                >
+                    <option value="" disabled>Selecciona un periodo</option>
+                    @for (period of periods; track period.id) {
+                        @if (period.state === true) {
+                            <option class="text-success" [value]="period.id"> {{period.name}} | En curso</option>
+                        }
+                        @if (period.state === false) {
+                            <option class="text-danger" [value]="period.id"> {{period.name}} | Finalizado</option>
+                        }                        
+                    }
+                </select>
+            </div>
+            <div class="mb-3">
                 <label class="form-label fw-medium small">Sede</label>
                 <select
                     id="campus"

@@ -53,6 +53,7 @@ export class AcademicSettingComponent {
     this.loadLevels();
     this.loadGrades();
     this.loadSections();
+    this.loadPeriods();
   }
 
   @ViewChild('modalEdit') modalEdit!: ModalEditComponent;
@@ -238,7 +239,7 @@ export class AcademicSettingComponent {
   'Nombre': 'name',
   'Fecha Inicio': 'startDate',
   'Fecha Fin': 'endDate',
-  'Estado': 'state'
+  'Estado': 'stateText'
   };
 
   rowsPeriods: dataSectionAll[] = [];
@@ -248,12 +249,14 @@ export class AcademicSettingComponent {
   loadPeriods() {
     this.periodService.getAllPeriods().subscribe({
       next:(period) => {
-        this.rowsPeriods = period.map((period: any): dataPeriodAll => ({
+        this.rowsPeriods = period.map((period: any): dataPeriodAll & { stateText: string, stateClass: string } => ({
           id: period.id,
           name: period.name,
           startDate: period.startDate,
           endDate: period.endDate,
-          state: period.state
+          state: period.state === true,
+          stateText: period.state === true ? 'En curso': 'Finalizado',
+          stateClass: period.state === true ? 'badge bg-success-subtle text-success fw-semibold' : 'badge bg-danger-subtle text-danger fw-semibold'
         }));
         if (this.periodsTable) {
           this.periodsTable.updateTable();

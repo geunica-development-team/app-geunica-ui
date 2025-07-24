@@ -7,6 +7,7 @@ import { dataLevel, dataLevelAll, LevelService } from '../../../../services/leve
 import { dataGrade, dataGradeAll, GradeService } from '../../../../services/grade.service';
 import { dataSection, SectionService } from '../../../../services/section.service';
 import { error } from 'console';
+import { dataPeriod, PeriodService } from '../../../../services/period.service';
 
 @Component({
   selector: 'app-modal-edit',
@@ -26,6 +27,7 @@ export class ModalEditComponent {
   private levelService = inject(LevelService);
   private gradeService = inject(GradeService);
   private sectionService = inject(SectionService);
+  private periodService = inject(PeriodService);
 
   getTitle(): string {
     switch (this.activeTab) {
@@ -232,6 +234,58 @@ export class ModalEditComponent {
     }
   }
 
+  //PARA EDITAR PERIODOS
+  formEditPeriod = this.toolsForm.group({
+    'name': ['', [Validators.required]],
+    'startDate': ['', [Validators.required]],
+    'endDate': ['', [Validators.required]],
+    'state': [true, [Validators.required]]
+  })
+
+  loadPeriodDetails() {
+    if (this.rowId && !isNaN(this.rowId)) {
+      this.periodService.getPeriodById(this.rowId).subscribe({
+        next: (period) => {
+          this.formEditPeriod.patchValue({
+            name: period.name,
+            startDate: period.startDate,
+            endDate: period.endDate,
+            state: period.state
+          });
+        },
+        error: (error) => {
+          this.notifycation.error('Error al cargar los detalles del periodo', 'Error');
+        }
+      })
+    } else {
+      this.notifycation.error('ID del periodo inválido', 'Error');
+    }
+  }
+
+  updatePeriod() {
+    if (this.formEditPeriod.valid && this.rowId) {
+      const updatedPeriod: dataPeriod = {
+        name: this.formEditPeriod.get('name')?.value ?? '',
+        startDate: this.formEditPeriod.get('startDate')?.value ?? '',
+        endDate: this.formEditPeriod.get('endDate')?.value ?? '',
+        state: this.formEditPeriod.get('state')?.value ?? false
+      }
+      this.periodService.updatePeriod(this.rowId, updatedPeriod).subscribe({
+        next: (value: any) => {
+          this.notifycation.success(`Periodo actualizado con éxito.`, 'Éxito');
+          this.updated.emit();
+          this.modalService.dismissAll();
+          this.formEditPeriod.reset();
+        },
+        error: (error: Error) => {
+          this.notifycation.error(error.message, 'Error');
+        }
+      })
+    } else {
+      this.notifycation.error('Debes completar todos los campos correctamente', 'Error');
+    }
+  }
+
   @ViewChild('modalEdit') modalEdit!: TemplateRef<ElementRef>;  
 
   openModal() {
@@ -261,6 +315,9 @@ export class ModalEditComponent {
       case 'secciones':
         this.loadSectionDetails();
         break;
+      case 'periodos':
+        this.loadPeriodDetails();
+        break;
     }
   }
 
@@ -277,6 +334,9 @@ export class ModalEditComponent {
       break;
       case 'secciones':
       this.formEditSection.reset();
+      break;
+      case 'periodos':
+      this.formEditPeriod.reset();
       break;
     }
     this.modalService.dismissAll();

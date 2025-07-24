@@ -7,6 +7,7 @@ import { CampusService, dataCampusAll } from '../../../services/campus.service';
 import { dataLevelAll, LevelService } from '../../../services/level.service';
 import { dataGradeAll, GradeService } from '../../../services/grade.service';
 import { dataSectionAll, SectionService } from '../../../services/section.service';
+import { dataPeriodAll, PeriodService } from '../../../services/period.service';
 
 @Component({
   selector: 'app-modal-edit-classroom',
@@ -26,6 +27,8 @@ export class ModalEditClassroomComponent {
   private levelService = inject(LevelService);
   private gradeService = inject(GradeService);
   private sectionService = inject(SectionService);
+  private periodService = inject(PeriodService);
+
 
   campus: dataCampusAll[] = []
   loadCampus() {
@@ -84,11 +87,25 @@ export class ModalEditClassroomComponent {
     })
   }
 
+  periods: dataPeriodAll[] = []
+  loadPeriods() {
+    this.periodService.getAllPeriods().subscribe({
+      next: (value) => {
+        this.periods = value;
+      },
+      error: (error: Error) => {
+        console.error('Error al cargar los periodos', error);
+      }
+    })
+  }
+
   formEditClassroom = this.toolsForm.group({
     'name': [''],
     'campus': [0, [Validators.required]],
     'grade': [0, [Validators.required]],
+    'level': [0, [Validators.required]],
     'section': [0, [Validators.required]],
+    'period': [0, [Validators.required]],
     'shift': ['', [Validators.required]],
     'capacity': [0, [Validators.required]],
     'specialCapacity': [0, [Validators.required]]
@@ -98,11 +115,14 @@ export class ModalEditClassroomComponent {
     if (this.rowId && !isNaN(this.rowId)) {
       this.classroomService.getClassroomById(this.rowId).subscribe({
         next: (classroom) => {
+          this.selectedLevelId = classroom.grade.level.id;
           this.formEditClassroom.patchValue({
             name: classroom.name,
             campus: classroom.campus?.id,
             grade: classroom.grade?.id,
             section: classroom.section?.id,
+            level: classroom.grade?.level?.id,
+            period: classroom.period?.id,
             shift: classroom.shift,
             capacity: classroom.capacity,
             specialCapacity: classroom.specialCapacity,
@@ -124,6 +144,7 @@ export class ModalEditClassroomComponent {
         idCampus: Number(this.formEditClassroom.get('campus')?.value) ?? 0,
         idGrade: Number(this.formEditClassroom.get('grade')?.value) ?? 0,
         idSection: Number(this.formEditClassroom.get('section')?.value) ?? 0,
+        idPeriod: Number(this.formEditClassroom.get('period')?.value) ?? 0,
         shift: this.formEditClassroom.get('shift')?.value ?? '',
         capacity: Number(this.formEditClassroom.get('capacity')?.value) ?? 0,
         specialCapacity: Number(this.formEditClassroom.get('specialCapacity')?.value) ?? 0,
@@ -152,6 +173,7 @@ export class ModalEditClassroomComponent {
     this.loadLevels();
     this.loadGrades();
     this.loadSections();
+    this.loadPeriods();
     this.modalService.open(this.modalEditClassroom, { 
       centered: true,
       size: 'lg',
@@ -163,4 +185,12 @@ export class ModalEditClassroomComponent {
     this.formEditClassroom.reset();
     this.modalService.dismissAll();
   }
+
+  onLevelChange() {
+  const selected = this.formEditClassroom.get('level')?.value;
+  this.selectedLevelId = selected ? +selected : 0;
+
+  // 🔥 IMPORTANTE: Limpiar el grado seleccionado si cambia el nivel
+  this.formEditClassroom.get('grade')?.setValue(0);
+}
 }

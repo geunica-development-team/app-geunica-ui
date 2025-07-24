@@ -198,8 +198,9 @@
                         class="form-select form-control"
                         formControlName="state"
                     >
-                        <option value="true">En curso</option>
-                        <option value="false">Finalizado</option>
+                        <option [ngValue]="null" disabled selected>Selecciona un estado</option>
+                        <option [ngValue]="true">En curso</option>
+                        <option [ngValue]="false">Finalizado</option>
                     </select>
                 </div>
             </div>

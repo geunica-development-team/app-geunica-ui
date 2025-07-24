@@ -7,6 +7,7 @@ import { dataLevelAll, LevelService } from '../../../services/level.service';
 import { dataGradeAll, GradeService } from '../../../services/grade.service';
 import { dataSectionAll, SectionService } from '../../../services/section.service';
 import { ClassroomService } from '../../../services/classroom.service';
+import { dataPeriodAll, PeriodService } from '../../../services/period.service';
 
 @Component({
   selector: 'app-modal-add-classroom',
@@ -25,12 +26,15 @@ export class ModalAddClassroomComponent {
   private levelService = inject(LevelService);
   private gradeService = inject(GradeService);
   private sectionService = inject(SectionService);
+  private periodService = inject(PeriodService);
+
 
   ngOnInit() {
     this.loadCampus();
     this.loadLevels();
     this.loadGrades();
     this.loadSections();
+    this.loadPeriods();
   }
 
   campus: dataCampusAll[] = []
@@ -90,11 +94,24 @@ export class ModalAddClassroomComponent {
     })
   }
 
+  periods: dataPeriodAll[] = []
+  loadPeriods() {
+    this.periodService.getAllPeriods().subscribe({
+      next: (value) => {
+        this.periods = value;
+      },
+      error: (error: Error) => {
+        console.error('Error al cargar los periodos', error);
+      }
+    })
+  }
+
   formAddClassroom = this.toolsForm.group({
     'name': [''],
     'campus': ['', [Validators.required]],
     'grade': ['', [Validators.required]],
     'section': ['', [Validators.required]],
+    'period': ['', [Validators.required]],
     'shift': ['', [Validators.required]],
     'capacity': ['', [Validators.required]],
     'specialCapacity': ['', [Validators.required]]
@@ -110,6 +127,7 @@ export class ModalAddClassroomComponent {
       idCampus: Number(this.formAddClassroom.get('campus')?.value) ?? 0,
       idGrade: Number(this.formAddClassroom.get('grade')?.value) ?? 0,
       idSection: Number(this.formAddClassroom.get('section')?.value) ?? 0,
+      idPeriod: Number(this.formAddClassroom.get('period')?.value) ?? 0,
       shift: this.formAddClassroom.get('shift')?.value ?? '',
       capacity: Number(this.formAddClassroom.get('capacity')?.value) ?? 0,
       specialCapacity: Number(this.formAddClassroom.get('specialCapacity')?.value) ?? 0,
@@ -137,7 +155,13 @@ export class ModalAddClassroomComponent {
   }
 
   onCancel() {
-    this.formAddClassroom.reset();
+    this.formAddClassroom.reset({
+      campus: '',
+      grade: '',
+      section: '',
+      period: '',
+      shift: ''
+    });
     this.modalService.dismissAll();
   }
 }

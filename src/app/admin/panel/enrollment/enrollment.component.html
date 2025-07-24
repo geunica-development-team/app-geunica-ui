@@ -12,42 +12,42 @@
 <div class="col-12">
   <div class="card">
     <div class="card-header d-grid d-lg-flex justify-content-between align-items-center">
-    <h5 class="card-title mb-2 mb-lg-0">Lista de Inscripciones</h5>
+      <h5 class="card-title mb-2 mb-lg-0">Lista de Inscripciones</h5>
 
-    <!-- Filtros simples -->
-    <div class="d-flex gap-3 align-items-center">
-      <!-- Filtro por Estado -->
-      <select 
-        class="form-select form-select-sm w-100"
-        style="width: 200px;"
-        [(ngModel)]="selectedStatus"
-        (change)="applyFilters()">
-        <option value="">Todos los estados</option>
-        @for (status of enrollmentStatuses; track status.value) {
-          <option [value]="status.value">{{ status.label }}</option>
-        }
-      </select>
+      <!-- Filtros simples -->
+      <div class="d-flex gap-3 align-items-center">
+        <!-- Filtro por Estado -->
+        <select 
+          class="form-select form-select-sm w-100"
+          style="width: 200px;"
+          [(ngModel)]="selectedStatus"
+          (change)="applyFilters()">
+          <option value="">Todos los estados</option>
+          @for (status of enrollmentStatuses; track status.value) {
+            <option [value]="status.value">{{ status.label }}</option>
+          }
+        </select>
 
-      <!-- Buscador -->
-      <div class="input-group w-100" style="width: 250px;">
-        <span class="input-group-text"><i class="fas fa-search"></i></span>
-        <input 
-          (input)="applySearchFilter($event)" 
-          type="text" 
-          class="form-control form-control-sm" 
-          placeholder="Buscar inscripción..."
-          [(ngModel)]="searchValue">
+        <!-- Buscador -->
+        <div class="input-group w-100" style="width: 250px;">
+          <span class="input-group-text"><i class="fas fa-search"></i></span>
+          <input 
+            (input)="applySearchFilter($event)" 
+            type="text" 
+            class="form-control form-control-sm" 
+            placeholder="Buscar inscripción..."
+            [(ngModel)]="searchValue">
+        </div>
+
+        <!-- Botón limpiar -->
+        <button 
+          type="button" 
+          class="btn btn-outline-secondary btn-sm"
+          (click)="clearFilters()">
+          <i class="fas fa-times"></i>
+        </button>
       </div>
-
-      <!-- Botón limpiar -->
-      <button 
-        type="button" 
-        class="btn btn-outline-secondary btn-sm"
-        (click)="clearFilters()">
-        <i class="fas fa-times"></i>
-      </button>
     </div>
-  </div>
 
     <div class="card-body p-3">
       <app-table-enrollment
@@ -83,6 +83,7 @@
 
 <app-modal-add-enrollment
   #modalAddEnrollment
+  (enrollmentAdded)="onCreatedOrEditedOrDeleted()"
 />
 
 <app-modal-read-enrollment 

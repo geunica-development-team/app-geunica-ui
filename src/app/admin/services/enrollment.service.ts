@@ -1,3 +1,5 @@
+//OJO, EN EL BACKEND "INSCRIPCION" ES INSCRIPTION,
+//EN EL FRONTEND "INSCRIPCION" ES ENROLLMENT
 export interface Enrollment {
   id: number;
   student: string;

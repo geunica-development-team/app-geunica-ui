@@ -10,7 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class ModalDeleteClassroomComponent {
   @Input() rowId!: number;
-  @Output() deletedClassroom = new EventEmitter<void>();
+  @Output() classroomDeleted = new EventEmitter<void>();
 
   private modalService = inject(NgbModal);
   private notifycation = inject(ToastrService);

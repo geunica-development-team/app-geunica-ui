@@ -6,6 +6,7 @@ export interface dataClassroom {
     idCampus: number,
     idGrade: number,
     idSection: number,
+    idPeriod: number,
     name: string,
     shift: string,
     capacity: number,
@@ -34,6 +35,10 @@ export interface dataClassroomById {
         id: number,
         name: string
     },
+    period: {
+        id: number,
+        name: string
+    }
 }
 
 export interface dataClassroomAll {
@@ -54,6 +59,10 @@ export interface dataClassroomAll {
     },
     section: {
         name: string
+    },
+    period: {
+        name: string,
+        state: string
     }
 }
 

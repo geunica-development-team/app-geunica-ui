@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
 import { TableEnrollmentComponent } from '../admin-component/table-enrollment/table-enrollment.component';
 import { AssignGroupData, Enrollment } from '../../services/enrollment.service';
@@ -8,6 +8,7 @@ import { ModalDeleteEnrollmentComponent } from './modal-delete-enrollment/modal-
 import { ModalAddEnrollmentComponent } from './modal-add-enrollment/modal-add-enrollment.component';
 import { ModalReadEnrollmentComponent } from './modal-read-enrollment/modal-read-enrollment.component';
 import { FormsModule } from '@angular/forms';
+import { dataInscriptionAll, InscriptionService } from '../../services/inscription.service';
 
 @Component({
   selector: 'app-enrollment',
@@ -16,29 +17,45 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './enrollment.component.css'
 })
 export class EnrollmentComponent {
+  private inscriptionService = inject(InscriptionService)
+
+  ngOnInit() {
+    this.loadEnrollments();
+  }
+
   @ViewChild("modalContinueRegistration") modalContinueRegistration?: ModalContinueRegistrationComponent
   @ViewChild("modalMarkPayment") modalMarkPayment?: ModalMarkPaymentComponent
   @ViewChild("modalDeleteEnrollment") modalDeleteEnrollment?: ModalDeleteEnrollmentComponent
   @ViewChild("modalReadEnrollment") modalReadEnrollment?: ModalReadEnrollmentComponent
+  
+    // FILTROS
+    selectedStatus = ""
+    searchValue = ""
 
   // COLUMNAS DE LA TABLA
-  columns = ["ID", "Estudiante", "Nivel Postulación", "Fecha", "Estado Inscripción", "Evaluación Resultado", "Ticket"]
+  columns = [
+    "ID",
+    "Estudiante",
+    "DNI",
+    "Apoderado",
+    "Grado y Sección",
+    "Fecha",
+    "Estado Inscripción",
+    "Evaluación Resultado"
+  ]
 
   // MAPEO PARA COLUMNAS Y FILAS
   columnMappings = {
     ID: "id",
-    Estudiante: "student",
-    "Nivel Postulación": "application_level",
-    Fecha: "date",
+    Estudiante: "studentFullName",
+    "DNI": "documentNumber",
+    Apoderado: "tutorFullName",
+    "Grado y Sección": "gradeAndSection",
+    Fecha: "registrationDate",
     "Estado Inscripción": "state",
     "Evaluación Resultado": "eval_result",
-    Ticket: "ticket",
   }
-
-  // FILTROS
-  selectedStatus = ""
-  searchValue = ""
-
+  
   // ESTADOS DISPONIBLES
   enrollmentStatuses = [
     { value: "Pendiente", label: "Pendiente" },
@@ -48,101 +65,55 @@ export class EnrollmentComponent {
     { value: "Pago pendiente", label: "Pago pendiente" },
     { value: "Matriculado", label: "Matriculado" },
   ]
-
-  rows: Enrollment[] = [
-    {
-      id: 1,
-      student: "Lucía Fernández",
-      application_level: "Primaria",
-      date: "2025-05-14",
-      state: "Pendiente",
-      eval_result: "-",
-      ticket: "-",
-    },
-    {
-      id: 2,
-      student: "Carlos Pérez",
-      application_level: "Primaria",
-      date: "2025-05-20",
-      state: "Evaluación en proceso",
-      eval_result: "-",
-      ticket: "-",
-    },
-    {
-      id: 3,
-      student: "María González",
-      application_level: "Primaria",
-      date: "2025-06-01",
-      state: "Evaluado",
-      eval_result: "Sin condición",
-      ticket: "-",
-    },
-    {
-      id: 4,
-      student: "José Ramírez",
-      application_level: "Primaria",
-      date: "2025-06-10",
-      state: "Evaluado",
-      eval_result: "Con condición",
-      ticket: "-",
-    },
-    {
-      id: 5,
-      student: "Ana López",
-      application_level: "Primaria",
-      date: "2025-06-15",
-      state: "Pendiente",
-      eval_result: "-",
-      ticket: "-",
-    },
-    {
-      id: 6,
-      student: "Luis Torres",
-      application_level: "Primaria",
-      date: "2025-06-18",
-      state: "Rechazado",
-      eval_result: "Con condición",
-      ticket: "-",
-    },
-    {
-      id: 7,
-      student: "Camila Rojas",
-      application_level: "Primaria",
-      date: "2025-06-22",
-      state: "Pago pendiente",
-      eval_result: "Con condición",
-      ticket: "Pendiente",
-    },
-    {
-      id: 8,
-      student: "Miguel Castro",
-      application_level: "Primaria",
-      date: "2025-06-25",
-      state: "Matriculado",
-      eval_result: "Sin condición",
-      ticket: "Pagado",
-    },
-    {
-      id: 9,
-      student: "Valentina Mendoza",
-      application_level: "Primaria",
-      date: "2025-06-26",
-      state: "Evaluación en proceso",
-      eval_result: "-",
-      ticket: "-",
-    },
-    {
-      id: 10,
-      student: "Diego Silva",
-      application_level: "Primaria",
-      date: "2025-06-27",
-      state: "Pendiente",
-      eval_result: "-",
-      ticket: "-",
-    },
-  ]
-
+    
+  rows: dataInscriptionAll[] = [];
+  
   @ViewChild("enrollmentTable") enrollmentTable?: TableEnrollmentComponent
+
+  loadEnrollments() {
+    this.inscriptionService.getAllInscriptions().subscribe({
+      next:(inscription) => {
+        this.rows = inscription.map((inscription: any): dataInscriptionAll & { studentFullName: string, tutorFullName: string, gradeAndSection: string, documentNumber: string } => ({
+          id: inscription.id,
+          registrationDate: this.formatDate(inscription.registrationDate),
+          state: inscription.state,
+          student: {
+            person: {
+              names: inscription.student?.person?.names,
+              paternalSurname: inscription.student?.person?.paternalSurname,
+              maternalSurname: inscription.student?.person?.maternalSurname,
+              documentNumber: inscription.student?.person?.documentNumber
+            }
+          },
+          tutor: {
+            person: {
+              names: inscription.tutor?.person?.names,
+              paternalSurname: inscription.tutor?.person?.paternalSurname,
+              maternalSurname: inscription.tutor?.person?.maternalSurname,
+            }
+          },
+          grade: {
+            id: inscription.grade.id,
+            name: inscription.grade.name,
+            level: {
+              id: inscription.grade.level.id,
+              name: inscription.grade.level.name
+            }
+          },
+          documentNumber: `${inscription.student?.person?.documentNumber}`,
+          studentFullName: `${inscription.student?.person?.names} ${inscription.student?.person?.paternalSurname} ${inscription.student?.person?.maternalSurname}`,
+          tutorFullName: `${inscription.tutor?.person?.names} ${inscription.tutor?.person?.paternalSurname} ${inscription.tutor?.person?.maternalSurname}`,
+          gradeAndSection: `${inscription.grade?.level?.name} - ${inscription.grade?.name}`
+        }));
+        if (this.enrollmentTable) {
+          this.enrollmentTable.updateTable();
+        }
+      },
+      error: (error) => {
+        console.error('Error al cargar la lista de inscripciones', error)
+      }
+    })
+  }
 
   // FILTROS
   applyFilters() {
@@ -227,7 +198,6 @@ export class EnrollmentComponent {
     const studentIndex = this.rows.findIndex((row) => row.id === data.studentId)
     if (studentIndex !== -1) {
       this.rows[studentIndex].state = "Pago pendiente"
-      this.rows[studentIndex].ticket = "Pendiente"
       if (this.enrollmentTable) {
         this.enrollmentTable.updateTable()
       }
@@ -236,5 +206,17 @@ export class EnrollmentComponent {
     alert(
       `Ticket generado para ${data.studentName} en el grupo ${data.selectedGroup?.name}. Estado actualizado a "Pago pendiente"`,
     )
+  }
+
+  formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // +1 porque enero es 0
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  }
+
+  onCreatedOrEditedOrDeleted() {
+    this.loadEnrollments();
   }
 }

@@ -43,22 +43,26 @@ export class ClassroomsComponent {
   columns = [
     'ID',
     'Nombre',
+    'Periodo',
+    'Estado',
     'Sede',
     'Nivel',
     'Grado y Sección',
     'Turno',
-    'Capacidad | Capacidad Condición'
+    'Capacidad'
   ];
   
   // MAPEO PARA COLUMNAS Y FILAS
   columnMappings = {
     'ID': 'id',
     'Nombre': 'name',
+    'Periodo': 'period',
+    'Estado': 'stateText',
     'Sede': 'campus',
     'Nivel': 'level',
     'Grado y Sección': 'gradeAndSection',
     'Turno': 'shift',
-    'Capacidad | Capacidad Condición': 'capacityDisplay'
+    'Capacidad': 'capacityDisplay'
   };
 
   rows: dataClassroomAll[] = [];
@@ -68,16 +72,19 @@ export class ClassroomsComponent {
   loadClassrooms() {
     this.classroomService.getAllClassrooms().subscribe({
       next:(classroom) => {
-        this.rows = classroom.map((classroom: any): dataClassroomAll & { gradeAndSection: string, capacityDisplay: string } => ({
+        this.rows = classroom.map((classroom: any): dataClassroomAll & { gradeAndSection: string, capacityDisplay: string, stateText: string, stateClass: string } => ({
           id: classroom.id,
           name: classroom.name,
-          campus: classroom.campus.name,
-          level: classroom.grade.level.name,
-          grade: classroom.grade.name,
+          campus: classroom.campus?.name,
+          level: classroom.grade?.level?.name,
+          grade: classroom.grade?.name,
           shift: classroom.shift,
-          section: classroom.section.name,
+          section: classroom.section?.name,
+          period: classroom.period?.name,
           specialCapacity: classroom.specialCapacity,
           capacity: classroom.capacity,
+          stateText: classroom.period?.state === true ? 'En curso': 'Finalizado',
+          stateClass: classroom.period?.state === true ? 'badge bg-success-subtle text-success fw-semibold' : 'badge bg-danger-subtle text-danger fw-semibold',
           gradeAndSection: `${classroom.grade.name} ${classroom.section.name}`,
           capacityDisplay: `0/${classroom.capacity} | 0/${classroom.specialCapacity}`
         }));
