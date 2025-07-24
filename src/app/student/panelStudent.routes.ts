@@ -54,6 +54,7 @@ export const studentPanelRoutes: Routes = [
                 path: 'payments',
                 component: PaymentsComponent
             },
+            
             {
                 path: 'announcement',
                 component: AnnouncementComponent

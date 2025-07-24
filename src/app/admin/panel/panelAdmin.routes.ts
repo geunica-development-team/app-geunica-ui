@@ -50,10 +50,7 @@ export const adminPanelRoutes: Routes = [
                 path: 'finanzas',
                 component: FinanceComponent
             },
-            {
-                path: 'aulas',
-                component: HeaderDinamicComponent
-            },
+
             {
                 path: 'perfil',
                 loadChildren: () => import('../../pages/shared/profile/profile.routes').then(m => m.profileRoutes)

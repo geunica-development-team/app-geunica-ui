@@ -1,7 +1,0 @@
-[
-  { "id": 1, "examId": 1, "enrollmentId": 101, "value": 15.50, "status": "activa", "registrationDate": "2025-03-06" },
-  { "id": 2, "examId": 2, "enrollmentId": 101, "value": 18.00, "status": "activa", "registrationDate": "2025-03-31" },
-  { "id": 3, "examId": 3, "enrollmentId": 101, "value": 12.00, "status": "activa", "registrationDate": "2025-04-16" },
-  { "id": 4, "examId": 4, "enrollmentId": 101, "value": 19.00, "status": "activa", "registrationDate": "2025-05-01" },
-  { "id": 5, "examId": 5, "enrollmentId": 101, "value": 17.50, "status": "activa", "registrationDate": "2025-05-16" }
-]

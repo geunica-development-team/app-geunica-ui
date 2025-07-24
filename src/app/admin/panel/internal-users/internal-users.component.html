@@ -1,1 +1,30 @@
-<p>internal-users works!</p>
+<!-- internal-users.component.html -->
+<app-header-dinamic [tabs]="[
+    {id: 'pagos',      label: 'Pagos',      icon: 'fas fa-credit-card'},
+    {id: 'cursos',     label: 'Cursos',     icon: 'fas fa-book'},
+    {id: 'notas',      label: 'Notas',      icon: 'fas fa-chart-line'},
+    {id: 'asistencia', label: 'Asistencia', icon: 'fas fa-calendar-check'},
+    {id: 'documentos', label: 'Documentos', icon: 'fas fa-file-alt'},
+    {id: 'semestre', label: 'Semestre', icon: 'fas fa-file-alt'}
+  ]">
+
+  <!-- Contenido para "Pagos" -->
+  <ng-template tabId="pagos">
+    <div class="text-center py-5">
+      <i class="fas fa-credit-card fa-3x text-muted mb-3"></i>
+      <h5 class="text-muted">Listado de Pagos</h5>
+      <p>Aquí iría tu lógica o subcomponente de pagos.</p>
+    </div>
+  </ng-template>
+
+  <!-- Contenido para "Cursos" -->
+  <ng-template tabId="cursos">
+    <div class="text-center py-5">
+      <i class="fas fa-book fa-3x text-muted mb-3"></i>
+      <h5 class="text-muted">Listado de Cursos</h5>
+      <p>Aquí iría tu lógica o subcomponente de cursos.</p>
+    </div>
+  </ng-template>
+
+  <!-- Y así para cada pestaña -->
+</app-header-dinamic>

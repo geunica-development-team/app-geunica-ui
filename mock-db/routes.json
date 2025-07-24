@@ -1,8 +1,0 @@
-{
-  "/api/courses":      "/courses",
-  "/api/curriculum":   "/curriculum",
-  "/api/exams":        "/exams",
-  "/api/grades":       "/grades",
-  "/api/announcements":"/announcements",
-  "/api/attendance":   "/attendance"
-}
