@@ -10,7 +10,10 @@
   "grado": [
     { "id_grado": 1, "nombre": "1°", "id_nivel": 1 },
     { "id_grado": 2, "nombre": "2°", "id_nivel": 1 },
-    { "id_grado": 3, "nombre": "3°", "id_nivel": 1 }
+    { "id_grado": 3, "nombre": "3°", "id_nivel": 1 },
+    { "id_grado": 4, "nombre": "4°", "id_nivel": 1 },
+    { "id_grado": 5, "nombre": "5°", "id_nivel": 1 },
+    { "id_grado": 6, "nombre": "6°", "id_nivel": 1 }
   ],
   "seccion": [
     { "id_seccion": 1, "nombre": "A" },
@@ -51,7 +54,9 @@
     { "id_persona": 2, "nombres": "Luis", "apell_paterno": "Ramírez", "correo": "luis.ramirez@mail.com" },
     { "id_persona": 3, "nombres": "Carmen", "apell_paterno": "Torres", "correo": "carmen.torres@mail.com" },
     { "id_persona": 4, "nombres": "pepe", "apell_paterno": "Torres", "correo": "Pepe.torres@mail.com" },
-    { "id_persona": 5, "nombres": "Marcelo", "apell_paterno": "Ñusta", "correo": "MarcelinoÑusta@mail.com" }
+    { "id_persona": 5, "nombres": "Marcelo", "apell_paterno": "Ñusta", "correo": "MarcelinoÑusta@mail.com" },
+    { "id_persona": 6, "nombres": "pepillo", "apell_paterno": "Torres", "correo": "PepilloTorres@mail.com" },
+    { "id_persona": 7, "nombres": "pepito", "apell_paterno": "Torres", "correo": "PepitoTorres@mail.com" }
   ],
   "docente": [
     {
@@ -64,7 +69,9 @@
     }
   ],
     "estudiante": [
-    { "id_estudiante": 1, "id_persona": 4, "id_usuario": 3, "codigo_estudiante": "EST001", "fecha_ingreso": "2025-01-15", "estado": "activo" }
+    { "id_estudiante": 1, "id_persona": 4, "id_usuario": 3, "codigo_estudiante": "EST001", "fecha_ingreso": "2025-01-15", "estado": "activo" },
+    { "id_estudiante": 2, "id_persona": 6, "id_usuario": 3, "codigo_estudiante": "EST001", "fecha_ingreso": "2025-01-15", "estado": "activo" },
+    { "id_estudiante": 3, "id_persona": 7, "id_usuario": 3, "codigo_estudiante": "EST001", "fecha_ingreso": "2025-01-15", "estado": "activo" }
   ],
   "apoderado": [
     { "id_apoderado": 1, "id_persona": 5 }

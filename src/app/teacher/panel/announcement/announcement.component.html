@@ -2,8 +2,6 @@
 
   <h2 class="text-center mb-4">Anuncios</h2>
 
-  
-
   <div class="container">
     <div class="row justify-content-center">
       <!-- Columna central con cards verticales -->
@@ -57,7 +55,7 @@
             </ul>
           </div>
 
-          <button class="btn btn-dark">
+          <button class="btn btn-dark" (click)="openModalAnuncio()" >
             + Nuevo anuncio
           </button>
 
@@ -137,4 +135,38 @@
       </div>
     </div>
   </ng-container>
+</app-app-modal>
+
+
+<!-- Modal reutilizable para nuevo anuncio-->
+<app-app-modal
+  [visible]="creatingAnnouncement"
+  (closed)="closeModal()"
+  width="1000px"
+  maxWidth="90vw"
+  borderRadius="0.75rem">
+<ng-container > 
+    <div class="p-4">
+      <h4>Crear nuevo anuncio</h4>
+        <div class="mb-3 d-flex align-items-center">
+          <!-- Label a la derecha -->
+          <label class="ms-3 mb-0 fw-medium">
+            Destinatarios:
+          </label>
+          <!-- Input de destinatarios -->
+          <input 
+            type="text"
+            class="form-control rounded-5"  
+            placeholder="Buscar destinatario(s)" />
+        </div>
+        <label class="ms-3 mb-0 fw-medium">
+          Mensaje:
+        </label>
+        <div #editorContainer class="border rounded p-2" style="min-height: 150px;"></div>
+
+
+
+    </div>
+</ng-container>
+
 </app-app-modal>

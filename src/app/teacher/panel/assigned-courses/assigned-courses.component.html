@@ -20,13 +20,13 @@
       <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let course of filteredCourses">
         
           <app-card-courses class="h-100"
-            [title]="course.nombre"
+            [etiquetaTitulo]="'CURSO'"
+            [titulo]="course.nombre"
+            [etiquetaSubtitulo1]="'CÓDIGO'"
             [subtitulo1]="course.codigo"
-            
-            [subtitulo2]="course.descripcion_curso"
             [link]="['/student/panel/courses', course.id_curso, 'curriculum']">
             
-            <!-- este ng-content se pegará al final de card-body -->
+            <!-- el link tenemos que cambiarlo, lo mejor seria crear un curriculum para profesor -->
 
             </app-card-courses>
       </div>
