@@ -32,16 +32,14 @@ export class DataStudentService {
   }
 
   getCourseById(id: number): Observable<Curso> {
-    return this.http
-      .get<Curso[]>(`${this.base}/curso?id=${id}`)
-      .pipe(
-        map(arr => {
-          if (!arr.length) {
-            throw new Error(`Curso con id ${id} no encontrado`);
-          }
-          return arr[0];
-        })
-      );
+      return this.http
+    .get<Curso[]>(`${this.base}/curso?id_curso=${id}`)//is_curso es como ests en la json
+    .pipe(
+      map(arr => {
+        if (!arr.length) throw new Error(`Curso con id ${id} no encontrado`);
+        return arr[0];
+      })
+    );
   }
 
   getTeacher(): Observable<Docente[]> {

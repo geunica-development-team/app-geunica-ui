@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { CoursesComponent } from '../courses/courses.component';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { DataStudentService } from '../../services/dataStudent.service';
 import { Curso } from '../../services/modelStudent';
+import { HeaderDinamicComponent } from '../../../components/header-dinamic/header-dinamic.component';
+import { TabContentDirective } from '../../../components/header-dinamic/tab-content.directive';
 
 interface RegistryItem {
   concepto: string;
@@ -12,7 +13,7 @@ interface RegistryItem {
 
 @Component({
   selector: 'app-grades-registry',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, HeaderDinamicComponent, TabContentDirective],
   templateUrl: './grades-registry.component.html',
   styleUrl: './grades-registry.component.css'
 })
