@@ -19,8 +19,6 @@
           <app-card-courses class="h-100"
             [etiquetaTitulo]="'CURSO'"
             [titulo]="course.nombre"
-            [etiquetaSubtitulo1]="'CÓDIGO'"
-            [subtitulo1]="course.codigo"
             [etiquetaSubtitulo2]="'DOCENTE'"
             [subtitulo2]="getDocenteAsignado()"
             [link]="['/student/panel/grades', course.id_curso, 'gradesRegistry']">
