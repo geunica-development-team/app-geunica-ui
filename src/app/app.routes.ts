@@ -26,6 +26,11 @@ export const routes: Routes = [
         import('./student/panel/panelStudent.routes').then(m => m.studentPanelRoutes) 
     },
     {
+      path: 'teacher',
+      loadChildren: () => 
+        import('./teacher/panel/panelTeacher.routes').then(m => m.teacherPanelRoutes) 
+    },
+    {
       path: 'public',
       loadChildren: () => 
         import('./pages/public/public.routes').then(m => m.publicRoutes) 
