@@ -35,14 +35,14 @@ export interface dataInscriptionbyId extends dataInscription {
     id: number;
     registrationDate: string;
     state: string;
-    level: {
-        id: number;
-        name: string;
-    }
     grade: {
-        id: number;
-        name: string;
-    };
+        id: number,
+        name: string
+        level: {
+            id: number;
+            name: string;
+        }
+    }
 }
 
 export interface dataInscriptionAll {

@@ -156,6 +156,13 @@ export class ModalAddEnrollmentComponent {
 
   onCancel() {
     this.modalService.dismissAll();
-    this.formAddEnrollment.reset();
+    this.formAddEnrollment.reset(
+      {
+        studentTypeOfDocument: '',
+        studentGender: '',
+        tutorTypeOfDocument: '',
+        tutorGender: ''
+      }
+    );
   }
 }

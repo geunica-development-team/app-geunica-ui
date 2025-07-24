@@ -1,7 +1,11 @@
-import { Component, ElementRef, EventEmitter, inject, Output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, Output, TemplateRef, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AssignGroupData, EnrollmentData, GroupOption } from '../../../services/enrollment.service';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { dataLevelAll, LevelService } from '../../../services/level.service';
+import { dataGradeAll, GradeService } from '../../../services/grade.service';
+import { InscriptionService } from '../../../services/inscription.service';
 
 @Component({
   selector: 'app-modal-read-enrollment',
@@ -11,25 +15,20 @@ import { FormsModule } from '@angular/forms';
 })
 export class ModalReadEnrollmentComponent {
   private modalService = inject(NgbModal);
+  private toolsForm = inject(FormBuilder);
+  private notifycation = inject(ToastrService);
+  private enrollmentService = inject(InscriptionService);
+  private levelService = inject(LevelService);
+  private gradeService = inject(GradeService);
   
   @Output() enrollmentUpdated = new EventEmitter<EnrollmentData>();
+  @Input() rowId!: number;
+
 
   // Estado del modal
   isEditMode: boolean = false;
   originalData: EnrollmentData | null = null;
   currentData: EnrollmentData | null = null;
-
-  // Opciones para dropdowns
-  documentTypes = [
-    { value: 'DNI', label: 'DNI' },
-    { value: 'CE', label: 'Carnet de Extranjería' },
-    { value: 'PASAPORTE', label: 'Pasaporte' }
-  ];
-
-  genders = [
-    { value: 'M', label: 'Masculino' },
-    { value: 'F', label: 'Femenino' }
-  ];
 
   enrollmentStatuses = [
     { value: 'Pendiente', label: 'Pendiente' },
@@ -39,7 +38,93 @@ export class ModalReadEnrollmentComponent {
     { value: 'Rechazado', label: 'Rechazado' }
   ];
 
+  //FILTRAR LOS GRADOS POR NIVEL
+  selectedLevelId: number | null = null;
+
+  get filteredGrades() {
+    if (!this.selectedLevelId) return this.grades;
+    return this.grades.filter(grade => grade.level.id === this.selectedLevelId);
+  }
+
+  levels: dataLevelAll[] = []
+  loadLevels() {
+    this.levelService.getAllLevels().subscribe({
+      next: (value) => {
+        this.levels = value;
+      },
+      error: (error: Error) => {
+        console.error('Error al cargar los niveles/programas', error);
+      }
+    })
+  }
+
+  grades: dataGradeAll[] = []
+  loadGrades() {
+    this.gradeService.getAllGrades().subscribe({
+      next: (value) => {
+        this.grades = value;
+      },
+      error: (error: Error) => {
+        console.error('Error al cargar los grados', error);
+      }
+    })
+  }
+
+  formEditEnrollment = this.toolsForm.group({
+    // DATOS DEL ESTUDIANTE
+    studentNames: ['', Validators.required],
+    studentPaternalSurname: ['', Validators.required],
+    studentMaternalSurname: ['', Validators.required],
+    studentTypeOfDocument: ['', Validators.required],
+    studentDocumentNumber: ['', Validators.required],
+    studentBirthDate: ['', Validators.required],
+    studentGender: ['', Validators.required],
+    studentPhoneNumber: [''],
+    studentAdress: [''],
+    studentEmail: ['', [Validators.email]],
+    // NIVEL ACADÉMICO
+    level: [0, Validators.required],
+    grade: [0, Validators.required],
+    // DATOS DEL APODERADO
+    tutorNames: ['', Validators.required],
+    tutorPaternalSurname: ['', Validators.required],
+    tutorMaternalSurname: ['', Validators.required],
+    tutorTypeOfDocument: ['', Validators.required],
+    tutorDocumentNumber: ['', Validators.required],
+    tutorBirthDate: ['', Validators.required],
+    tutorGender: [''],
+    tutorPhoneNumber: ['', Validators.required],
+    tutorAdress: ['', Validators.required],
+    tutorEmail: ['', [Validators.required, Validators.email]],
+  })
+
   @ViewChild('modalReadEnrollment') modalReadEnrollment!: TemplateRef<ElementRef>;
+
+  loadEnrollmentDetails() {
+    if (this.rowId && !isNaN(this.rowId)) {
+      this.enrollmentService.getInscriptionById(this.rowId).subscribe({
+        next: (enrollment) => {
+          this.selectedLevelId = enrollment.grade.level.id;
+          this.formEditEnrollment.patchValue({
+            name: classroom.name,
+            campus: classroom.campus?.id,
+            grade: classroom.grade?.id,
+            section: classroom.section?.id,
+            level: classroom.grade?.level?.id,
+            period: classroom.period?.id,
+            shift: classroom.shift,
+            capacity: classroom.capacity,
+            specialCapacity: classroom.specialCapacity,
+          });
+        },
+        error: (error) => {
+          this.notifycation.error('Error al cargar los detalles del grado', 'Error');
+        }
+      })
+    } else {
+      this.notifycation.error('ID del grado inválido', 'Error');
+    }
+  }
 
   openModal(enrollmentData: any) {
     // Mapear los datos recibidos al formato interno

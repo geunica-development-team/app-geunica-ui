@@ -32,7 +32,7 @@
             type="text" 
             class="form-control rounded" 
             [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.student.firstName"
+            formControlName="studentNames"
             name="studentFirstName">
         </div>
         <div class="col-md-4">
@@ -41,7 +41,7 @@
             type="text" 
             class="form-control rounded"
             [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.student.paternalLastName"
+            formControlName="studentPaternalSurname"
             name="studentPaternalLastName">
         </div>
         <div class="col-md-4">
@@ -50,7 +50,7 @@
             type="text" 
             class="form-control rounded"
             [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.student.maternalLastName"
+            formControlName="studentMaternalSurname"
             name="studentMaternalLastName">
         </div>
       </div>
@@ -62,11 +62,11 @@
           <select 
             class="form-select rounded"
             [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.student.documentType"
+            formControlName="studentTypeOfDocument"
             name="studentDocumentType">
-            @for (docType of documentTypes; track docType.value) {
-              <option [value]="docType.value">{{ docType.label }}</option>
-            }
+            <option value="" disabled>Tipo de Documento</option>
+            <option value="DNI">DNI</option>
+            <option value="Carnet de extranjería">Carnet de extranjería</option>
           </select>
         </div>
         <div class="col-md-3">
@@ -75,7 +75,7 @@
             type="text" 
             class="form-control rounded"
             [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.student.documentNumber"
+            formControlName="studentDocumentNumber"
             name="studentDocumentNumber">
         </div>
         <div class="col-md-3">
@@ -84,7 +84,7 @@
             type="date" 
             class="form-control rounded"
             [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.student.birthDate"
+            formControlName="studentBirthDate"
             name="studentBirthDate">
         </div>
         <div class="col-md-3">
@@ -94,9 +94,9 @@
             [disabled]="!isEditMode"
             [(ngModel)]="currentData!.student.gender"
             name="studentGender">
-            @for (gender of genders; track gender.value) {
-              <option [value]="gender.value">{{ gender.label }}</option>
-            }
+            <option value="" disabled>Género</option>
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
           </select>
         </div>
       </div>
@@ -109,7 +109,7 @@
             type="text" 
             class="form-control rounded"
             [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.student.phone"
+            formControlName="studentPhoneNumber"
             name="studentPhone">
         </div>
         <div class="col-md-4">
@@ -118,7 +118,7 @@
             type="text" 
             class="form-control rounded"
             [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.student.address"
+            formControlName="studentAdress"
             name="studentAddress">
         </div>
         <div class="col-md-4">
@@ -127,8 +127,41 @@
             type="email" 
             class="form-control rounded"
             [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.student.email"
+            formControlName="studentEmail"
             name="studentEmail">
+        </div>
+      </div>
+
+      <!-- NIVEL ACADÉMICO -->
+      <div class="section-divider">
+        <h5 class="fw-semibold mb-0">Nivel académico</h5>
+      </div>
+
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <label class="form-label fw-medium small">Nivel *</label>
+          <select 
+            class="form-select rounded"
+            name="academicLevel"
+            (change)="selectedLevelId = +$any($event.target).value"
+            >
+            <option value="" disabled selected>Nivel</option>
+            @for (level of levels; track level.id) {
+              <option [value]="level.id">{{ level.name }}</option>
+            }
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-medium small">Grado *</label>
+          <select 
+            class="form-select rounded" 
+            formControlName="grade"
+            name="academicGrade">
+            <option value="" disabled>Grado</option>
+            @for (grade of filteredGrades; track grade.id) {
+              <option [value]="grade.id">{{ grade.name }}</option>
+            }
+          </select>
         </div>
       </div>
 
@@ -145,7 +178,7 @@
             type="text" 
             class="form-control rounded"
             [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.guardian.firstName"
+            formControlName="tutorNames"
             name="guardianFirstName">
         </div>
         <div class="col-md-4">
@@ -154,7 +187,7 @@
             type="text" 
             class="form-control rounded"
             [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.guardian.paternalLastName"
+            formControlName="tutorPaternalSurname"
             name="guardianPaternalLastName">
         </div>
         <div class="col-md-4">
@@ -163,7 +196,7 @@
             type="text" 
             class="form-control rounded"
             [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.guardian.maternalLastName"
+            formControlName="tutorMaternalSurname"
             name="guardianMaternalLastName">
         </div>
       </div>
@@ -175,11 +208,11 @@
           <select 
             class="form-select rounded"
             [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.guardian.documentType"
+            formControlName="tutorTypeOfDocument"
             name="guardianDocumentType">
-            @for (docType of documentTypes; track docType.value) {
-              <option [value]="docType.value">{{ docType.label }}</option>
-            }
+            <option value="" disabled>Tipo de Documento</option>
+            <option value="DNI">DNI</option>
+            <option value="Carnet de extranjería">Carnet de extranjería</option>
           </select>
         </div>
         <div class="col-md-3">
@@ -188,7 +221,7 @@
             type="text" 
             class="form-control rounded"
             [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.guardian.documentNumber"
+            formControlName="tutorDocumentNumber"
             name="guardianDocumentNumber">
         </div>
         <div class="col-md-3">
@@ -197,7 +230,7 @@
             type="date" 
             class="form-control rounded"
             [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.guardian.birthDate"
+            formControlName="tutorBirthDate"
             name="guardianBirthDate">
         </div>
         <div class="col-md-3">
@@ -205,11 +238,11 @@
           <select 
             class="form-select rounded"
             [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.guardian.gender"
+            formControlName="tutorGender"
             name="guardianGender">
-            @for (gender of genders; track gender.value) {
-              <option [value]="gender.value">{{ gender.label }}</option>
-            }
+            <option value="" disabled>Género</option>
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
           </select>
         </div>
       </div>
@@ -222,7 +255,7 @@
             type="text" 
             class="form-control rounded"
             [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.guardian.phone"
+            formControlName="tutorPhoneNumber"
             name="guardianPhone">
         </div>
         <div class="col-md-4">
@@ -231,7 +264,7 @@
             type="text" 
             class="form-control rounded"
             [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.guardian.address"
+            formControlName="tutorAdress"
             name="guardianAddress">
         </div>
         <div class="col-md-4">
@@ -240,7 +273,7 @@
             type="email" 
             class="form-control rounded"
             [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.guardian.email"
+            formControlName="tutorEmail"
             name="guardianEmail">
         </div>
       </div>
