@@ -117,11 +117,18 @@
     { "id_usuario": 3, "usuario": "Alumnado", "id_persona": 4, "id_rol": 3 },
     { "id_usuario": 3, "usuario": "Familiar", "id_persona": 5, "id_rol": 4 }
   ],
-  "anuncio": [
-    { "id_anuncio": 1, "id_usuario": 2, "id_salon": 1, "titulo": "Inicio de Clases", "estado": "visto", "cuerpo": "Empieza el 15 de agosto.", "fecha_creacion": "2025-03-01" },
-    { "id_anuncio": 2, "id_usuario": 2, "id_salon": 1, "titulo": "Falta de tareas", "estado": "publicado", "cuerpo": "no entrego la tarea.", "fecha_creacion": "2025-03-01"},
-    { "id_anuncio": 3, "id_usuario": 2, "id_salon": 1, "titulo": "Pelea en el aula","estado": "publicado", "cuerpo": "El muchacho se peleo con 2 alumnos.", "fecha_creacion": "2025-03-03" }
-  ],
+"anuncio": [
+  { "id_anuncio": 1, "id_usuario": 2, "id_salon": 1, "titulo": "Inicio de Clases", "estado": "visto", "cuerpo": "Empieza el 15 de agosto.", "fecha_creacion": "2025-03-01" },
+  { "id_anuncio": 2, "id_usuario": 2, "id_salon": 1, "titulo": "Falta de tareas", "estado": "publicado", "cuerpo": "no entrego la tarea.", "fecha_creacion": "2025-03-01"},
+  { "id_anuncio": 3, "id_usuario": 2, "id_salon": 1, "titulo": "Pelea en el aula","estado": "publicado", "cuerpo": "El muchacho se peleo con 2 alumnos.", "fecha_creacion": "2025-03-03" },
+  { "id_anuncio": 4, "id_usuario": 2, "id_salon": 1, "titulo": "Entrega de trabajos", "estado": "visto", "cuerpo": "La entrega final es el 10 de marzo.", "fecha_creacion": "2025-03-04" },
+  { "id_anuncio": 5, "id_usuario": 2, "id_salon": 1, "titulo": "Reunión de padres", "estado": "publicado", "cuerpo": "Convocatoria para el día viernes a las 6pm.", "fecha_creacion": "2025-03-05" },
+  { "id_anuncio": 6, "id_usuario": 2, "id_salon": 1, "titulo": "Excursión programada", "estado": "publicado", "cuerpo": "El viaje al museo será el 20 de marzo.", "fecha_creacion": "2025-03-06" },
+  { "id_anuncio": 7, "id_usuario": 2, "id_salon": 1, "titulo": "Suspensión de clases", "estado": "publicado", "cuerpo": "No habrá clases el lunes por mantenimiento.", "fecha_creacion": "2025-03-07" },
+  { "id_anuncio": 8, "id_usuario": 2, "id_salon": 1, "titulo": "Taller de lectura", "estado": "publicado", "cuerpo": "El taller comienza el miércoles a las 3pm.", "fecha_creacion": "2025-03-08" },
+  { "id_anuncio": 9, "id_usuario": 2, "id_salon": 1, "titulo": "Entrega de libretas", "estado": "publicado", "cuerpo": "Se entregarán el 15 de marzo.", "fecha_creacion": "2025-03-09" },
+  { "id_anuncio": 10, "id_usuario": 2, "id_salon": 1, "titulo": "Cambio de horario", "estado": "publicado", "cuerpo": "Matemática pasa al primer bloque los lunes.", "fecha_creacion": "2025-03-10" }
+],
   "asistencia": [
   { "id_asistencia": 1,  "id_estudiante": 1, "status": "asistió",   "date": "2025-03-01" },
   { "id_asistencia": 2,  "id_estudiante": 1, "status": "falto",     "date": "2025-03-02" },

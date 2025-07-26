@@ -5,13 +5,13 @@ import { AppModalComponent } from '../../../components/app-modal/app-modal.compo
 import { SearcherComponent } from '../../../components/searcher/searcher.component';
 import { Anuncio } from '../../services/modelTeacher';
 import { DataTeacherService } from '../../services/dataTeacher.service';
-import { NgSelectModule } from '@ng-select/ng-select';
-import Quill from 'quill';
+import {QuillModule } from 'ngx-quill'
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-announcement',
   standalone: true,
-  imports: [CommonModule, AppModalComponent, NgSelectModule],
+  imports: [CommonModule, AppModalComponent,  FormsModule, QuillModule ],
   templateUrl: './announcement.component.html',
   styleUrl: './announcement.component.css'
 })
@@ -22,24 +22,28 @@ export class AnnouncementComponent implements OnInit {
   students: readonly any[]|null|undefined;
 
 
-  @ViewChild('editorContainer', { static: true }) editorContainer!: ElementRef<HTMLDivElement>;
-  private quillEditor!: Quill;//el quill no carga aaaaaah
+  contenido = '';
+  quillModules = {
+    toolbar: [
+      ['bold', 'italic', 'underline', 'strike'],        // botones de formato
+      
+      [{ 'header': 1 }, { 'header': 2 }],               // encabezados personalizados
+      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+      [{ 'indent': '-1' }, { 'indent': '+1' }],          // aumentar/disminuir sangría
+      [{ 'direction': 'rtl' }],                         // dirección del texto (derecha a izquierda)
+      [{ 'size': ['small', false, 'large', 'huge'] }],  // tamaño de fuente personalizado
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      [{ 'color': [] }, { 'background': [] }],          // colores de texto y fondo
+      [{ 'font': [] }],
+      [{ 'align': [] }],
+      ['clean']  
+    ]
+  };
 
   constructor(private dataService: DataTeacherService) {}
 
   ngOnInit() {
     this.announcements$ = this.dataService.getAnnouncements();
-  }
-
-
-    ngAfterViewInit() {
-    // Inicializa Quill editor con toolbar básico
-    this.quillEditor = new Quill(this.editorContainer.nativeElement, {
-      modules: {
-        toolbar: [ ['bold', 'italic', 'underline'], [{ list: 'ordered' }, { list: 'bullet' }], ['link'] ]
-      },
-      theme: 'snow'
-    });
   }
 
     openAnnouncement(a: Anuncio) {
@@ -49,10 +53,18 @@ export class AnnouncementComponent implements OnInit {
   closeModal() {
     this.selectedAnnouncement = null;
     this.creatingAnnouncement = false;
+    this.contenido = '';// Limpia el contenido para la próxima vez
   }
 
   openModalAnuncio(){
     this.creatingAnnouncement = true;
+    // Si quieres asegurarte, también puedes vaciar aquí:
+    this.contenido = '';
+  }
+
+  saveNewAnnouncement() {
+    console.log('Enviar:', this.contenido);
+    this.closeModal();
   }
 
 }

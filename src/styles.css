@@ -9,3 +9,9 @@ html, body {
   padding: 0;
   height: 100%;
 }
+
+.ql-editor {
+    min-height: 100px; /* Ajusta la altura según lo que necesites */
+    max-height: 300px; /* Puedes también agregar un máximo si lo deseas */
+    height: auto; /* Permite que la altura cambie automáticamente */
+  }

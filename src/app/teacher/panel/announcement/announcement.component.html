@@ -145,7 +145,7 @@
   width="1000px"
   maxWidth="90vw"
   borderRadius="0.75rem">
-<ng-container > 
+<ng-container *ngIf="creatingAnnouncement"> 
     <div class="p-4">
       <h4>Crear nuevo anuncio</h4>
         <div class="mb-3 d-flex align-items-center">
@@ -162,8 +162,20 @@
         <label class="ms-3 mb-0 fw-medium">
           Mensaje:
         </label>
-        <div #editorContainer class="border rounded p-2" style="min-height: 150px;"></div>
+        
+        <quill-editor
+        [(ngModel)]="contenido"
+        [modules]="quillModules"
+        placeholder="Enter text"
+        theme="snow"
+        class="bg-white rounded-5"
+        style="height: 200px;"
+        ></quill-editor>
 
+      <div class="d-flex justify-content-end mt-3">
+        <button type="button" class="btn btn-secondary me-2" (click)="closeModal()">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="saveNewAnnouncement()">Enviar</button>
+      </div>
 
 
     </div>
