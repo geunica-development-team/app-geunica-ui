@@ -7,6 +7,7 @@ import { NoteManagmentComponent } from "./note-managment/note-managment.componen
 import { AttendanceManagmentComponent } from "./attendance-managment/attendance-managment.component";
 import { AnnouncementComponent } from "./announcement/announcement.component";
 import { ScheduleComponent } from "./schedule/schedule.component";
+import { AttendanceListComponent } from "./attendance-list/attendance-list.component";
 
 export const teacherPanelRoutes: Routes = [
     {
@@ -32,18 +33,23 @@ export const teacherPanelRoutes: Routes = [
                 path: "NoteManagment",
                 component: NoteManagmentComponent
             },
-                        {
+            {
                 path: "attendanceManagment",
                 component: AttendanceManagmentComponent
             },
-                        {
+            {
+                path: "attendanceList/:id_salon",
+                component: AttendanceListComponent
+            },
+            {
                 path: "announcement",
                 component: AnnouncementComponent
             },
-                        {
+            {
                 path: "schedule",
                 component: ScheduleComponent
             }
+
         ]
     }
 ]

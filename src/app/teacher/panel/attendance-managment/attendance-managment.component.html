@@ -64,7 +64,10 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let month of attendance?.months">
+              <tr         
+                *ngFor="let month of attendance?.months" 
+                class="clickable-row" 
+                (click)="openAttendanceList(selectedGrade!.id_salon!, month.month)">
                 <td>{{ month.month }}</td>
                 <td>
                   {{ isMonthComplete(month) ? 'Completado' : 'En progreso' }}

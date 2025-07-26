@@ -1,0 +1,76 @@
+/* Hacer que la cabecera y la tabla tengan bordes redondeados */
+.table {
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+/* Quitar el borde superior en la primera fila del thead para una curva más limpia */
+.table thead th:first-child {
+  border-top-left-radius: 0.75rem;
+}
+.table thead th:last-child {
+  border-top-right-radius: 0.75rem;
+}
+
+/* Alinear los botones y hacerlos más compactos */
+.table tbody td .btn {
+  min-width: 4rem;
+}
+
+.custom-status-group {
+  /* Agrupa sin gap y con bordes redondeados */
+  border-radius: 1.5rem;
+  overflow: hidden;
+}
+
+/* Botones redondeados y pastel */
+.custom-status-btn {
+  border-radius: 0;
+  /* quitamos bordes internos extras */
+  border-width: 0;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.8rem;
+  transition: background-color .2s;
+}
+
+/* Redondeo en extremos del grupo */
+.custom-status-btn:first-child {
+  border-top-left-radius: 1.5rem;
+  border-bottom-left-radius: 1.5rem;
+}
+
+.custom-status-btn:last-child {
+  border-top-right-radius: 1.5rem;
+  border-bottom-right-radius: 1.5rem;
+}
+
+/* Tonos pastel para los estados */
+.btn-success.custom-status-btn {
+  background-color: #51aa51;  /* verde suave */
+  color: #2f5d2f;
+}
+.btn-danger.custom-status-btn {
+  background-color: #dd4848;  /* rojo suave */
+  color: #5d2f2f;
+}
+.btn-warning.custom-status-btn {
+  background-color: #e6f63d;  /* amarillo suave */
+  color: #5d4f2f;
+}
+
+/* Hover ligeramente más oscuro */
+.btn-success.custom-status-btn:hover {
+  background-color: #7bd97b;
+}
+.btn-danger.custom-status-btn:hover {
+  background-color: #e18a8a;
+}
+.btn-warning.custom-status-btn:hover {
+  background-color: #e7cf7e;
+}
+
+/* Asegura que el dropdown coincide con el botón */
+.dropdown-menu-end {
+  min-width: 100%;  /* para que el menú tenga por lo menos el ancho del grupo */
+  border-radius: 0 0 0.5rem 0.5rem;
+}

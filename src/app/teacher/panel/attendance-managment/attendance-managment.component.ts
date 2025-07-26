@@ -6,6 +6,7 @@ import { CardCoursesComponent } from '../../../components/card-courses/card-cour
 import { forkJoin } from 'rxjs';
 import { AppModalComponent } from '../../../components/app-modal/app-modal.component';
 import { Attendance, Month } from '../../services/modelTeacher';
+import { Router } from '@angular/router';
 
 interface GradeInfo {
   grado:     string;
@@ -25,7 +26,9 @@ export class AttendanceManagmentComponent implements OnInit{
   searchTerm = '';
   attendance?: Attendance;
   selectedGrade: GradeInfo | null = null;
-  constructor(private dataSvc: DataTeacherService) {}
+  constructor(private dataSvc: DataTeacherService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     forkJoin({
@@ -97,6 +100,13 @@ export class AttendanceManagmentComponent implements OnInit{
     // Se considera completado si el mes ya terminó
     const lastDayOfMonth = new Date(year, monthIndex + 1, 0);
     return lastDayOfMonth < now;
+  }
+
+  openAttendanceList(id_salon: number, monthLabel: string) {
+    this.router.navigate(
+      ['/teacher/panel/attendanceList', id_salon],
+      { queryParams: { month: monthLabel } }
+    );
   }
 
 }

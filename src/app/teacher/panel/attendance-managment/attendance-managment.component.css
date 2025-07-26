@@ -30,3 +30,10 @@
 .custom-table tbody tr:last-child td:last-child {
   border-bottom-right-radius: 0.75rem;
 }
+
+.clickable-row {
+  cursor: pointer;
+}
+.clickable-row:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+}
