@@ -9,6 +9,7 @@ import { ModalAddEnrollmentComponent } from './modal-add-enrollment/modal-add-en
 import { ModalReadEnrollmentComponent } from './modal-read-enrollment/modal-read-enrollment.component';
 import { FormsModule } from '@angular/forms';
 import { dataInscriptionAll, InscriptionService } from '../../services/inscription.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-enrollment',
@@ -18,15 +19,16 @@ import { dataInscriptionAll, InscriptionService } from '../../services/inscripti
 })
 export class EnrollmentComponent {
   private inscriptionService = inject(InscriptionService)
+  private notifycation = inject(ToastrService);
 
   ngOnInit() {
     this.loadEnrollments();
   }
 
-  @ViewChild("modalContinueRegistration") modalContinueRegistration?: ModalContinueRegistrationComponent
-  @ViewChild("modalMarkPayment") modalMarkPayment?: ModalMarkPaymentComponent
-  @ViewChild("modalDeleteEnrollment") modalDeleteEnrollment?: ModalDeleteEnrollmentComponent
-  @ViewChild("modalReadEnrollment") modalReadEnrollment?: ModalReadEnrollmentComponent
+  @ViewChild("modalContinueRegistration") modalContinueRegistration!: ModalContinueRegistrationComponent
+  @ViewChild("modalMarkPayment") modalMarkPayment!: ModalMarkPaymentComponent
+  @ViewChild("modalDeleteEnrollment") modalDeleteEnrollment!: ModalDeleteEnrollmentComponent
+  @ViewChild("modalReadEnrollment") modalReadEnrollment!: ModalReadEnrollmentComponent
   
     // FILTROS
     selectedStatus = ""
@@ -53,7 +55,7 @@ export class EnrollmentComponent {
     "Grado y Sección": "gradeAndSection",
     Fecha: "registrationDate",
     "Estado Inscripción": "state",
-    "Evaluación Resultado": "eval_result",
+    "Evaluación Resultado": "evaluationResult",
   }
   
   // ESTADOS DISPONIBLES
@@ -73,7 +75,13 @@ export class EnrollmentComponent {
   loadEnrollments() {
     this.inscriptionService.getAllInscriptions().subscribe({
       next:(inscription) => {
-        this.rows = inscription.map((inscription: any): dataInscriptionAll & { studentFullName: string, tutorFullName: string, gradeAndSection: string, documentNumber: string } => ({
+        this.rows = inscription.map((inscription: any): dataInscriptionAll & {
+          studentFullName: string,
+          tutorFullName: string,
+          gradeAndSection: string,
+          documentNumber: string,
+          evaluationResult: string
+        } => ({
           id: inscription.id,
           registrationDate: this.formatDate(inscription.registrationDate),
           state: inscription.state,
@@ -100,10 +108,16 @@ export class EnrollmentComponent {
               name: inscription.grade.level.name
             }
           },
+          psychology: inscription.psychology ?? null,
           documentNumber: `${inscription.student?.person?.documentNumber}`,
           studentFullName: `${inscription.student?.person?.names} ${inscription.student?.person?.paternalSurname} ${inscription.student?.person?.maternalSurname}`,
           tutorFullName: `${inscription.tutor?.person?.names} ${inscription.tutor?.person?.paternalSurname} ${inscription.tutor?.person?.maternalSurname}`,
-          gradeAndSection: `${inscription.grade?.level?.name} - ${inscription.grade?.name}`
+          gradeAndSection: `${inscription.grade?.level?.name} - ${inscription.grade?.name}`,
+          evaluationResult: inscription.psychology ? (inscription.psychology.result === true
+            ? 'Con condición'
+            : 'Sin condición'
+          )
+          : 'No evaluado'
         }));
         if (this.enrollmentTable) {
           this.enrollmentTable.updateTable();
@@ -126,14 +140,23 @@ export class EnrollmentComponent {
     this.searchValue = (event.target as HTMLInputElement).value
     this.applyFilters()
   }
-
+  
   clearFilters() {
     this.selectedStatus = ""
     this.searchValue = ""
     this.applyFilters()
   }
-
+  
   // MODALES
+  openModalReadEnrollment(row: any) {
+    if (row && row.id && !isNaN(row.id)) {
+      this.modalReadEnrollment.rowId = Number(row.id);
+      this.modalReadEnrollment.openModal();
+    } else {
+      console.error('ID inválido:', row.id);
+    }
+  }
+
   openModalContinueRegistration(row: any) {
     if (this.modalContinueRegistration) {
       this.modalContinueRegistration.openModal(row)
@@ -167,29 +190,59 @@ export class EnrollmentComponent {
     this.openModalDeleteEnrollment(row)
   }
 
-  openModalReadEnrollment(row: any) {
-    if (this.modalReadEnrollment) {
-      this.modalReadEnrollment.openModal(row)
-    }
-  }
 
-  onReadEnrollment = (row: Enrollment) => {
-    console.log("Leer inscripción:", row)
-    this.openModalReadEnrollment(row)
-  }
+  onSendForEvaluation = (row: dataInscriptionAll) => {
+    const newState = {
+      state: "Evaluación en proceso"
+    };
 
-  onEnviarEvaluacion = (row: Enrollment) => {
-    console.log("Enviar a evaluación:", row)
-
-    const studentIndex = this.rows.findIndex((r) => r.id === row.id)
-    if (studentIndex !== -1) {
-      this.rows[studentIndex].state = "Evaluación en proceso"
-      if (this.enrollmentTable) {
-        this.enrollmentTable.updateTable()
+    this.inscriptionService.changeState(row.id, newState).subscribe({
+      next: () => {
+        if (this.enrollmentTable) {
+          this.loadEnrollments();
+        }
+        this.notifycation.success('El estudiante fue enviado a evaluación', 'Éxito');
+      },
+      error: (error) => {
+        this.notifycation.error('Error al cambiar el estado de la inscripción', 'Error');
       }
-    }
+    })
+  }
 
-    alert(`${row.student} ha sido enviado a evaluación`)
+  onRestoreRegistration = (row: dataInscriptionAll) => {
+    const newState = {
+      state: "Pendiente"
+    };
+
+    this.inscriptionService.changeState(row.id, newState).subscribe({
+      next: () => {
+        if (this.enrollmentTable) {
+          this.loadEnrollments();
+        }
+        this.notifycation.success('La inscripción fue restaurada', 'Éxito');
+      },
+      error: (error) => {
+        this.notifycation.error('Error al cambiar el estado de la inscripción', 'Error');
+      }
+    })
+  }
+
+  onCancelEvaluation = (row: dataInscriptionAll) => {
+    const newState = {
+      state: "Pendiente"
+    };
+
+    this.inscriptionService.changeState(row.id, newState).subscribe({
+      next: () => {
+        if (this.enrollmentTable) {
+          this.loadEnrollments();
+        }
+        this.notifycation.warning('Se anulo la evaluación', 'Alerta');
+      },
+      error: (error) => {
+        this.notifycation.error('Error al cambiar el estado de la inscripción', 'Error');
+      }
+    })
   }
 
   ongroupAssigned(data: AssignGroupData) {

@@ -1,5 +1,4 @@
 import { Component, inject } from '@angular/core';
-import { UserProfile } from '../../../admin/services/users.service';
 import { ModalChangePasswordComponent } from "./modal-change-password/modal-change-password.component";
 import { AuthService } from '../../../services/auth.service';
 import { HttpClient } from '@angular/common/http';

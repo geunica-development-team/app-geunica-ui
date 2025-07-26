@@ -58,11 +58,14 @@
         [pageSize]="10"
         [statusFilter]="selectedStatus"
         [searchFilter]="searchValue"
-        [accionEnviarEvaluacion]="onEnviarEvaluacion"
+        [accionEnviarEvaluacion]="onSendForEvaluation"
+        [accionAnularEvaluacion]="onCancelEvaluation"
+        [accionRestaurarInscripcion]="onRestoreRegistration"
         [actionContinueRegistration]="onContinueRegistration"
         [actionMarkPayment]="onMarkPayment"
         [actionDeleteEnrollment]="onDeleteEnrollment"
-        [actionReadEnrollment]="onReadEnrollment"
+        [actionReadEnrollment]="openModalReadEnrollment.bind(this)"
+        
       />
     </div>
   </div>
@@ -88,4 +91,5 @@
 
 <app-modal-read-enrollment 
   #modalReadEnrollment
+  (enrollmentUpdated)="onCreatedOrEditedOrDeleted()"
 />

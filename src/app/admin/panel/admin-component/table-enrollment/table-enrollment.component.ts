@@ -8,6 +8,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class TableEnrollmentComponent {
   @Input() accionEnviarEvaluacion!: (row: any) => void
+  @Input() accionAnularEvaluacion!: (row: any) => void
+  @Input() accionRestaurarInscripcion!: (row: any) => void
   @Input() actionContinueRegistration!: (row: any) => void
   @Input() actionMarkPayment!: (row: any) => void
   @Input() actionDeleteEnrollment!: (row: any) => void
@@ -76,6 +78,10 @@ export class TableEnrollmentComponent {
       return statusMatch && searchMatch
     })
 
+    // 👉 ORDENAR POR ID (de menor a mayor)
+    const idKey = this.columnMappings["ID"] || "id" // Ajusta si tu mapeo usa otro nombre
+    this.filteredRows.sort((a, b) => a[idKey] - b[idKey])
+
     // Calcular paginación
     this.totalPages = Math.ceil(this.filteredRows.length / this.pageSize)
 
@@ -132,15 +138,15 @@ export class TableEnrollmentComponent {
   getActionButtonForState(state: string): { text: string; action: string; class: string } | null {
     switch (state) {
       case "Pendiente":
-        return { text: "Enviar a evaluación", action: "enviarEvaluacion", class: "btn-warning" }
+        return { text: "Enviar a evaluación", action: "enviarEvaluacion", class: "btn-enviarEvaluacion" }
       case "Evaluación en proceso":
-        return null
+        return { text: "Anular evaluación", action: "anularEvaluacion", class: "btn-anularEvaluacion" }
       case "Evaluado":
-        return { text: "Continuar con la matrícula", action: "continuarMatricula", class: "btn-primary" }
+        return { text: "Continuar con la matrícula", action: "continuarMatricula", class: "btn-continuarMatricula" }
       case "Rechazado":
-        return null
+        return { text: "Restaurar inscripción", action: "restaurarInscripcion", class: "btn-restaurarInscripcion" }
       case "Pago pendiente":
-        return { text: "Marcar pago", action: "marcarPago", class: "btn-success" }
+        return { text: "Marcar pago", action: "marcarPago", class: "btn-marcarPago" }
       case "Matriculado":
         return null
       default:
@@ -153,8 +159,14 @@ export class TableEnrollmentComponent {
       case "enviarEvaluacion":
         this.accionEnviarEvaluacion(row)
         break
+      case "anularEvaluacion":
+        this.accionAnularEvaluacion(row)
+        break
       case "continuarMatricula":
         this.actionContinueRegistration(row)
+        break
+      case "restaurarInscripcion":
+        this.accionRestaurarInscripcion(row)
         break
       case "marcarPago":
         this.actionMarkPayment(row)
@@ -165,17 +177,17 @@ export class TableEnrollmentComponent {
   getStateClass(state: string): string {
     switch (state) {
       case "Pendiente":
-        return "badge bg-secondary text-white"
+        return "badge estadoPendiente"
       case "Evaluación en proceso":
-        return "badge bg-warning text-dark"
+        return "badge estadoEvaluacionEnProceso"
       case "Evaluado":
-        return "badge bg-info text-white"
+        return "badge estadoEvaluado"
       case "Rechazado":
-        return "badge bg-danger text-white"
+        return "badge estadoRechazado"
       case "Pago pendiente":
-        return "badge bg-primary text-white"
+        return "badge estadoPagoPendiente"
       case "Matriculado":
-        return "badge bg-success text-white"
+        return "badge estadoMatriculado"
       default:
         return "badge bg-light text-dark"
     }
