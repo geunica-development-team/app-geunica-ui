@@ -7,6 +7,7 @@ import { AttendanceManagmentComponent } from "./panel/attendance-managment/atten
 import { AnnouncementComponent } from "./panel/announcement/announcement.component";
 import { ScheduleComponent } from "./panel/schedule/schedule.component";
 import { AttendanceListComponent } from "./panel/attendance-list/attendance-list.component";
+import { NoteListComponent } from "./panel/note-list/note-list.component";
 
 export const teacherPanelRoutes: Routes = [
     {
@@ -31,11 +32,15 @@ export const teacherPanelRoutes: Routes = [
                 component: NoteManagmentComponent
             },
             {
+                path: "NoteList/:id_estudiante",
+                component: NoteListComponent
+            },
+            {
                 path: "attendanceManagment",
                 component: AttendanceManagmentComponent
             },
             {
-                path: "attendanceList/:id_salon",
+                path: "attendanceList",
                 component: AttendanceListComponent
             },
             {

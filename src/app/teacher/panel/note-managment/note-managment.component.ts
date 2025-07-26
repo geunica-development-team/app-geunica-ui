@@ -124,9 +124,9 @@ export class NoteManagmentComponent {
   }
 
   
-  goToStudentNotes(id: number) {
-    // Navega al componente de notas, p.ej. /student-notes/:id
-    this.router.navigate(['/student-notes', id]);
+  goToStudentNotes(id_estudiante: number) {
+    // Navega al componente de notas, p.ej. /student/:id , id_estudiante
+    this.router.navigate(['/teacher', 'panel', 'NoteList', id_estudiante]);
   }
 
     closeModal() {

@@ -1,1 +1,269 @@
-<p>note-list works!</p>
+<ng-container *ngIf="course; else cargando">
+  <h2 class="section-title ">{{ course.nombre }}</h2>
+
+<div class="container mb-4">
+  <!-- Barra de semestres -->
+  <app-header-dinamic [tabs]="[
+    {id: '1er Bimestre',      label: '1er Bimestre',      icon: 'fas fa-file-alt'},
+    {id: '2do Bimestre',     label: '2do Bimestre',     icon: 'fas fa-file-alt'},
+    {id: '3er Bimestre',      label: '3er Bimestre',      icon: 'fas fa-file-alt'},
+    {id: '4to Bimestre', label: '4to Bimestre', icon: 'fas fa-file-alt'},
+    {id: 'Bimestre Final', label: 'Bimestre Final', icon: 'fas fa-file-alt'}
+  ]">
+
+    <!-- Contenido para "1do Bimestre" -->
+    <ng-template tabId="1er Bimestre">
+      <!-- Fila que agrupa las dos columnas -->
+      <div class="row gy-4">
+        <!-- Columna izquierda -->
+        <div class="col-12 col-md-6 mb-4">
+          <div class="card p-4 h-100">
+            <h5 class="mb-3">Notas del 1er bimestre</h5>
+            <div class="table-responsive">
+              <table class="table table-rounded">
+                <thead class="table-success">
+                  <tr>
+                    <th scope="col">NRO</th>
+                    <th scope="col">Concepto</th>
+                    <th scope="col">Nota</th>
+                    <th scope="col">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                  <tr *ngFor="let item of registryItems; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ item.concepto }}</td>
+                    <td>{{ item.valor }}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary me-2" (click)="onEditNote(item)">
+                            <i class="fas fa-edit"></i> 
+                        </button>
+                        <button class="btn btn-sm btn-danger" (click)="onDeleteNote(item)">
+                            <i class="fas fa-trash-alt"></i> 
+                        </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna derecha -->
+        <div class="col-12 col-md-6 mb-4">
+            <div class="card p-4 h-100 d-flex align-items-center justify-content-center">
+                <h5 class="mb-3">Notas del bimestre</h5>
+                <div class="donut-chart" role="img" aria-label="Gráfico de pastel con 30% rojo, 50% azul, 20% amarillo"></div>
+            </div>
+        </div>
+      </div>
+
+    </ng-template>
+
+    <!-- Contenido para "2do Bimestre" -->
+    <ng-template tabId="2do Bimestre">
+      <!-- Fila que agrupa las dos columnas -->
+      <div class="row gy-4">
+        <!-- Columna izquierda -->
+        <div class="col-12 col-md-6 mb-4">
+          <div class="card p-4 h-100">
+            <h5 class="mb-3">Notas del 2do bimestre</h5>
+            <div class="table-responsive">
+              <table class="table table-rounded">
+                <thead class="table-success">
+                  <tr>
+                    <th scope="col">NRO</th>
+                    <th scope="col">Concepto</th>
+                    <th scope="col">Nota</th>
+                    <th scope="col">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                  <tr *ngFor="let item of registryItems; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ item.concepto }}</td>
+                    <td>{{ item.valor }}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary me-2" (click)="onEditNote(item)">
+                            <i class="fas fa-edit"></i> 
+                        </button>
+                        <button class="btn btn-sm btn-danger" (click)="onDeleteNote(item)">
+                            <i class="fas fa-trash-alt"></i> 
+                        </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna derecha -->
+        <div class="col-12 col-md-6 mb-4">
+            <div class="card p-4 h-100 d-flex align-items-center justify-content-center">
+                <h5 class="mb-3">Notas del 2do bimestre</h5>
+                <div class="donut-chart" role="img" aria-label="Gráfico de pastel con 30% rojo, 50% azul, 20% amarillo"></div>
+            </div>
+        </div>
+      </div>
+    </ng-template>
+
+        <!-- Contenido para "3er Bimestre" -->
+    <ng-template tabId="3er Bimestre">
+      <!-- Fila que agrupa las dos columnas -->
+      <div class="row gy-4">
+        <!-- Columna izquierda -->
+        <div class="col-12 col-md-6 mb-4">
+          <div class="card p-4 h-100">
+            <h5 class="mb-3">Notas del 3er bimestre</h5>
+            <div class="table-responsive">
+              <table class="table table-rounded">
+                <thead class="table-success">
+                  <tr>
+                    <th scope="col">NRO</th>
+                    <th scope="col">Concepto</th>
+                    <th scope="col">Nota</th>
+                    <th scope="col">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                  <tr *ngFor="let item of registryItems; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ item.concepto }}</td>
+                    <td>{{ item.valor }}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary me-2" (click)="onEditNote(item)">
+                            <i class="fas fa-edit"></i> 
+                        </button>
+                        <button class="btn btn-sm btn-danger" (click)="onDeleteNote(item)">
+                            <i class="fas fa-trash-alt"></i> 
+                        </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna derecha -->
+        <div class="col-12 col-md-6 mb-4">
+            <div class="card p-4 h-100 d-flex align-items-center justify-content-center">
+                <h5 class="mb-3">Notas del bimestre</h5>
+                <div class="donut-chart" role="img" aria-label="Gráfico de pastel con 30% rojo, 50% azul, 20% amarillo"></div>
+            </div>
+        </div>
+      </div>
+    </ng-template>
+
+        <!-- Contenido para "4to Bimestre" -->
+    <ng-template tabId="4to Bimestre">
+      <!-- Fila que agrupa las dos columnas -->
+      <div class="row gy-4">
+        <!-- Columna izquierda -->
+        <div class="col-12 col-md-6 mb-4">
+          <div class="card p-4 h-100">
+            <h5 class="mb-3">Notas del 4to bimestre</h5>
+            <div class="table-responsive">
+              <table class="table table-rounded">
+                <thead class="table-success">
+                  <tr>
+                    <th scope="col">NRO</th>
+                    <th scope="col">Concepto</th>
+                    <th scope="col">Nota</th>
+                    <th scope="col">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                  <tr *ngFor="let item of registryItems; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ item.concepto }}</td>
+                    <td>{{ item.valor }}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary me-2" (click)="onEditNote(item)">
+                            <i class="fas fa-edit"></i> 
+                        </button>
+                        <button class="btn btn-sm btn-danger" (click)="onDeleteNote(item)">
+                            <i class="fas fa-trash-alt"></i> 
+                        </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna derecha -->
+        <div class="col-12 col-md-6 mb-4">
+            <div class="card p-4 h-100 d-flex align-items-center justify-content-center">
+                <h5 class="mb-3">Notas del bimestre</h5>
+                <div class="donut-chart" role="img" aria-label="Gráfico de pastel con 30% rojo, 50% azul, 20% amarillo"></div>
+            </div>
+        </div>
+      </div>
+    </ng-template>
+
+        <!-- Contenido para "Bimestre final" -->
+    <ng-template tabId="Bimestre Final">
+      <!-- Fila que agrupa las dos columnas -->
+      <div class="row gy-4">
+        <!-- Columna izquierda -->
+        <div class="col-12 col-md-6 mb-4">
+          <div class="card p-4 h-100">
+            <h5 class="mb-3">Notas Finales</h5>
+            <div class="table-responsive">
+              <table class="table table-rounded">
+                <thead class="table-success">
+                  <tr>
+                    <th scope="col">NRO</th>
+                    <th scope="col">Concepto</th>
+                    <th scope="col">Nota</th>
+                    <th scope="col">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                  <tr *ngFor="let item of registryItems; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ item.concepto }}</td>
+                    <td>{{ item.valor }}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary me-2" (click)="onEditNote(item)">
+                            <i class="fas fa-edit"></i> 
+                        </button>
+                        <button class="btn btn-sm btn-danger" (click)="onDeleteNote(item)">
+                            <i class="fas fa-trash-alt"></i> 
+                        </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna derecha -->
+        <div class="col-12 col-md-6 mb-4">
+            <div class="card p-4 h-100 d-flex align-items-center justify-content-center">
+                <h5 class="mb-3">Notas del bimestre</h5>
+                <div class="donut-chart" role="img" aria-label="Gráfico de pastel con 30% rojo, 50% azul, 20% amarillo">
+                <!--<span class="center-label">{{ notaFinal }}</span>-->
+                </div>
+            </div>
+        </div>
+      </div>
+    </ng-template>
+
+  <!-- Y así para cada pestaña -->
+  </app-header-dinamic>
+
+</div>
+
+
+</ng-container>
+
+<ng-template #cargando>
+  <div class="text-center py-4">
+    <div class="spinner-border" role="status"></div>
+  </div>
+</ng-template>
