@@ -9,6 +9,7 @@ import { routes } from './app.routes';
 import { authRoutes } from './pages/auth/auth.routes';
 import { studentPanelRoutes } from './student/panel/panelStudent.routes';
 import { adminPanelRoutes } from './admin/panel/panelAdmin.routes';
+import { psychologistPanelRoutes } from './admin/panel/panelPsychologist.routes';
 
 
 
@@ -19,7 +20,8 @@ export const appConfig: ApplicationConfig = {
       ...routes,
       ...authRoutes,
       ...studentPanelRoutes,
-      ...adminPanelRoutes
+      ...adminPanelRoutes,
+      ...psychologistPanelRoutes
     ]),
 
     provideClientHydration(

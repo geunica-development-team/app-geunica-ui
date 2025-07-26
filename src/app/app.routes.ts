@@ -15,6 +15,11 @@ export const routes: Routes = [
         import('./pages/auth/auth.routes').then(m => m.authRoutes) 
     },
     {
+      path: 'psychologist',
+      loadChildren: () => 
+        import('./admin/panel/panelPsychologist.routes').then(m => m.psychologistPanelRoutes) 
+    },
+    {
       path: 'admin',
       loadChildren: () => 
         import('./admin/panel/panelAdmin.routes').then(m => m.adminPanelRoutes) 

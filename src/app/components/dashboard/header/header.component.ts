@@ -36,6 +36,8 @@ export class HeaderComponent {
         this.router.navigateByUrl('/admin/panel/perfil');
       } else if (role === 'student') {
         this.router.navigateByUrl('student/panel/perfil');
+      } else if (role === 'psychologist') {
+        this.router.navigateByUrl('psychologist/panel/perfil');
       } else {
         this.router.navigateByUrl('/unauthorized');
       }
