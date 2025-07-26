@@ -13,14 +13,36 @@
     { "id_grado": 3, "nombre": "3°", "id_nivel": 1 },
     { "id_grado": 4, "nombre": "4°", "id_nivel": 1 },
     { "id_grado": 5, "nombre": "5°", "id_nivel": 1 },
-    { "id_grado": 6, "nombre": "6°", "id_nivel": 1 }
+    { "id_grado": 6, "nombre": "6°", "id_nivel": 1 },
+
+    { "id_grado": 7, "nombre": "1°", "id_nivel": 2 },
+    { "id_grado": 8, "nombre": "2°", "id_nivel": 2 },
+    { "id_grado": 9, "nombre": "3°", "id_nivel": 2 },
+    { "id_grado": 10, "nombre": "4°", "id_nivel": 2 },
+    { "id_grado": 11, "nombre": "5°", "id_nivel": 2 }
   ],
   "seccion": [
     { "id_seccion": 1, "nombre": "A" },
     { "id_seccion": 2, "nombre": "B" }
   ],
   "salon": [
-    { "id_salon": 1, "id_sede": 1, "id_grado": 1, "id_seccion": 1, "nombre": "101", "turno": "mañana", "capacidad": 30 }
+    { "id_salon": 1, "id_sede": 1, "id_grado": 1, "id_seccion": 1, "nombre": "101", "turno": "mañana", "capacidad": 30 },
+    { "id_salon": 2, "id_sede": 1, "id_grado": 2, "id_seccion": 1, "nombre": "102", "turno": "mañana", "capacidad": 30 },
+    { "id_salon": 3, "id_sede": 1, "id_grado": 3, "id_seccion": 1, "nombre": "103", "turno": "mañana", "capacidad": 30 },
+    { "id_salon": 4, "id_sede": 1, "id_grado": 4, "id_seccion": 1, "nombre": "104", "turno": "mañana", "capacidad": 30 },
+    { "id_salon": 5, "id_sede": 1, "id_grado": 5, "id_seccion": 1, "nombre": "105", "turno": "mañana", "capacidad": 30 },
+    { "id_salon": 6, "id_sede": 1, "id_grado": 6, "id_seccion": 1, "nombre": "106", "turno": "mañana", "capacidad": 30 },
+    { "id_salon": 7, "id_sede": 1, "id_grado": 6, "id_seccion": 2, "nombre": "106", "turno": "mañana", "capacidad": 30 },
+
+    { "id_salon": 8, "id_sede": 1, "id_grado": 7, "id_seccion": 1, "nombre": "107", "turno": "mañana", "capacidad": 30 },
+    { "id_salon": 9, "id_sede": 1, "id_grado": 7, "id_seccion": 2, "nombre": "108", "turno": "mañana", "capacidad": 30 },
+    { "id_salon": 10, "id_sede": 1, "id_grado": 8, "id_seccion": 1, "nombre": "109", "turno": "mañana", "capacidad": 30 },
+    { "id_salon": 11, "id_sede": 1, "id_grado": 8, "id_seccion": 2, "nombre": "110", "turno": "mañana", "capacidad": 20 },
+    { "id_salon": 12, "id_sede": 1, "id_grado": 9, "id_seccion": 1, "nombre": "111", "turno": "mañana", "capacidad": 20 },
+    { "id_salon": 13, "id_sede": 1, "id_grado": 9, "id_seccion": 2, "nombre": "112", "turno": "mañana", "capacidad": 30 },
+    { "id_salon": 14, "id_sede": 1, "id_grado": 10, "id_seccion": 1, "nombre": "113", "turno": "mañana", "capacidad": 21 },
+    { "id_salon": 15, "id_sede": 1, "id_grado": 11, "id_seccion": 1, "nombre": "114", "turno": "mañana", "capacidad": 20 },
+    { "id_salon": 16, "id_sede": 1, "id_grado": 11, "id_seccion": 2, "nombre": "115", "turno": "mañana", "capacidad": 30 }
   ],
   "curso": [
     { "id_curso": 1, "nombre": "Matemáticas", "codigo": "MAT01", "descripcion_curso": "numeros" },
@@ -69,9 +91,9 @@
     }
   ],
     "estudiante": [
-    { "id_estudiante": 1, "id_persona": 4, "id_usuario": 3, "codigo_estudiante": "EST001", "fecha_ingreso": "2025-01-15", "estado": "activo" },
-    { "id_estudiante": 2, "id_persona": 6, "id_usuario": 3, "codigo_estudiante": "EST001", "fecha_ingreso": "2025-01-15", "estado": "activo" },
-    { "id_estudiante": 3, "id_persona": 7, "id_usuario": 3, "codigo_estudiante": "EST001", "fecha_ingreso": "2025-01-15", "estado": "activo" }
+    { "id_estudiante": 1, "id_persona": 4, "id_usuario": 4, "codigo_estudiante": "EST001", "fecha_ingreso": "2025-01-15", "estado": "activo" },
+    { "id_estudiante": 2, "id_persona": 6, "id_usuario": 4, "codigo_estudiante": "EST002", "fecha_ingreso": "2025-01-15", "estado": "activo" },
+    { "id_estudiante": 3, "id_persona": 7, "id_usuario": 4, "codigo_estudiante": "EST003", "fecha_ingreso": "2025-01-15", "estado": "activo" }
   ],
   "apoderado": [
     { "id_apoderado": 1, "id_persona": 5 }
@@ -108,14 +130,15 @@
     { "id_rol": 1, "rol": "Admin"},
     { "id_rol": 2, "rol": "Docente"},
     { "id_rol": 3, "rol": "Alumno"},
-    { "id_rol": 4, "rol": "Apoderado"}
+    { "id_rol": 4, "rol": "Apoderado"},
+    { "id_rol": 5, "rol": "Psicologo"}
   ],
   "usuario": [
     { "id_usuario": 1, "usuario": "Administrador", "id_persona": 1, "id_rol": 1 },
-    { "id_usuario": 2, "usuario": "Profesor", "id_persona": 2, "id_rol": 2 },
-    { "id_usuario": 2, "usuario": "Profesor", "id_persona": 3, "id_rol": 2 },
-    { "id_usuario": 3, "usuario": "Alumnado", "id_persona": 4, "id_rol": 3 },
-    { "id_usuario": 3, "usuario": "Familiar", "id_persona": 5, "id_rol": 4 }
+    { "id_usuario": 2, "usuario": "Profesor", "id_persona": 2, "id_rol": 5 },
+    { "id_usuario": 3, "usuario": "Psicologo", "id_persona": 3, "id_rol": 2 },
+    { "id_usuario": 4, "usuario": "Alumnado", "id_persona": 4, "id_rol": 3 },
+    { "id_usuario": 5, "usuario": "Familiar", "id_persona": 5, "id_rol": 4 }
   ],
 "anuncio": [
   { "id_anuncio": 1, "id_usuario": 2, "id_salon": 1, "titulo": "Inicio de Clases", "estado": "visto", "cuerpo": "Empieza el 15 de agosto.", "fecha_creacion": "2025-03-01" },
@@ -173,15 +196,21 @@
   { "id_asistencia": 38, "id_estudiante": 1, "status": "falto",     "date": "2025-06-08" },
   { "id_asistencia": 39, "id_estudiante": 1, "status": "Tardanza",  "date": "2025-06-09" },
   { "id_asistencia": 40, "id_estudiante": 1, "status": "asistió",   "date": "2025-06-10" }
+
+
   ],
   "evaluacion_psicologica": [
     { "id_evaluacion": 1, "id_inscripcion": 1, "resultado": true, "fecha_evaluacion": "2025-04-01" }
   ],
   "inscripcion_virtual": [
-    { "id_inscripcion": 1, "id_estudiante_pers": 1, "id_nivel": 1, "id_grado": 1, "estado": "activo" }
+    { "id_inscripcion": 1, "id_estudiante": 1, "id_nivel": 1, "id_grado": 1, "estado": "activo" },
+    { "id_inscripcion": 2, "id_estudiante": 2, "id_nivel": 1, "id_grado": 1, "estado": "activo" },
+    { "id_inscripcion": 3, "id_estudiante": 3, "id_nivel": 1, "id_grado": 1, "estado": "activo" }
   ],
   "matricula": [
-    { "id_matricula": 1, "id_inscripcion": 1, "id_sede": 1, "id_salon": 1, "estado": "vigente", "condicion": true }
+    { "id_matricula": 1, "id_inscripcion": 1, "id_salon": 1, "estado": "vigente", "condicion": true },
+    { "id_matricula": 2, "id_inscripcion": 2, "id_salon": 1, "estado": "vigente", "condicion": true },
+    { "id_matricula": 3, "id_inscripcion": 3, "id_salon": 1, "estado": "vigente", "condicion": true }
   ]
 
 }

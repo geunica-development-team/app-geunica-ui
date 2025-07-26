@@ -84,11 +84,32 @@ export interface NotaActividad {
   valor: number;
 }
 
-export interface Asistencia {
+/** Registro plano de asistencia */
+export interface FlatAsistencia {
   id_asistencia: number;
   id_estudiante: number;
   status: 'asistió' | 'faltó' | 'tardanza';
   date: string;
+}
+
+/** Sesión de asistencia */
+export interface Session {
+  date: string;
+  status: 'asistió' | 'faltó' | 'tardanza';
+}
+
+/** Mes de asistencia */
+export interface Month {
+  month: string;
+  sessions: Session[];
+}
+
+/** Asistencia agrupada por meses */
+export interface Attendance {
+  [x: string]: any;
+  startDate: string;
+  endDate: string;
+  months: Month[];
 }
 
 export interface Persona {

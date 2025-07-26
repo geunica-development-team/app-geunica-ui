@@ -25,4 +25,9 @@ export class CardCoursesComponent {
       this.router.navigate(this.link);
     }
   }
+
+  onCardClick() {
+  this.goToLink();
+  // o cualquier otro handler, p.ej.
+}
 }

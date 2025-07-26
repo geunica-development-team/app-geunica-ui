@@ -12,7 +12,11 @@ import {
   Seccion,
   Salon,
   Anuncio,
-  Curso
+  Curso,
+  FlatAsistencia,
+  Session,
+  Month,
+  Attendance,
 } from './modelTeacher';
 
 @Injectable({
@@ -38,6 +42,63 @@ export class DataTeacherService {
         })
       );
   }
+
+  getAttendance(): Observable<Attendance> {
+    return this.http.get<FlatAsistencia[]>(`${this.base}/asistencia`)
+      .pipe(
+        map(flat => {
+          if (!flat?.length) {
+            return { startDate: '', endDate: '', months: [] } as Attendance;
+          }
+
+          // 1) Orden cronológico
+          flat.sort((a, b) => a.date.localeCompare(b.date));
+
+          const startDate = flat[0].date;
+          const endDate   = flat[flat.length - 1].date;
+
+          // 2) Agrupación
+          const monthsMap = new Map<string, Session[]>();
+          flat.forEach(item => {
+            // 1) parseo de la fecha en zona local
+            const [y, m, d] = item.date.split('-').map(Number);
+            const dateObj   = new Date(y, m - 1, d);
+            const monthName = dateObj.toLocaleString('es-ES', { month: 'long' });
+            const year      = dateObj.getFullYear();
+            const key       = `${monthName} ${year}`;
+
+            // 2) validación / mapeo del status
+            const raw = item.status.toLowerCase();
+            const status: Session['status'] =
+              raw === 'asistió'   ? 'asistió'  :
+              raw === 'faltó'     ? 'faltó'    :
+              raw === 'tardanza'  ? 'tardanza' :
+              // Por defecto, si algo extraño llega:
+              'asistió';
+
+            // 3) creación de la sesión tipada correctamente
+            const session: Session = {
+              date: item.date,
+              status
+            };
+
+            // 4) agrupación en el monthsMap como antes
+            if (!monthsMap.has(key)) { monthsMap.set(key, []); }
+            monthsMap.get(key)!.push(session);
+          });
+
+
+          // 3) A arreglo final
+          const months: Month[] = [];
+          monthsMap.forEach((sessions, month) => {
+            months.push({ month, sessions });
+          });
+
+          return { startDate, endDate, months } as Attendance;
+        })
+      );
+  }
+  
 
   /** Obtener todas las sedes */
   getSedes(): Observable<Sede[]> {
