@@ -51,8 +51,6 @@ export class ModalMarkPaymentComponent {
   @ViewChild("modalMarkPayment") modalMarkPayment!: TemplateRef<ElementRef>
 
   openModal(studentData: any) {
-    console.log("Abriendo modal de pago para:", studentData)
-
     this.currentStudent = studentData
 
     // Inicializar datos del pago

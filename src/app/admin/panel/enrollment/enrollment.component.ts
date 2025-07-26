@@ -164,7 +164,6 @@ export class EnrollmentComponent {
   }
 
   onContinueRegistration = (row: Enrollment) => {
-    console.log("Continuar con matrícula:", row)
     this.openModalContinueRegistration(row)
   }
 
