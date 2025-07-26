@@ -40,7 +40,7 @@ export const teacherPanelRoutes: Routes = [
                 component: AttendanceManagmentComponent
             },
             {
-                path: "attendanceList",
+                path: "attendanceList/:id_salon",
                 component: AttendanceListComponent
             },
             {
