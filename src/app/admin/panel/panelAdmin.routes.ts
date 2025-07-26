@@ -12,7 +12,6 @@ import { AcademicSettingComponent } from "./academic-setting/academic-setting.co
 import { ClassroomsComponent } from "./classrooms/classrooms.component";
 
 export const adminPanelRoutes: Routes = [
-    //RUTAS DE ADMIN
     {
         path: 'admin/panel',
         component: PanelComponent,
