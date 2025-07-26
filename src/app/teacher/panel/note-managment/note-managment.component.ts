@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { SearcherComponent } from '../../../components/searcher/searcher.component';
 import { DataTeacherService } from '../../services/dataTeacher.service';
+import { CardCoursesComponent } from '../../../components/card-courses/card-courses.component';
 
 interface GradeInfo {
   grado: string;
@@ -11,7 +12,7 @@ interface GradeInfo {
 
 @Component({
   selector: 'app-note-managment',
-  imports: [CommonModule, SearcherComponent],
+  imports: [CommonModule, SearcherComponent, CardCoursesComponent],
   templateUrl: './note-managment.component.html',
   styleUrl: './note-managment.component.css'
 })
