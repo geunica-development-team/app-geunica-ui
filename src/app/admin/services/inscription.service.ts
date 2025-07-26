@@ -4,47 +4,37 @@ import { catchError, tap, throwError } from "rxjs";
 
 //OJO, EN EL BACKEND "INSCRIPCION" ES INSCRIPTION,
 //EN EL FRONTEND "INSCRIPCION" ES ENROLLMENT
+
 export interface dataInscription {
     student: {
-        person: {
-            names: string;
-            paternalSurname: string;
-            maternalSurname: string;
-            typeOfIdentityDocument: string;
-            documentNumber: string;
-            birthDate: string; // formato ISO: YYYY-MM-DD
-            gender: string;
-            address?: string;
-            phoneNumber?: string;
-            email?: string;
-        }
-    },
+        person: dataPerson;
+    };
     tutor: {
-        person: {
-            names: string;
-            paternalSurname: string;
-            maternalSurname: string;
-            typeOfIdentityDocument: string;
-            documentNumber: string;
-            birthDate: string; // formato ISO: YYYY-MM-DD
-            gender: string;
-            address: string;
-            phoneNumber: string;
-            email: string;
-        }
-    }
-    idGrade: number
+        person: dataPerson;
+        relation: string;
+    };
+    inscription: {
+        idGrade: number;
+    };
+}
+
+export interface dataPerson {
+    names: string;
+    paternalSurname: string;
+    maternalSurname: string;
+    typeOfIdentityDocument: string;
+    documentNumber: string;
+    birthDate: string; // formato ISO: YYYY-MM-DD
+    gender: string;
+    address: string;
+    phoneNumber: string;
+    email: string;
 }
 
 export interface dataInscriptionbyId extends dataInscription {
     id: number;
     registrationDate: string;
     state: string;
-    psychology?: {
-        result: boolean;
-        observation: string;
-        evaluationDate: string;
-    } | null;
     grade: {
         id: number,
         name: string
@@ -59,10 +49,6 @@ export interface dataInscriptionAll {
     id: number;
     registrationDate: string;
     state: string;
-    psychology?: {
-        result: boolean;
-        evaluationDate: string;
-    } | null;
     student: {
         person: {
             names: string,
@@ -86,10 +72,6 @@ export interface dataInscriptionAll {
             name: string;
         }
     }
-}
-
-export interface dataChangeState {
-    state: string;
 }
 
 @Injectable({
@@ -144,12 +126,7 @@ export class InscriptionService {
     }
     updateInscription(id: number, data: dataInscription) {
         return this.httpService
-        .patch(`${this.auth_end_point}/inscription/full/${id}`, { ...data})
-        .pipe(catchError(this.handleError));
-    }
-    changeState(id: number, data: dataChangeState) {
-        return this.httpService
-        .patch(`${this.auth_end_point}/inscription/state/${id}`, { ...data})
+        .patch(`${this.auth_end_point}/inscription/${id}`, { ...data})
         .pipe(catchError(this.handleError));
     }
 }

@@ -1,7 +1,7 @@
 <ng-template #modalReadEnrollment let-modal>
   <div class="modal-header bg-white border-bottom px-4">
     <div class="w-100">
-      <h4 class="modal-title fw-semibold text-dark">{{ studentFullName }}</h4>
+      <h4 class="modal-title fw-semibold text-dark">{{ currentData?.studentName }}</h4>
     </div>
     <button 
     type="button" 
@@ -12,13 +12,13 @@
 </div>
 
 <div class="modal-body bg-white p-4">
-    <div class="mb-3">
-      <p class="mb-1"><strong class="fw-semibold">Fecha de inscripción:</strong> {{ registrationDate }}</p>
-      <p class="mb-0"><strong class="fw-semibold">Nivel y Grado seleccionado:</strong> 
-        {{ levelAndGrade }}
+    <div class="small mb-3">
+      <p class="mb-1"><strong>Fecha de inscripción:</strong> {{ currentData?.enrollmentDate }}</p>
+      <p class="mb-0"><strong>Nivel, Grado y Turno seleccionado:</strong> 
+        {{ currentData?.level }} - {{ currentData?.grade }} - {{ currentData?.shift }}
       </p>
     </div>
-    <form [formGroup]="formEditEnrollment" (ngSubmit)="updateEnrollment()" id="formEditEnrollment">
+    <form>
       <!-- DATOS DEL ESTUDIANTE -->
       <div class="section-divider">
         <h5 class="fw-semibold mb-0">Datos del Estudiante</h5>
@@ -30,7 +30,8 @@
           <label class="form-label fw-medium small">Nombre</label>
           <input 
             type="text" 
-            class="form-control rounded"
+            class="form-control rounded" 
+            [disabled]="!isEditMode"
             formControlName="studentNames"
             name="studentFirstName">
         </div>
@@ -39,6 +40,7 @@
           <input 
             type="text" 
             class="form-control rounded"
+            [disabled]="!isEditMode"
             formControlName="studentPaternalSurname"
             name="studentPaternalLastName">
         </div>
@@ -47,6 +49,7 @@
           <input 
             type="text" 
             class="form-control rounded"
+            [disabled]="!isEditMode"
             formControlName="studentMaternalSurname"
             name="studentMaternalLastName">
         </div>
@@ -58,6 +61,7 @@
           <label class="form-label fw-medium small">Tipo de Documento</label>
           <select 
             class="form-select rounded"
+            [disabled]="!isEditMode"
             formControlName="studentTypeOfDocument"
             name="studentDocumentType">
             <option value="" disabled>Tipo de Documento</option>
@@ -70,6 +74,7 @@
           <input 
             type="text" 
             class="form-control rounded"
+            [disabled]="!isEditMode"
             formControlName="studentDocumentNumber"
             name="studentDocumentNumber">
         </div>
@@ -78,6 +83,7 @@
           <input 
             type="date" 
             class="form-control rounded"
+            [disabled]="!isEditMode"
             formControlName="studentBirthDate"
             name="studentBirthDate">
         </div>
@@ -85,7 +91,8 @@
           <label class="form-label fw-medium small">Sexo</label>
           <select 
             class="form-select rounded"
-            formControlName="studentGender"
+            [disabled]="!isEditMode"
+            [(ngModel)]="currentData!.student.gender"
             name="studentGender">
             <option value="" disabled>Género</option>
             <option value="Masculino">Masculino</option>
@@ -101,6 +108,7 @@
           <input 
             type="text" 
             class="form-control rounded"
+            [disabled]="!isEditMode"
             formControlName="studentPhoneNumber"
             name="studentPhone">
         </div>
@@ -109,7 +117,8 @@
           <input 
             type="text" 
             class="form-control rounded"
-            formControlName="studentAddress"
+            [disabled]="!isEditMode"
+            formControlName="studentAdress"
             name="studentAddress">
         </div>
         <div class="col-md-4">
@@ -117,6 +126,7 @@
           <input 
             type="email" 
             class="form-control rounded"
+            [disabled]="!isEditMode"
             formControlName="studentEmail"
             name="studentEmail">
         </div>
@@ -129,12 +139,11 @@
 
       <div class="row mb-4">
         <div class="col-md-6">
-          <label class="form-label fw-medium small">Nivel/Programa *</label>
+          <label class="form-label fw-medium small">Nivel *</label>
           <select 
             class="form-select rounded"
             name="academicLevel"
-            formControlName="level"
-            (change)="onLevelChange()"
+            (change)="selectedLevelId = +$any($event.target).value"
             >
             <option value="" disabled selected>Nivel</option>
             @for (level of levels; track level.id) {
@@ -148,7 +157,7 @@
             class="form-select rounded" 
             formControlName="grade"
             name="academicGrade">
-            <option [value]="0" disabled>Grado</option>
+            <option value="" disabled>Grado</option>
             @for (grade of filteredGrades; track grade.id) {
               <option [value]="grade.id">{{ grade.name }}</option>
             }
@@ -168,6 +177,7 @@
           <input 
             type="text" 
             class="form-control rounded"
+            [disabled]="!isEditMode"
             formControlName="tutorNames"
             name="guardianFirstName">
         </div>
@@ -176,6 +186,7 @@
           <input 
             type="text" 
             class="form-control rounded"
+            [disabled]="!isEditMode"
             formControlName="tutorPaternalSurname"
             name="guardianPaternalLastName">
         </div>
@@ -184,6 +195,7 @@
           <input 
             type="text" 
             class="form-control rounded"
+            [disabled]="!isEditMode"
             formControlName="tutorMaternalSurname"
             name="guardianMaternalLastName">
         </div>
@@ -195,6 +207,7 @@
           <label class="form-label fw-medium small">Tipo de Documento</label>
           <select 
             class="form-select rounded"
+            [disabled]="!isEditMode"
             formControlName="tutorTypeOfDocument"
             name="guardianDocumentType">
             <option value="" disabled>Tipo de Documento</option>
@@ -207,6 +220,7 @@
           <input 
             type="text" 
             class="form-control rounded"
+            [disabled]="!isEditMode"
             formControlName="tutorDocumentNumber"
             name="guardianDocumentNumber">
         </div>
@@ -215,6 +229,7 @@
           <input 
             type="date" 
             class="form-control rounded"
+            [disabled]="!isEditMode"
             formControlName="tutorBirthDate"
             name="guardianBirthDate">
         </div>
@@ -222,6 +237,7 @@
           <label class="form-label fw-medium small">Sexo</label>
           <select 
             class="form-select rounded"
+            [disabled]="!isEditMode"
             formControlName="tutorGender"
             name="guardianGender">
             <option value="" disabled>Género</option>
@@ -238,6 +254,7 @@
           <input 
             type="text" 
             class="form-control rounded"
+            [disabled]="!isEditMode"
             formControlName="tutorPhoneNumber"
             name="guardianPhone">
         </div>
@@ -246,7 +263,8 @@
           <input 
             type="text" 
             class="form-control rounded"
-            formControlName="tutorAddress"
+            [disabled]="!isEditMode"
+            formControlName="tutorAdress"
             name="guardianAddress">
         </div>
         <div class="col-md-4">
@@ -254,25 +272,10 @@
           <input 
             type="email" 
             class="form-control rounded"
+            [disabled]="!isEditMode"
             formControlName="tutorEmail"
             name="guardianEmail">
         </div>
-      </div>
-
-      <div class="section-divider">
-        <h5 class="fw-semibold mb-0">Evaluación psicológica</h5>
-      </div>
-
-      <div class="alert alert-info border rounded mb-3">
-        @if (hasPsychology) {
-          <strong>Fecha de la evaluación:</strong> {{ formatDate(psyEvaluationDate) }}<br>
-          <strong>Resultado de evaluación:</strong>
-          {{ psyEvaluationResult }}
-          <br>
-          <strong>Observaciones:</strong> {{ psyEvaluationObservation }}
-        } @else {
-          <strong>No hay registros de inscripción</strong>
-        }
       </div>
 
       <!-- ESTADO DE INSCRIPCIÓN -->
@@ -281,6 +284,8 @@
           <label class="form-label fw-medium small">Cambiar estado de inscripción</label>
           <select 
             class="form-select rounded"
+            [disabled]="!isEditMode"
+            [(ngModel)]="currentData!.enrollmentStatus"
             name="enrollmentStatus">
             @for (status of enrollmentStatuses; track status.value) {
               <option [value]="status.value">{{ status.label }}</option>
@@ -298,12 +303,21 @@
       (click)="onCancel()">
       Cancelar
     </button>
-    <button 
-      type="submit" 
-      class="btn btn-success rounded px-4"
-      form="formEditEnrollment"
-      [disabled]="formEditEnrollment.invalid">
-      Guardar cambios
-    </button>
+    
+    @if (!isEditMode) {
+      <button 
+        type="button" 
+        class="btn btn-warning rounded px-4"
+        (click)="enableEditMode()">
+        Editar
+      </button>
+    } @else {
+      <button 
+        type="button" 
+        class="btn btn-success rounded px-4"
+        (click)="saveChanges()">
+        Guardar cambios
+      </button>
+    }
   </div>
 </ng-template>
