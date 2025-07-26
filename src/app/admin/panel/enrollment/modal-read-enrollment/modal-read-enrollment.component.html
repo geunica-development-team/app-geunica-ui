@@ -1,7 +1,7 @@
 <ng-template #modalReadEnrollment let-modal>
   <div class="modal-header bg-white border-bottom px-4">
     <div class="w-100">
-      <h4 class="modal-title fw-semibold text-dark">{{ currentData?.studentName }}</h4>
+      <h4 class="modal-title fw-semibold text-dark">{{ studentFullName }}</h4>
     </div>
     <button 
     type="button" 
@@ -12,13 +12,13 @@
 </div>
 
 <div class="modal-body bg-white p-4">
-    <div class="small mb-3">
-      <p class="mb-1"><strong>Fecha de inscripción:</strong> {{ currentData?.enrollmentDate }}</p>
-      <p class="mb-0"><strong>Nivel, Grado y Turno seleccionado:</strong> 
-        {{ currentData?.level }} - {{ currentData?.grade }} - {{ currentData?.shift }}
+    <div class="mb-3">
+      <p class="mb-1"><strong class="fw-semibold">Fecha de inscripción:</strong> {{ registrationDate }}</p>
+      <p class="mb-0"><strong class="fw-semibold">Nivel y Grado seleccionado:</strong> 
+        {{ levelAndGrade }}
       </p>
     </div>
-    <form>
+    <form [formGroup]="formEditEnrollment" (ngSubmit)="updateEnrollment()" id="formEditEnrollment">
       <!-- DATOS DEL ESTUDIANTE -->
       <div class="section-divider">
         <h5 class="fw-semibold mb-0">Datos del Estudiante</h5>
@@ -30,9 +30,8 @@
           <label class="form-label fw-medium small">Nombre</label>
           <input 
             type="text" 
-            class="form-control rounded" 
-            [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.student.firstName"
+            class="form-control rounded"
+            formControlName="studentNames"
             name="studentFirstName">
         </div>
         <div class="col-md-4">
@@ -40,8 +39,7 @@
           <input 
             type="text" 
             class="form-control rounded"
-            [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.student.paternalLastName"
+            formControlName="studentPaternalSurname"
             name="studentPaternalLastName">
         </div>
         <div class="col-md-4">
@@ -49,8 +47,7 @@
           <input 
             type="text" 
             class="form-control rounded"
-            [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.student.maternalLastName"
+            formControlName="studentMaternalSurname"
             name="studentMaternalLastName">
         </div>
       </div>
@@ -61,12 +58,11 @@
           <label class="form-label fw-medium small">Tipo de Documento</label>
           <select 
             class="form-select rounded"
-            [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.student.documentType"
+            formControlName="studentTypeOfDocument"
             name="studentDocumentType">
-            @for (docType of documentTypes; track docType.value) {
-              <option [value]="docType.value">{{ docType.label }}</option>
-            }
+            <option value="" disabled>Tipo de Documento</option>
+            <option value="DNI">DNI</option>
+            <option value="Carnet de extranjería">Carnet de extranjería</option>
           </select>
         </div>
         <div class="col-md-3">
@@ -74,8 +70,7 @@
           <input 
             type="text" 
             class="form-control rounded"
-            [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.student.documentNumber"
+            formControlName="studentDocumentNumber"
             name="studentDocumentNumber">
         </div>
         <div class="col-md-3">
@@ -83,20 +78,18 @@
           <input 
             type="date" 
             class="form-control rounded"
-            [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.student.birthDate"
+            formControlName="studentBirthDate"
             name="studentBirthDate">
         </div>
         <div class="col-md-3">
           <label class="form-label fw-medium small">Sexo</label>
           <select 
             class="form-select rounded"
-            [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.student.gender"
+            formControlName="studentGender"
             name="studentGender">
-            @for (gender of genders; track gender.value) {
-              <option [value]="gender.value">{{ gender.label }}</option>
-            }
+            <option value="" disabled>Género</option>
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
           </select>
         </div>
       </div>
@@ -108,8 +101,7 @@
           <input 
             type="text" 
             class="form-control rounded"
-            [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.student.phone"
+            formControlName="studentPhoneNumber"
             name="studentPhone">
         </div>
         <div class="col-md-4">
@@ -117,8 +109,7 @@
           <input 
             type="text" 
             class="form-control rounded"
-            [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.student.address"
+            formControlName="studentAddress"
             name="studentAddress">
         </div>
         <div class="col-md-4">
@@ -126,9 +117,42 @@
           <input 
             type="email" 
             class="form-control rounded"
-            [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.student.email"
+            formControlName="studentEmail"
             name="studentEmail">
+        </div>
+      </div>
+
+      <!-- NIVEL ACADÉMICO -->
+      <div class="section-divider">
+        <h5 class="fw-semibold mb-0">Nivel académico</h5>
+      </div>
+
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <label class="form-label fw-medium small">Nivel/Programa *</label>
+          <select 
+            class="form-select rounded"
+            name="academicLevel"
+            formControlName="level"
+            (change)="onLevelChange()"
+            >
+            <option value="" disabled selected>Nivel</option>
+            @for (level of levels; track level.id) {
+              <option [value]="level.id">{{ level.name }}</option>
+            }
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-medium small">Grado *</label>
+          <select 
+            class="form-select rounded" 
+            formControlName="grade"
+            name="academicGrade">
+            <option [value]="0" disabled>Grado</option>
+            @for (grade of filteredGrades; track grade.id) {
+              <option [value]="grade.id">{{ grade.name }}</option>
+            }
+          </select>
         </div>
       </div>
 
@@ -144,8 +168,7 @@
           <input 
             type="text" 
             class="form-control rounded"
-            [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.guardian.firstName"
+            formControlName="tutorNames"
             name="guardianFirstName">
         </div>
         <div class="col-md-4">
@@ -153,8 +176,7 @@
           <input 
             type="text" 
             class="form-control rounded"
-            [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.guardian.paternalLastName"
+            formControlName="tutorPaternalSurname"
             name="guardianPaternalLastName">
         </div>
         <div class="col-md-4">
@@ -162,8 +184,7 @@
           <input 
             type="text" 
             class="form-control rounded"
-            [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.guardian.maternalLastName"
+            formControlName="tutorMaternalSurname"
             name="guardianMaternalLastName">
         </div>
       </div>
@@ -174,12 +195,11 @@
           <label class="form-label fw-medium small">Tipo de Documento</label>
           <select 
             class="form-select rounded"
-            [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.guardian.documentType"
+            formControlName="tutorTypeOfDocument"
             name="guardianDocumentType">
-            @for (docType of documentTypes; track docType.value) {
-              <option [value]="docType.value">{{ docType.label }}</option>
-            }
+            <option value="" disabled>Tipo de Documento</option>
+            <option value="DNI">DNI</option>
+            <option value="Carnet de extranjería">Carnet de extranjería</option>
           </select>
         </div>
         <div class="col-md-3">
@@ -187,8 +207,7 @@
           <input 
             type="text" 
             class="form-control rounded"
-            [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.guardian.documentNumber"
+            formControlName="tutorDocumentNumber"
             name="guardianDocumentNumber">
         </div>
         <div class="col-md-3">
@@ -196,20 +215,18 @@
           <input 
             type="date" 
             class="form-control rounded"
-            [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.guardian.birthDate"
+            formControlName="tutorBirthDate"
             name="guardianBirthDate">
         </div>
         <div class="col-md-3">
           <label class="form-label fw-medium small">Sexo</label>
           <select 
             class="form-select rounded"
-            [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.guardian.gender"
+            formControlName="tutorGender"
             name="guardianGender">
-            @for (gender of genders; track gender.value) {
-              <option [value]="gender.value">{{ gender.label }}</option>
-            }
+            <option value="" disabled>Género</option>
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
           </select>
         </div>
       </div>
@@ -221,8 +238,7 @@
           <input 
             type="text" 
             class="form-control rounded"
-            [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.guardian.phone"
+            formControlName="tutorPhoneNumber"
             name="guardianPhone">
         </div>
         <div class="col-md-4">
@@ -230,8 +246,7 @@
           <input 
             type="text" 
             class="form-control rounded"
-            [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.guardian.address"
+            formControlName="tutorAddress"
             name="guardianAddress">
         </div>
         <div class="col-md-4">
@@ -239,10 +254,25 @@
           <input 
             type="email" 
             class="form-control rounded"
-            [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.guardian.email"
+            formControlName="tutorEmail"
             name="guardianEmail">
         </div>
+      </div>
+
+      <div class="section-divider">
+        <h5 class="fw-semibold mb-0">Evaluación psicológica</h5>
+      </div>
+
+      <div class="alert alert-info border rounded mb-3">
+        @if (hasPsychology) {
+          <strong>Fecha de la evaluación:</strong> {{ formatDate(psyEvaluationDate) }}<br>
+          <strong>Resultado de evaluación:</strong>
+          {{ psyEvaluationResult }}
+          <br>
+          <strong>Observaciones:</strong> {{ psyEvaluationObservation }}
+        } @else {
+          <strong>No hay registros de inscripción</strong>
+        }
       </div>
 
       <!-- ESTADO DE INSCRIPCIÓN -->
@@ -251,8 +281,6 @@
           <label class="form-label fw-medium small">Cambiar estado de inscripción</label>
           <select 
             class="form-select rounded"
-            [disabled]="!isEditMode"
-            [(ngModel)]="currentData!.enrollmentStatus"
             name="enrollmentStatus">
             @for (status of enrollmentStatuses; track status.value) {
               <option [value]="status.value">{{ status.label }}</option>
@@ -270,21 +298,12 @@
       (click)="onCancel()">
       Cancelar
     </button>
-    
-    @if (!isEditMode) {
-      <button 
-        type="button" 
-        class="btn btn-warning rounded px-4"
-        (click)="enableEditMode()">
-        Editar
-      </button>
-    } @else {
-      <button 
-        type="button" 
-        class="btn btn-success rounded px-4"
-        (click)="saveChanges()">
-        Guardar cambios
-      </button>
-    }
+    <button 
+      type="submit" 
+      class="btn btn-success rounded px-4"
+      form="formEditEnrollment"
+      [disabled]="formEditEnrollment.invalid">
+      Guardar cambios
+    </button>
   </div>
 </ng-template>

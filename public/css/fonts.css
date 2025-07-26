@@ -6,6 +6,16 @@
   font-style: normal;
 }
 
+option {
+  font-weight: 400 !important;
+}
+
+.text-span-invalid {
+  font-size: 13px;
+  font-weight: 500;
+  color: #f51414;
+}
+
 .poppins-thin {
   font-family: "Poppins", sans-serif;
   font-weight: 100;

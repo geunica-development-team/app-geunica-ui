@@ -19,8 +19,6 @@ export class ModalDeleteEnrollmentComponent {
   @ViewChild('modalDeleteEnrollment') modalDeleteEnrollment!: TemplateRef<ElementRef>;
 
   openModal(studentData: any) {
-    console.log('Abriendo modal de eliminar inscripción para:', studentData);
-    
     this.currentStudent = studentData;
 
     this.modalService.open(this.modalDeleteEnrollment, { 

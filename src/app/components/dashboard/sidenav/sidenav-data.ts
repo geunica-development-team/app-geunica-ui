@@ -78,77 +78,57 @@ export const menuItemsAdmin = [
     { 
       icon: 'fas fa-home', 
       label: 'Dashboard', 
-      route: '/admin/panel/dashboard',
+      route: 'dashboard',
       active: true 
-    },
-    { 
-      icon: 'fa-solid fa-school', 
-      label: 'Gestión Académica', 
-      route: '/admin/panel/gestion-academica' 
-    },
-    { 
-      icon: 'fa-solid fa-user-plus', 
-      label: 'Matrícula', 
-      route: '/admin/panel/matricula' 
-    },
-    { 
-      icon: 'fa-solid fa-person-chalkboard', 
-      label: 'Docentes', 
-      route: '/admin/panel/docentes' 
     },
     {
       icon: 'fa-solid fa-file-circle-plus', 
       label: 'Inscripciones', 
-      route: '/admin/panel/inscripciones',
+      route: 'inscripciones',
       active: true 
     },
     {
       icon: 'fa-solid fa-users', 
       label: 'Gestión de estudiantes', 
-      route: '/admin/panel/estudiantes-matriculados',
+      route: 'estudiantes-matriculados',
       active: true 
     },
     {
       icon: 'fa-solid fa-person-chalkboard', 
       label: 'Gestión de equipo académico', 
-      route: '/admin/panel/equipo-academico',
+      route: 'equipo-academico',
       active: true 
     },
     { 
       icon: 'fa-solid fa-users', 
       label: 'Usuarios', 
-      route: '/admin/panel/usuarios' 
+      route: 'usuarios' 
     },
     { 
       icon: 'fa-solid fa-people-roof', 
       label: 'Aulas', 
-      route: '/admin/panel/aulas' 
+      route: 'aulas' 
     },
     { 
       icon: 'fa-solid fa-calendar', 
       label: 'Horarios', 
-      route: '/admin/panel/horarios' 
-    },
-    { 
-      icon: 'fa-solid fa-book', 
-      label: 'Cursos', 
-      route: '/admin/panel/cursos' 
-    },
-    { 
-      icon: 'fa-solid fa-users', 
-      label: 'Usuarios', 
-      route: '/admin/panel/usuarios' 
+      route: 'horarios' 
     },
     { 
       icon: 'fa-solid fa-coins', 
       label: 'Finanzas', 
-      route: '/admin/panel/finanzas' 
+      route: 'finanzas' 
     },
     { 
       icon: 'fas fa-bullhorn', 
       label: 'Anuncios', 
-      route: '/admin/panel/anuncios',
+      route: 'anuncios',
       badge: 24 
+    },
+    { 
+      icon: 'fas fa-cog', 
+      label: 'Configuración académica', 
+      route: 'configuracion-academica'
     }
 ];
 

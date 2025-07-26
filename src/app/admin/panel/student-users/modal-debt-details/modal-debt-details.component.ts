@@ -19,7 +19,6 @@ export class ModalDebtDetailsComponent {
   @ViewChild("modalDebtDetails") modalDebtDetails!: TemplateRef<ElementRef>
 
   openModal(studentData: any) {
-    console.log("🔥 Abriendo modal para:", studentData)
     this.currentStudent = studentData
     this.hasDebt = this.checkHasDebt()
 

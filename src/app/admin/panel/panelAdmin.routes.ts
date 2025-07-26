@@ -9,6 +9,8 @@ import { InternalUsersComponent } from "./internal-users/internal-users.componen
 import { StudentDetailsComponent } from "./student-users/student-details/student-details.component";
 import { roleGuard } from "../../guards/role.guard";
 import { HeaderDinamicComponent } from "../../components/header-dinamic/header-dinamic.component";
+import { AcademicSettingComponent } from "./academic-setting/academic-setting.component";
+import { ClassroomsComponent } from "./classrooms/classrooms.component";
 
 export const adminPanelRoutes: Routes = [
     {
@@ -47,10 +49,18 @@ export const adminPanelRoutes: Routes = [
                 component: UsersComponent
             },
             {
+                path: 'aulas',
+                component: ClassroomsComponent
+            },
+            {
                 path: 'finanzas',
                 component: FinanceComponent
             },
 
+            {
+                path: 'configuracion-academica',
+                component: AcademicSettingComponent
+            },
             {
                 path: 'perfil',
                 loadChildren: () => import('../../pages/shared/profile/profile.routes').then(m => m.profileRoutes)

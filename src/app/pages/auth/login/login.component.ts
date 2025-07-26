@@ -11,7 +11,7 @@ import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-login',
-  imports: [RouterLink, ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
   
@@ -27,6 +27,8 @@ export class LoginComponent {
   private authStorage = inject(AuthStorageService);
   private activatedRoute = inject(ActivatedRoute);
   private modalService = inject(NgbModal);
+
+  showPassword = false;
 
   ngOnInit(): void {
     const isBrowser = isPlatformBrowser(this.platformId);
@@ -56,9 +58,13 @@ export class LoginComponent {
     }
   }
 
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
+  }
+
   formLogin = this.toolsForm.group({
-    'user': ['', [Validators.required]],
-    'password': ['', [Validators.required, Validators.minLength(5)]]
+    'user': ['', [Validators.required, Validators.minLength(6)]],
+    'password': ['', [Validators.required, Validators.minLength(6)]]
   })
 
   login() {

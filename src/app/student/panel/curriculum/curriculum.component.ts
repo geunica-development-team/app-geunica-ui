@@ -12,7 +12,7 @@ import { Curriculum, Curso } from '../../services/modelStudent';
   styleUrl: './curriculum.component.css'
 })
 export class CurriculumComponent implements OnInit {
-    course!: Curso;
+  course!: Curso;
   curriculum: Curriculum[] = [];
   mostrarDetalle = false;
 

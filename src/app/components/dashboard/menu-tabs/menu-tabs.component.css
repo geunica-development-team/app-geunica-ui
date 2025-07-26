@@ -1,0 +1,134 @@
+/* ===== MODERN NAV STYLES (Copiado de student-details.component.css) ===== */
+.nav.nav-tabs.card-header-tabs {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 8px;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  gap: 4px;
+  margin-bottom: 1.5rem !important;
+}
+
+.nav.nav-tabs .nav-link {
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  color: #6c757d;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 12px 20px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0;
+}
+
+.nav.nav-tabs .nav-link:hover:not(.disabled) {
+  background: rgba(0, 140, 98, 0.1);
+  color: #008c62;
+  transform: translateY(-1px);
+  border: none;
+}
+
+.nav.nav-tabs .nav-link.active {
+  background-color: #008c62;
+  color: white !important;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 140, 98, 0.3);
+}
+
+.nav.nav-tabs .nav-link.active:hover {
+  background-color: #006b4a;
+  transform: translateY(-1px);
+}
+
+.nav.nav-tabs .nav-link.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.nav.nav-tabs .nav-link i {
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+}
+
+.nav.nav-tabs .nav-link .badge {
+  font-size: 10px;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
+  }
+  70% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 8px rgba(220, 53, 69, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+  }
+}
+
+/* ===== CARDS Y CONTENIDO (Copiado de student-details.component.css) ===== */
+.card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+.tab-content-item {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== RESPONSIVE (Copiado de student-details.component.css) ===== */
+@media (max-width: 768px) {
+  .nav.nav-tabs.card-header-tabs {
+    flex-direction: column;
+    padding: 12px;
+  }
+
+  .nav.nav-tabs .nav-link {
+    justify-content: flex-start;
+    width: 100%;
+    margin-bottom: 4px;
+  }
+}
+
+@media (max-width: 576px) {
+  .nav.nav-tabs .nav-link {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+
+  .nav.nav-tabs .nav-link i {
+    font-size: 14px;
+    width: 18px;
+  }
+}

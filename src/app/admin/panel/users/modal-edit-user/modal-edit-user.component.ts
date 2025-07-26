@@ -44,8 +44,7 @@ export class ModalEditUserComponent {
   @ViewChild('modalEditUser') modalEditUser!: TemplateRef<ElementRef>;
 
   openModal(studentData: any) {
-    console.log('Abriendo modal para:', studentData); // Para debug
-    
+  
     this.currentStudent = studentData;
     this.selectedLevel = studentData.application_level || 'Primaria';
     this.selectedGrade = '2do';

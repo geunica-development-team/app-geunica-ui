@@ -16,16 +16,34 @@
                 <h2 class="mb-4 fs-4 text-blue">Ingresa tus datos para iniciar sesión</h2>
                 <form [formGroup]="formLogin" (ngSubmit)="login()">
                     <div class="mb-3">
-                        <label class="label text-blue fw-normal mb-2">Número de DNI:</label>
+                        <label class="label text-blue fw-normal mb-2">Usuario:</label>
                         <input class="input form-control" name="dni" placeholder="Usuario" formControlName="user">
+                        <span class="text-span-invalid" [hidden]="formLogin.get('user')?.valid || formLogin.get('user')?.untouched"><i class="fa-solid fa-circle-exclamation"></i> Debes colocar un usuario válido.</span>
+
                     </div>
                     <div class="mb-3">
                         <label class="label text-blue fw-normal mb-2">Contraseña:</label>
-                        <input type="password" class="input form-control" name="password" placeholder="Contraseña" formControlName="password">
-                    </div>
-                    <div class="my-3 d-flex flex-column flex-md-row justify-content-end align-items-center">
-                        <a routerLink="/auth/recover/email" class="text-blue fw-medium" style="font-size: 14px;">Restablecer contraseña</a>
-                    </div>
+                        <div class="password-input-container">
+                            <input
+                            [type]="showPassword ? 'text' : 'password'"
+                            class="input form-control"
+                            name="password"
+                            placeholder="Contraseña"
+                            formControlName="password"
+                            >
+                            <button
+                            type="button"
+                            class="password-toggle-btn"
+                            (click)="togglePasswordVisibility()"
+                            title="{{ showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña' }}"
+                            >
+                            <i class="fas" [class.fa-eye]="!showPassword" [class.fa-eye-slash]="showPassword"></i>
+                            </button>
+                        </div>
+                        <span class="text-span-invalid" [hidden]="formLogin.get('password')?.valid || formLogin.get('password')?.untouched">
+                            <i class="fa-solid fa-circle-exclamation"></i> Tu contraseña no tiene los carácteres mínimos ( {{ formLogin.get('password')?.value?.length || 0 }} /6 )
+                        </span>
+                        </div>
                     <button class="btn-custom-green-100" [disabled]="formLogin.invalid">Iniciar sesión</button>
                 </form>
             </div>

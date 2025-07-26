@@ -54,8 +54,6 @@ export class ModalContinueRegistrationComponent {
   @ViewChild('modalContinueRegistration') modalContinueRegistration!: TemplateRef<ElementRef>;
 
   openModal(studentData: any) {
-    console.log('Abriendo modal para:', studentData);
-    
     this.currentStudent = studentData;
     // Inicializar filtros vacíos para mostrar todos los grupos
     this.selectedLevel = '';
