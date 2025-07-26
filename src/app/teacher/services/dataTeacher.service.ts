@@ -17,6 +17,14 @@ import {
   Session,
   Month,
   Attendance,
+  Examen,
+  NotaExamen,
+  Estudiante,
+  Persona,
+  AsignacionDeClase,
+  Docente,
+  Matricula,
+  InscripcionVirtual
 } from './modelTeacher';
 
 @Injectable({
@@ -138,4 +146,69 @@ export class DataTeacherService {
   getAnnouncements(): Observable<Anuncio[]> {
     return this.http.get<Anuncio[]>(`${this.base}/anuncio`);
   }
+
+    /** Exámenes */
+  getExams(): Observable<Examen[]> {
+    return this.http.get<Examen[]>(`${this.base}/examen`);
+  }
+  getExamById(id: number): Observable<Examen> {
+    return this.http.get<Examen>(`${this.base}/examen/${id}`);
+  }
+
+  /** Notas de examen */
+  getExamNotes(): Observable<NotaExamen[]> {
+    return this.http.get<NotaExamen[]>(`${this.base}/nota_examen`);
+  }
+  getExamNotesByExam(id_examen: number): Observable<NotaExamen[]> {
+    return this.http.get<NotaExamen[]>(`${this.base}/nota_examen?examenId=${id_examen}`);
+  }
+
+    /** Asignaciones de clase */
+  getClassAssignments(): Observable<AsignacionDeClase[]> {
+    return this.http.get<AsignacionDeClase[]>(`${this.base}/asignacion_de_clase`);
+  }
+  getClassAssignmentById(id: number): Observable<AsignacionDeClase> {
+    return this.http.get<AsignacionDeClase>(`${this.base}/asignacion_de_clase/${id}`);
+  }
+
+  /** Inscripciones virtuales */
+  getVirtualEnrollments(): Observable<InscripcionVirtual[]> {
+    return this.http.get<InscripcionVirtual[]>(`${this.base}/inscripcion_virtual`);
+  }
+  getVirtualEnrollmentById(id: number): Observable<InscripcionVirtual> {
+    return this.http.get<InscripcionVirtual>(`${this.base}/inscripcion_virtual/${id}`);
+  }
+
+  /** Matrículas */
+  getMatriculas(): Observable<Matricula[]> {
+    return this.http.get<Matricula[]>(`${this.base}/matricula`);
+  }
+  getMatriculaById(id: number): Observable<Matricula> {
+    return this.http.get<Matricula>(`${this.base}/matricula/${id}`);
+  }
+
+  /** Personas */
+  getPersonas(): Observable<Persona[]> {
+    return this.http.get<Persona[]>(`${this.base}/persona`);
+  }
+  getPersonaById(id: number): Observable<Persona> {
+    return this.http.get<Persona>(`${this.base}/persona/${id}`);
+  }
+
+  /** Docentes */
+  getDocentes(): Observable<Docente[]> {
+    return this.http.get<Docente[]>(`${this.base}/docente`);
+  }
+  getDocenteById(id: number): Observable<Docente> {
+    return this.http.get<Docente>(`${this.base}/docente/${id}`);
+  }
+
+  /** Estudiantes */
+  getEstudiantes(): Observable<Estudiante[]> {
+    return this.http.get<Estudiante[]>(`${this.base}/estudiante`);
+  }
+  getEstudianteById(id: number): Observable<Estudiante> {
+    return this.http.get<Estudiante>(`${this.base}/estudiante/${id}`);
+  }
+
 }

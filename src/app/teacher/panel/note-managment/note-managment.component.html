@@ -18,21 +18,74 @@
       
   <div class="row g-4">
     <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let g of filteredGrades">
-              <app-card-courses class="h-100"
+      <app-card-courses class="h-100"
           [etiquetaTitulo]="'GRADO'"
-          [titulo]="g.grado "
-          [etiquetaSubtitulo1]="'NIVEL'"
-          [subtitulo1]=" g.nivel"
+          [titulo]="g.grado + ' ' + g.nivel"
+          [etiquetaSubtitulo1]="'SECCION'"
+          [subtitulo1]=" g.seccion"
           [etiquetaSubtitulo2]="'SEDE'"
           [subtitulo2]=" g.sede"
-          [link]="['#']">
+          (click)="openModalNoteManagment(g)"         
+            style="cursor: pointer;">
           <!-- '/student/panel/courses', course.id_curso, 'curriculum' -->
           <!-- el link tenemos que cambiarlo, lo mejor seria crear un curriculum para profesor -->
 
-        </app-card-courses>
+      </app-card-courses>
 
     </div>
   </div>
 
 
 </div>
+
+<!-- Modal reutilizable -->
+<app-app-modal
+  [visible]="!!selectedGrade" 
+  (closed)="closeModal()"
+  width="500px"
+  maxWidth="90vw"
+  borderRadius="0.75rem"
+>
+
+  <ng-container *ngIf="selectedGrade">
+    <div class="p-4">
+
+      <!-- 1) Título -->
+      <h4 class="mb-3 text-center">
+        {{ selectedGrade.nivel }} – {{ selectedGrade.grado }} 
+        <small class="text-muted">({{ selectedGrade.seccion }})</small>
+      </h4>
+      <hr/>
+
+      <div class="table-responsive ">
+        <div class="d-flex justify-content-center">
+          <table class="table table-sm table-bordered rounded shadow-sm">
+            <thead class="table-light">
+              <tr>
+                <th class="fw-bold">Nombre</th>
+                <th class="fw-bold">Apellido</th>
+                <th class="fw-bold">Código</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let s of students">
+                <td>
+                  <a 
+                    href="#" 
+                    (click)="goToStudentNotes(s.id_estudiante); $event.preventDefault()"
+                  >
+                    {{ s.persona.nombres }}
+                  </a>
+                </td>
+                <td>{{ s.persona.apell_paterno }}</td>
+                <td>{{ s.codigo_estudiante }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </ng-container>
+
+</app-app-modal>

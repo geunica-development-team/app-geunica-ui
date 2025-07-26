@@ -90,7 +90,7 @@
       "persona": {"id_persona": 3,"nombres": "Carmen","apell_paterno": "Torres"}
     }
   ],
-    "estudiante": [
+  "estudiante": [
     { "id_estudiante": 1, "id_persona": 4, "id_usuario": 4, "codigo_estudiante": "EST001", "fecha_ingreso": "2025-01-15", "estado": "activo" },
     { "id_estudiante": 2, "id_persona": 6, "id_usuario": 4, "codigo_estudiante": "EST002", "fecha_ingreso": "2025-01-15", "estado": "activo" },
     { "id_estudiante": 3, "id_persona": 7, "id_usuario": 4, "codigo_estudiante": "EST003", "fecha_ingreso": "2025-01-15", "estado": "activo" }
