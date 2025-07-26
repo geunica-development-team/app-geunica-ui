@@ -15,8 +15,8 @@
 
   <!-- Tabla de asistencia -->
   <div class="table-responsive">
-    <table class="table align-middle table-bordered rounded shadow-sm">
-      <thead class="table-light">
+    <table class="table align-middle table-bordered rounded shadow-sm table-fixed">
+      <thead class="table-success">
         <tr>
           <th>Estudiante</th>
           <th *ngFor="let day of days" class="text-center">{{ day }}</th>
@@ -30,36 +30,36 @@
             </td>
             <!-- Una celda por día -->
             <td *ngFor="let rec of student.records" class="text-center">
-            <div class="btn-group custom-status-group">
-                <!-- Botón principal que muestra el estado -->
-                <button 
-                type="button"
-                class="btn btn-sm custom-status-btn"
-                [ngClass]="statusClass(rec.status)"
-                >
-                {{ rec.status | uppercase }}
-                </button>
+                <div class="btn-group custom-status-group">
+                    <!-- Botón principal que muestra el estado -->
+                    <button 
+                    type="button"
+                    class="btn btn-sm custom-status-btn"
+                    [ngClass]="statusClass(rec.status)"
+                    >
+                    {{ rec.status | uppercase }}
+                    </button>
 
-                <!-- Split toggle: la flechita -->
-                <button
-                type="button"
-                class="btn btn-sm dropdown-toggle dropdown-toggle-split custom-status-btn"
-                [ngClass]="statusClass(rec.status)"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-                >
-                <span class="visually-hidden">Toggle Dropdown</span>
-                </button>
+                    <!-- Split toggle: la flechita -->
+                    <button
+                    type="button"
+                    class="btn btn-sm dropdown-toggle dropdown-toggle-split custom-status-btn"
+                    [ngClass]="statusClass(rec.status)"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    >
+                    <span class="visually-hidden">Toggle Dropdown</span>
+                    </button>
 
-                <!-- Menú con las dos opciones restantes, alineado al botón -->
-                <ul class="dropdown-menu dropdown-menu-end">
-                <li *ngFor="let opt of getOtherStatuses(rec.status)">
-                    <a class="dropdown-item" (click)="rec.status = opt">
-                    {{ opt | uppercase }}
-                    </a>
-                </li>
-                </ul>
-            </div>
+                    <!-- Menú con las dos opciones restantes, alineado al botón -->
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li *ngFor="let opt of getOtherStatuses(rec.status)">
+                            <a class="dropdown-item" (click)="rec.status = opt">
+                            {{ opt | uppercase }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </td>
 
 
