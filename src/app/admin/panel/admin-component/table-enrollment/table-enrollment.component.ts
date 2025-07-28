@@ -167,11 +167,6 @@ export class TableEnrollmentComponent {
       case "Pendiente":
         return { text: "Enviar a evaluación", action: "enviarEvaluacion", class: "btn-enviarEvaluacion" }
       case "Evaluación en proceso":
-<<<<<<< Updated upstream
-        return { text: "Anular evaluación", action: "anularEvaluacion", class: "btn-anularEvaluacion" }
-      case "Evaluado":
-        return { text: "Continuar con la matrícula", action: "continuarMatricula", class: "btn-continuarMatricula" }
-=======
         if (!this.userProfile) return null;
 
         if (this.userProfile.role.role === 'admin') {
@@ -191,7 +186,6 @@ export class TableEnrollmentComponent {
         } else {
           return null
         }
->>>>>>> Stashed changes
       case "Rechazado":
         return { text: "Restaurar inscripción", action: "restaurarInscripcion", class: "btn-restaurarInscripcion" }
       case "Pago pendiente":
