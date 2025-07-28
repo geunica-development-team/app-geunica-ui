@@ -33,59 +33,22 @@
 }
 
 
-/* Botones redondeados y pastel */
-.custom-status-btn {
-  border-radius: 0;
-  /* quitamos bordes internos extras */
-  border-width: 0;
-  padding: 0.25rem 0.75rem;
-  font-size: 0.8rem;
-  transition: background-color .2s;
-  min-width: 7rem;
-  text-align: center;
+
+/* Asistió → mismo fondo y color de letra que .estadoEvaluado */
+.btn-asistio {
+  background-color: #DFF5E1 !important;
+  color: #2E7D32 !important;
 }
 
-/* Redondeo en extremos del grupo */
-.custom-status-btn:first-child {
-  border-top-left-radius: 1.5rem;
-  border-bottom-left-radius: 1.5rem;
+/* Falto → mismo fondo y color de letra que .estadoRechazado */
+.btn-falto {
+  background-color: #FFE3E3 !important;
+  color: #D32F2F !important;
 }
 
-.custom-status-btn:last-child {
-  border-top-right-radius: 1.5rem;
-  border-bottom-right-radius: 1.5rem;
+/* Tardanza → mismo fondo y color de letra que .estadoPagoPendiente */
+.btn-tardanza {
+  background-color: #FFF3E0 !important;
+  color: #EF6C00 !important;
 }
 
-/* Tonos pastel más saturados para los estados */
-.btn-success.custom-status-btn {
-  background-color: #3fae3f;  /* verde más saturado */
-  color: #1f4d1f;
-}
-.btn-danger.custom-status-btn {
-  background-color: #e03a3a;  /* rojo más saturado */
-  color: #4a1f1f;
-}
-.btn-warning.custom-status-btn {
-  background-color: #f2dc2f;  /* amarillo más saturado */
-  color: #4d3d1f;
-}
-
-/* Hover ligeramente más oscuro y definido */
-.btn-success.custom-status-btn:hover {
-  background-color: #2d982d;
-}
-.btn-danger.custom-status-btn:hover {
-  background-color: #c83030;
-}
-.btn-warning.custom-status-btn:hover {
-  background-color: #eac91a;
-}
-
-/* Asegura que el dropdown coincide con el botón */
-.dropdown-menu-end {
-  min-width: 100%;  /* para que el menú tenga por lo menos el ancho del grupo */
-  border-radius: 0 0 0.5rem 0.5rem;
-}
-.dropdown-menu {
-  z-index: 1055 !important;
-}

@@ -30,36 +30,20 @@
             </td>
             <!-- Una celda por día -->
             <td *ngFor="let rec of student.records" class="text-center">
-                <div class="btn-group custom-status-group">
-                    <!-- Botón principal que muestra el estado -->
-                    <button 
-                    type="button"
-                    class="btn btn-sm custom-status-btn"
-                    [ngClass]="statusClass(rec.status)"
-                    >
-                    {{ rec.status | uppercase }}
-                    </button>
-
-                    <!-- Split toggle: la flechita -->
-                    <button
-                    type="button"
-                    class="btn btn-sm dropdown-toggle dropdown-toggle-split custom-status-btn"
-                    [ngClass]="statusClass(rec.status)"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                    >
-                    <span class="visually-hidden">Toggle Dropdown</span>
-                    </button>
-
-                    <!-- Menú con las dos opciones restantes, alineado al botón -->
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li *ngFor="let opt of getOtherStatuses(rec.status)">
-                            <a class="dropdown-item" (click)="rec.status = opt">
-                            {{ opt | uppercase }}
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+              <div class="dropdown">
+                <button class="btn dropdown-toggle" type="button" 
+                id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"
+                [ngClass]="statusClass(rec.status)">
+                  {{ rec.status | uppercase }}
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                  <li *ngFor="let opt of getOtherStatuses(rec.status)">
+                    <a class="dropdown-item" (click)="rec.status = opt">
+                    {{ opt | uppercase }}
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </td>
 
 

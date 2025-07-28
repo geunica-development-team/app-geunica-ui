@@ -109,9 +109,9 @@ export class AttendanceListComponent implements OnInit {
   // Mapea status a clase Bootstrap
   statusClass(status: Status) {
     return {
-      'asistió':  'btn-success',
-      'falto':    'btn-danger',
-      'tardanza': 'btn-warning text-dark'
+      'asistió':  'btn-asistio',
+      'falto':    'btn-falto',
+      'tardanza': 'btn-tardanza'
     }[status];
   }
 
