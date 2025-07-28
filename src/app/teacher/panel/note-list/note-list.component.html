@@ -3,17 +3,13 @@
 
 <div class="container mb-4">
   <!-- Barra de semestres -->
-  <app-header-dinamic [tabs]="[
-    {id: '1er Bimestre',      label: '1er Bimestre',      icon: 'fas fa-file-alt'},
-    {id: '2do Bimestre',     label: '2do Bimestre',     icon: 'fas fa-file-alt'},
-    {id: '3er Bimestre',      label: '3er Bimestre',      icon: 'fas fa-file-alt'},
-    {id: '4to Bimestre', label: '4to Bimestre', icon: 'fas fa-file-alt'},
-    {id: 'Bimestre Final', label: 'Bimestre Final', icon: 'fas fa-file-alt'}
-  ]">
+<app-menu-tabs
+  [tabs]="tabs"
+  [activeTabId]="activeTab"
+  (tabChanged)="onTabChanged($event)"
 
-    <!-- Contenido para "1do Bimestre" -->
-    <ng-template tabId="1er Bimestre">
-      <!-- Fila que agrupa las dos columnas -->
+>
+@if (activeTab === '1er Bimestre') {
       <div class="row gy-4">
         <!-- Columna izquierda -->
         <div class="col-12 col-md-6 mb-4">
@@ -57,12 +53,9 @@
             </div>
         </div>
       </div>
+}
 
-    </ng-template>
-
-    <!-- Contenido para "2do Bimestre" -->
-    <ng-template tabId="2do Bimestre">
-      <!-- Fila que agrupa las dos columnas -->
+@if (activeTab === '2do Bimestre') {
       <div class="row gy-4">
         <!-- Columna izquierda -->
         <div class="col-12 col-md-6 mb-4">
@@ -106,11 +99,9 @@
             </div>
         </div>
       </div>
-    </ng-template>
+}
 
-        <!-- Contenido para "3er Bimestre" -->
-    <ng-template tabId="3er Bimestre">
-      <!-- Fila que agrupa las dos columnas -->
+@if (activeTab === '3er Bimestre') {
       <div class="row gy-4">
         <!-- Columna izquierda -->
         <div class="col-12 col-md-6 mb-4">
@@ -154,11 +145,9 @@
             </div>
         </div>
       </div>
-    </ng-template>
+}
 
-        <!-- Contenido para "4to Bimestre" -->
-    <ng-template tabId="4to Bimestre">
-      <!-- Fila que agrupa las dos columnas -->
+@if (activeTab === '4to Bimestre') {
       <div class="row gy-4">
         <!-- Columna izquierda -->
         <div class="col-12 col-md-6 mb-4">
@@ -202,11 +191,9 @@
             </div>
         </div>
       </div>
-    </ng-template>
+}
 
-        <!-- Contenido para "Bimestre final" -->
-    <ng-template tabId="Bimestre Final">
-      <!-- Fila que agrupa las dos columnas -->
+@if (activeTab === 'Bimestre Final') {
       <div class="row gy-4">
         <!-- Columna izquierda -->
         <div class="col-12 col-md-6 mb-4">
@@ -252,12 +239,14 @@
             </div>
         </div>
       </div>
-    </ng-template>
+}
 
-  <!-- Y así para cada pestaña -->
-  </app-header-dinamic>
+</app-menu-tabs>
 
 </div>
+
+
+
 
 
 </ng-container>
