@@ -20,6 +20,11 @@ export const routes: Routes = [
         import('./admin/panel/panelAdmin.routes').then(m => m.adminPanelRoutes) 
     },
     {
+      path: 'psychologist',
+      loadChildren: () => 
+        import('./psychologist/panel/panelPsychologist.routes').then(m => m.psychologistPanelRoutes) 
+    },
+    {
       path: 'student',
       loadChildren: () => 
         import('./student/panel/panelStudent.routes').then(m => m.studentPanelRoutes) 

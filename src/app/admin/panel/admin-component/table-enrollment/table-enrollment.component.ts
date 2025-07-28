@@ -1,4 +1,7 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { AuthService } from '../../../../services/auth.service';
+import { UserService, UserSession } from '../../../../services/user.service';
+import { error } from 'console';
 
 @Component({
   selector: 'app-table-enrollment',
@@ -7,6 +10,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrl: './table-enrollment.component.css'
 })
 export class TableEnrollmentComponent {
+  private authService = inject(AuthService);
+  private userService = inject(UserService);
+  
+
   @Input() accionEnviarEvaluacion!: (row: any) => void
   @Input() accionAnularEvaluacion!: (row: any) => void
   @Input() accionRestaurarInscripcion!: (row: any) => void
@@ -14,7 +21,27 @@ export class TableEnrollmentComponent {
   @Input() actionMarkPayment!: (row: any) => void
   @Input() actionDeleteEnrollment!: (row: any) => void
   @Input() actionReadEnrollment!: (row: any) => void
+
+  @Input() accionRegistrarEvaluacion!: (row: any) => void
+
   @Input() columns: string[] = []
+
+  userProfile!: UserSession;
+  
+  ngOnInit(): void {
+    const tokenDecoded = this.authService.getDecodedToken();
+    const userId = tokenDecoded?.id;
+    if (userId) {
+      this.userService.getUserById(userId).subscribe({
+        next: (user) => {
+          this.userProfile = user;
+        },
+        error: (error) => {
+          console.error('Error al cargar perfil de usuario: ', error)
+        }
+      })
+    }
+  }
 
   // INPUTS PARA FILTROS CON SETTERS
   private _statusFilter = ""
@@ -140,9 +167,31 @@ export class TableEnrollmentComponent {
       case "Pendiente":
         return { text: "Enviar a evaluación", action: "enviarEvaluacion", class: "btn-enviarEvaluacion" }
       case "Evaluación en proceso":
+<<<<<<< Updated upstream
         return { text: "Anular evaluación", action: "anularEvaluacion", class: "btn-anularEvaluacion" }
       case "Evaluado":
         return { text: "Continuar con la matrícula", action: "continuarMatricula", class: "btn-continuarMatricula" }
+=======
+        if (!this.userProfile) return null;
+
+        if (this.userProfile.role.role === 'admin') {
+          return { text: "Anular evaluación", action: "anularEvaluacion", class: "btn-anularEvaluacion" }
+        } else if (this.userProfile.role.role === 'psychologist') {
+          return { text: "Registrar evaluación", action: "registrarEvaluacion", class: "btn-registrarEvaluacion" }
+        } else {
+          return null
+        }
+      case "Evaluado":
+        if (!this.userProfile) return null;
+
+        if (this.userProfile.role.role === 'admin') {
+          return { text: "Asignar salón", action: "continuarMatricula", class: "btn-continuarMatricula" }
+        } else if (this.userProfile.role.role === 'psychologist') {
+          return { text: "Registrar nueva evaluación", action: "registrarEvaluacion", class: "btn-registrarEvaluacion" }
+        } else {
+          return null
+        }
+>>>>>>> Stashed changes
       case "Rechazado":
         return { text: "Restaurar inscripción", action: "restaurarInscripcion", class: "btn-restaurarInscripcion" }
       case "Pago pendiente":
@@ -170,6 +219,9 @@ export class TableEnrollmentComponent {
         break
       case "marcarPago":
         this.actionMarkPayment(row)
+        break
+      case "registrarEvaluacion":
+        this.accionRegistrarEvaluacion(row)
         break
     }
   }

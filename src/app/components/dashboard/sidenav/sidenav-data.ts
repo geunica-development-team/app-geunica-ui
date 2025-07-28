@@ -129,6 +129,30 @@ export const menuItemsAdmin = [
       icon: 'fas fa-cog', 
       label: 'Configuración académica', 
       route: 'configuracion-academica'
+<<<<<<< Updated upstream
+=======
+    }
+];
+
+export const menuItemsPsychologist = [
+    { 
+      icon: 'fas fa-home', 
+      label: 'Dashboard', 
+      route: 'dashboard',
+      active: true 
+    },
+    {
+      icon: 'fa-solid fa-file-circle-plus', 
+      label: 'Evaluaciones pendientes', 
+      route: 'inscripciones',
+      active: true 
+    },
+    {
+      icon: 'fa-solid fa-users', 
+      label: 'Historial de evaluaciones', 
+      route: 'historial-evaluaciones',
+      active: true 
+>>>>>>> Stashed changes
     }
 ];
 

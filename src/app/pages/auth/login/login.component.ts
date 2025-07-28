@@ -89,6 +89,8 @@ export class LoginComponent {
             this.router.navigateByUrl('/admin/panel/dashboard');
           } else if (role === 'student') {
             this.router.navigateByUrl('/student/panel/dashboard');
+          } else if (role === 'psychologist') {
+            this.router.navigateByUrl('/psychologist/panel/dashboard');
           } else {
             this.router.navigateByUrl('/unauthorized');
           }

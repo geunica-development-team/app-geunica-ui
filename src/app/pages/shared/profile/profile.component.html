@@ -100,6 +100,19 @@
                     <span>{{ userProfile.campus.name }}</span>
                   </div>
                 }
+<<<<<<< Updated upstream
+=======
+                @if (userProfile.role.role === 'psychologist') {
+                  <div class="info-item">
+                    <label>Rol académico:</label>
+                    <span> Psicólogo </span>
+                  </div>
+                  <div class="info-item">
+                    <label>Sede/s asociada/s:</label>
+                    <span>{{ userProfile.campus.name }}</span>
+                  </div>
+                }
+>>>>>>> Stashed changes
                 @if (userProfile.role.role === 'student') {
                   <div class="info-item">
                     <label>Rol académico:</label>

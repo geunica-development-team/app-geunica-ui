@@ -20,6 +20,7 @@ import { ToastrService } from 'ngx-toastr';
 export class EnrollmentComponent {
   private inscriptionService = inject(InscriptionService)
   private notifycation = inject(ToastrService);
+<<<<<<< Updated upstream
 
   ngOnInit() {
     this.loadEnrollments();
@@ -57,6 +58,45 @@ export class EnrollmentComponent {
     "Estado Inscripción": "state",
     "Evaluación Resultado": "evaluationResult",
   }
+=======
+
+  ngOnInit() {
+    this.loadEnrollments();
+  }
+
+  @ViewChild("modalContinueRegistration") modalContinueRegistration!: ModalContinueRegistrationComponent
+  @ViewChild("modalMarkPayment") modalMarkPayment!: ModalMarkPaymentComponent
+  @ViewChild("modalDeleteEnrollment") modalDeleteEnrollment!: ModalDeleteEnrollmentComponent
+  @ViewChild("modalReadEnrollment") modalReadEnrollment!: ModalReadEnrollmentComponent
+  
+  // FILTROS
+  selectedStatus = ""
+  searchValue = ""
+
+  // COLUMNAS DE LA TABLA
+  columns = [
+    "ID",
+    "Estudiante",
+    "DNI",
+    "Apoderado",
+    "Grado y Sección",
+    "Fecha",
+    "Estado Inscripción",
+    "Evaluación Resultado"
+  ]
+
+  // MAPEO PARA COLUMNAS Y FILAS
+  columnMappings = {
+    ID: "id",
+    Estudiante: "studentFullName",
+    "DNI": "documentNumber",
+    Apoderado: "tutorFullName",
+    "Grado y Sección": "gradeAndSection",
+    Fecha: "registrationDate",
+    "Estado Inscripción": "state",
+    "Evaluación Resultado": "evaluationResult",
+  }
+>>>>>>> Stashed changes
   
   // ESTADOS DISPONIBLES
   enrollmentStatuses = [
