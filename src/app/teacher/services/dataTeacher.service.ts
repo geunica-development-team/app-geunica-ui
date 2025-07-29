@@ -13,6 +13,7 @@ import {
   Salon,
   Anuncio,
   Curso,
+  Curriculum,
   FlatAsistencia,
   Session,
   Month,
@@ -37,18 +38,24 @@ export class DataTeacherService {
   getCourses(): Observable<Curso[]> {
     return this.http.get<Curso[]>(`${this.base}/curso`);
   }
-  
+
   getCourseById(id: number): Observable<Curso> {
-    return this.http
-      .get<Curso[]>(`${this.base}/curso?id=${id}`)
-      .pipe(
-        map(arr => {
-          if (!arr.length) {
-            throw new Error(`Curso con id ${id} no encontrado`);
-          }
-          return arr[0];
-        })
-      );
+      return this.http
+    .get<Curso[]>(`${this.base}/curso?id_curso=${id}`)//is_curso es como ests en la json
+    .pipe(
+      map(arr => {
+        if (!arr.length) throw new Error(`Curso con id ${id} no encontrado`);
+        return arr[0];
+      })
+    );
+  }
+
+  getCurriculums(): Observable<Curriculum[]> {
+    return this.http.get<Curriculum[]>(`${this.base}/curriculum`);
+  }
+
+  getCurriculumByCourseId(courseId: number): Observable<Curriculum[]> {
+    return this.http.get<Curriculum[]>(`${this.base}/curriculum?courseId=${courseId}`);
   }
 
   getAttendance(): Observable<Attendance> {

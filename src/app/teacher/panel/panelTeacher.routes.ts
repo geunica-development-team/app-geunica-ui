@@ -9,6 +9,7 @@ import { AnnouncementComponent } from "./announcement/announcement.component";
 import { ScheduleComponent } from "./schedule/schedule.component";
 import { AttendanceListComponent } from "./attendance-list/attendance-list.component";
 import { NoteListComponent } from "./note-list/note-list.component";
+import { CurriculumManagmentComponent } from "./curriculum-managment/curriculum-managment.component";
 
 export const teacherPanelRoutes: Routes = [
     {
@@ -27,8 +28,15 @@ export const teacherPanelRoutes: Routes = [
                 component: DashboardComponent
             },
             {
-                path: "coursesAsigned",
-                component: AssignedCoursesComponent
+                path: 'coursesAsigned',
+                children: [
+                    { path: '', 
+                        component: AssignedCoursesComponent
+                    },
+                    { path: ':id/curriculumManagment', 
+                        component: CurriculumManagmentComponent
+                    },
+                ]
             },
             {
                 path: "NoteManagment",

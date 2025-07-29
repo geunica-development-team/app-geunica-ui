@@ -24,9 +24,10 @@
             [titulo]="course.nombre"
             [etiquetaSubtitulo1]="'CÓDIGO'"
             [subtitulo1]="course.codigo"
-            [link]="['/student/panel/courses', course.id_curso, 'curriculum']">
+            [link]="['/teacher/panel/coursesAsigned', course.id_curso, 'curriculumManagment']">
             
-            <!-- el link tenemos que cambiarlo, lo mejor seria crear un curriculum para profesor -->
+            <!-- el link tenemos que cambiarlo, lo mejor seria crear un curriculum para profesor 
+             [link]="['/teacher/panel/curriculumManagment', course.id_curso, 'curriculum']">-->
 
             </app-card-courses>
       </div>
