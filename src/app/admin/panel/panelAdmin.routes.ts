@@ -8,7 +8,6 @@ import { StudentUsersComponent } from "./student-users/student-users.component";
 import { InternalUsersComponent } from "./internal-users/internal-users.component";
 import { StudentDetailsComponent } from "./student-users/student-details/student-details.component";
 import { roleGuard } from "../../guards/role.guard";
-import { HeaderDinamicComponent } from "../../components/header-dinamic/header-dinamic.component";
 import { AcademicSettingComponent } from "./academic-setting/academic-setting.component";
 import { ClassroomsComponent } from "./classrooms/classrooms.component";
 

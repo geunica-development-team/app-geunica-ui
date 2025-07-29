@@ -3,9 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { DataStudentService } from '../../services/dataStudent.service';
 import { Curso } from '../../services/modelStudent';
-import { HeaderDinamicComponent } from '../../../components/header-dinamic/header-dinamic.component';
-import { TabContentDirective } from '../../../components/header-dinamic/tab-content.directive';
 import { forkJoin } from 'rxjs';
+import { MenuTabsComponent, TabItem } from '../../../components/dashboard/menu-tabs/menu-tabs.component';
 
 interface RegistryItem {
   concepto: string;
@@ -14,7 +13,7 @@ interface RegistryItem {
 
 @Component({
   selector: 'app-grades-registry',
-  imports: [CommonModule, RouterModule, HeaderDinamicComponent, TabContentDirective],
+  imports: [CommonModule, RouterModule, MenuTabsComponent],
   templateUrl: './grades-registry.component.html',
   styleUrl: './grades-registry.component.css'
 })
@@ -28,6 +27,24 @@ export class GradesRegistryComponent implements OnInit {
     private route: ActivatedRoute,
     private dataSvc: DataStudentService
   ) {}
+
+    tabs: TabItem[] = [
+      { id: '1er Bimestre',  label: '1er Bimestre', icon: 'fas fa-file-alt' },
+      {id: '2do Bimestre',     label: '2do Bimestre',     icon: 'fas fa-file-alt'},
+      {id: '3er Bimestre',      label: '3er Bimestre',      icon: 'fas fa-file-alt'},
+      {id: '4to Bimestre', label: '4to Bimestre', icon: 'fas fa-file-alt'},
+      {id: 'Bimestre Final', label: 'Bimestre Final', icon: 'fas fa-file-alt'}
+  
+    ];
+  
+    // pestaña activa
+    activeTab = "1er Bimestre";
+  
+    // opcional: reaccionar a cambio
+    onTabChanged(newTab: string) {
+      this.activeTab = newTab;
+      console.log('Pestaña activa ahora:', newTab);
+    }
 
 
   ngOnInit(): void {
