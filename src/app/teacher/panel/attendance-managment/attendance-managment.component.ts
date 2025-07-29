@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { SearcherComponent } from '../../../components/searcher/searcher.component';
 import { DataTeacherService } from '../../services/dataTeacher.service';
 import { CardCoursesComponent } from '../../../components/card-courses/card-courses.component';
@@ -7,6 +7,10 @@ import { forkJoin } from 'rxjs';
 import { AppModalComponent } from '../../../components/app-modal/app-modal.component';
 import { Attendance, Month } from '../../services/modelTeacher';
 import { Router } from '@angular/router';
+import { TableComponent } from '../../../components/table/table.component';
+import { USERS } from '../../../admin/utility/db-simulator';
+import { ModalDebtDetailsComponent } from '../../../admin/panel/student-users/modal-debt-details/modal-debt-details.component';
+import { FormsModule } from '@angular/forms';
 
 interface GradeInfo {
   grado:     string;
@@ -17,7 +21,7 @@ interface GradeInfo {
 
 @Component({
   selector: 'app-attendance-managment',
-  imports: [CommonModule, SearcherComponent, CardCoursesComponent, AppModalComponent],
+  imports: [CommonModule, SearcherComponent, CardCoursesComponent, AppModalComponent, TableComponent, FormsModule],
   templateUrl: './attendance-managment.component.html',
   styleUrl: './attendance-managment.component.css'
 })
@@ -26,10 +30,80 @@ export class AttendanceManagmentComponent implements OnInit{
   searchTerm = '';
   attendance?: Attendance;
   selectedGrade: GradeInfo | null = null;
-  constructor(private dataSvc: DataTeacherService,
-    private router: Router
-  ) {}
+  constructor(private dataSvc: DataTeacherService, private router: Router) {}
 
+  // FILTROS
+  searchValue = ""
+
+  // Columnas de la tabla
+  columns = [
+    "ID",
+    "Código Estudiante",
+    "Nombres y Apellidos"
+  ]
+
+  // Mapeo para columnas y filas
+  columnMappings = {
+    ID: "userId",
+    "Código Estudiante": "studentCode",
+    "Nombres y Apellidos": "fullName"
+  }
+
+  // Filtrar solo usuarios con rol 'student' y procesar los datos
+  get rows() {
+    return USERS.filter((user) => user.role === "student").map((user) => ({
+      userId: user.userId,
+      studentCode: user.student?.studentCode || "-",
+      fullName: `${user.person.firstName} ${user.person.lastName} ${user.person.middleName}`.trim(),
+      debtStatus: "",
+      // Clases CSS para los badges
+
+      // Mantener referencia al objeto original para el modal
+      originalData: user,
+    }))
+  }
+
+  @ViewChild("studentUsersTable") studentUsersTable?: TableComponent
+
+  // MÉTODOS DE FILTRADO
+  applyFilters() {
+    if (this.studentUsersTable) {
+      this.studentUsersTable.updateTable()
+    }
+  }
+
+  applySearchFilter(event: Event) {
+    this.searchValue = (event.target as HTMLInputElement).value
+    this.applyFilters()
+  }
+
+  clearFilters() {
+
+    this.searchValue = ""
+    this.applyFilters()
+  }
+
+  applyFilter(event: Event) {
+    if (this.studentUsersTable) {
+      this.studentUsersTable.filterValue = (event.target as HTMLInputElement).value
+      this.studentUsersTable.updateTable()
+    }
+  }
+
+  // ACCIONES
+onVerFicha = (row: any) => {
+  this.router.navigate(
+    ['/teacher/panel/attendanceList', row.userId]
+  );
+}
+
+    openAttendanceList(id_salon: number, monthLabel: string) {
+    this.router.navigate(
+      ['/teacher/panel/attendanceList', id_salon],
+      { queryParams: { month: monthLabel } }
+    );
+  }
+  
   ngOnInit() {
     forkJoin({
       niveles:   this.dataSvc.getNiveles(),
@@ -57,16 +131,16 @@ export class AttendanceManagmentComponent implements OnInit{
         };
       });
 
-      this.applyFilter();
+      this.applicarFiltro();
     });
 
   }
 
   onSearch() {
-    this.applyFilter();
+    this.applicarFiltro();
   }
 
-  private applyFilter() {
+  private applicarFiltro() {
     const term = this.searchTerm.trim().toLowerCase();
     if (!term) return;
 
@@ -102,11 +176,6 @@ export class AttendanceManagmentComponent implements OnInit{
     return lastDayOfMonth < now;
   }
 
-  openAttendanceList(id_salon: number, monthLabel: string) {
-    this.router.navigate(
-      ['/teacher/panel/attendanceList', id_salon],
-      { queryParams: { month: monthLabel } }
-    );
-  }
+
 
 }
