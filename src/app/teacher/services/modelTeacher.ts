@@ -39,17 +39,6 @@ export interface Curso {
   descripcion_curso: string;
 }
 
-/** Temas del plan de estudios */
-export interface Curriculum {
-  id: number;
-  courseId: number;
-  topic: string;
-  description: string;
-  teacher: string;
-  date: string; // ISO YYYY-MM-DD
-  imageUrl?: string;
-}
-
 export interface Curriculum {
   id: number;
   id_curso: number;

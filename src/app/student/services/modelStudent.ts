@@ -2,6 +2,7 @@
 
 /** Curso */
 export interface Curso {
+  name: string;
   id_curso: number;
   nombre: string;
   codigo: string;

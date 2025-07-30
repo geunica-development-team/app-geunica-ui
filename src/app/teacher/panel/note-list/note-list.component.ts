@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { Curso } from '../../services/modelTeacher';
+import { Course, Exam, Exam_scores } from '../../services/modelTeacher';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { DataStudentService } from '../../../student/services/dataStudent.service';
 import { forkJoin } from 'rxjs';
 import { MenuTabsComponent, TabItem } from '../../../components/dashboard/menu-tabs/menu-tabs.component';
+import { DataTeacherService } from '../../services/dataTeacher.service';
 
 interface RegistryItem {
   concepto: string;
@@ -19,13 +20,13 @@ interface RegistryItem {
 })
 export class NoteListComponent {
 
-    course!: Curso;
+  course!: Course;
   registryItems: RegistryItem[] = [];
   loading = true;
 
   constructor(
     private route: ActivatedRoute,
-    private dataSvc: DataStudentService
+    private dataSvc: DataTeacherService
   ) {}
 
   tabs: TabItem[] = [
@@ -55,24 +56,24 @@ export class NoteListComponent {
   forkJoin({
     course: this.dataSvc.getCourseById(courseId),
     exams: this.dataSvc.getExams(),
-    grades: this.dataSvc.getGrades(),
+    grades: this.dataSvc.getExamNotes(), 
   }).subscribe(({ course, exams, grades }) => {
     this.course = course;
 
     // 2) Filtrar exámenes de este curso
-    const courseExams = exams.filter(e => e.id_asignacion_de_clase === courseId);
+    const courseExams = exams.filter(e => e.classAssignmentId === course.id);
 
     // 3) Filtrar notas de esos exámenes
     const relevantGrades = grades.filter(g =>
-      courseExams.some(e => e.id_examen === g.id_examen)
+      courseExams.some(e => e.id === g.examId)
     );
 
     // 4) Mapear a tu tabla
     this.registryItems = relevantGrades.map(g => {
-      const exam = courseExams.find(e => e.id_examen === g.id_examen)!;
+      const exam = courseExams.find(e => e.id === g.id)!;
       return {
-        concepto: exam.nombre_examen,
-        valor:    g.valor,
+        concepto: exam.name,
+        valor:    g.score,
         
       };
     });

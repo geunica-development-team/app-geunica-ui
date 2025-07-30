@@ -18,9 +18,9 @@
         
           <app-card-courses class="h-100"
             [etiquetaTitulo]="'CURSO'"
-            [titulo]="course.nombre"
-            [etiquetaSubtitulo2]="'DOCENTE'"
-            [subtitulo2]="getDocenteAsignado()"
+            [titulo]="course.course_name"
+            [etiquetaSubtitulo1]="'CÓDIGO'"
+            [subtitulo1]="course.course_code"
             [link]="['/student/panel/grades', course.id_curso, 'gradesRegistry']">
             
             <!-- este ng-content se pegará al final de card-body -->

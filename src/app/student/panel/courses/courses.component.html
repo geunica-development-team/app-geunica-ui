@@ -21,11 +21,11 @@
         
           <app-card-courses class="h-100"        
             [etiquetaTitulo]="'CURSO'"
-            [titulo]="course.nombre"
+            [titulo]="course.course_name"
             [etiquetaSubtitulo1]="'CÓDIGO'"
-            [subtitulo1]="course.codigo"
+            [subtitulo1]="course.course_code"
             [etiquetaSubtitulo2]="'DOCENTE'"
-            [subtitulo2]="getDocenteAsignado()"
+            [subtitulo2]="course.teacher_fullname"
             [link]="['/student/panel/courses', course.id_curso, 'curriculum']">
 
             </app-card-courses>

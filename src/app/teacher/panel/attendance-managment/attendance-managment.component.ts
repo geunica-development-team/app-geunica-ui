@@ -113,21 +113,21 @@ onVerFicha = (row: any) => {
     }).subscribe(({ niveles, grados, secciones, salones }) => {
       this.filteredGrades = salones.map(salon => {
         // 1) Encuentra el grado
-        const gradoObj = grados.find(g => g.id_grado === salon.id_grado);
+        const gradoObj = grados.find(g => g.id === salon.id);
 
         // 2) A partir del grado, encuentra el nivel
         const nivelObj = gradoObj
-          ? niveles.find(n => n.id_nivel === gradoObj.id_nivel)
+          ? niveles.find(n => n.id === gradoObj.id)
           : undefined;
 
         // 3) Encuentra la sección directamente
-        const seccionObj = secciones.find(s => s.id_seccion === salon.id_seccion);
+        const seccionObj = secciones.find(s => s.id === salon.id);
 
         return {
           grado:   gradoObj?.nombre   ?? '—',
           nivel:   nivelObj?.nombre   ?? '—',
           seccion: seccionObj?.nombre ?? '—',
-          id_salon: salon.id_salon
+          id_salon: salon.id
         };
       });
 

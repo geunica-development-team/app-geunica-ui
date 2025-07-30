@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { AppModalComponent } from '../../../components/app-modal/app-modal.component';
 import { SearcherComponent } from '../../../components/searcher/searcher.component';
-import { Anuncio } from '../../services/modelTeacher';
+import { Announcement } from '../../services/modelTeacher';
 import { DataTeacherService } from '../../services/dataTeacher.service';
 import {QuillModule } from 'ngx-quill'
 import { FormsModule } from '@angular/forms';
@@ -16,8 +16,8 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './announcement.component.css'
 })
 export class AnnouncementComponent implements OnInit {
-  announcements$!: Observable<Anuncio[]>;
-  selectedAnnouncement: Anuncio | null = null;
+  announcements$!: Observable<Announcement[]>;
+  selectedAnnouncement: Announcement | null = null;
   creatingAnnouncement = false;
   students: readonly any[]|null|undefined;
 
@@ -46,7 +46,7 @@ export class AnnouncementComponent implements OnInit {
     this.announcements$ = this.dataService.getAnnouncements();
   }
 
-    openAnnouncement(a: Anuncio) {
+    openAnnouncement(a: Announcement) {
     this.selectedAnnouncement = a;
   }
 

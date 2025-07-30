@@ -2,8 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { CardCoursesComponent } from '../../../components/card-courses/card-courses.component';
 import { SearcherComponent } from '../../../components/searcher/searcher.component';
-import { DataTeacherService } from '../../services/dataTeacher.service';
-import { Curso } from '../../services/modelTeacher';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-assigned-courses',
@@ -12,23 +11,28 @@ import { Curso } from '../../services/modelTeacher';
   styleUrl: './assigned-courses.component.css'
 })
 export class AssignedCoursesComponent implements OnInit {
-  courses: Curso[] = [];
-  filteredCourses: Curso[] = [];
+  courses: any[]        = [];
+  filteredCourses: any[] = [];
   searchTerm: string = '';
 
-  constructor(private dataSvc: DataTeacherService) {}
+  constructor(private http: HttpClient) {}
 
   ngOnInit() {
-    this.dataSvc.getCourses().subscribe(c => {
-      this.courses = c;
-      // Inicialmente mostrar todos
-      this.filteredCourses = c;
-    });
+    // Llama directamente a la vista /cursos
+    this.http.get<any[]>('http://localhost:3000/course/cursos')
+      .subscribe(data => {
+        this.courses = data;
+        this.filteredCourses = data;
+      }, err => {
+        console.error('Error al cargar cursos:', err);
+      });
   }
 
   onSearch() {
-    // opcional: aquí podrías disparar algún otro efecto al hacer submit,
-    // pero el filtrado ya lo maneja el (filtered)
+    // filtra por course_name si quieres...
+    this.filteredCourses = this.courses.filter(c =>
+      c.course_name.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
   }
   
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Curriculum, Curso } from '../../services/modelTeacher';
+import { Curriculum, Course } from '../../services/modelTeacher';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CardListComponent } from '../../../components/card-list/card-list.component';
 import { CommonModule } from '@angular/common';
@@ -12,7 +12,7 @@ import { DataTeacherService } from '../../services/dataTeacher.service';
   styleUrl: './curriculum-managment.component.css'
 })
 export class CurriculumManagmentComponent implements OnInit {
-  course!: Curso;
+  course!: Course;
   curriculum: Curriculum[] = [];
   mostrarDetalle = false;
 

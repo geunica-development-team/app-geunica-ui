@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CardCoursesComponent } from '../../../components/card-courses/card-courses.component';
-import { DataStudentService } from '../../services/dataStudent.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { SearcherComponent } from '../../../components/searcher/searcher.component';
-import { Curso, Docente } from '../../services/modelStudent';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-courses',
@@ -15,33 +14,28 @@ import { Curso, Docente } from '../../services/modelStudent';
   styleUrls: ['./courses.component.css']
 })
 export class CoursesComponent implements OnInit {
-  courses: Curso[] = [];
-  teacher: Docente[] = [];
-  filteredCourses: Curso[] = [];
+  courses: any[]        = [];
+  filteredCourses: any[] = [];
   searchTerm: string = '';
 
-  constructor(private dataSvc: DataStudentService) {}
-
-  onSearch() {
-    // opcional: aquí podrías disparar algún otro efecto al hacer submit,
-    // pero el filtrado ya lo maneja el (filtered)
-  }
-
-  getDocenteAsignado(): string {//hasta que no tengamos claro la logica al agregar docente sera esto nomas
-    return this.teacher.length
-      ? `${this.teacher[0].persona.nombres} ${this.teacher[0].persona.apell_paterno}`
-      : 'Sin docente asignado';
-  }
+  constructor(private http: HttpClient) {}
 
   ngOnInit() {
-    this.dataSvc.getCourses().subscribe(c => {
-      this.courses = c;
-      // Inicialmente mostrar todos
-      this.filteredCourses = c;
-    });
-
+    // Llama directamente a la vista /cursos
+    this.http.get<any[]>('http://localhost:3000/course/cursos')
+      .subscribe(data => {
+        this.courses = data;
+        this.filteredCourses = data;
+      }, err => {
+        console.error('Error al cargar cursos:', err);
+      });
   }
 
-
+  onSearch() {
+    // filtra por course_name si quieres...
+    this.filteredCourses = this.courses.filter(c =>
+      c.course_name.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+  }
 
 }

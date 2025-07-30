@@ -6,6 +6,7 @@ import { CardCoursesComponent } from '../../../components/card-courses/card-cour
 import { SearcherComponent } from '../../../components/searcher/searcher.component';
 import { RouterModule } from '@angular/router';
 import { Curso, Docente } from '../../services/modelStudent';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-grades',
@@ -15,24 +16,32 @@ import { Curso, Docente } from '../../services/modelStudent';
 })
 export class GradesComponent implements OnInit {
   
-  courses: Curso[] = [];
-  teacher: Docente[] = [];
+   courses: any[]        = [];
+  filteredCourses: any[] = [];
   searchTerm: string = '';
-  
-  constructor(private dataSvc: DataStudentService) {}    // <-- aquí
 
-  getDocenteAsignado(): string {//hasta que no tengamos claro la logica al agregar docente sera esto nomas
-    return this.teacher.length
-      ? `${this.teacher[0].persona.nombres} ${this.teacher[0].persona.apell_paterno}`
-      : 'Sin docente asignado';
-  }
+  constructor(private http: HttpClient) {}
 
   ngOnInit() {
-    this.dataSvc.getCourses().subscribe(c => this.courses = c);
+    // Llama directamente a la vista /cursos
+    this.http.get<any[]>('http://localhost:3000/course/cursos')
+      .subscribe(data => {
+        this.courses = data;
+        this.filteredCourses = data;
+      }, err => {
+        console.error('Error al cargar cursos:', err);
+      });
   }
-  
-    // getter que devuelve sólo los que coinciden con la busqeuda
-    get filteredCourses(): Curso[] {
+
+  onSearch() {
+    // filtra por course_name si quieres...
+    this.filteredCourses = this.courses.filter(c =>
+      c.course_name.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+  }
+
+        // getter que devuelve sólo los que coinciden con la busqeuda
+  get cursosFiltro(): Curso[] {
       const raw = this.searchTerm.toLowerCase().trim();
   
       // Si hay menos de 4 caracteres, no filtramos
@@ -61,7 +70,4 @@ export class GradesComponent implements OnInit {
       });
     }
   
-  onSearch() {
-    // ya tenemos el getter filteredCourses que reacciona a searchTerm,
-  }
 }

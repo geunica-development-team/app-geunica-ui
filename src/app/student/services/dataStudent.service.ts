@@ -42,16 +42,16 @@ export class DataStudentService {
     );
   }
 
-  getTeacher(): Observable<Docente[]> {
-    return this.http.get<Docente[]>(`${this.base}/docente`);
-  }
-
   getCurriculums(): Observable<Curriculum[]> {
     return this.http.get<Curriculum[]>(`${this.base}/curriculum`);
   }
 
   getCurriculumByCourseId(courseId: number): Observable<Curriculum[]> {
     return this.http.get<Curriculum[]>(`${this.base}/curriculum?courseId=${courseId}`);
+  }
+
+  getTeacher(): Observable<Docente[]> {
+    return this.http.get<Docente[]>(`${this.base}/docente`);
   }
 
   getAnnouncements(): Observable<Anuncio[]> {

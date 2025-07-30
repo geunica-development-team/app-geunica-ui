@@ -51,9 +51,9 @@
     { "id_curso": 4, "nombre": "Comunicacion", "codigo": "COM01", "descripcion_curso": "escritura y eso" },
     { "id_curso": 5, "nombre": "Arte", "codigo": "ART01", "descripcion_curso": "dibujos" },
     { "id_curso": 6,  "nombre": "Historia", "codigo": "HIS01", "descripcion_curso": "acontecimientos pasados" },
-    { "id_curso": 7,  "nombre": "Historia Universal", "codigo": "MUS01", "descripcion_curso": "teoría y práctica" },
-    { "id_curso": 8,  "nombre": "Educ. Física", "codigo": "EDF01", "descripcion_curso": "salud y movimiento" },
-    { "id_curso": 9,  "nombre": "Inglés", "codigo": "ING01", "descripcion_curso": "idioma extranjero" },
+    { "id_curso": 15,  "nombre": "Historia Universal", "codigo": "MUS01", "descripcion_curso": "teoría y práctica" },
+    { "id_curso": 16,  "nombre": "Educ. Física", "codigo": "EDF01", "descripcion_curso": "salud y movimiento" },
+    { "id_curso": 17,  "nombre": "Inglés", "codigo": "ING01", "descripcion_curso": "idioma extranjero" },
     { "id_curso": 10, "nombre": "Geografía", "codigo": "GEO01", "descripcion_curso": "estudio de la tierra" }
 
   ],
