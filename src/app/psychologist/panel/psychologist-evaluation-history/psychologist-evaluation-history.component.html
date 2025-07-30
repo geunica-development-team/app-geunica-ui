@@ -20,8 +20,20 @@
         [statusFilter]="selectedStatus"
         [searchFilter]="searchValue"   
         [verFila]="true"
-        [eliminarFila]="true"     
+        [eliminarFila]="true"
+        [accionVerInscripcion]="openModalEditEvaluation.bind(this)"   
+        [accionEliminarInscripcion]="openModalDeleteEvaluation.bind(this)"   
       />
     </div>
   </div>
 </div>
+
+<app-modal-edit-evaluation
+  #modalEditEvaluation
+  (evaluationEdited)="onCreatedOrEditedOrDeleted()"
+/>
+
+<app-modal-delete-evaluation
+  #modalDeleteEvaluation
+  (evaluationEdited)="onCreatedOrEditedOrDeleted()"
+/>

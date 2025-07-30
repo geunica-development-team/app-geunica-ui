@@ -151,14 +151,11 @@ export class ModalAddEvaluationComponent {
   }
 
   onCancel() {
-    //this.formAddEnrollment.reset(
-    //  {
-    //    studentTypeOfDocument: '',
-    //    studentGender: '',
-    //    tutorTypeOfDocument: '',
-    //    tutorGender: ''
-    //  }
-    //);
+    this.formAddEvaluation.reset(
+      {
+        result: null
+      }
+    );
     this.modalService.dismissAll();
   }
 

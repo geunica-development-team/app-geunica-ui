@@ -47,6 +47,12 @@ export class EvaluationService {
         .pipe(catchError(this.handleError)
         );
     }
+
+    updateEvaluation(data: dataEvaluation) {
+        return this.httpService
+        .patch(`${this.auth_end_point}/psychology`, { ...data})
+        .pipe(catchError(this.handleError));
+    }
 }
             
 

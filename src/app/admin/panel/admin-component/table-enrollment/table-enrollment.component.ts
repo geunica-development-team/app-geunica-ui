@@ -20,10 +20,10 @@ export class TableEnrollmentComponent {
   @Input() accionAnularEvaluacion!: (row: any) => void
   @Input() accionRestaurarInscripcion!: (row: any) => void
   @Input() accionVerInscripcion!: (row: any) => void
+  @Input() accionEliminarInscripcion!: (row: any) => void
 
   @Input() actionContinueRegistration!: (row: any) => void
   @Input() actionMarkPayment!: (row: any) => void
-  @Input() actionDeleteEnrollment!: (row: any) => void
 
   @Input() accionRegistrarEvaluacion!: (row: any) => void
 

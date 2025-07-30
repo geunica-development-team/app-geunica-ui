@@ -5,15 +5,17 @@ import { AuthService } from '../../../services/auth.service';
 import { UserService, UserSession } from '../../../services/user.service';
 import { TableEnrollmentComponent } from '../../../admin/panel/admin-component/table-enrollment/table-enrollment.component';
 import { dataInscriptionAll, InscriptionService } from '../../../admin/services/inscription.service';
+import { ModalEditEvaluationComponent } from '../modal-edit-evaluation/modal-edit-evaluation.component';
+import { ModalDeleteEvaluationComponent } from '../modal-delete-evaluation/modal-delete-evaluation.component';
 
 @Component({
   selector: 'app-psychologist-evaluation-history',
-  imports: [PanelHeaderComponent, TableEnrollmentComponent],
+  imports: [PanelHeaderComponent, TableEnrollmentComponent, ModalEditEvaluationComponent, ModalDeleteEvaluationComponent],
   templateUrl: './psychologist-evaluation-history.component.html',
   styleUrl: './psychologist-evaluation-history.component.css'
 })
 export class PsychologistEvaluationHistoryComponent {
-private inscriptionService = inject(InscriptionService)
+  private inscriptionService = inject(InscriptionService)
   private notifycation = inject(ToastrService);
   private authService = inject(AuthService);
   private userService = inject(UserService);
@@ -35,6 +37,9 @@ private inscriptionService = inject(InscriptionService)
       })
     }
   }
+
+  @ViewChild ('modalEditEvaluation') modalEditEvaluation!: ModalEditEvaluationComponent;
+  @ViewChild ('modalDeleteEvaluation') modalDeleteEvaluation!: ModalDeleteEvaluationComponent;
 
   // FILTROS
   selectedStatus = ""
@@ -145,6 +150,25 @@ private inscriptionService = inject(InscriptionService)
     const year = date.getFullYear();
     return `${day}-${month}-${year}`;
   }
+
+  openModalEditEvaluation(row: any) {
+    if (row && row.id && !isNaN(row.id)) {
+      this.modalEditEvaluation.rowId = Number(row.id);
+      this.modalEditEvaluation.openModal();
+    } else {
+      console.error('ID inválido:', row.id);
+    }
+  }
+
+  openModalDeleteEvaluation(row: any) {
+    if (row && row.id && !isNaN(row.id)) {
+      this.modalDeleteEvaluation.rowId = Number(row.id);
+      this.modalDeleteEvaluation.openModal();
+    } else {
+      console.error('ID inválido:', row.id);
+    }
+  }
+
 
   onCreatedOrEditedOrDeleted() {
     this.loadEnrollments();

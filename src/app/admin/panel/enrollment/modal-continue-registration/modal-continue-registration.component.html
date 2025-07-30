@@ -1,7 +1,7 @@
 <ng-template #modalContinueRegistration let-modal>
   <div class="modal-header bg-white border-bottom px-4">
     <h4 class="modal-title fw-semibold text-dark mb-0">
-      Asignar grupo a: {{ currentStudent?.student || 'Estudiante' }}
+      Asignar grupo a: {{ studentFullName || 'Estudiante' }}
     </h4>
     <button 
       type="button" 
@@ -14,8 +14,8 @@
   <div class="modal-body bg-white p-4">
     <!-- Información del estudiante -->
     <div class="alert alert-info border rounded mb-3">
-      <strong>Estudiante:</strong> {{ currentStudent?.student }}<br>
-      <strong>Resultado de evaluación:</strong> {{ currentStudent?.eval_result || 'Sin evaluar' }}
+      <strong>Estudiante:</strong> {{ studentFullName }}<br>
+      <strong>Resultado de evaluación:</strong> {{ result || 'Sin evaluar' }}
     </div>
 
     <!-- Filtros -->
@@ -28,39 +28,24 @@
         <label for="level" class="form-label fw-medium small">Filtrar por Nivel:</label>
         <select 
           id="level"
-          class="form-select rounded"
-          [(ngModel)]="selectedLevel"
-          (change)="onLevelChange()">
+          class="form-select rounded">
           <option value="">Todos los niveles</option>
-          @for (level of levels; track level.value) {
-            <option [value]="level.value">{{ level.label }}</option>
-          }
         </select>
       </div>
       <div class="col-md-4">
         <label for="grade" class="form-label fw-medium small">Filtrar por Grado:</label>
         <select 
           id="grade"
-          class="form-select rounded"
-          [(ngModel)]="selectedGrade"
-          (change)="onGradeChange()">
+          class="form-select rounded">
           <option value="">Todos los grados</option>
-          @for (grade of grades; track grade.value) {
-            <option [value]="grade.value">{{ grade.label }}</option>
-          }
         </select>
       </div>
       <div class="col-md-4">
         <label for="shift" class="form-label fw-medium small">Filtrar por Turno:</label>
         <select 
           id="shift"
-          class="form-select rounded"
-          [(ngModel)]="selectedShift"
-          (change)="onShiftChange()">
+          class="form-select rounded">
           <option value="">Todos los turnos</option>
-          @for (shift of shifts; track shift.value) {
-            <option [value]="shift.value">{{ shift.label }}</option>
-          }
         </select>
       </div>
     </div>
@@ -75,41 +60,37 @@
     <div class="mb-3">
       <label class="form-label fw-medium small">Seleccionar Grupo:</label>
       
-      @if (filteredGroups.length === 0) {
+      @if (availableGroups.length === 0) {
         <div class="alert alert-warning border rounded">
           No hay grupos disponibles con los filtros seleccionados.
         </div>
       } @else {
         <div class="border rounded p-2 group-scroll-container">
-          @for (group of filteredGroups; track group.id) {
-            <div class="group-option rounded p-3 mb-2 bg-white" [class.disabled]="isGroupDisabled(group)">
+          @for (classroom of availableGroups; track classroom.id) {
+            <div class="group-option rounded p-3 mb-2 bg-white">
               <label class="d-flex align-items-start mb-0">
                 <input 
                   type="radio" 
                   name="group"
-                  [value]="group.id"
-                  [(ngModel)]="selectedGroupId"
-                  [disabled]="isGroupDisabled(group)"
-                  (change)="onGroupSelect(group.id)"
+                  [value]="classroom.id"
                   class="form-check-input me-3 mt-1">
                 
                 <div class="flex-grow-1">
                   <div class="d-flex align-items-center gap-2 mb-1">
                     <span class="fw-semibold small">
-                      {{ group.name }} - {{ group.shift }} ({{ group.level }})
+                      {{ classroom.grade }} {{ classroom.section }} ({{ classroom.level }})
                     </span>
-                    <span [class]="'badge ' + getGroupStatusClass(group)">
-                      {{ group.status }}
+                    <span>
+                      {{ classroom.status }}
                     </span>
                   </div>
                   
                   <small class="text-muted d-block">
-                    Estudiantes especiales: {{ group.total_special_students }}/{{ group.special_capacity }} - 
-                    Total: {{ group.total_students }}/{{ group.capacity }}
+                    Estudiantes especiales: {{ classroom.total_special_students }}/{{ classroom.special_capacity }} - 
+                    Total: {{ classroom.total_students }}/{{ classroom.capacity }}
                   </small>
                   
                   <small class="text-muted d-block">
-                    {{ getGroupAvailabilityInfo(group) }}
                   </small>
                 </div>
               </label>
@@ -129,9 +110,7 @@
     </button>
     <button 
       type="button" 
-      class="btn btn-success rounded px-4"
-      (click)="onConfirm()"
-      [disabled]="isSelectedGroupDisabled">
+      class="btn btn-success rounded px-4">
       Generar Ticket
     </button>
   </div>

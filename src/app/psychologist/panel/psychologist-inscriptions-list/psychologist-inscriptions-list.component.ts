@@ -44,8 +44,6 @@ export class PsychologistInscriptionsListComponent {
   }
 
   @ViewChild("modalAddEvaluation") modalAddEvaluation!: ModalAddEvaluationComponent
-  @ViewChild("modalReadEvaluation") modalReadEvaluation!: ModalEditEvaluationComponent
-  @ViewChild("modalDeleteEvaluation") modalDeleteEvaluation!: ModalDeleteEvaluationComponent
 
   // FILTROS
   selectedStatus = ""
@@ -54,22 +52,24 @@ export class PsychologistInscriptionsListComponent {
   // COLUMNAS DE LA TABLA
   columns = [
     "ID",
+    "Estado Inscripción",
     "Estudiante",
     "DNI",
     "Grado y Sección",
     "Fecha",
-    "Estado Inscripción",
+    "Estado Evaluación",
     "Evaluación Resultado"
   ]
 
   // MAPEO PARA COLUMNAS Y FILAS
   columnMappings = {
     ID: "id",
+    "Estado Inscripción": "state",
     Estudiante: "studentFullName",
     "DNI": "documentNumber",
     "Grado y Sección": "gradeAndSection",
     Fecha: "registrationDate",
-    "Estado Inscripción": "state",
+    "Estado Evaluación": "stateEvaluation",
     "Evaluación Resultado": "evaluationResult"
   }
 
@@ -85,6 +85,8 @@ export class PsychologistInscriptionsListComponent {
           gradeAndSection: string,
           documentNumber: string,
           evaluationResult: string
+          stateEvaluation: string,
+          dateEvaluation: string
         } => ({
           id: inscription.id,
           registrationDate: this.formatDate(inscription.registrationDate),
@@ -106,6 +108,8 @@ export class PsychologistInscriptionsListComponent {
             }
           },
           psychology: inscription.psychology ?? null,
+          stateEvaluation: inscription.psychology ? "Se registró 1 evaluación" : "No evaluado",
+          dateEvaluation: this.formatDate(inscription.psychology?.evaluationDate),
           documentNumber: `${inscription.student?.person?.documentNumber}`,
           studentFullName: `${inscription.student?.person?.names} ${inscription.student?.person?.paternalSurname} ${inscription.student?.person?.maternalSurname}`,
           gradeAndSection: `${inscription.grade?.level?.name} - ${inscription.grade?.name}`,
@@ -118,7 +122,8 @@ export class PsychologistInscriptionsListComponent {
       ));
 
         if (this.userProfile?.role.role === 'psychologist') {
-          this.rows = this.rows.filter(inscripciones => inscripciones.state === 'Evaluación en proceso')
+          this.rows = this.rows.filter(inscripciones =>
+            inscripciones.state === 'Evaluación en proceso')
         }
 
         if (this.enrollmentTable) {

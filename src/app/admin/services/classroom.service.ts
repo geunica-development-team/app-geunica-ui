@@ -56,6 +56,10 @@ export interface dataClassroomAll {
     }
     grade: {
         name: string
+        level: {
+        id: number,
+        name: string
+    }
     },
     section: {
         name: string
