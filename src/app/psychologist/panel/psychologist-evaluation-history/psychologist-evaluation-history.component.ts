@@ -1,10 +1,10 @@
 import { Component, inject, ViewChild } from '@angular/core';
 import { PanelHeaderComponent } from "../../../components/dashboard/shared-components/panel-header/panel-header.component";
-import { dataInscriptionAll, InscriptionService } from '../../services/evaluation.service';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/auth.service';
 import { UserService, UserSession } from '../../../services/user.service';
 import { TableEnrollmentComponent } from '../../../admin/panel/admin-component/table-enrollment/table-enrollment.component';
+import { dataInscriptionAll, InscriptionService } from '../../../admin/services/inscription.service';
 
 @Component({
   selector: 'app-psychologist-evaluation-history',
@@ -36,16 +36,6 @@ private inscriptionService = inject(InscriptionService)
     }
   }
 
-  // ESTADOS DISPONIBLES
-  enrollmentStatuses = [
-    { value: "Pendiente", label: "Pendiente" },
-    { value: "Evaluación en proceso", label: "Evaluación en proceso" },
-    { value: "Evaluado", label: "Evaluado" },
-    { value: "Rechazado", label: "Rechazado" },
-    { value: "Pago pendiente", label: "Pago pendiente" },
-    { value: "Matriculado", label: "Matriculado" },
-  ]
-
   // FILTROS
   selectedStatus = ""
   searchValue = ""
@@ -53,25 +43,25 @@ private inscriptionService = inject(InscriptionService)
   // COLUMNAS DE LA TABLA
   columns = [
     "ID",
+    "Estado Inscripción",
     "Estudiante",
     "DNI",
-    "Apoderado",
     "Grado y Sección",
-    "Fecha",
-    "Estado Inscripción",
+    "Fecha Evaluación",
+    "Estado Evaluación",
     "Evaluación Resultado"
   ]
 
   // MAPEO PARA COLUMNAS Y FILAS
   columnMappings = {
     ID: "id",
+    "Estado Inscripción": "state",
     Estudiante: "studentFullName",
     "DNI": "documentNumber",
-    Apoderado: "tutorFullName",
     "Grado y Sección": "gradeAndSection",
-    Fecha: "registrationDate",
-    "Estado Inscripción": "state",
-    "Evaluación Resultado": "evaluationResult",
+    "Fecha Evaluación": "dateEvaluation",
+    "Estado Evaluación": "stateEvaluation",
+    "Evaluación Resultado": "evaluationResult"
   }
 
   rows: dataInscriptionAll[] = [];
@@ -83,10 +73,11 @@ private inscriptionService = inject(InscriptionService)
       next:(inscription) => {
         this.rows = inscription.map((inscription: any): dataInscriptionAll & {
           studentFullName: string,
-          tutorFullName: string,
           gradeAndSection: string,
           documentNumber: string,
-          evaluationResult: string
+          evaluationResult: string,
+          stateEvaluation: string,
+          dateEvaluation: string
         } => ({
           id: inscription.id,
           registrationDate: this.formatDate(inscription.registrationDate),
@@ -99,13 +90,6 @@ private inscriptionService = inject(InscriptionService)
               documentNumber: inscription.student?.person?.documentNumber
             }
           },
-          tutor: {
-            person: {
-              names: inscription.tutor?.person?.names,
-              paternalSurname: inscription.tutor?.person?.paternalSurname,
-              maternalSurname: inscription.tutor?.person?.maternalSurname,
-            }
-          },
           grade: {
             id: inscription.grade.id,
             name: inscription.grade.name,
@@ -115,9 +99,10 @@ private inscriptionService = inject(InscriptionService)
             }
           },
           psychology: inscription.psychology ?? null,
+          stateEvaluation: inscription.psychology ? "Se registró 1 evaluación" : "No evaluado",
+          dateEvaluation: this.formatDate(inscription.psychology?.evaluationDate),
           documentNumber: `${inscription.student?.person?.documentNumber}`,
           studentFullName: `${inscription.student?.person?.names} ${inscription.student?.person?.paternalSurname} ${inscription.student?.person?.maternalSurname}`,
-          tutorFullName: `${inscription.tutor?.person?.names} ${inscription.tutor?.person?.paternalSurname} ${inscription.tutor?.person?.maternalSurname}`,
           gradeAndSection: `${inscription.grade?.level?.name} - ${inscription.grade?.name}`,
           evaluationResult: inscription.psychology ? (inscription.psychology.result === true
             ? 'Con condición'
@@ -128,7 +113,9 @@ private inscriptionService = inject(InscriptionService)
       ));
 
         if (this.userProfile?.role.role === 'psychologist') {
-          this.rows = this.rows.filter(inscripciones => inscripciones.state === 'Evaluado')
+          this.rows = this.rows.filter(inscripciones =>
+            inscripciones.state === 'Evaluado' || inscripciones.psychology !== null
+          );
         }
 
         if (this.enrollmentTable) {

@@ -1,8 +1,6 @@
 import { Component, ElementRef, EventEmitter, inject, Output, TemplateRef, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AcademicData, AssignGroupData, GuardianData, StudentData } from '../../../services/enrollment.service';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ESTADOS, GRADO, NIVEL, SEXO, TIPO_DOCUMENTO, TURNO } from '../../../utility/personal-data';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { dataLevelAll, LevelService } from '../../../services/level.service';
 import { dataGradeAll, GradeService } from '../../../services/grade.service';

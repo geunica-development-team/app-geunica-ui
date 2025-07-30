@@ -1,0 +1,129 @@
+<ng-template #modalAddEvaluation let-modal>
+  <div class="modal-header bg-white border-bottom px-4">
+    <div class="w-100">
+      <h4 class="modal-title fw-semibold text-dark"> Registrar evaluación psicológica </h4>
+    </div>
+    <button 
+    type="button" 
+    class="btn-close" 
+    aria-label="Close"
+    (click)="onCancel()">
+    </button>
+  </div>
+
+    <div class="modal-body bg-white">
+        <!-- Información del estudiante -->
+        <div class="mb-3 px-3">
+            <p class="mb-1"><strong class="fw-semibold">Fecha de inscripción:</strong> {{ registrationDate }}</p>
+            <p class="mb-0"><strong class="fw-semibold">Nivel y Grado:</strong> 
+                {{ levelAndGrade }}
+            </p>
+        </div>
+
+        <div class="alert alert-info border rounded mb-4">
+            <h6 class="fw-semibold mb-2">
+            <i class="fas fa-user me-2"></i>
+            Información del Estudiante
+            </h6>
+            <div class="row">
+                <p class="mb-1"><strong>Nombre:</strong> {{ studentFullName }}</p>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-1"><strong>Tipo de documento:</strong> {{ typeOfDocument }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p class="mb-0"><strong>Nro de documento:</strong> {{ documentNumber }}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-1"><strong>Fecha de nacimiento:</strong> {{ dateBirthDate }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p class="mb-0"><strong>Género:</strong> {{ studentGender }}</p>
+                </div>
+            </div>
+        </div>
+                <!-- Información del estudiante -->
+        <div class="alert alert-info border rounded mb-4">
+            <h6 class="fw-semibold mb-2">
+            <i class="fas fa-user me-2"></i>
+            Información del Apoderado
+            </h6>
+            <div class="row">
+                <p class="mb-1"><strong>Nombre:</strong> {{ tutorFullName }}</p>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-1"><strong>Tipo de documento:</strong> {{ tutorTypeOfDocument }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p class="mb-0"><strong>Nro de documento:</strong> {{ tutorDocumentNumber }}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-1"><strong>Fecha de nacimiento:</strong> {{ tutorDateBirthDate }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p class="mb-0"><strong>Género:</strong> {{ tutorGender }}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0"><strong>Número de teléfono:</strong> {{ tutorPhoneNumber }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p class="mb-0"><strong>Correo electrónico:</strong> {{ tutorEmail }}</p>
+                </div>
+            </div>
+            <div class="row">
+                <p class="mb-1"><strong>Dirección:</strong> {{ tutorAddress }}</p>
+            </div>
+        </div>
+        <form [formGroup]="formAddEvaluation" (ngSubmit)="addEvaluation()" id="formAddEvaluation">
+            <div class="px-3">
+                <div class="section-divider">
+                    <h5 class="fw-semibold mb-0">Evaluación psicológica</h5>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-medium small">Resultado</label>
+                    <select 
+                    class="form-select rounded form-control"
+                    formControlName="result"
+                    name="result">
+                    <option [ngValue]="null" disabled selected>Seleccione un resultado</option>
+                    <option [ngValue]="false">Sin condición psicológica</option>
+                    <option [ngValue]="true">Con condición psicológica</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-medium small">Observaciones</label>
+                    <textarea
+                    name="observation"
+                    formControlName="observation"
+                    class="form-control rounded"
+                    rows="5"></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+
+  <div class="modal-footer bg-white border-top d-flex justify-content-end gap-2 p-3">
+    <button 
+        type="button" 
+        class="btn btn-secondary rounded px-4"
+        (click)="onCancel()">
+        Cancelar
+    </button>
+    <button 
+        type="submit" 
+        form="formAddEvaluation"
+        class="btn btn-success rounded px-4"
+        [disabled]="formAddEvaluation.invalid">
+
+      Guardar cambios
+    </button>
+  </div>
+</ng-template>

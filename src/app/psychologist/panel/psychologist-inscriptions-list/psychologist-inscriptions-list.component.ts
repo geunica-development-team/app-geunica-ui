@@ -7,16 +7,21 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { UserService, UserSession } from '../../../services/user.service';
+import { ModalAddEvaluationComponent } from '../modal-add-evaluation/modal-add-evaluation.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalEditEvaluationComponent } from '../modal-edit-evaluation/modal-edit-evaluation.component';
+import { ModalDeleteEvaluationComponent } from '../modal-delete-evaluation/modal-delete-evaluation.component';
 
 @Component({
   selector: 'app-psychologist-inscriptions-list',
-  imports: [PanelHeaderComponent, CommonModule, FormsModule, TableEnrollmentComponent],
+  imports: [PanelHeaderComponent, CommonModule, FormsModule, TableEnrollmentComponent, ModalAddEvaluationComponent],
   templateUrl: './psychologist-inscriptions-list.component.html',
   styleUrl: './psychologist-inscriptions-list.component.css'
 })
 export class PsychologistInscriptionsListComponent {
-  private inscriptionService = inject(InscriptionService)
   private notifycation = inject(ToastrService);
+  private modalService = inject(NgbModal);
+  private inscriptionService = inject(InscriptionService)
   private authService = inject(AuthService);
   private userService = inject(UserService);
 
@@ -38,15 +43,9 @@ export class PsychologistInscriptionsListComponent {
     }
   }
 
-  // ESTADOS DISPONIBLES
-  enrollmentStatuses = [
-    { value: "Pendiente", label: "Pendiente" },
-    { value: "Evaluación en proceso", label: "Evaluación en proceso" },
-    { value: "Evaluado", label: "Evaluado" },
-    { value: "Rechazado", label: "Rechazado" },
-    { value: "Pago pendiente", label: "Pago pendiente" },
-    { value: "Matriculado", label: "Matriculado" },
-  ]
+  @ViewChild("modalAddEvaluation") modalAddEvaluation!: ModalAddEvaluationComponent
+  @ViewChild("modalReadEvaluation") modalReadEvaluation!: ModalEditEvaluationComponent
+  @ViewChild("modalDeleteEvaluation") modalDeleteEvaluation!: ModalDeleteEvaluationComponent
 
   // FILTROS
   selectedStatus = ""
@@ -57,7 +56,6 @@ export class PsychologistInscriptionsListComponent {
     "ID",
     "Estudiante",
     "DNI",
-    "Apoderado",
     "Grado y Sección",
     "Fecha",
     "Estado Inscripción",
@@ -69,11 +67,10 @@ export class PsychologistInscriptionsListComponent {
     ID: "id",
     Estudiante: "studentFullName",
     "DNI": "documentNumber",
-    Apoderado: "tutorFullName",
     "Grado y Sección": "gradeAndSection",
     Fecha: "registrationDate",
     "Estado Inscripción": "state",
-    "Evaluación Resultado": "evaluationResult",
+    "Evaluación Resultado": "evaluationResult"
   }
 
   rows: dataInscriptionAll[] = [];
@@ -85,7 +82,6 @@ export class PsychologistInscriptionsListComponent {
       next:(inscription) => {
         this.rows = inscription.map((inscription: any): dataInscriptionAll & {
           studentFullName: string,
-          tutorFullName: string,
           gradeAndSection: string,
           documentNumber: string,
           evaluationResult: string
@@ -101,13 +97,6 @@ export class PsychologistInscriptionsListComponent {
               documentNumber: inscription.student?.person?.documentNumber
             }
           },
-          tutor: {
-            person: {
-              names: inscription.tutor?.person?.names,
-              paternalSurname: inscription.tutor?.person?.paternalSurname,
-              maternalSurname: inscription.tutor?.person?.maternalSurname,
-            }
-          },
           grade: {
             id: inscription.grade.id,
             name: inscription.grade.name,
@@ -119,13 +108,12 @@ export class PsychologistInscriptionsListComponent {
           psychology: inscription.psychology ?? null,
           documentNumber: `${inscription.student?.person?.documentNumber}`,
           studentFullName: `${inscription.student?.person?.names} ${inscription.student?.person?.paternalSurname} ${inscription.student?.person?.maternalSurname}`,
-          tutorFullName: `${inscription.tutor?.person?.names} ${inscription.tutor?.person?.paternalSurname} ${inscription.tutor?.person?.maternalSurname}`,
           gradeAndSection: `${inscription.grade?.level?.name} - ${inscription.grade?.name}`,
           evaluationResult: inscription.psychology ? (inscription.psychology.result === true
             ? 'Con condición'
             : 'Sin condición'
           )
-          : 'No evaluado'
+          : 'No evaluado',
         }
       ));
 
@@ -163,5 +151,15 @@ export class PsychologistInscriptionsListComponent {
 
   onCreatedOrEditedOrDeleted() {
     this.loadEnrollments();
+  }
+
+  // MODALES
+  openModalAddEvaluation(row: any) {
+    if (row && row.id && !isNaN(row.id)) {
+      this.modalAddEvaluation.rowId = Number(row.id);
+      this.modalAddEvaluation.openModal();
+    } else {
+      console.error('ID inválido:', row.id);
+    }
   }
 }

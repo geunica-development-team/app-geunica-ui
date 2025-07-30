@@ -61,10 +61,14 @@
         [accionEnviarEvaluacion]="onSendForEvaluation"
         [accionAnularEvaluacion]="onCancelEvaluation"
         [accionRestaurarInscripcion]="onRestoreRegistration"
-        [actionReadEnrollment]="openModalReadEnrollment.bind(this)"
+
+        [verFila]="true"
+        [accionVerInscripcion]="openModalReadEnrollment.bind(this)"
 
         [actionContinueRegistration]="onContinueRegistration"
         [actionMarkPayment]="onMarkPayment"
+
+        [eliminarFila]="true"
         [actionDeleteEnrollment]="onDeleteEnrollment"
         
       />

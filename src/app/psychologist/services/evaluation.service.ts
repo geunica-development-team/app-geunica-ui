@@ -2,100 +2,16 @@ import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { catchError, tap, throwError } from "rxjs";
 
-//OJO, EN EL BACKEND "INSCRIPCION" ES INSCRIPTION,
-//EN EL FRONTEND "INSCRIPCION" ES ENROLLMENT
-export interface dataInscription {
-    student: {
-        person: {
-            names: string;
-            paternalSurname: string;
-            maternalSurname: string;
-            typeOfIdentityDocument: string;
-            documentNumber: string;
-            birthDate: string; // formato ISO: YYYY-MM-DD
-            gender: string;
-            address?: string;
-            phoneNumber?: string;
-            email?: string;
-        }
-    },
-    tutor: {
-        person: {
-            names: string;
-            paternalSurname: string;
-            maternalSurname: string;
-            typeOfIdentityDocument: string;
-            documentNumber: string;
-            birthDate: string; // formato ISO: YYYY-MM-DD
-            gender: string;
-            address: string;
-            phoneNumber: string;
-            email: string;
-        }
-    }
-    idGrade: number
-}
-
-export interface dataInscriptionbyId extends dataInscription {
-    id: number;
-    registrationDate: string;
-    state: string;
-    psychology?: {
-        result: boolean;
-        observation: string;
-        evaluationDate: string;
-    } | null;
-    grade: {
-        id: number,
-        name: string
-        level: {
-            id: number;
-            name: string;
-        }
-    }
-}
-
-export interface dataInscriptionAll {
-    id: number;
-    registrationDate: string;
-    state: string;
-    psychology?: {
-        result: boolean;
-        evaluationDate: string;
-    } | null;
-    student: {
-        person: {
-            names: string,
-            paternalSurname: string;
-            maternalSurname: string;
-            documentNumber: string;
-        }
-    };
-    tutor: {
-        person: {
-            names: string,
-            paternalSurname: string;
-            maternalSurname: string;
-        }
-    };
-    grade: {
-        id: number;
-        name: string;
-        level: {
-            id: number;
-            name: string;
-        }
-    }
-}
-
-export interface dataChangeState {
-    state: string;
+export interface dataEvaluation {
+    idInscription: number,
+    result: boolean,
+    observation: string
 }
 
 @Injectable({
     providedIn: 'root'
 })
-export class InscriptionService {
+export class EvaluationService {
     private httpService = inject(HttpClient);
     private auth_end_point = 'https://app-geunica-backend.onrender.com';
     constructor() {}
@@ -125,32 +41,11 @@ export class InscriptionService {
         return throwError(() => new Error(errorMessage));
     }
                 
-    addInscription(data: dataInscription) {
+    addEvaluation(data: dataEvaluation) {
         return this.httpService
-        .post(this.auth_end_point+'/inscription/full', {...data})
+        .post(this.auth_end_point+'/psychology', {...data})
         .pipe(catchError(this.handleError)
         );
-    }
-    getAllInscriptions() {
-        return this.httpService
-        .get<dataInscriptionAll[]>(this.auth_end_point+'/inscription')
-        .pipe(catchError(this.handleError)
-        );
-    }
-    getInscriptionById(id:number) {
-        return this.httpService
-        .get<dataInscriptionbyId>(`${this.auth_end_point}/inscription/${id}`)
-        .pipe(catchError(this.handleError));
-    }
-    updateInscription(id: number, data: dataInscription) {
-        return this.httpService
-        .patch(`${this.auth_end_point}/inscription/full/${id}`, { ...data})
-        .pipe(catchError(this.handleError));
-    }
-    changeState(id: number, data: dataChangeState) {
-        return this.httpService
-        .patch(`${this.auth_end_point}/inscription/state/${id}`, { ...data})
-        .pipe(catchError(this.handleError));
     }
 }
             

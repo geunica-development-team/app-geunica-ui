@@ -12,15 +12,18 @@ import { error } from 'console';
 export class TableEnrollmentComponent {
   private authService = inject(AuthService);
   private userService = inject(UserService);
-  
+
+  @Input() eliminarFila!: boolean
+  @Input() verFila!: boolean
 
   @Input() accionEnviarEvaluacion!: (row: any) => void
   @Input() accionAnularEvaluacion!: (row: any) => void
   @Input() accionRestaurarInscripcion!: (row: any) => void
+  @Input() accionVerInscripcion!: (row: any) => void
+
   @Input() actionContinueRegistration!: (row: any) => void
   @Input() actionMarkPayment!: (row: any) => void
   @Input() actionDeleteEnrollment!: (row: any) => void
-  @Input() actionReadEnrollment!: (row: any) => void
 
   @Input() accionRegistrarEvaluacion!: (row: any) => void
 
@@ -182,7 +185,9 @@ export class TableEnrollmentComponent {
         if (this.userProfile.role.role === 'admin') {
           return { text: "Asignar salón", action: "continuarMatricula", class: "btn-continuarMatricula" }
         } else if (this.userProfile.role.role === 'psychologist') {
-          return { text: "Registrar nueva evaluación", action: "registrarEvaluacion", class: "btn-registrarEvaluacion" }
+          //ESTO SOLO SI SE AGREGA QUE UN ESTUDIANTE TENGA MUCHAS EVALUACIONES
+          //return { text: "Registrar nueva evaluación", action: "registrarEvaluacion", class: "btn-registrarEvaluacion" }
+          return null
         } else {
           return null
         }

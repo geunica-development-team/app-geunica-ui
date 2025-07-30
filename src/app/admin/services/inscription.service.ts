@@ -61,6 +61,7 @@ export interface dataInscriptionAll {
     state: string;
     psychology?: {
         result: boolean;
+        observation: string;
         evaluationDate: string;
     } | null;
     student: {
@@ -71,7 +72,7 @@ export interface dataInscriptionAll {
             documentNumber: string;
         }
     };
-    tutor: {
+    tutor?: {
         person: {
             names: string,
             paternalSurname: string;

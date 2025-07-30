@@ -27,14 +27,16 @@
             <td class="text-center">
               <div class="d-flex justify-content-center gap-2">
                 <!-- Botón Ver (siempre visible) -->
-                <button 
-                  type="button"
-                  class="btn btn-outline-secondary btn-sm"
-                  (click)="actionReadEnrollment(row)"
-                  title="Ver detalles">
-                  <i class="fas fa-eye"></i>
-                  Ver
-                </button>
+                 @if (verFila) {
+                  <button 
+                    type="button"
+                    class="btn btn-outline-secondary btn-sm"
+                    (click)="accionVerInscripcion(row)"
+                    title="Ver detalles">
+                    <i class="fas fa-eye"></i>
+                    Ver
+                  </button>
+                 }
                 <!-- Botón condicional según el estado -->
                 @if (getActionButtonForState(row[columnMappings['Estado Inscripción']]) !== null) {
                   @let actionButton = getActionButtonForState(row[columnMappings['Estado Inscripción']]);
@@ -66,13 +68,15 @@
                   </button>
                 }
                 <!-- Botón eliminar (opcional) -->
-                <button 
-                  type="button"
-                  class="btn btn-outline-danger btn-sm"
-                  title="Eliminar"
-                  (click)="actionDeleteEnrollment(row)">
-                  <i class="fa-solid fa-trash"></i>
-                </button>
+                 @if (eliminarFila) {
+                    <button 
+                      type="button"
+                      class="btn btn-outline-danger btn-sm"
+                      title="Eliminar"
+                      (click)="actionDeleteEnrollment(row)">
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                 }
               </div>
             </td>
           </tr>
