@@ -16,7 +16,7 @@ export const teacherPanelRoutes: Routes = [
         path: 'teacher/panel',
         component: PanelComponent,
         canActivate: [roleGuard],
-        data: { role: 'teacher' },
+        data: { role: 'docente' },
         children: [
 {
                 path: '',

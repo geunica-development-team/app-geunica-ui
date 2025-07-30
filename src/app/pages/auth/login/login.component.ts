@@ -85,11 +85,11 @@ export class LoginComponent {
           const decoded: any = jwtDecode(token);
           const role = decoded.role;
 
-          if (role === 'admin') {
+          if (role === 'administrador') {
             this.router.navigateByUrl('/admin/panel/dashboard');
-          } else if (role === 'student') {
+          } else if (role === 'alumno') {
             this.router.navigateByUrl('/student/panel/dashboard'); 
-          } else if (role === 'teacher') {
+          } else if (role === 'docente') {
             this.router.navigateByUrl('/teacher/panel/dashboard');
           }
            else {

@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { environment } from '../enviroments/environment';
+import { AuthInterceptor } from './services/auth.interceptor';
 
 
 @Component({

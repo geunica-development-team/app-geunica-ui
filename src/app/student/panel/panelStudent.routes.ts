@@ -16,7 +16,7 @@ export const studentPanelRoutes: Routes = [
         path: 'student/panel',
         component: PanelComponent,
         canActivate: [roleGuard],
-        data: { role: 'student' },
+        data: { role: 'alumno' },
         children: [
             {
                 path: '',

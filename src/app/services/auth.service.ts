@@ -14,7 +14,8 @@ interface DataLogin {
 })
 export class AuthService {
     private httpService = inject(HttpClient);
-    private auth_end_point = 'https://app-geunica-backend.onrender.com';
+    private auth_end_point = 'http://localhost:3000';
+    //private base = environment.apiBase;  // ej. 'http://localhost:3000'
     private authStorage = inject(AuthStorageService);
     
     constructor() {}
@@ -71,6 +72,11 @@ export class AuthService {
                         }),
                         catchError(this.handleError)
                     );
+                }
+
+                /** GET /user/me: devuelve el perfil del usuario autenticado */
+                getProfile() {
+                return this.httpService.get<any>(`${this.auth_end_point}/user/me`);
                 }
             }
             

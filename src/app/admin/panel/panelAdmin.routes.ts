@@ -16,7 +16,7 @@ export const adminPanelRoutes: Routes = [
         path: 'admin/panel',
         component: PanelComponent,
         canActivate: [roleGuard],
-        data: { role: 'admin' },
+        data: { role: 'administrador' },
         children: [
             {
                 path: '',
