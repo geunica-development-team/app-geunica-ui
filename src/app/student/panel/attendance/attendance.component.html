@@ -1,6 +1,6 @@
 <ng-container *ngIf="attendance; else loading">
   
-    <div class="container py-4" *ngIf="attendance">
+    <div class="container py-4" *ngIf="let m of summary">
   <div class="row g-4">
     <div 
       class="col-12 col-sm-6 col-md-4 col-lg-3"

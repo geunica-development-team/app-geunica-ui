@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { Course, Exam, Exam_scores } from '../../services/modelTeacher';
+import { Curso } from '../../services/modelTeacher';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { DataStudentService } from '../../../student/services/dataStudent.service';
 import { forkJoin } from 'rxjs';
+
 import { MenuTabsComponent, TabItem } from '../../../components/dashboard/menu-tabs/menu-tabs.component';
-import { DataTeacherService } from '../../services/dataTeacher.service';
 
 interface RegistryItem {
   concepto: string;
@@ -20,17 +20,18 @@ interface RegistryItem {
 })
 export class NoteListComponent {
 
-  course!: Course;
+    course!: Curso;
   registryItems: RegistryItem[] = [];
   loading = true;
 
   constructor(
     private route: ActivatedRoute,
-    private dataSvc: DataTeacherService
+    private dataSvc: DataStudentService
   ) {}
 
-  tabs: TabItem[] = [
+    tabs: TabItem[] = [
     { id: '1er Bimestre',  label: '1er Bimestre', icon: 'fas fa-file-alt' },
+
     {id: '2do Bimestre',     label: '2do Bimestre',     icon: 'fas fa-file-alt'},
     {id: '3er Bimestre',      label: '3er Bimestre',      icon: 'fas fa-file-alt'},
     {id: '4to Bimestre', label: '4to Bimestre', icon: 'fas fa-file-alt'},
@@ -39,7 +40,7 @@ export class NoteListComponent {
   ];
 
   // pestaña activa
-  activeTab = "1er Bimestre";
+  activeTab = "ficha";
 
   // opcional: reaccionar a cambio
   onTabChanged(newTab: string) {
@@ -56,24 +57,24 @@ export class NoteListComponent {
   forkJoin({
     course: this.dataSvc.getCourseById(courseId),
     exams: this.dataSvc.getExams(),
-    grades: this.dataSvc.getExamNotes(), 
+    grades: this.dataSvc.getGrades(),
   }).subscribe(({ course, exams, grades }) => {
     this.course = course;
 
     // 2) Filtrar exámenes de este curso
-    const courseExams = exams.filter(e => e.classAssignmentId === course.id);
+    const courseExams = exams.filter(e => e.id_asignacion_de_clase === courseId);
 
     // 3) Filtrar notas de esos exámenes
     const relevantGrades = grades.filter(g =>
-      courseExams.some(e => e.id === g.examId)
+      courseExams.some(e => e.id_examen === g.id_examen)
     );
 
     // 4) Mapear a tu tabla
     this.registryItems = relevantGrades.map(g => {
-      const exam = courseExams.find(e => e.id === g.id)!;
+      const exam = courseExams.find(e => e.id_examen === g.id_examen)!;
       return {
-        concepto: exam.name,
-        valor:    g.score,
+        concepto: exam.nombre_examen,
+        valor:    g.valor,
         
       };
     });

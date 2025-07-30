@@ -4,7 +4,22 @@ import {  DataStudentService } from '../../services/dataStudent.service';
 import { CardCoursesComponent } from '../../../components/card-courses/card-courses.component';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { Attendance, Month } from '../../services/modelStudent';
+
+
+interface Attendance {
+  months: Month[];
+}
+
+interface Month {
+  month: string;
+  sessions: Session[];
+}
+
+interface Session {
+  date: string;
+  status: 'asistió' | 'faltó' | 'tardanza';
+}
+
 
 @Component({
   selector: 'app-attendance',

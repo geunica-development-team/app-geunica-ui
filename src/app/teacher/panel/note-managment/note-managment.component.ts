@@ -5,7 +5,7 @@ import { DataTeacherService } from '../../services/dataTeacher.service';
 import { CardCoursesComponent } from '../../../components/card-courses/card-courses.component';
 import { forkJoin } from 'rxjs';
 import { AppModalComponent } from '../../../components/app-modal/app-modal.component';
-import { Student, Person } from '../../services/modelTeacher';
+import { Estudiante, Persona } from '../../services/modelTeacher';
 import { Router } from '@angular/router';
 import { USERS } from '../../../admin/utility/db-simulator';
 import { TableComponent } from '../../../components/table/table.component';
@@ -31,7 +31,7 @@ export class NoteManagmentComponent {
   searchTerm: string = '';
   selectedGrade: GradeInfo | null = null;
     // Para más adelante: filtrar por salón o mes
-  students: Array<Student & { persona: Person }> = [];
+  students: Array<Estudiante & { persona: Persona }> = [];
   constructor(
     private dataSvc: DataTeacherService,
     private router: Router) {}
@@ -114,24 +114,24 @@ export class NoteManagmentComponent {
     }).subscribe(({ niveles, grados, secciones, salones, sedes }) => {
       this.filteredGrades = salones.map(salon => {
         // 1) Encuentra el grado
-        const gradoObj = grados.find(g => g.id === salon.id);
+        const gradoObj = grados.find(g => g.id_grado === salon.id_grado);
 
         // 2) A partir del grado, encuentra el nivel
         const nivelObj = gradoObj
-          ? niveles.find(n => n.id === gradoObj.id)
+          ? niveles.find(n => n.id_nivel === gradoObj.id_nivel)
           : undefined;
 
         // 3) Encuentra la sección directamente
-        const seccionObj = secciones.find(s => s.id === salon.id);
+        const seccionObj = secciones.find(s => s.id_seccion === salon.id_seccion);
 
-        const sedeObj = sedes.find(s => s.id === salon.id);
+        const sedeObj = sedes.find(s => s.id_sede === salon.id_sede);
 
         return {
           grado:   gradoObj?.nombre   ?? '—',
           nivel:   nivelObj?.nombre   ?? '—',
           seccion: seccionObj?.nombre ?? '—',
           sede:     sedeObj?.nombre ?? '—',
-          id_salon: salon.id 
+          id_salon: salon.id_salon 
           
         };
       });

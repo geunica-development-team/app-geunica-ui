@@ -118,12 +118,12 @@
     <!-- Detalle completo dentro del modal -->
     <div class="p-3">
       <h2 class="mb-3">{{ selectedAnnouncement.titulo }}</h2>
-      <h6 class="text-muted">{{ selectedAnnouncement.createdAt | date:'longDate' }}</h6>
+      <h6 class="text-muted">{{ selectedAnnouncement.fecha_creacion | date:'longDate' }}</h6>
       <hr>
       <p>{{ selectedAnnouncement.cuerpo }}</p>
       <hr>
       <div class="d-flex justify-content-between align-items-center">
-        <small class="text-muted">Creado por {{ selectedAnnouncement.id_user }}</small>
+        <small class="text-muted">Creado por {{ selectedAnnouncement.id_usuario }}</small>
         <span 
           class="badge"
           [ngClass]="{
