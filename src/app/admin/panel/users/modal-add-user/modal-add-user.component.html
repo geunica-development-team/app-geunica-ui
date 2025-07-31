@@ -29,9 +29,9 @@
             name="role"
             (change)="onRoleChange()"
             required>
-            <option [value]="0">Seleccionar rol...</option>
+            <option [ngValue]="0">Seleccionar rol...</option>
             @for (rol of roles; track rol.id) {
-              <option [value]="rol.id">{{ rol.name }}</option>
+              <option [ngValue]="rol.id">{{ rol.name }}</option>
             }
           </select>
           <small class="text-muted">Rol seleccionado: {{ getRoleCode() }}</small>

@@ -1,7 +1,29 @@
 import { Component, ElementRef, EventEmitter, inject, Output, TemplateRef, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { UserData } from '../../../services/users.service';
 import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../../enviroments/environment';
+
+interface UserData {
+  username: string;
+  password: string;
+  role_id: number;
+  status: string;
+  first_name: string;
+  paternal_lastname: string;
+  maternal_lastname: string;
+  document_type_id: number;
+  document_number: string;
+  phone: string;
+  email: string;
+  address: string;
+  birth_date: string;  // ISO yyyy-MM-dd
+  gender: 'M'|'F';
+  // opcionales según rol:
+  specialty?: string;
+  specialty_area?: string;
+  access_level?: string;
+}
 
 @Component({
   selector: 'app-modal-add-user',
@@ -11,8 +33,10 @@ import { FormsModule } from '@angular/forms';
 })
 export class ModalAddUserComponent {
   private modalService = inject(NgbModal)
+  private http         = inject(HttpClient);
 
   @Output() userCreated = new EventEmitter<UserData>()
+  @ViewChild("modalAddUser") modalAddUser!: TemplateRef<ElementRef>
 
   // Datos del formulario - usando la interfaz extendida
   userData: UserData = {
@@ -34,9 +58,10 @@ export class ModalAddUserComponent {
 
   // Opciones para dropdowns
   roles = [
-    { id: 1, name: "Administrador", code: "ADMIN" },
-    { id: 2, name: "Docente", code: "TEACHER" },
-    { id: 3, name: "Psicóloga", code: "PSYCHOLOGIST" }
+    { id: 1, name: "administrador", code: "ADMIN" },
+    { id: 2, name: "docente", code: "TEACHER" },
+    { id: 3, name: "psicólogo", code: "PSYCHOLOGIST" },
+    {id: 4, name: "alumno", code: "STUDENT"}
   ]
 
   documentTypes = [
@@ -74,9 +99,7 @@ export class ModalAddUserComponent {
     "Orientación Vocacional",
   ]
 
-  adminAccessLevels = ["Super Administrador", "Administrador", "Administrador Limitado"]
-
-  @ViewChild("modalAddUser") modalAddUser!: TemplateRef<ElementRef>
+  adminAccessLevels = ["Super Administrador", "Administrador"]
 
   openModal() {
     // Resetear formulario
@@ -120,7 +143,7 @@ export class ModalAddUserComponent {
 
   getRoleCode(): string {
     const role = this.roles.find((r) => r.id === Number(this.userData.role_id))
-    console.log("Role encontrado:", role)
+    //console.log("Role encontrado:", role)
     return role ? role.code : ""
   }
 
@@ -142,20 +165,7 @@ export class ModalAddUserComponent {
     this.userData.password = password
   }
 
-  onCreateUser() {
-    // Validaciones básicas
-    if (!this.validateForm()) {
-      return
-    }
-
-    console.log("Creando usuario:", this.userData)
-    this.userCreated.emit(this.userData)
-    this.modalService.dismissAll()
-
-    alert("Usuario creado exitosamente")
-  }
-
-  validateForm(): boolean {
+    validateForm(): boolean {
     // Validar campos obligatorios
     if (!this.userData.username.trim()) {
       alert("El usuario es obligatorio")
@@ -218,6 +228,67 @@ export class ModalAddUserComponent {
 
     return true
   }
+
+onCreateUser() {
+  if (!this.validateForm()) return;
+
+  // 1) Buscamos primero los objetos dropdown
+  const dt = this.documentTypes.find(d => d.id === this.userData.document_type_id);
+  const roleObj = this.roles.find(r => r.id === this.userData.role_id);
+
+  // 2) Validaciones de existencias
+  if (!dt) {
+    alert('Tipo de documento inválido');
+    return;
+  }
+  if (!roleObj) {
+    alert('Rol inválido');
+    return;
+  }
+
+  // 3) Construimos el payload
+  const payload = {
+    // Persona
+    names:                  this.userData.first_name,
+    paternalSurname:        this.userData.paternal_lastname,
+    maternalSurname:        this.userData.maternal_lastname,
+    typeOfIdentityDocument: dt.name,               // ya sabemos que existe
+    documentNumber:         this.userData.document_number,
+    phoneNumber:            this.userData.phone,
+    email:                  this.userData.email,
+    address:                this.userData.address,
+    birthDate:              this.userData.birth_date,
+    gender:                 this.userData.gender,
+
+    // Usuario
+    user:    this.userData.username,
+    password:this.userData.password,
+    state:   this.userData.status,
+
+    // Rol y campus
+    role: roleObj.name,          // ya sabemos que existe
+    idCampus: 1
+  };
+
+  // 4) Petición directa
+  this.http.post<{ userId: number }>(
+    `${environment.apiBase}/user/CreateUser`,
+    payload
+  )
+  .subscribe({
+    next: res => {
+      alert('Usuario creado con ID ' + res.userId);
+      this.modalService.dismissAll();
+      this.userCreated.emit();
+    },
+    error: err => {
+      const msg = err.error?.message ?? err.message;
+      alert(`Error creando usuario: ${msg}`);
+    }
+  });
+}
+
+
 
   onCancel() {
     this.modalService.dismissAll()

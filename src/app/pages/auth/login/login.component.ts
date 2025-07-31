@@ -77,7 +77,7 @@ export class LoginComponent {
       password: this.formLogin.get('password')?.value ?? '',
     }).subscribe({
       next: (value: any) => {
-        this.notifycation.success(`${value.message}, ${value.user.person.names} ${value.user.person.paternalSurname}.`, 'Éxito')
+        this.notifycation.success(`${value.message}, ${value.names} ${value.paternalSurname}.`,'Éxito')
         this.formLogin.reset();
 
         const token = this.authStorage.getToken();
