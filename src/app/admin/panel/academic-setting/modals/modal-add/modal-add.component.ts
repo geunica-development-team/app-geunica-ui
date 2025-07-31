@@ -118,7 +118,7 @@ export class ModalAddComponent {
     if (this.formPeriod.invalid) return this.errorForm();
     const { name, start_date, end_date, state } = this.formPeriod.value;
     // state viene como boolean, lo convertimos a string
-    const stateStr = state ? 'active' : 'inactive';
+    const stateStr = state ? 'En curso' : 'Finalizado';
     this.http.post(`${this.baseUrl}/period`, { name, start_date, end_date, state: stateStr })
       .subscribe(() => this.onSuccess('Periodo creado'));
   }

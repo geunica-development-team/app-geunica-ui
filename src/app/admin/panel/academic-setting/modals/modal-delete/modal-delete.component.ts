@@ -12,14 +12,14 @@ import { HttpClient } from '@angular/common/http';
   styleUrl: './modal-delete.component.css'
 })
 export class ModalDeleteComponent {
-    //@Input({required : true}) activeTab: string = 'sedes'; 
-   @Input({ required: true })
+  //@Input({required : true}) activeTab: string = 'sedes'; 
+  @Input({ required: true })
   activeTab!: string;
   @Input() rowId!: number;
   @Output() deleted = new EventEmitter<void>();
 
-    private modalService = inject(NgbModal);
-  private toolsForm = inject(FormBuilder);
+  private modalService = inject(NgbModal);
+  //private toolsForm = inject(FormBuilder);
   private notification       = inject(ToastrService);
   private http         = inject(HttpClient);
   private apiBase      = environment.apiBase;

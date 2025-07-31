@@ -142,8 +142,8 @@ export class AcademicSettingComponent {
           start_date:  p.start_date,
           end_date:    p.end_date,
           state:      p.state,
-          stateText:  p.state === 'active' ? 'activo' : 'inactivo',//'En curso' : 'Finalizado'
-          stateClass: p.state === 'active' 
+          stateText:  p.state === 'En curso' ? 'En curso' : 'Finalizado',//'En curso' : 'Finalizado'
+          stateClass: p.state === 'En curso' 
                         ? 'badge bg-success-subtle text-success fw-semibold' 
                         : 'badge bg-danger-subtle text-danger fw-semibold'        }));
         this.periodsTable?.updateTable();

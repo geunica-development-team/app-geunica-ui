@@ -10,7 +10,7 @@
     </div>
 
     @if (activeTab === 'sedes') {
-        <form [formGroup]="formEditCampus" (ngSubmit)="updateCampus()" id="formEditCampus">
+        <form [formGroup]="formCampus" id="formEditCampus" (ngSubmit)="onSave()">
             <div class="modal-body bg-white p-4">
                 <div class="mb-3">     
                     <label class="form-label fw-medium small">Nombre de la sede</label>
@@ -44,13 +44,13 @@
             type="submit" 
             class="btn btn-success rounded px-4"
             form="formEditCampus"
-            [disabled]="formEditCampus.invalid">
+            [disabled]="formCampus.invalid">
             Editar sede
             </button>
         </div>
     }
     @if (activeTab === 'niveles') {
-        <form [formGroup]="formEditLevel" (ngSubmit)="updateLevel()" id="formEditLevel">
+        <form [formGroup]="formLevel" id="formEditLevel" (ngSubmit)="onSave()">
             <div class="modal-body bg-white p-4">
                 <div class="mb-3">     
                     <label class="form-label fw-medium small">Nombre del nivel/programa</label>
@@ -84,13 +84,13 @@
             type="submit" 
             class="btn btn-success rounded px-4"
             form="formEditLevel"
-            [disabled]="formEditLevel.invalid">
+            [disabled]="formLevel.invalid">
             Editar nivel/programa
             </button>
         </div>
     }
     @if (activeTab === 'grados') {
-        <form [formGroup]="formEditGrade" (ngSubmit)="updateGrade()" id="formEditGrade">
+        <form [formGroup]="formGrade" id="formEditGrade" (ngSubmit)="onSave()">
             <div class="modal-body bg-white p-4">
                 <div class="mb-3">     
                     <label class="form-label fw-medium small">Nombre del grado</label>
@@ -106,11 +106,11 @@
                     <select
                         id="levelSelect"
                         class="form-select form-control"
-                        formControlName="level"
+                        formControlName="levelName"
                     >
                         <option value="" disabled>Selecciona un nivel</option>
-                        @for (level of levels; track level.id) {
-                            <option [ngValue]="level.id"> {{level.name}} </option>
+                        @for (level of levels; track level.name) {
+                            <option [ngValue]="level.name"> {{level.name}} </option>
                         }
                     </select>
                 </div>
@@ -127,13 +127,13 @@
             type="submit" 
             class="btn btn-success rounded px-4"
             form="formEditGrade"
-            [disabled]="formEditGrade.invalid">
+            [disabled]="formGrade.invalid">
             Editar grado
             </button>
         </div>
     }
     @if (activeTab === 'secciones') {
-        <form [formGroup]="formEditSection" (ngSubmit)="updateSection()" id="formEditSection">
+        <form [formGroup]="formSection" id="formEditSection" (ngSubmit)="onSave()">
             <div class="modal-body bg-white p-4">
                 <div class="mb-3">     
                     <label class="form-label fw-medium small">Nombre de la sección</label>
@@ -157,13 +157,13 @@
             type="submit" 
             class="btn btn-success rounded px-4"
             form="formEditSection"
-            [disabled]="formEditSection.invalid">
+            [disabled]="formSection.invalid">
             Editar sección
             </button>
         </div>
     }
     @if (activeTab === 'periodos') {
-        <form [formGroup]="formEditPeriod" (ngSubmit)="updatePeriod()" id="formEditPeriod">
+        <form [formGroup]="formPeriod" id="formEditPeriod" (ngSubmit)="onSave()">
             <div class="modal-body bg-white p-4">
                 <div class="mb-3">     
                     <label class="form-label fw-medium small">Nombre del periodo</label>
@@ -180,7 +180,7 @@
                     type="date" 
                     class="form-control rounded" 
                     name="sectionName"
-                    formControlName="startDate">
+                    formControlName="start_date">
                 </div>
                 <div class="mb-3">     
                     <label class="form-label fw-medium small">Fecha de fin</label>
@@ -188,7 +188,7 @@
                     type="date" 
                     class="form-control rounded" 
                     name="sectionName"
-                    formControlName="endDate">
+                    formControlName="end_date">
                 </div>
 
                 <div class="mb-3">
@@ -216,7 +216,7 @@
             type="submit" 
             class="btn btn-success rounded px-4"
             form="formEditPeriod"
-            [disabled]="formEditPeriod.invalid">
+            [disabled]="formPeriod.invalid">
             Editar sección
             </button>
         </div>

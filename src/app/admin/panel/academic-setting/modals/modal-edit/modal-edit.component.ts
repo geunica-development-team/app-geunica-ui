@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, inject, Input, Output, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { CampusService, dataCampus } from '../../../../services/campus.service';
@@ -8,6 +8,8 @@ import { dataGrade, dataGradeAll, GradeService } from '../../../../services/grad
 import { dataSection, SectionService } from '../../../../services/section.service';
 import { error } from 'console';
 import { dataPeriod, PeriodService } from '../../../../services/period.service';
+import { environment } from '../../../../../../enviroments/environment';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-modal-edit',
@@ -16,18 +18,88 @@ import { dataPeriod, PeriodService } from '../../../../services/period.service';
   styleUrl: './modal-edit.component.css'
 })
 export class ModalEditComponent {
-  @Input({required : true}) activeTab: string = 'sedes';
+  //@Input({ required: true }) activeTab!: 'sedes'|'niveles'|'grados'|'secciones'|'periodos';
+  @Input({ required: true })
+  activeTab!: string;
   @Input() rowId!: number;
   @Output() updated = new EventEmitter<void>();
 
+  private http = inject(HttpClient);
+  private toolsForm   = inject(FormBuilder);//  private toolsForm = inject(FormBuilder);
+  private notification = inject(ToastrService);//private toastr = inject(ToastrService);
   private modalService = inject(NgbModal);
-  private toolsForm = inject(FormBuilder);
-  private notifycation = inject(ToastrService);
-  private campusService = inject(CampusService);
-  private levelService = inject(LevelService);
-  private gradeService = inject(GradeService);
-  private sectionService = inject(SectionService);
-  private periodService = inject(PeriodService);
+  private baseUrl = environment.apiBase;
+  
+  @ViewChild('modalEdit') modalEdit!: TemplateRef<ElementRef>;  
+
+  levels: any[] = [];
+  // Forms para cada entidad
+  formCampus   = this.toolsForm.group({ name: ['', Validators.required], location: ['', Validators.required] });
+  formLevel    = this.toolsForm.group({ name: ['', Validators.required], cost: ['', Validators.required] });
+  formGrade    = this.toolsForm.group({ name: ['', Validators.required], levelName: [0, Validators.required] });
+  formSection  = this.toolsForm.group({ name: ['', Validators.required] });
+  formPeriod   = this.toolsForm.group({
+    name: ['', Validators.required],
+    start_date: ['', Validators.required],
+    end_date:   ['', Validators.required],
+    state:      [false, Validators.required],
+  });
+
+  ngOnInit() {     
+    this.http.get<any[]>(`${this.baseUrl}/level`)
+      .subscribe(data => this.levels = data); 
+  }
+
+  openModal() {
+    this.modalService.open(this.modalEdit, { centered: true, size: 'lg', backdrop: 'static' });
+    // cargar datos según entidad
+    switch (this.activeTab) {
+      case 'sedes':     this.loadAndPatch('campus', this.formCampus, ['name','location']); break;
+      case 'niveles':   this.loadAndPatch('level',  this.formLevel,  ['name','cost']);     break;
+      case 'grados':
+        this.http.get<any>(`${this.baseUrl}/grade/${this.rowId}`)
+          .subscribe({
+            next: grade => {
+              this.formGrade.patchValue({
+                name:      grade.name,
+                levelName: grade.level.name   // <–– asegúrate de esto
+              });
+            },
+            error: () => this.notification.error('Error cargando grado','Error')
+          });
+      break;
+      case 'secciones': this.loadAndPatch('section',this.formSection,['name']);          break;
+      case 'periodos':
+        this.http.get<any>(`${this.baseUrl}/period/${this.rowId}`)
+          .subscribe({
+            next: period => {
+              this.formPeriod.patchValue({
+                name:       period.name,
+                start_date: period.start_date,
+                end_date:   period.end_date,
+                // convierte string -> boolean
+                state:      period.state === 'active'
+              });
+            },
+            error: () => this.notification.error('Error cargando detalles del periodo', 'Error')
+          });
+        break;
+    }
+  }
+
+  loadAndPatch(endpoint: string, form: any, fields: string[]) {
+    this.http.get<any>(`${this.baseUrl}/${endpoint}/${this.rowId}`)
+      .subscribe({
+        next: data => {
+          const patch: any = {};
+          for (const f of fields) {
+            patch[f] = data[f];
+          }
+          form.patchValue(patch);
+        },
+        error: () => this.notification.error(`Error cargando detalles de ${endpoint}`, 'Error')
+      });
+  }
 
   getTitle(): string {
     switch (this.activeTab) {
@@ -35,310 +107,71 @@ export class ModalEditComponent {
       case 'niveles': return 'Editar nivel/programa';
       case 'grados': return 'Editar grado';
       case 'secciones': return 'Editar sección';
+      case 'periodos':  return 'Editar periodo';
       default: return 'Editar';
     }
   }
 
-  //PARA EDITAR SEDE
-  formEditCampus = this.toolsForm.group({
-    'name': ['', [Validators.required]],
-    'location': ['', [Validators.required]]
-  })
+onSave() {
+  let endpoint = '';
+  let form: FormGroup;
 
-  loadCampusDetails() {
-    if (this.rowId && !isNaN(this.rowId)) {
-      this.campusService.getCampusById(this.rowId).subscribe({
-        next: (campus) => {
-          this.formEditCampus.patchValue({
-            name: campus.name,
-            location: campus.location
-          });
-        },
-        error: (error) => {
-          this.notifycation.error('Error al cargar los detalles del campus', 'Error');
-        }
-      })
-    } else {
-      this.notifycation.error('ID del campus inválido', 'Error');
-    }
+  switch (this.activeTab) {
+    case 'sedes':
+      endpoint = 'campus';    form = this.formCampus;   break;
+    case 'niveles':
+      endpoint = 'level';     form = this.formLevel;    break;
+    case 'grados':
+      endpoint = 'grade';     form = this.formGrade;    break;
+    case 'secciones':
+      endpoint = 'section';   form = this.formSection;  break;
+    case 'periodos':
+      endpoint = 'period';    form = this.formPeriod;   break;
+    default:
+      return;
   }
 
-  updateCampus() {
-    if (this.formEditCampus.valid && this.rowId) {
-      const updatedCampus: dataCampus = {
-        name: this.formEditCampus.get('name')?.value ?? '',
-        location: this.formEditCampus.get('location')?.value ?? ''
-      }
-      this.campusService.updateCampus(this.rowId, updatedCampus).subscribe({
-        next: (value: any) => {
-          this.notifycation.success(`Sede actualizada con éxito.`, 'Éxito');
-          this.updated.emit();
-          this.modalService.dismissAll();
-          this.formEditCampus.reset();
-        },
-        error: (error: Error) => {
-          this.notifycation.error(error.message, 'Error');
-        }
-      })
-    } else {
-      this.notifycation.error('Debes completar todos los campos correctamente', 'Error');
-    }
+  if (form.invalid) {
+    this.notification.error('Debes completar todos los campos correctamente', 'Error');
+    return;
   }
 
-  //PARA EDITAR NIVEL/PROGRAMA
-  formEditLevel = this.toolsForm.group({
-    'name': ['', [Validators.required]],
-    'cost': ['', [Validators.required]]
-  })
+  // toma los valores
+  const body: any = { ...form.value };
 
-  loadLevelDetails() {
-    if (this.rowId && !isNaN(this.rowId)) {
-      this.levelService.getLevelById(this.rowId).subscribe({
-        next: (level) => {
-          this.formEditLevel.patchValue({
-            name: level.name,
-            cost: String(level.cost)
-          });
-        },
-        error: (error) => {
-          this.notifycation.error('Error al cargar los detalles del nivel/programa', 'Error');
-        }
-      })
-    } else {
-      this.notifycation.error('ID del nivel inválido', 'Error');
-    }
+  // Si es periodo, convertimos el boolean a string y renombramos si es necesario
+  if (endpoint === 'period') {
+    // tu API espera start_date y end_date
+    body.start_date = body.start_date;
+    body.end_date   = body.end_date;
+    // convierte booleano a la cadena que espera tu DTO
+    body.state = body.state ? 'En curso' : 'Finalizado';
   }
 
-  updateLevel() {
-    if (this.formEditLevel.valid && this.rowId) {
-      const updatedLevel: dataLevel = {
-        name: this.formEditLevel.get('name')?.value ?? '',
-        cost: Number(this.formEditLevel.get('cost')?.value) ?? 0
-      }
-      this.levelService.updateLevel(this.rowId, updatedLevel).subscribe({
-        next: (value: any) => {
-          this.notifycation.success(`Nivel/programa actualizado con éxito.`, 'Éxito');
-          this.updated.emit();
-          this.modalService.dismissAll();
-          this.formEditLevel.reset();
-        },
-        error: (error: Error) => {
-          this.notifycation.error(error.message, 'Error');
-        }
-      })
-    } else {
-      this.notifycation.error('Debes completar todos los campos correctamente', 'Error');
-    }
-  }
-
-  //PARA EDITAR GRADO
-  formEditGrade = this.toolsForm.group({
-    'name': ['', [Validators.required]],
-    'level': [0, [Validators.required]]
-  })
-
-  levels: dataLevelAll[] = []
-  
-  loadLevels() {
-  this.levelService.getAllLevels().subscribe({
-    next: (levels) => {
-      this.levels = levels;
+  this.http.patch(
+    `${this.baseUrl}/${endpoint}/${this.rowId}`,
+    body
+  ).subscribe({
+    next: () => {
+      this.notification.success(`${this.getTitle()} exitoso.`, 'Éxito');
+      this.updated.emit();
+      this.modalService.dismissAll();
+      form.reset({ state: null });
     },
-    error: (err) => {
-      this.notifycation.error('Error al cargar los niveles', 'Error');
+    error: err => {
+      const msg = err.error?.message || err.message || 'Error';
+      this.notification.error(msg, 'Error');
     }
   });
 }
 
-
-  loadGradeDetails() {
-    if (this.rowId && !isNaN(this.rowId)) {
-      this.gradeService.getGradeById(this.rowId).subscribe({
-        next: (grade) => {
-          this.formEditGrade.patchValue({
-            name: grade.name,
-            level: grade.level?.id
-          });
-        },
-        error: (error) => {
-          this.notifycation.error('Error al cargar los detalles del grado', 'Error');
-        }
-      })
-    } else {
-      this.notifycation.error('ID del grado inválido', 'Error');
-    }
-  }
-
-  updateGrade() {
-    if (this.formEditGrade.valid && this.rowId) {
-      const updatedGrade: dataGrade = {
-        name: this.formEditGrade.get('name')?.value ?? '',
-        idLevel: this.formEditGrade.get('level')?.value ?? 0,
-      }
-      this.gradeService.updateGrade(this.rowId, updatedGrade).subscribe({
-        next: (value: any) => {
-          this.notifycation.success(`Grado actualizado con éxito.`, 'Éxito');
-          this.updated.emit();
-          this.modalService.dismissAll();
-          this.formEditGrade.reset();
-        },
-        error: (error: Error) => {
-          this.notifycation.error(error.message, 'Error');
-        }
-      })
-    } else {
-      this.notifycation.error('Debes completar todos los campos correctamente', 'Error');
-    }
-  }
-
-//PARA EDITAR SECCION
-  formEditSection = this.toolsForm.group({
-    'name': ['', [Validators.required]]
-  })
-
-  loadSectionDetails() {
-    if (this.rowId && !isNaN(this.rowId)) {
-      this.sectionService.getSectionById(this.rowId).subscribe({
-        next: (section) => {
-          this.formEditSection.patchValue({
-            name: section.name
-          });
-        },
-        error: (error) => {
-          this.notifycation.error('Error al cargar los detalles de la seccion', 'Error');
-        }
-      })
-    } else {
-      this.notifycation.error('ID de la seccion inválido', 'Error');
-    }
-  }
-
-  updateSection() {
-    if (this.formEditSection.valid && this.rowId) {
-      const updatedSection: dataSection = {
-        name: this.formEditSection.get('name')?.value ?? ''
-      }
-      this.sectionService.updateSection(this.rowId, updatedSection).subscribe({
-        next: (value: any) => {
-          this.notifycation.success(`Sección actualizada con éxito.`, 'Éxito');
-          this.updated.emit();
-          this.modalService.dismissAll();
-          this.formEditSection.reset();
-        },
-        error: (error: Error) => {
-          this.notifycation.error(error.message, 'Error');
-        }
-      })
-    } else {
-      this.notifycation.error('Debes completar todos los campos correctamente', 'Error');
-    }
-  }
-
-  //PARA EDITAR PERIODOS
-  formEditPeriod = this.toolsForm.group({
-    'name': ['', [Validators.required]],
-    'startDate': ['', [Validators.required]],
-    'endDate': ['', [Validators.required]],
-    'state': [true, [Validators.required]]
-  })
-
-  loadPeriodDetails() {
-    if (this.rowId && !isNaN(this.rowId)) {
-      this.periodService.getPeriodById(this.rowId).subscribe({
-        next: (period) => {
-          this.formEditPeriod.patchValue({
-            name: period.name,
-            startDate: period.startDate,
-            endDate: period.endDate,
-            state: period.state
-          });
-        },
-        error: (error) => {
-          this.notifycation.error('Error al cargar los detalles del periodo', 'Error');
-        }
-      })
-    } else {
-      this.notifycation.error('ID del periodo inválido', 'Error');
-    }
-  }
-
-  updatePeriod() {
-    if (this.formEditPeriod.valid && this.rowId) {
-      const updatedPeriod: dataPeriod = {
-        name: this.formEditPeriod.get('name')?.value ?? '',
-        startDate: this.formEditPeriod.get('startDate')?.value ?? '',
-        endDate: this.formEditPeriod.get('endDate')?.value ?? '',
-        state: this.formEditPeriod.get('state')?.value ?? false
-      }
-      this.periodService.updatePeriod(this.rowId, updatedPeriod).subscribe({
-        next: (value: any) => {
-          this.notifycation.success(`Periodo actualizado con éxito.`, 'Éxito');
-          this.updated.emit();
-          this.modalService.dismissAll();
-          this.formEditPeriod.reset();
-        },
-        error: (error: Error) => {
-          this.notifycation.error(error.message, 'Error');
-        }
-      })
-    } else {
-      this.notifycation.error('Debes completar todos los campos correctamente', 'Error');
-    }
-  }
-
-  @ViewChild('modalEdit') modalEdit!: TemplateRef<ElementRef>;  
-
-  openModal() {
-    this.modalService.open(this.modalEdit, { 
-      centered: true,
-      size: 'lg',
-      backdrop: 'static'
-    });
-    switch (this.activeTab) {
-      case 'sedes':
-        this.loadCampusDetails();
-        break;
-      case 'niveles':
-        this.loadLevelDetails();
-        break;
-      case 'grados':
-        this.levelService.getAllLevels().subscribe({
-        next: (levels) => {
-          this.levels = levels;
-          this.loadGradeDetails();
-        },
-        error: (err) => {
-          this.notifycation.error('Error al cargar niveles', 'Error');
-        }
-      });
-      break;
-      case 'secciones':
-        this.loadSectionDetails();
-        break;
-      case 'periodos':
-        this.loadPeriodDetails();
-        break;
-    }
-  }
-
   onCancel() {
-    switch (this.activeTab) {
-      case 'sedes':
-        this.formEditCampus.reset();
-        break;
-      case 'niveles':
-        this.formEditLevel.reset();
-        break;
-      case 'grados':
-      this.formEditGrade.reset();
-      break;
-      case 'secciones':
-      this.formEditSection.reset();
-      break;
-      case 'periodos':
-      this.formEditPeriod.reset();
-      break;
-    }
     this.modalService.dismissAll();
+    // reset de todos
+    this.formCampus.reset();
+    this.formLevel.reset();
+    this.formGrade.reset();
+    this.formSection.reset();
+    this.formPeriod.reset({ state: null });
   }
 }
