@@ -10,6 +10,8 @@ import { AnnouncementComponent } from "./announcement/announcement.component";
 import { ScheduleComponent } from "./schedule/schedule.component";
 import { GradesRegistryComponent } from "./grades-registry/grades-registry.component";
 import { roleGuard } from "../../guards/role.guard";
+import { ProfileComponent } from "../../pages/shared/profile/profile.component";
+
 
 export const studentPanelRoutes: Routes = [
     {
@@ -66,8 +68,10 @@ export const studentPanelRoutes: Routes = [
                 component: ScheduleComponent
             },
             {
-                path: 'perfil',
-                loadChildren: () => import('../../pages/shared/profile/profile.routes').then(m => m.profileRoutes)
+            path: 'profile',
+            component: ProfileComponent,
+            canActivate:  [roleGuard],
+            data: { role: 'alumno' }
             }
 
         ]

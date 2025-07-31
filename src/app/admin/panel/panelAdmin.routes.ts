@@ -61,7 +61,7 @@ export const adminPanelRoutes: Routes = [
                 component: AcademicSettingComponent
             },
             {
-                path: 'perfil',
+                path: 'profile',
                 loadChildren: () => import('../../pages/shared/profile/profile.routes').then(m => m.profileRoutes)
             }
         ]

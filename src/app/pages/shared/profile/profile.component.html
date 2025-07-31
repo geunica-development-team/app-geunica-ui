@@ -22,8 +22,8 @@
         <div class="row">
           <div class="col-12 text-center mb-5">
             <div class="user-info-header">
-              <h2 class="user-name mb-2">{{ userProfile.person.names }} {{ userProfile.person.paternalSurname }} {{ userProfile.person.maternalSurname }}</h2>
-              <p class="user-dni text-muted">{{ userProfile.person.documentNumber }}</p>
+              <h2 class="user-name mb-2">{{ userProfile.names }} {{ userProfile.paternal_surname }} {{ userProfile.maternal_surname }}</h2>
+              <p class="user-dni text-muted">{{ userProfile.document_number }}</p>
             </div>
           </div>
         </div>
@@ -40,19 +40,19 @@
               <div class="info-grid">
                 <div class="info-item">
                   <label>Nombre completo:</label>
-                  <span>{{ userProfile.person.names }} {{ userProfile.person.paternalSurname }} {{ userProfile.person.maternalSurname }}</span>
+                  <span>{{ userProfile.names }} {{ userProfile.paternal_surname }} {{ userProfile.maternal_surname }}</span>
                 </div>
                 <div class="info-item">
                   <label>DNI:</label>
-                  <span>{{ userProfile.person.documentNumber }}</span>
+                  <span>{{ userProfile.document_number }}</span>
                 </div>
                 <div class="info-item">
                   <label>Fecha de Nacimiento:</label>
-                  <span>{{ userProfile.person.birthDate }}</span>
+                  <span>{{ userProfile.birth_date }}</span>
                 </div>
                 <div class="info-item">
                   <label>Género:</label>
-                  <span>{{ userProfile.person.gender }}</span>
+                  <span>{{ userProfile.gender }}</span>
                 </div>
               </div>
             </div>
@@ -68,15 +68,15 @@
               <div class="info-grid">
                 <div class="info-item">
                   <label>Teléfono:</label>
-                  <span>{{ userProfile.person.phoneNumber }}</span>
+                  <span>{{ userProfile.phone_number }}</span>
                 </div>
                 <div class="info-item">
                   <label>Dirección:</label>
-                  <span>{{ userProfile.person.address }}</span>
+                  <span>{{ userProfile.address }}</span>
                 </div>
                 <div class="info-item">
                   <label>Correo Electrónico:</label>
-                  <span>{{ userProfile.person.email }}</span>
+                  <span>{{ userProfile.email }}</span>
                 </div>
               </div>
             </div>
@@ -90,24 +90,24 @@
                 Información Académica
               </h5>
             <div class="info-grid">
-                @if (userProfile.role.role === 'admin') {
+                @if (userProfile.role === 'admin') {
                   <div class="info-item">
                     <label>Rol académico:</label>
                     <span> Administrador </span>
                   </div>
                   <div class="info-item">
                     <label>Sede/s asociada/s:</label>
-                    <span>{{ userProfile.campus.name }}</span>
+                    <span>{{ userProfile.campus_location }}</span>
                   </div>
                 }
-                @if (userProfile.role.role === 'student') {
+                @if (userProfile.role=== 'student') {
                   <div class="info-item">
                     <label>Rol académico:</label>
                     <span class=""> Estudiante </span>
                   </div>
                   <div class="info-item">
                     <label>Sede:</label>
-                    <span>{{ userProfile.campus.name }}</span>
+                    <span>{{ userProfile.campus_name }}</span>
                   </div>
                   <!--
                   <div class="info-item">
@@ -138,7 +138,7 @@
               <div class="info-grid">
                 <div class="info-item">
                   <label>Usuario:</label>
-                  <span>{{ userProfile.user }}</span>
+                  <span>{{ userProfile.username }}</span>
                 </div>
                 <div class="info-item">
                   <label>Contraseña:</label>

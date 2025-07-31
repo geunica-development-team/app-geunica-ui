@@ -32,10 +32,12 @@ export class HeaderComponent {
       const decoded: any = jwtDecode(token);
       const role = decoded.role;
 
-      if (role === 'admin') {
-        this.router.navigateByUrl('/admin/panel/perfil');
-      } else if (role === 'student') {
-        this.router.navigateByUrl('student/panel/perfil');
+      if (role === 'administrador') {
+        this.router.navigateByUrl('/admin/panel/profile');
+      } else if (role === 'alumno') {
+        this.router.navigateByUrl('student/panel/profile');
+      } else if (role === 'docente') {
+        this.router.navigateByUrl('teacher/panel/profile');
       } else {
         this.router.navigateByUrl('/unauthorized');
       }

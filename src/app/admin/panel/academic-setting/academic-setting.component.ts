@@ -11,6 +11,8 @@ import { dataSectionAll, SectionService } from '../../services/section.service';
 import { ModalEditComponent } from "./modals/modal-edit/modal-edit.component";
 import { ModalDeleteComponent } from './modals/modal-delete/modal-delete.component';
 import { dataPeriodAll, PeriodService } from '../../services/period.service';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../enviroments/environment';
 
 @Component({
   selector: 'app-academic-setting',
@@ -19,13 +21,10 @@ import { dataPeriodAll, PeriodService } from '../../services/period.service';
   styleUrl: './academic-setting.component.css'
 })
 export class AcademicSettingComponent {
-  private campusService = inject(CampusService);
-  private levelService = inject(LevelService);
-  private gradeService = inject(GradeService);
-  private sectionService = inject(SectionService);
-  private periodService = inject(PeriodService);
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
+  private http     = inject(HttpClient);
+  private route    = inject(ActivatedRoute);
+  private router   = inject(Router);
+  private baseUrl  = environment.apiBase;
 
   tabs: TabItem[] = [
     { id: "sedes", label: "Sedes", icon: "fa-solid fa-tents"},
@@ -78,194 +77,106 @@ export class AcademicSettingComponent {
     }
   }
 
-  //PARA TABLA SEDES:
-  // COLUMNAS DE LA TABLA
-  columnsCampus = [
-  'ID',
-  'Nombre',
-  'Localización'
-  ];
+
+
   
-  // MAPEO PARA COLUMNAS Y FILAS
-  columnMappingsCampus = {
-  'ID': 'id',
-  'Nombre': 'name',
-  'Localización': 'location'
-  };
-
-  rowsCampus: dataCampusAll[] = [];
-
+  //––– SEDES –––
   @ViewChild('campusTable') campusTable?: TableComponent;
-
+  columnsCampus = ['ID','Nombre','Localización'];
+  
+  // MAPEO PARA COLUMNAS Y FILAS
+  columnMappingsCampus = {'ID': 'id','Nombre': 'name','Localización': 'location'};
+  rowsCampus: any[] = [];
   loadCampus() {
-    this.campusService.getAllCampus().subscribe({
-      next:(campus) => {
-        this.rowsCampus = campus.map((campus: any): dataCampusAll => ({
-          id: campus.id,
-          name: campus.name,
-          location: campus.location
+    this.http.get<any[]>(`${this.baseUrl}/campus`)
+      .subscribe(data => {
+        this.rowsCampus = data.map(c=>({
+          id:       c.id,
+          name:     c.name,
+          location: c.location
         }));
-        if (this.campusTable) {
-          this.campusTable.updateTable();
-        }
-      },
-        error: (error) => {
-          console.error('Error al cargar la lista de sedes: ', error);
-        }
-    });
+        this.campusTable?.updateTable();
+      }, e=> console.error(e));
   }
 
-  //PARA TABLA NIVELES:
-  // COLUMNAS DE LA TABLA
-  columnsLevels = [
-  'ID',
-  'Nombre del nivel/programa',
-  'Costo'
-  ];
-  
-  // MAPEO PARA COLUMNAS Y FILAS
-  columnMappingsLevels = {
-  'ID': 'id',
-  'Nombre del nivel/programa': 'name',
-  'Costo': 'cost'
-  };
-
-  rowsLevels: dataLevelAll[] = [];
-
+  //––– NIVELES –––
   @ViewChild('levelsTable') levelsTable?: TableComponent;
-
+  columnsLevels = ['ID','Nombre del nivel/programa','Costo'];
+  // MAPEO PARA COLUMNAS Y FILAS
+  columnMappingsLevels = {'ID': 'id','Nombre del nivel/programa': 'name','Costo': 'cost'};
+  rowsLevels: any[] = [];
   loadLevels() {
-    this.levelService.getAllLevels().subscribe({
-      next:(level) => {
-        this.rowsLevels = level.map((level: any): dataLevelAll => ({
-          id: level.id,
-          name: level.name,
-          cost: level.cost
+    this.http.get<any[]>(`${this.baseUrl}/level`)
+      .subscribe(data => {
+        this.rowsLevels = data.map(l=>({
+          id:   l.id,
+          name: l.name,
+          cost: l.cost
         }));
-        if (this.levelsTable) {
-          this.levelsTable.updateTable();
-        }
-      },
-        error: (error) => {
-          console.error('Error al cargar la lista de niveles/programas: ', error);
-        }
-    });
+        this.levelsTable?.updateTable();
+      }, e=> console.error(e));
   }
 
-  //PARA TABLA GRADOS:
-  // COLUMNAS DE LA TABLA
-  columnsGrades = [
-  'ID',
-  'Grado',
-  'Nivel'
-  ];
-  
-  // MAPEO PARA COLUMNAS Y FILAS
-  columnMappingsGrades = {
-  'ID': 'id',
-  'Grado': 'name',
-  'Nivel': 'level'
-  };
-
-  rowsGrades: dataGradeAll[] = [];
-
+  //––– GRADOS (vista grados) –––
   @ViewChild('gradesTable') gradesTable?: TableComponent;
-
+  // COLUMNAS DE LA TABLA
+  columnsGrades = ['ID','Grado','Nivel'];
+  // MAPEO PARA COLUMNAS Y FILAS
+  columnMappingsGrades = {'ID':'id','Grado':'grado','Nivel':'nivel'};
+  rowsGrades: any[] = [];
   loadGrades() {
-    this.gradeService.getAllGrades().subscribe({
-      next:(grade) => {
-        this.rowsGrades = grade.map((grade: any): dataGradeAll => ({
-          id: grade.id,
-          name: grade.name,
-          level: grade.level.name
+    this.http.get<any[]>(`${this.baseUrl}/grade/grados`)
+      .subscribe(data => {
+        this.rowsGrades = data.map(g=>({
+          id:     g.id,
+          grado:  g.grado,
+          nivel:  g.nivel
         }));
-        if (this.gradesTable) {
-          this.gradesTable.updateTable();
-        }
-      },
-        error: (error) => {
-          console.error('Error al cargar la lista de niveles/programas: ', error);
-        }
-    });
+        this.gradesTable?.updateTable();
+      }, e=> console.error(e));
   }
 
-  //PARA TABLA SECCIONES:
-  // COLUMNAS DE LA TABLA
-  columnsSections = [
-  'ID',
-  'Nombre'
-  ];
-  
-  // MAPEO PARA COLUMNAS Y FILAS
-  columnMappingsSections = {
-  'ID': 'id',
-  'Nombre': 'name'
-  };
-
-  rowsSections: dataSectionAll[] = [];
-
+  //––– SECCIONES –––
   @ViewChild('sectionsTable') sectionsTable?: TableComponent;
-
+  // COLUMNAS DE LA TABLA
+  columnsSections = ['ID','Nombre'];
+  // MAPEO PARA COLUMNAS Y FILAS
+  columnMappingsSections = {'ID': 'id','Nombre': 'name'};
+  rowsSections: any[] = [];
   loadSections() {
-    this.sectionService.getAllSections().subscribe({
-      next:(section) => {
-        this.rowsSections = section.map((section: any): dataSectionAll => ({
-          id: section.id,
-          name: section.name
+    this.http.get<any[]>(`${this.baseUrl}/section`)
+      .subscribe(data => {
+        this.rowsSections = data.map(s=>({
+          id:   s.id,
+          name: s.name
         }));
-        if (this.sectionsTable) {
-          this.sectionsTable.updateTable();
-        }
-      },
-        error: (error) => {
-          console.error('Error al cargar la lista de niveles/programas: ', error);
-        }
-    });
+        this.sectionsTable?.updateTable();
+      }, e=> console.error(e));
   }
 
-  //PARA TABLA PERIODOS:
-  // COLUMNAS DE LA TABLA
-  columnsPeriods = [
-  'ID',
-  'Nombre',
-  'Fecha Inicio',
-  'Fecha Fin',
-  'Estado'
-  ];
-  
-  // MAPEO PARA COLUMNAS Y FILAS
-  columnMappingsPeriods = {
-  'ID': 'id',
-  'Nombre': 'name',
-  'Fecha Inicio': 'startDate',
-  'Fecha Fin': 'endDate',
-  'Estado': 'stateText'
-  };
-
-  rowsPeriods: dataSectionAll[] = [];
-
+  //––– PERIODOS –––
   @ViewChild('periodsTable') periodsTable?: TableComponent;
-
+  // COLUMNAS DE LA TABLA
+  columnsPeriods = ['ID','Nombre','Fecha Inicio','Fecha Fin','Estado'];
+  // MAPEO PARA COLUMNAS Y FILAS
+  columnMappingsPeriods = {'ID': 'id','Nombre': 'name','Fecha Inicio': 
+    'start_date','Fecha Fin': 'end_date','Estado': 'stateText'};
+  rowsPeriods: any[] = [];
   loadPeriods() {
-    this.periodService.getAllPeriods().subscribe({
-      next:(period) => {
-        this.rowsPeriods = period.map((period: any): dataPeriodAll & { stateText: string, stateClass: string } => ({
-          id: period.id,
-          name: period.name,
-          startDate: period.startDate,
-          endDate: period.endDate,
-          state: period.state === true,
-          stateText: period.state === true ? 'En curso': 'Finalizado',
-          stateClass: period.state === true ? 'badge bg-success-subtle text-success fw-semibold' : 'badge bg-danger-subtle text-danger fw-semibold'
-        }));
-        if (this.periodsTable) {
-          this.periodsTable.updateTable();
-        }
-      },
-        error: (error) => {
-          console.error('Error al cargar la lista de niveles/programas: ', error);
-        }
-    });
+    this.http.get<any[]>(`${this.baseUrl}/period`)
+      .subscribe(data => {
+        this.rowsPeriods = data.map(p=>({
+          id:         p.id,
+          name:       p.name,
+          start_date:  p.start_date,
+          end_date:    p.end_date,
+          state:      p.state,
+          stateText:  p.state === 'active' ? 'activo' : 'inactivo',//'En curso' : 'Finalizado'
+          stateClass: p.state === 'active' 
+                        ? 'badge bg-success-subtle text-success fw-semibold' 
+                        : 'badge bg-danger-subtle text-danger fw-semibold'        }));
+        this.periodsTable?.updateTable();
+      }, e=> console.error(e));
   }
 
 

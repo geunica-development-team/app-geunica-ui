@@ -9,6 +9,26 @@ interface DataLogin {
     password: string
 }
 
+export interface UserProfile {
+  id: number;
+  username: string;
+  state: string;
+  names: string;
+  paternal_surname: string;
+  maternal_surname: string;
+  document_type: string;
+  document_number: string;
+  phone_number: string;
+  email: string;
+  address: string;
+  birth_date: string;
+  gender: 'M' | 'F' | 'O';
+  role: string;
+  campus_name: string;
+  campus_location: string;
+}
+
+
 @Injectable({
     providedIn: 'root'
 })
@@ -76,7 +96,7 @@ export class AuthService {
 
                 /** GET /user/me: devuelve el perfil del usuario autenticado */
                 getProfile() {
-                return this.httpService.get<any>(`${this.auth_end_point}/user/me`);
+                return this.httpService.get<UserProfile>(`${this.auth_end_point}/user/me`);
                 }
             }
             
