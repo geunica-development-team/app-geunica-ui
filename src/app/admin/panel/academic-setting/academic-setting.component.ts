@@ -3,14 +3,9 @@ import { PanelHeaderComponent } from "../../../components/dashboard/shared-compo
 import { TabItem, MenuTabsComponent } from '../../../components/dashboard/menu-tabs/menu-tabs.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableComponent } from "../../../components/table/table.component";
-import { CampusService, dataCampusAll } from '../../services/campus.service';
 import { ModalAddComponent } from "./modals/modal-add/modal-add.component";
-import { dataLevelAll, LevelService } from '../../services/level.service';
-import { dataGradeAll, GradeService } from '../../services/grade.service';
-import { dataSectionAll, SectionService } from '../../services/section.service';
 import { ModalEditComponent } from "./modals/modal-edit/modal-edit.component";
 import { ModalDeleteComponent } from './modals/modal-delete/modal-delete.component';
-import { dataPeriodAll, PeriodService } from '../../services/period.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../enviroments/environment';
 
@@ -54,30 +49,6 @@ export class AcademicSettingComponent {
     this.loadSections();
     this.loadPeriods();
   }
-
-  @ViewChild('modalEdit') modalEdit!: ModalEditComponent;
-
-  openModalEdit(row: any) {
-    if (row && row.id && !isNaN(row.id)) {
-      this.modalEdit.rowId = Number(row.id);
-      this.modalEdit.openModal();
-    } else {
-      console.error('ID inválido:', row.id);
-    }
-  }
-
-  @ViewChild('modalDelete') modalDelete!: ModalDeleteComponent;
-
-  openModalDelete(row: any) {
-    if (row && row.id && !isNaN(row.id)) {
-      this.modalDelete.rowId = Number(row.id);
-      this.modalDelete.openModal();
-    } else {
-      console.error('ID inválido:', row.id);
-    }
-  }
-
-
 
   
   //––– SEDES –––
@@ -179,58 +150,40 @@ export class AcademicSettingComponent {
       }, e=> console.error(e));
   }
 
+  //––– Acciones editar / borrar (idénticas para todas)
+  @ViewChild('modalEdit') modalEdit!: ModalEditComponent;
+  @ViewChild('modalDelete') modalDelete!: ModalDeleteComponent;
+  openModalEdit(row: any) {
+    if (!isNaN(+row.id)) {
+      this.modalEdit.rowId = +row.id;
+      this.modalEdit.openModal();
+    }
+  }
+
+  openModalDelete(row: any) {
+    if (!isNaN(+row.id)) {
+      this.modalDelete.rowId = +row.id;
+      this.modalDelete.openModal();
+    }
+  }
 
   //PARA EL FILTRO DE LA TABLA (BUSCADOR)
   applyFilter(event: Event) {
-    if (this.campusTable) {
-      this.campusTable.filterValue = (
-        event.target as HTMLInputElement
-      ).value;
-      this.campusTable.updateTable();
-    }
-    else if (this.levelsTable) {
-      this.levelsTable.filterValue = (
-        event.target as HTMLInputElement
-      ).value;
-      this.levelsTable.updateTable();
-    }
-    else if (this.gradesTable) {
-      this.gradesTable.filterValue = (
-        event.target as HTMLInputElement
-      ).value;
-      this.gradesTable.updateTable();
-    }
-    else if (this.sectionsTable) {
-      this.sectionsTable.filterValue = (
-        event.target as HTMLInputElement
-      ).value;
-      this.sectionsTable.updateTable();
-    }
-    else if (this.periodsTable) {
-      this.periodsTable.filterValue = (
-        event.target as HTMLInputElement
-      ).value;
-      this.periodsTable.updateTable();
-    }
+    const val = (event.target as HTMLInputElement).value;
+    if (this.campusTable   && this.activeTab==='sedes')    { this.campusTable.filterValue   = val; this.campusTable.updateTable(); }
+    if (this.levelsTable   && this.activeTab==='niveles')  { this.levelsTable.filterValue   = val; this.levelsTable.updateTable(); }
+    if (this.gradesTable   && this.activeTab==='grados')   { this.gradesTable.filterValue   = val; this.gradesTable.updateTable(); }
+    if (this.sectionsTable && this.activeTab==='secciones'){ this.sectionsTable.filterValue = val; this.sectionsTable.updateTable(); }
+    if (this.periodsTable  && this.activeTab==='periodos') { this.periodsTable.filterValue  = val; this.periodsTable.updateTable(); }
   }
 
   onCreatedOrEditedOrDeleted() {
     switch (this.activeTab) {
-      case 'sedes':
-        this.loadCampus();
-        break;
-      case 'niveles':
-        this.loadLevels();
-        break;
-      case 'grados':
-        this.loadGrades();
-        break;
-      case 'secciones':
-        this.loadSections();
-        break;
-      case 'periodos':
-        this.loadPeriods();
-        break;
+      case 'sedes':     this.loadCampus();   break;
+      case 'niveles':   this.loadLevels();   break;
+      case 'grados':    this.loadGrades();   break;
+      case 'secciones': this.loadSections(); break;
+      case 'periodos':  this.loadPeriods();  break;
     }
   }
 }
