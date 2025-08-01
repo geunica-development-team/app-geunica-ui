@@ -5,11 +5,11 @@
         type="button" 
         class="btn-close" 
         aria-label="Close"
-        (click)="onCancel()">
+        (click)="cancel()">
         </button>
     </div>
 
-    <form [formGroup]="formEditClassroom" (ngSubmit)="updateClassroom()" id="formAddClassroom">
+    <form [formGroup]="formEditClassroom" (ngSubmit)="save()" id="formEditClassroom">
         <div class="modal-body bg-white p-4">
             <div class="mb-3">     
                 <label class="form-label fw-medium small">Nombre (opcional)</label>
@@ -28,14 +28,33 @@
                     formControlName="period"
                 >
                     <option value="" disabled>Selecciona un periodo</option>
-                    @for (period of periods; track period.id) {
+
+                    
+                    @for (period of periodList; track period.id) {
+                        <option class="text-success" [value]="period.id"> {{period.name}} </option>
+                        <!---
                         @if (period.state === true) {
-                            <option class="text-success" [value]="period.id"> {{period.name}} | En curso</option>
+                            <option class="text-success" [value]="period.id"> {{period.name}} </option>
                         }
                         @if (period.state === false) {
-                            <option class="text-danger" [value]="period.id"> {{period.name}} | Finalizado</option>
-                        }                        
+                            <option class="text-danger" [value]="period.id"> {{period.name}} </option>
+                        }
+                        --->                        
                     }
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-medium small">Estado</label>
+                <select
+                    id="state"
+                    class="form-select form-control"
+                    formControlName="state"
+                >
+                    <option value="" disabled>Selecciona un estado</option>
+                    <option value="En curso">En curso</option>
+                    <option value="Finalizado">Finalizado</option>
+                    <option value="Inactivo">Inactivo</option>
                 </select>
             </div>
 
@@ -47,7 +66,7 @@
                     formControlName="campus"
                 >
                     <option value="" disabled>Selecciona una sede</option>
-                    @for (campus of campus; track campus.id) {
+                    @for (campus of campusList; track campus.id) {
                         <option [value]="campus.id"> {{campus.name}} </option>
                     }
                 </select>
@@ -61,7 +80,7 @@
                     (change)="onLevelChange()"
                 >
                     <option value="" disabled selected>Selecciona un nivel/programa</option>
-                    @for (level of levels; track level.id) {
+                    @for (level of levelList; track level.id) {
                         <option [value]="level.id"> {{level.name}} </option>
                     }
                 </select>
@@ -74,7 +93,7 @@
                     formControlName="grade"
                 >
                     <option [value]="0" disabled>Selecciona un grado</option>
-                    @for (grade of filteredGrades; track grade.id) {
+                    @for (grade of gradeList; track grade.id) {
                         <option [value]="grade.id"> {{grade.name}} </option>
                     }
                 </select>
@@ -87,7 +106,7 @@
                     formControlName="section"
                 >
                     <option value="" disabled>Selecciona una sección</option>
-                    @for (section of sections; track section.id) {
+                    @for (section of sectionList; track section.id) {
                         <option [value]="section.id"> {{section.name}} </option>
                     }
                 </select>
@@ -130,13 +149,13 @@
         <button 
         type="button" 
         class="btn btn-secondary rounded px-4"
-        (click)="onCancel()">
+        (click)="cancel()">
         Cancelar
         </button>
         <button 
         type="submit" 
         class="btn btn-success rounded px-4"
-        form="formAddClassroom"
+        form="formEditClassroom"
         [disabled]="formEditClassroom.invalid">
         Editar aula
         </button>

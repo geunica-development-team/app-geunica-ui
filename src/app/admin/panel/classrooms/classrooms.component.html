@@ -2,7 +2,7 @@
     title="Aulas"
 />
 <div class="mb-4 d-flex justify-content-center justify-content-md-end">
-    <button class="btn-custom-green" (click)="modalAddClassroom.openModal()">
+    <button class="btn-custom-green" (click)="openModalAdd()">
         + Registrar nueva aula
     </button>
 </div>
@@ -24,26 +24,26 @@
                 [pageSize]="10"
                 [acciones]="true"
                 [editarFila]="true"
-                [accionEditar]="openModalEditClassroom.bind(this)"
+                [accionEditar]="openModalEdit.bind(this)"
                 [verFila]="false"
                 [eliminarFila]="true"
-                [accionEliminar]="openModalDeleteClassroom.bind(this)"
+                [accionEliminar]="openModalDelete.bind(this)"
             />
         </div>
     </div>
 </div>
 
 <app-modal-add-classroom
-    #modalAddClassroom
+    #modalAdd
     (classroomAdded)="onCreatedOrEditedOrDeleted()"
 />
 
 <app-modal-edit-classroom
-    #modalEditClassroom
+    #modalEdit
     (classroomEdited)="onCreatedOrEditedOrDeleted()"
 />
 
 <app-modal-delete-classroom
-    #modalDeleteClassroom
+    #modalDelete
     (classroomDeleted)="onCreatedOrEditedOrDeleted()"
 />

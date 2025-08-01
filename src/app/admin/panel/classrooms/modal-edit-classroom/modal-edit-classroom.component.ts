@@ -1,13 +1,9 @@
 import { Component, ElementRef, EventEmitter, inject, Input, Output, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { ClassroomService, dataClassroom } from '../../../services/classroom.service';
-import { CampusService, dataCampusAll } from '../../../services/campus.service';
-import { dataLevelAll, LevelService } from '../../../services/level.service';
-import { dataGradeAll, GradeService } from '../../../services/grade.service';
-import { dataSectionAll, SectionService } from '../../../services/section.service';
-import { dataPeriodAll, PeriodService } from '../../../services/period.service';
+import { environment } from '../../../../../enviroments/environment';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-modal-edit-classroom',
@@ -16,181 +12,121 @@ import { dataPeriodAll, PeriodService } from '../../../services/period.service';
   styleUrl: './modal-edit-classroom.component.css'
 })
 export class ModalEditClassroomComponent {
-  @Output() classroomEdited = new EventEmitter<any>();
   @Input() rowId!: number;
+  @Output() classroomEdited = new EventEmitter<void>();
 
-  private modalService = inject(NgbModal);
+  private http = inject(HttpClient);
   private toolsForm = inject(FormBuilder);
-  private notifycation = inject(ToastrService);
-  private classroomService = inject(ClassroomService);
-  private campusService = inject(CampusService);
-  private levelService = inject(LevelService);
-  private gradeService = inject(GradeService);
-  private sectionService = inject(SectionService);
-  private periodService = inject(PeriodService);
+  private notification = inject(ToastrService);
+  private modalService = inject(NgbModal);
+  private baseUrl = environment.apiBase;
 
+  // Dropdown data
+  campusList: any[] = [];
+  levelList: any[] = [];
+  gradeList: any[] = [];
+  sectionList: any[] = [];
+  periodList: any[] = [];
 
-  campus: dataCampusAll[] = []
-  loadCampus() {
-    this.campusService.getAllCampus().subscribe({
-      next: (value) => {
-        this.campus = value;
-      },
-      error: (error: Error) => {
-        console.error('Error al cargar las sedes', error);
-      }
-    })
+  formEditClassroom: FormGroup = this.toolsForm.group({
+    name: ['', Validators.required],
+    campus: [0, Validators.required],
+    level: [0, Validators.required],
+    grade: [0, Validators.required],
+    section: [0, Validators.required],
+    period: [0, Validators.required],
+    state: [null, Validators.required],
+    shift: ['', Validators.required],
+    capacity: [0, Validators.required],
+    specialCapacity: [0, Validators.required]
+  });
+
+  //@ViewChild('modalEdit')   modalEdit!:   ModalEditClassroomComponent;
+@ViewChild('modalEditClassroom') modalEdit!: TemplateRef<any>;
+  ngOnInit() {
+    // preload dropdowns
+    this.http.get<any[]>(`${this.baseUrl}/campus`).subscribe(v => this.campusList = v);
+    this.http.get<any[]>(`${this.baseUrl}/level`).subscribe(v => this.levelList = v);
+    this.http.get<any[]>(`${this.baseUrl}/section`).subscribe(v => this.sectionList = v);
+    this.http.get<any[]>(`${this.baseUrl}/period`).subscribe(v => this.periodList = v);
   }
-
-  //FILTRAR LOS GRADOS POR NIVEL
-  selectedLevelId: number | null = null;
-
-  get filteredGrades() {
-    if (!this.selectedLevelId) return this.grades;
-    return this.grades.filter(grade => grade.level.id === this.selectedLevelId);
-  }
-
-  levels: dataLevelAll[] = []
-  loadLevels() {
-    this.levelService.getAllLevels().subscribe({
-      next: (value) => {
-        this.levels = value;
-      },
-      error: (error: Error) => {
-        console.error('Error al cargar los niveles/programas', error);
-      }
-    })
-  }
-
-  grades: dataGradeAll[] = []
-  loadGrades() {
-    this.gradeService.getAllGrades().subscribe({
-      next: (value) => {
-        this.grades = value;
-      },
-      error: (error: Error) => {
-        console.error('Error al cargar los grados', error);
-      }
-    })
-  }
-
-
-  sections: dataSectionAll[] = []
-  loadSections() {
-    this.sectionService.getAllSections().subscribe({
-      next: (value) => {
-        this.sections = value;
-      },
-      error: (error: Error) => {
-        console.error('Error al cargar las secciones', error);
-      }
-    })
-  }
-
-  periods: dataPeriodAll[] = []
-  loadPeriods() {
-    this.periodService.getAllPeriods().subscribe({
-      next: (value) => {
-        this.periods = value;
-      },
-      error: (error: Error) => {
-        console.error('Error al cargar los periodos', error);
-      }
-    })
-  }
-
-  formEditClassroom = this.toolsForm.group({
-    'name': [''],
-    'campus': [0, [Validators.required]],
-    'grade': [0, [Validators.required]],
-    'level': [0, [Validators.required]],
-    'section': [0, [Validators.required]],
-    'period': [0, [Validators.required]],
-    'shift': ['', [Validators.required]],
-    'capacity': [0, [Validators.required]],
-    'specialCapacity': [0, [Validators.required]]
-  })
-
-  loadClassroomDetails() {
-    if (this.rowId && !isNaN(this.rowId)) {
-      this.classroomService.getClassroomById(this.rowId).subscribe({
-        next: (classroom) => {
-          this.selectedLevelId = classroom.grade.level.id;
-          this.formEditClassroom.patchValue({
-            name: classroom.name,
-            campus: classroom.campus?.id,
-            grade: classroom.grade?.id,
-            section: classroom.section?.id,
-            level: classroom.grade?.level?.id,
-            period: classroom.period?.id,
-            shift: classroom.shift,
-            capacity: classroom.capacity,
-            specialCapacity: classroom.specialCapacity,
-          });
-        },
-        error: (error) => {
-          this.notifycation.error('Error al cargar los detalles del grado', 'Error');
-        }
-      })
-    } else {
-      this.notifycation.error('ID del grado inválido', 'Error');
-    }
-  }
-
-  updateClassroom() {
-    if (this.formEditClassroom.valid && this.rowId) {
-      const updatedClassroom: dataClassroom = {
-        name: this.formEditClassroom.get('name')?.value ?? '',
-        idCampus: Number(this.formEditClassroom.get('campus')?.value) ?? 0,
-        idGrade: Number(this.formEditClassroom.get('grade')?.value) ?? 0,
-        idSection: Number(this.formEditClassroom.get('section')?.value) ?? 0,
-        idPeriod: Number(this.formEditClassroom.get('period')?.value) ?? 0,
-        shift: this.formEditClassroom.get('shift')?.value ?? '',
-        capacity: Number(this.formEditClassroom.get('capacity')?.value) ?? 0,
-        specialCapacity: Number(this.formEditClassroom.get('specialCapacity')?.value) ?? 0,
-      }
-      this.classroomService.updateClassroom(this.rowId, updatedClassroom).subscribe({
-        next: (value: any) => {
-          this.notifycation.success(`Aula actualizada con éxito.`, 'Éxito');
-          this.classroomEdited.emit();
-          this.modalService.dismissAll();
-          this.formEditClassroom.reset();
-        },
-        error: (error: Error) => {
-          this.notifycation.error(error.message, 'Error');
-        }
-      })
-    } else {
-      this.notifycation.error('Debes completar todos los campos correctamente', 'Error');
-    }
-  }
-  
-  @ViewChild('modalEditClassroom') modalEditClassroom!: TemplateRef<ElementRef>;  
 
   openModal() {
-    this.loadClassroomDetails();
-    this.loadCampus();
-    this.loadLevels();
-    this.loadGrades();
-    this.loadSections();
-    this.loadPeriods();
-    this.modalService.open(this.modalEditClassroom, { 
-      centered: true,
-      size: 'lg',
-      backdrop: 'static'
-    });
+    this.loadDetails();
+    this.modalService.open(this.modalEdit, { centered: true, size: 'lg', backdrop: 'static' });
   }
 
-  onCancel() {
-    this.formEditClassroom.reset();
-    this.modalService.dismissAll();
+  loadDetails() {
+    this.http.get<any>(`${this.baseUrl}/classrooms/${this.rowId}`)
+      .subscribe({
+        next: data => {
+          // after fetching, set dependent grade list
+          if (data.grade?.level?.id) {
+            this.loadGrades(data.grade.level.id);
+          }
+          this.formEditClassroom.patchValue({
+            name: data.name,
+            campus: data.campus.id ,
+            level: data.grade.level.id ,
+            grade: data.grade.id ,
+            section: data.section.id ,
+            period: data.period.id ?? null, 
+            state: data.state as any,
+            shift: data.shift,
+            capacity: data.capacity,
+            specialCapacity: data.specialCapacity
+          });
+        },
+        error: () => this.notification.error('Error cargando detalles del aula', 'Error')
+      });
   }
 
   onLevelChange() {
-  const selected = this.formEditClassroom.get('level')?.value;
-  this.selectedLevelId = selected ? +selected : 0;
+    const lvl = this.formEditClassroom.value.level;
+    this.loadGrades(lvl);
+    this.formEditClassroom.patchValue({ grade: 0 });
+  }
 
-  // 🔥 IMPORTANTE: Limpiar el grado seleccionado si cambia el nivel
-  this.formEditClassroom.get('grade')?.setValue(0);
-}
+  loadGrades(levelId: number) {
+    this.http.get<any[]>(`${this.baseUrl}/grade?levelId=${levelId}`)
+      .subscribe(v => this.gradeList = v);
+  }
+
+  save() {
+    if (this.formEditClassroom.invalid || !this.rowId) {
+      this.notification.error('Corrige los campos', 'Error');
+      return;
+    }    
+    const f = this.formEditClassroom.value;   
+    const body = {
+      name:            f.name,
+      shift:           f.shift,
+      capacity:        +f.capacity,
+      specialCapacity: +f.specialCapacity,
+      idCampus:        +f.campus,
+      idGrade:         +f.grade,
+      idSection:       +f.section,
+      // ojo: el DTO define `id_period?`
+      idPeriod:        f.period != null ? +f.period : undefined,
+      state:           f.state
+      
+    };
+    console.log('Payload to backend:', body);
+    this.http
+      .patch(`${this.baseUrl}/classrooms/${this.rowId}`, body)
+      .subscribe({
+        next: () => {
+          this.notification.success('Aula actualizada', 'Éxito');
+          this.classroomEdited.emit();
+          this.modalService.dismissAll();
+        },
+        error: err => this.notification.error(err.error?.message || err.message, 'Error')
+      });
+  }
+
+
+  cancel() {
+    this.formEditClassroom.reset();
+    this.modalService.dismissAll();
+  }
 }

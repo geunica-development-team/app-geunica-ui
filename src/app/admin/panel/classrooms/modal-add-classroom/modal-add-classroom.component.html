@@ -9,7 +9,7 @@
         </button>
     </div>
 
-    <form [formGroup]="formAddClassroom" (ngSubmit)="addClassroom()" id="formAddClassroom">
+    <form [formGroup]="form" (ngSubmit)="addClassroom()" id="formAddClassroom">
         <div class="modal-body bg-white p-4">
             <div class="mb-3">     
                 <label class="form-label fw-medium small">Nombre (opcional)</label>
@@ -18,7 +18,8 @@
                 class="form-control rounded" 
                 placeholder="Nombre del aula"
                 name="name"
-                formControlName="name">
+                formControlName="name"
+                >
             </div>
             <div class="mb-3">
                 <label class="form-label fw-medium small">Periodo</label>
@@ -27,14 +28,16 @@
                     class="form-select form-control"
                     formControlName="period"
                 >
-                    <option value="" disabled>Selecciona un periodo</option>
-                    @for (period of periods; track period.id) {
+                    <option [value]="0" disabled>Selecciona un periodo</option>
+                    @for (period of periodList; track period.id) {
+                        <option class="text-success" [value]="period.id"> {{period.name}} | En curso</option>
+                        <!----
                         @if (period.state === true) {
                             <option class="text-success" [value]="period.id"> {{period.name}} | En curso</option>
                         }
                         @if (period.state === false) {
                             <option class="text-danger" [value]="period.id"> {{period.name}} | Finalizado</option>
-                        }                        
+                        }         --->               
                     }
                 </select>
             </div>
@@ -45,8 +48,8 @@
                     class="form-select form-control"
                     formControlName="campus"
                 >
-                    <option value="" disabled>Selecciona una sede</option>
-                    @for (campus of campus; track campus.id) {
+                    <option [value]="0" disabled>Selecciona una sede</option>
+                    @for (campus of campusList; track campus.id) {
                         <option [value]="campus.id"> {{campus.name}} </option>
                     }
                 </select>
@@ -54,12 +57,13 @@
             <div class="mb-3">
                 <label class="form-label fw-medium small">Nivel/programa</label>
                 <select
+                    formControlName="level"
                     id="level"
                     class="form-select form-control"
-                    (change)="selectedLevelId = +$any($event.target).value"
+                    (change)="onLevelChange()"
                 >
-                    <option value="" disabled selected>Selecciona un nivel/programa</option>
-                    @for (level of levels; track level.id) {
+                    <option [value]="0" disabled selected>Selecciona un nivel/programa</option>
+                    @for (level of levelList; track level.id) {
                         <option [value]="level.id"> {{level.name}} </option>
                     }
                 </select>
@@ -67,25 +71,28 @@
             <div class="mb-3">
                 <label class="form-label fw-medium small">Grado</label>
                 <select
-                    id="grade"
-                    class="form-select form-control"
                     formControlName="grade"
+                    id="grade"
+                    class="form-select form-control"           
                 >
-                    <option value="" disabled>Selecciona un grado</option>
-                    @for (grade of filteredGrades; track grade.id) {
+                    <option [value]="0" disabled>Selecciona un grado</option>
+                    @for (grade of gradeList; track grade.id) {
                         <option [value]="grade.id"> {{grade.name}} </option>
                     }
                 </select>
+                
+                
             </div>
             <div class="mb-3">
                 <label class="form-label fw-medium small">Sección</label>
                 <select
+                    formControlName="section"
                     id="section"
                     class="form-select form-control"
-                    formControlName="section"
+                    
                 >
-                    <option value="" disabled>Selecciona una sección</option>
-                    @for (section of sections; track section.id) {
+                    <option [value]="0" disabled>Selecciona una sección</option>
+                    @for (section of sectionList; track section.id) {
                         <option [value]="section.id"> {{section.name}} </option>
                     }
                 </select>
@@ -93,9 +100,10 @@
             <div class="mb-3">
                 <label class="form-label fw-medium small">Turno</label>
                 <select
+                    formControlName="shift"
                     id="shift"
                     class="form-select form-control"
-                    formControlName="shift"
+                    
                 >
                     <option value="" disabled>Selecciona un turno</option>
                     <option value="Mañana">Mañana</option>
@@ -110,6 +118,7 @@
                 placeholder="Capacidad total"
                 name="capacity"
                 formControlName="capacity"
+                
                 >
             </div>
             <div class="mb-3">
@@ -135,7 +144,7 @@
         type="submit" 
         class="btn btn-success rounded px-4"
         form="formAddClassroom"
-        [disabled]="formAddClassroom.invalid">
+        [disabled]="form.invalid">
         Registrar aula
         </button>
     </div>

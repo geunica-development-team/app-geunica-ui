@@ -1,10 +1,11 @@
 import { Component, inject, ViewChild } from '@angular/core';
 import { PanelHeaderComponent } from "../../../components/dashboard/shared-components/panel-header/panel-header.component";
 import { TableComponent } from '../../../components/table/table.component';
-import { ClassroomService, dataClassroomAll } from '../../services/classroom.service';
 import { ModalAddClassroomComponent } from './modal-add-classroom/modal-add-classroom.component';
 import { ModalEditClassroomComponent } from "./modal-edit-classroom/modal-edit-classroom.component";
 import { ModalDeleteClassroomComponent } from "./modal-delete-classroom/modal-delete-classroom.component";
+import { environment } from '../../../../enviroments/environment';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-classrooms',
@@ -13,97 +14,80 @@ import { ModalDeleteClassroomComponent } from "./modal-delete-classroom/modal-de
   styleUrl: './classrooms.component.css'
 })
 export class ClassroomsComponent {
-  private classroomService = inject(ClassroomService);
+  private http = inject(HttpClient);
+  private BaseUrl = environment.apiBase;
+
+  @ViewChild('classroomTable') classroomTable?: TableComponent;
+  @ViewChild('modalAdd')    modalAddClassroom!:    ModalAddClassroomComponent;
+  @ViewChild('modalEdit')   modalEdit!:   ModalEditClassroomComponent;
+  @ViewChild('modalDelete') modalDelete!: ModalDeleteClassroomComponent;
+
+  // columnas
+  columns = [
+    'ID','Nombre','Periodo','Estado',
+    'Sede','Nivel','Grado y Sección',
+    'Turno','Capacidad'
+  ];
+  columnMappings = {
+    'ID':'id','Nombre':'name','Periodo':'period',
+    'Estado':'state','Sede':'campus','Nivel':'level',
+    'Grado y Sección':'gradeAndSection','Turno':'shift',
+    'Capacidad':'capacityDisplay'
+  };
+
+  rows: any[] = [];
 
   ngOnInit() {
     this.loadClassrooms();
   }
 
-  @ViewChild('modalEditClassroom') modalEditClassroom!: ModalEditClassroomComponent;
-  openModalEditClassroom(row: any) {
-    if (row && row.id && !isNaN(row.id)) {
-      this.modalEditClassroom.rowId = Number(row.id);
-      this.modalEditClassroom.openModal();
-    } else {
-      console.error('ID inválido:', row.id);
-    }
-  }
-
-  @ViewChild('modalDeleteClassroom') modalDeleteClassroom!: ModalDeleteClassroomComponent;
-  openModalDeleteClassroom(row: any) {
-    if (row && row.id && !isNaN(row.id)) {
-      this.modalDeleteClassroom.rowId = Number(row.id);
-      this.modalDeleteClassroom.openModal();
-    } else {
-      console.error('ID inválido:', row.id);
-    }
-  }
-  
-  // COLUMNAS DE LA TABLA
-  columns = [
-    'ID',
-    'Nombre',
-    'Periodo',
-    'Estado',
-    'Sede',
-    'Nivel',
-    'Grado y Sección',
-    'Turno',
-    'Capacidad'
-  ];
-  
-  // MAPEO PARA COLUMNAS Y FILAS
-  columnMappings = {
-    'ID': 'id',
-    'Nombre': 'name',
-    'Periodo': 'period',
-    'Estado': 'stateText',
-    'Sede': 'campus',
-    'Nivel': 'level',
-    'Grado y Sección': 'gradeAndSection',
-    'Turno': 'shift',
-    'Capacidad': 'capacityDisplay'
-  };
-
-  rows: dataClassroomAll[] = [];
-
-  @ViewChild('classroomTable') classroomTable?: TableComponent;
-
   loadClassrooms() {
-    this.classroomService.getAllClassrooms().subscribe({
-      next:(classroom) => {
-        this.rows = classroom.map((classroom: any): dataClassroomAll & { gradeAndSection: string, capacityDisplay: string, stateText: string, stateClass: string } => ({
-          id: classroom.id,
-          name: classroom.name,
-          campus: classroom.campus?.name,
-          level: classroom.grade?.level?.name,
-          grade: classroom.grade?.name,
-          shift: classroom.shift,
-          section: classroom.section?.name,
-          period: classroom.period?.name,
-          specialCapacity: classroom.specialCapacity,
-          capacity: classroom.capacity,
-          stateText: classroom.period?.state === true ? 'En curso': 'Finalizado',
-          stateClass: classroom.period?.state === true ? 'badge bg-success-subtle text-success fw-semibold' : 'badge bg-danger-subtle text-danger fw-semibold',
-          gradeAndSection: `${classroom.grade.name} ${classroom.section.name}`,
-          capacityDisplay: `0/${classroom.capacity} | 0/${classroom.specialCapacity}`
+    this.http.get<any[]>(`${this.BaseUrl}/classrooms`)
+      .subscribe(aulas => {
+        this.rows = aulas.map(a => ({
+          id:               a.id,
+          name:             a.name,
+          period:           a.period?.name ?? '—',
+          state:            a.state ?? '—',
+          stateClass:       a.state === 'En curso' ? 'badge bg-success-subtle text-success fw-semibold'
+                            : a.state === 'Finalizado' ? 'badge bg-danger-subtle text-danger fw-semibold'
+                            : 'badge bg-secondary-subtle text-secondary fw-semibold',
+          campus:           a.campus?.name ?? '—',
+          level:            a.grade?.level?.name ?? '—',
+          gradeAndSection:  `${a.grade?.name ?? ''} - ${a.section?.name ?? ''}`.trim(),
+          shift:            a.shift,
+          capacityDisplay:  `0/${a.capacity} | 0/${a.specialCapacity}`
         }));
-        if (this.classroomTable) {
-          this.classroomTable.updateTable();
-        }
-      },
-        error: (error) => {
-          console.error('Error al cargar la lista de aulas: ', error);
-        }
-    });
+        this.classroomTable?.updateTable();
+      }, err => console.error('Error cargando aulas', err));
   }
 
   applyFilter(event: Event) {
+    const v = (event.target as HTMLInputElement).value;
     if (this.classroomTable) {
-      this.classroomTable.filterValue = (
-        event.target as HTMLInputElement
-      ).value;
+      this.classroomTable.filterValue = v;
       this.classroomTable.updateTable();
+    }
+  }
+
+  /** Abrir modal “Agregar” */
+  openModalAdd(): void {
+    this.modalAddClassroom.openModal();
+  }
+
+  /** Abrir modal “Editar” */
+  openModalEdit(row: any) {
+    if (!isNaN(+row.id)) {
+      this.modalEdit.rowId = +row.id;
+      this.modalEdit.openModal();
+    }
+  }
+
+  /** Abrir modal “Eliminar” */
+  openModalDelete(row: any): void {
+    if (!isNaN(+row.id)) {
+      this.modalDelete.rowId = +row.id;
+      this.modalDelete.openModal();
     }
   }
 

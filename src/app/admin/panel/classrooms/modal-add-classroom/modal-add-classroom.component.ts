@@ -8,6 +8,8 @@ import { dataGradeAll, GradeService } from '../../../services/grade.service';
 import { dataSectionAll, SectionService } from '../../../services/section.service';
 import { ClassroomService } from '../../../services/classroom.service';
 import { dataPeriodAll, PeriodService } from '../../../services/period.service';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../../enviroments/environment';
 
 @Component({
   selector: 'app-modal-add-classroom',
@@ -16,152 +18,108 @@ import { dataPeriodAll, PeriodService } from '../../../services/period.service';
   styleUrl: './modal-add-classroom.component.css'
 })
 export class ModalAddClassroomComponent {
-  @Output() classroomAdded = new EventEmitter<any>();
+  @Output() classroomAdded = new EventEmitter<void>();
 
-  private modalService = inject(NgbModal);
-  private toolsForm = inject(FormBuilder);
-  private notifycation = inject(ToastrService);
-  private classroomService = inject(ClassroomService);
-  private campusService = inject(CampusService);
-  private levelService = inject(LevelService);
-  private gradeService = inject(GradeService);
-  private sectionService = inject(SectionService);
-  private periodService = inject(PeriodService);
+  private http = inject(HttpClient);
+  private formBuilder = inject(FormBuilder);
+  private notification = inject(ToastrService);
+  private modal = inject(NgbModal);
+  private BaseUrl = environment.apiBase;
 
+  // Dropdown lists
+  campusList: any[]   = [];
+  levelList: any[]    = [];
+  gradeList: any[]    = [];
+  sectionList: any[]  = [];
+  periodList: any[]   = [];
+  selectedLevelId = 0;
+
+  // Form
+  form = this.formBuilder.group({
+    name:           ['', Validators.required],
+    campus:         [0, [Validators.required, Validators.min(1)]],
+    level:          [0, [Validators.required, Validators.min(1)]],
+    grade:          [0, [Validators.required, Validators.min(1)]],
+    section:        [0, [Validators.required, Validators.min(1)]],
+    period:         [0, [Validators.required, Validators.min(1)]],
+    shift:          ['', Validators.required],
+    capacity:       [0, [Validators.required, Validators.min(1)]],
+    specialCapacity:[0, [Validators.required, Validators.min(1)]],
+  });
+
+  @ViewChild('modalAddClassroom') modalAddClassroom!: TemplateRef<ElementRef>;
 
   ngOnInit() {
-    this.loadCampus();
-    this.loadLevels();
-    this.loadGrades();
-    this.loadSections();
-    this.loadPeriods();
+    // Carga inicial de listas
+    this.http.get<any[]>(`${this.BaseUrl}/campus`).subscribe(v => this.campusList = v);
+    this.http.get<any[]>(`${this.BaseUrl}/level`).subscribe(v => this.levelList = v);
+    this.http.get<any[]>(`${this.BaseUrl}/section`).subscribe(v => this.sectionList = v);
+    this.http.get<any[]>(`${this.BaseUrl}/period`).subscribe(v => this.periodList = v);
+
   }
 
-  campus: dataCampusAll[] = []
-  loadCampus() {
-    this.campusService.getAllCampus().subscribe({
-      next: (value) => {
-        this.campus = value;
-      },
-      error: (error: Error) => {
-        console.error('Error al cargar las sedes', error);
-      }
-    })
+  // Cuando cambia el nivel, recarga grados
+  onLevelChange() {
+  const lvl = this.form.value.level;
+  console.log('onLevelChange(): nivel seleccionado =', lvl);//mañana revisar esto por consola
+  this.http.get<any[]>(`${this.BaseUrl}/grade?levelId=${lvl}`)
+    .subscribe(v => {
+      console.log('grados recibidos:', v);
+      this.gradeList = v;
+    });
+  this.form.patchValue({ grade: 0 });
   }
 
-  //FILTRAR LOS GRADOS POR NIVEL
-  selectedLevelId: number | null = null;
-
-  get filteredGrades() {
-    if (!this.selectedLevelId) return this.grades;
-    return this.grades.filter(grade => grade.level.id === this.selectedLevelId);
-  }
-
-  levels: dataLevelAll[] = []
-  loadLevels() {
-    this.levelService.getAllLevels().subscribe({
-      next: (value) => {
-        this.levels = value;
-      },
-      error: (error: Error) => {
-        console.error('Error al cargar los niveles/programas', error);
-      }
-    })
-  }
-
-  grades: dataGradeAll[] = []
-  loadGrades() {
-    this.gradeService.getAllGrades().subscribe({
-      next: (value) => {
-        this.grades = value;
-      },
-      error: (error: Error) => {
-        console.error('Error al cargar los grados', error);
-      }
-    })
-  }
-
-
-  sections: dataSectionAll[] = []
-  loadSections() {
-    this.sectionService.getAllSections().subscribe({
-      next: (value) => {
-        this.sections = value;
-      },
-      error: (error: Error) => {
-        console.error('Error al cargar las secciones', error);
-      }
-    })
-  }
-
-  periods: dataPeriodAll[] = []
-  loadPeriods() {
-    this.periodService.getAllPeriods().subscribe({
-      next: (value) => {
-        this.periods = value;
-      },
-      error: (error: Error) => {
-        console.error('Error al cargar los periodos', error);
-      }
-    })
-  }
-
-  formAddClassroom = this.toolsForm.group({
-    'name': [''],
-    'campus': ['', [Validators.required]],
-    'grade': ['', [Validators.required]],
-    'section': ['', [Validators.required]],
-    'period': ['', [Validators.required]],
-    'shift': ['', [Validators.required]],
-    'capacity': ['', [Validators.required]],
-    'specialCapacity': ['', [Validators.required]]
-  })
-
-  addClassroom() {
-    if (this.formAddClassroom.invalid) {
-      this.notifycation.error('Debes completar todos los campos correctamente', 'Error');
-      return;
-    }
-    this.classroomService.addClassroom({
-      name: this.formAddClassroom.get('name')?.value ?? '',
-      idCampus: Number(this.formAddClassroom.get('campus')?.value) ?? 0,
-      idGrade: Number(this.formAddClassroom.get('grade')?.value) ?? 0,
-      idSection: Number(this.formAddClassroom.get('section')?.value) ?? 0,
-      idPeriod: Number(this.formAddClassroom.get('period')?.value) ?? 0,
-      shift: this.formAddClassroom.get('shift')?.value ?? '',
-      capacity: Number(this.formAddClassroom.get('capacity')?.value) ?? 0,
-      specialCapacity: Number(this.formAddClassroom.get('specialCapacity')?.value) ?? 0,
-    }).subscribe({
-      next: (value: any) => {
-        this.notifycation.success('Aula agregada', 'Éxito')
-        this.classroomAdded.emit();
-        this.modalService.dismissAll();
-        this.formAddClassroom.reset();
-      },
-      error: (error: Error) => {
-        this.notifycation.error(error.message, 'Error');
-      }
-    })
-  }
   
-  @ViewChild('modalAddClassroom') modalAddClassroom!: TemplateRef<ElementRef>;  
+
+  loadGrades(levelId: number) {
+  this.gradeList = [];              // limpia la lista vieja
+  this.form.patchValue({ grade: 0 });// resetea el control
+  this.http.get<any[]>(`${this.BaseUrl}/grade?levelId=${levelId}`)
+    .subscribe(v => this.gradeList = v);
+  }
+
 
   openModal() {
-    this.modalService.open(this.modalAddClassroom, { 
-      centered: true,
-      size: 'lg',
-      backdrop: 'static'
-    });
+    this.modal.open(this.modalAddClassroom, { centered: true, size: 'lg', backdrop: 'static' });
+  }
+
+  addClassroom() {
+    if (this.form.invalid) {
+      this.notification.error('Debes completar todos los campos correctamente', 'Error');
+      return;
+    }
+    // Prepara el body con los nombres de la propiedad tal como el backend espera
+    const f = this.form.value;
+    const body = {
+      name:            f.name,                    // ya es string
+      shift:           f.shift,                   // ya es string
+      capacity:        +f.capacity!,               // number
+      specialCapacity: +f.specialCapacity!,        // number
+      idCampus:        +f.campus!,                 // number
+      idGrade:         +f.grade!,                  // number
+      idSection:       +f.section!,                // number
+      idPeriod:        f.period ? +f.period : undefined,  // number | undefined
+    };
+    console.log('Payload a crear aula:', body);
+
+    this.http.post(`${this.BaseUrl}/classrooms`, body)
+      .subscribe({
+        next: () => {
+          this.notification.success('Aula agregada', 'Éxito');
+          this.classroomAdded.emit();
+          this.modal.dismissAll();
+          this.form.reset({ campus: 0, level: 0, grade: 0, section: 0, period: 0, shift: '' });
+        },
+        error: err => {
+          this.notification.error(err.error?.message || err.message, 'Error');
+        }
+      });
   }
 
   onCancel() {
-    this.formAddClassroom.reset({
-      campus: '',
-      grade: '',
-      section: '',
-      period: '',
-      shift: ''
-    });
-    this.modalService.dismissAll();
+    this.gradeList = [];
+    this.form.reset({ campus: 0, level: 0, grade: 0, section: 0, period: 0, shift: '' });
+    this.modal.dismissAll();
   }
 }
