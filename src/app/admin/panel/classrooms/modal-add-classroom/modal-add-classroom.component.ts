@@ -54,7 +54,17 @@ export class ModalAddClassroomComponent {
     this.http.get<any[]>(`${this.BaseUrl}/campus`).subscribe(v => this.campusList = v);
     this.http.get<any[]>(`${this.BaseUrl}/level`).subscribe(v => this.levelList = v);
     this.http.get<any[]>(`${this.BaseUrl}/section`).subscribe(v => this.sectionList = v);
-    this.http.get<any[]>(`${this.BaseUrl}/period`).subscribe(v => this.periodList = v);
+    this.http.get<any[]>(`${this.BaseUrl}/period`)
+    .subscribe(v => {
+      // Mapeamos para añadirles la clase CSS según el estado
+      this.periodList = v.map(p => ({
+        ...p,
+        cssClass: p.state === 'En curso'
+                  ? 'text-success fw-semibold'
+                  : 'text-danger fw-semibold'
+      }));
+    });
+    
 
   }
 

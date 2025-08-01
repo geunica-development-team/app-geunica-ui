@@ -30,14 +30,10 @@
                 >
                     <option [value]="0" disabled>Selecciona un periodo</option>
                     @for (period of periodList; track period.id) {
-                        <option class="text-success" [value]="period.id"> {{period.name}} | En curso</option>
-                        <!----
-                        @if (period.state === true) {
-                            <option class="text-success" [value]="period.id"> {{period.name}} | En curso</option>
-                        }
-                        @if (period.state === false) {
-                            <option class="text-danger" [value]="period.id"> {{period.name}} | Finalizado</option>
-                        }         --->               
+                        <option class="text-success" 
+                        [value]="period.id" 
+                        [attr.class]="period.cssClass"> 
+                        {{period.name}}</option>             
                     }
                 </select>
             </div>

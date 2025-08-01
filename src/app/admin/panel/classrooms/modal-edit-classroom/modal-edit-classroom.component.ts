@@ -48,7 +48,17 @@ export class ModalEditClassroomComponent {
     this.http.get<any[]>(`${this.baseUrl}/campus`).subscribe(v => this.campusList = v);
     this.http.get<any[]>(`${this.baseUrl}/level`).subscribe(v => this.levelList = v);
     this.http.get<any[]>(`${this.baseUrl}/section`).subscribe(v => this.sectionList = v);
-    this.http.get<any[]>(`${this.baseUrl}/period`).subscribe(v => this.periodList = v);
+    this.http.get<any[]>(`${this.baseUrl}/period`)
+    //.subscribe(v => this.periodList = v);
+    .subscribe(v => {
+      // Mapeamos para añadirles la clase CSS según el estado
+      this.periodList = v.map(p => ({
+        ...p,
+        cssClass: p.state === 'En curso'
+                  ? 'text-success fw-semibold'
+                  : 'text-danger fw-semibold'
+      }));
+    });
   }
 
   openModal() {
@@ -71,6 +81,7 @@ export class ModalEditClassroomComponent {
             grade: data.grade.id ,
             section: data.section.id ,
             period: data.period.id ?? null, 
+
             state: data.state as any,
             shift: data.shift,
             capacity: data.capacity,
