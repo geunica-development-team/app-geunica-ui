@@ -221,4 +221,52 @@
             </button>
         </div>
     }
+    @if (activeTab === 'cursos') {
+        <form [formGroup]="formCourse" id="formEditCourse" (ngSubmit)="onSave()">
+            <div class="modal-body bg-white p-4">
+                <div class="mb-3">     
+                    <label class="form-label fw-medium small">Nombre del curso</label>
+                    <input 
+                    type="text" 
+                    class="form-control rounded" 
+                    placeholder="Nombre del curso"
+                    name="CourseName"
+                    formControlName="name">
+                </div>
+                <div class="mb-3">     
+                    <label class="form-label fw-medium small">Codigo</label>
+                    <input 
+                    type="text" 
+                    class="form-control rounded" 
+                    placeholder="Codigo"
+                    name="CodeName"
+                    formControlName="code">
+                </div>
+                <div class="mb-3">     
+                    <label class="form-label fw-medium small">Descripcion</label>
+                    <input 
+                    type="text" 
+                    class="form-control rounded" 
+                    placeholder="Descripcion"
+                    name="DescriptionName"
+                    formControlName="description">
+                </div>
+            </div>
+        </form>
+        <div class="modal-footer bg-white border-top d-flex justify-content-end gap-2 p-3">
+            <button 
+            type="button" 
+            class="btn btn-secondary rounded px-4"
+            (click)="onCancel()">
+            Cancelar
+            </button>
+            <button 
+            type="submit" 
+            class="btn btn-success rounded px-4"
+            form="formEditCourse"
+            [disabled]="formCourse.invalid">
+            Editar curso
+            </button>
+        </div>
+    }
 </ng-template>

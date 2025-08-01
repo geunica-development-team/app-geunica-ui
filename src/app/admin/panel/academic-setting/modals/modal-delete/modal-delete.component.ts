@@ -33,6 +33,7 @@ export class ModalDeleteComponent {
       case 'grados': return 'Eliminar grado';
       case 'secciones': return 'Eliminar sección';
       case 'periodos' : return 'Eliminar periodo';
+      case 'cursos' : return 'Eliminar curso';
       default: return 'Eliminar';
     }
   }
@@ -72,6 +73,9 @@ export class ModalDeleteComponent {
         break;
       case 'periodos':
         url = `${this.apiBase}/period/${this.rowId}`;
+        break;
+      case 'cursos':
+        url = `${this.apiBase}/course/${this.rowId}`;
         break;
       default:
         this.notification.error('Operación no soportada', 'Error');

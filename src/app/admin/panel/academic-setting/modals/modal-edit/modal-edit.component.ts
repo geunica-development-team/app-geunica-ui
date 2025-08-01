@@ -44,6 +44,10 @@ export class ModalEditComponent {
     end_date:   ['', Validators.required],
     state:      [false, Validators.required],
   });
+  formCourse   = this.toolsForm.group({ name: ['', Validators.required], 
+    code: ['', Validators.required],
+    description: ['', Validators.required]
+   })
 
   ngOnInit() {     
     this.http.get<any[]>(`${this.baseUrl}/level`)
@@ -84,6 +88,7 @@ export class ModalEditComponent {
             error: () => this.notification.error('Error cargando detalles del periodo', 'Error')
           });
         break;
+        case 'cursos': this.loadAndPatch('course',this.formCourse,['name','code','description']); break;
     }
   }
 
@@ -108,6 +113,7 @@ export class ModalEditComponent {
       case 'grados': return 'Editar grado';
       case 'secciones': return 'Editar sección';
       case 'periodos':  return 'Editar periodo';
+      case 'cursos':  return 'Editar curso';
       default: return 'Editar';
     }
   }
@@ -127,6 +133,8 @@ onSave() {
       endpoint = 'section';   form = this.formSection;  break;
     case 'periodos':
       endpoint = 'period';    form = this.formPeriod;   break;
+    case 'cursos':
+      endpoint = 'course';    form = this.formCourse;   break;
     default:
       return;
   }
@@ -173,5 +181,6 @@ onSave() {
     this.formGrade.reset();
     this.formSection.reset();
     this.formPeriod.reset({ state: null });
+    this.formCourse.reset();
   }
 }

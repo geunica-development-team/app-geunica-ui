@@ -26,7 +26,8 @@ export class AcademicSettingComponent {
     { id: "niveles", label: "Niveles/Programas", icon: "fa-solid fa-layer-group"},
     { id: "grados", label: "Grados", icon: "fa-solid fa-chart-simple" },
     { id: "secciones", label: "Secciones", icon: "fa-solid fa-users-rectangle" },
-    { id: "periodos", label: "Periodos", icon: "fa-solid fa-calendar" }
+    { id: "periodos", label: "Periodos", icon: "fa-solid fa-calendar" },
+    { id: "cursos", label: "Cursos", icon: "fa-solid fa-book-atlas" }
   ];
 
   activeTab = "sedes";
@@ -48,6 +49,7 @@ export class AcademicSettingComponent {
     this.loadGrades();
     this.loadSections();
     this.loadPeriods();
+    this.loadCourses();
   }
 
   
@@ -61,10 +63,10 @@ export class AcademicSettingComponent {
   loadCampus() {
     this.http.get<any[]>(`${this.baseUrl}/campus`)
       .subscribe(data => {
-        this.rowsCampus = data.map(c=>({
-          id:       c.id,
-          name:     c.name,
-          location: c.location
+        this.rowsCampus = data.map(s=>({
+          id:       s.id,
+          name:     s.name,
+          location: s.location
         }));
         this.campusTable?.updateTable();
       }, e=> console.error(e));
@@ -117,9 +119,9 @@ export class AcademicSettingComponent {
   loadSections() {
     this.http.get<any[]>(`${this.baseUrl}/section`)
       .subscribe(data => {
-        this.rowsSections = data.map(s=>({
-          id:   s.id,
-          name: s.name
+        this.rowsSections = data.map(t=>({
+          id:   t.id,
+          name: t.name
         }));
         this.sectionsTable?.updateTable();
       }, e=> console.error(e));
@@ -150,6 +152,26 @@ export class AcademicSettingComponent {
       }, e=> console.error(e));
   }
 
+  //––– CURSOS –––
+  @ViewChild('coursesTable')coursesTable?: TableComponent;
+  // COLUMNAS DE LA TABLA
+  columnsCourses = ['Nombre','Codigo','Descripcion'];
+  // MAPEO PARA COLUMNAS Y FILAS
+  columnMappingsCourses = {'Nombre': 'name', 'Codigo':'code', 'Descripcion':'description'};
+  rowsCourses: any[] = [];
+  loadCourses(){
+    this.http.get<any[]>(`${this.baseUrl}/course`)
+          .subscribe(data => {
+        this.rowsCourses = data.map(c=>({
+          id:             c.id,
+          name:           c.name,
+          code:           c.code,
+          description:    c.description,
+         }));
+        this.coursesTable?.updateTable();
+      }, e=> console.error(e));
+  }
+
   //––– Acciones editar / borrar (idénticas para todas)
   @ViewChild('modalEdit') modalEdit!: ModalEditComponent;
   @ViewChild('modalDelete') modalDelete!: ModalDeleteComponent;
@@ -175,6 +197,7 @@ export class AcademicSettingComponent {
     if (this.gradesTable   && this.activeTab==='grados')   { this.gradesTable.filterValue   = val; this.gradesTable.updateTable(); }
     if (this.sectionsTable && this.activeTab==='secciones'){ this.sectionsTable.filterValue = val; this.sectionsTable.updateTable(); }
     if (this.periodsTable  && this.activeTab==='periodos') { this.periodsTable.filterValue  = val; this.periodsTable.updateTable(); }
+    if (this.coursesTable  && this.activeTab==='cursos') { this.coursesTable.filterValue  = val; this.coursesTable.updateTable(); }
   }
 
   onCreatedOrEditedOrDeleted() {
@@ -184,6 +207,7 @@ export class AcademicSettingComponent {
       case 'grados':    this.loadGrades();   break;
       case 'secciones': this.loadSections(); break;
       case 'periodos':  this.loadPeriods();  break;
+      case 'cursos':  this.loadCourses();  break;
     }
   }
 }

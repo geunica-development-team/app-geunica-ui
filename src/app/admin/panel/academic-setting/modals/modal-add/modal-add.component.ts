@@ -41,6 +41,10 @@ export class ModalAddComponent {
     end_date:   ['', Validators.required],
     state:     [null, Validators.required],
   });
+  formCourse   = this.fb.group({ name: ['', Validators.required], 
+    code: ['', Validators.required],
+    description: ['', Validators.required]
+   })
 
   @ViewChild('modalAdd') modalAdd!: TemplateRef<ElementRef>; 
 
@@ -64,6 +68,7 @@ export class ModalAddComponent {
     this.formGrade.reset();
     this.formSection.reset();
     this.formPeriod.reset({ state: null });
+    this.formCourse.reset();
   }
 
   getTitle() {
@@ -72,7 +77,8 @@ export class ModalAddComponent {
       niveles:   'Registrar nuevo nivel',
       grados:    'Registrar nuevo grado',
       secciones: 'Registrar nueva sección',
-      periodos:  'Registrar nuevo periodo'
+      periodos:  'Registrar nuevo periodo',
+      cursos:    'Registrar nuevo curso'
     }[this.activeTab]!;
   }
 
@@ -123,6 +129,13 @@ export class ModalAddComponent {
       .subscribe(() => this.onSuccess('Periodo creado'));
   }
 
+  addCourse() {
+    if (this.formCourse.invalid) return this.errorForm();
+    const body = this.formCourse.value;
+    this.http.post(`${this.baseUrl}/course`, body)
+      .subscribe(() => this.onSuccess('Curso creado'));
+  }
+
     private errorForm() {
     this.toastr.error('Debes completar todos los campos correctamente', 'Error');
   }
@@ -133,7 +146,5 @@ export class ModalAddComponent {
     this.added.emit();
     this.resetForms();
   }
-   
-
 
 }
