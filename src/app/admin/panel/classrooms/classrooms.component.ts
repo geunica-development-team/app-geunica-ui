@@ -6,6 +6,7 @@ import { ModalEditClassroomComponent } from "./modal-edit-classroom/modal-edit-c
 import { ModalDeleteClassroomComponent } from "./modal-delete-classroom/modal-delete-classroom.component";
 import { environment } from '../../../../enviroments/environment';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-classrooms',
@@ -16,6 +17,7 @@ import { HttpClient } from '@angular/common/http';
 export class ClassroomsComponent {
   private http = inject(HttpClient);
   private BaseUrl = environment.apiBase;
+  private router = inject(Router)
 
   @ViewChild('classroomTable') classroomTable?: TableComponent;
   @ViewChild('modalAdd')    modalAddClassroom!:    ModalAddClassroomComponent;
@@ -69,6 +71,9 @@ export class ClassroomsComponent {
       this.classroomTable.updateTable();
     }
   }
+  onVerFicha = (row: any) => {
+    this.router.navigate(['/admin', 'panel','aulas',row.id, 'asignadas' ]);
+  };
 
   /** Abrir modal “Agregar” */
   openModalAdd(): void {

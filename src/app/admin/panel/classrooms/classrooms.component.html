@@ -23,9 +23,10 @@
                 [columnMappings]="columnMappings"
                 [pageSize]="10"
                 [acciones]="true"
+                [verFila]="true"
+                [accionVer]="onVerFicha"
                 [editarFila]="true"
                 [accionEditar]="openModalEdit.bind(this)"
-                [verFila]="false"
                 [eliminarFila]="true"
                 [accionEliminar]="openModalDelete.bind(this)"
             />

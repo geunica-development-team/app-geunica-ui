@@ -11,6 +11,7 @@ import { roleGuard } from "../../guards/role.guard";
 import { AcademicSettingComponent } from "./academic-setting/academic-setting.component";
 import { ClassroomsComponent } from "./classrooms/classrooms.component";
 import { AcademicDetailComponent } from "./academic-users/academic-detail/academic-detail.component";
+import { ClassAssignmentComponent } from "./class-assignment/class-assignment.component";
 
 export const adminPanelRoutes: Routes = [
     {
@@ -55,6 +56,9 @@ export const adminPanelRoutes: Routes = [
             {
                 path: 'aulas',
                 component: ClassroomsComponent
+            },
+            { path: 'aulas/:id/asignadas', //aulas/:id/
+                component: ClassAssignmentComponent 
             },
             {
                 path: 'finanzas',
