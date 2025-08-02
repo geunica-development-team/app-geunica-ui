@@ -5,7 +5,7 @@ import { UsersComponent } from "./users/users.component";
 import { FinanceComponent } from "./finance/finance.component";
 import { EnrollmentComponent } from "./enrollment/enrollment.component";
 import { StudentUsersComponent } from "./student-users/student-users.component";
-import { InternalUsersComponent } from "./internal-users/internal-users.component";
+import { AcademicUsersComponent } from "./academic-users/academic-users.component";
 import { StudentDetailsComponent } from "./student-users/student-details/student-details.component";
 import { roleGuard } from "../../guards/role.guard";
 import { AcademicSettingComponent } from "./academic-setting/academic-setting.component";
@@ -41,7 +41,7 @@ export const adminPanelRoutes: Routes = [
             },
             {
                 path: 'equipo-academico',
-                component: InternalUsersComponent
+                component: AcademicUsersComponent
             },
             {
                 path: 'usuarios',
