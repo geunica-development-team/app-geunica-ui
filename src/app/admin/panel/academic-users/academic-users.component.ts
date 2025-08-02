@@ -6,6 +6,8 @@ import { ModalEditAcademicUserComponentComponent } from "./modal-edit-academic-u
 import { ModalDeleteAcademicUserComponentComponent } from "./modal-delete-academic-user-component/modal-delete-academic-user-component.component";
 import { environment } from '../../../../enviroments/environment';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+
 
 
 @Component({
@@ -19,7 +21,7 @@ export class AcademicUsersComponent {
 
   @ViewChild('employeeTable') employeeTable?: TableComponent;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,private router: Router,) {}
     // columnas
   columns = [
     'Nombre',
@@ -51,6 +53,7 @@ export class AcademicUsersComponent {
       .subscribe(data => {
         this.rows = data.map(u => ({
           ...u,
+          
           // Texto para mostrar en la columna “Estado”
           stateText: u.user_state_employee === 'Active' ? 'Activo' : 'Inactivo',
           // Clase CSS para el badge
@@ -72,6 +75,11 @@ export class AcademicUsersComponent {
       this.classroomTable.updateTable();
     }
   }*/
+
+  onVerFicha = (row: any) => {
+    // Navega a /equipo-academico/{id}
+    this.router.navigate(['/admin', 'panel', 'equipo-academico', row.user_id]);
+  };
 
   openModalAdd(): void {}
     /** Abrir modal “Agregar” 

@@ -10,6 +10,7 @@ import { StudentDetailsComponent } from "./student-users/student-details/student
 import { roleGuard } from "../../guards/role.guard";
 import { AcademicSettingComponent } from "./academic-setting/academic-setting.component";
 import { ClassroomsComponent } from "./classrooms/classrooms.component";
+import { AcademicDetailComponent } from "./academic-users/academic-detail/academic-detail.component";
 
 export const adminPanelRoutes: Routes = [
     {
@@ -42,6 +43,10 @@ export const adminPanelRoutes: Routes = [
             {
                 path: 'equipo-academico',
                 component: AcademicUsersComponent
+            },
+            {
+                path: 'equipo-academico/:id',
+                component: AcademicDetailComponent
             },
             {
                 path: 'usuarios',
