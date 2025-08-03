@@ -1,1 +1,56 @@
-<p>modal-edit works!</p>
+<ng-template #modalEditTpl let-modal>
+  <div class="modal-header bg-white border-bottom px-4">
+    <h4 class="modal-title fw-semibold text-dark mb-0">{{ getTitle() }}</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="onCancel()"></button>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSave()">
+    <div class="modal-body bg-white p-4">
+      <!-- Curso -->
+      <div class="mb-3">
+        <label class="form-label fw-medium small">Curso</label>
+        <select class="form-select" formControlName="courseId">
+          <option value="0" disabled>Selecciona un curso</option>
+          <option *ngFor="let c of courses" [value]="c.id">{{ c.name }}</option>
+        </select>
+      </div>
+
+      <!-- Docente y especialidad -->
+      <div class="mb-3">
+        <label class="form-label fw-medium small mb-1">
+          Especialidad: {{ selectedSpecialty }}
+        </label>
+        <div class="d-flex align-items-center">
+          <label class="form-label fw-medium small me-2 mb-0">Docente:</label>
+          <div class="flex-grow-1">
+            <select class="form-select" formControlName="teacherId">
+              <option value="0" disabled>Selecciona un docente</option>
+              <option *ngFor="let t of teachers" [value]="t.id">{{ t.name }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hora inicio / fin -->
+      <div class="row">
+        <div class="col mb-3">
+          <label class="form-label fw-medium small">Hora inicio</label>
+          <input type="time" class="form-control" formControlName="startTime">
+        </div>
+        <div class="col mb-3">
+          <label class="form-label fw-medium small">Hora fin</label>
+          <input type="time" class="form-control" formControlName="endTime">
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer bg-white border-top d-flex justify-content-end gap-2 p-3">
+      <button type="button" class="btn btn-secondary rounded px-4" (click)="onCancel()" [disabled]="isLoading">
+        Cancelar
+      </button>
+      <button type="submit" class="btn btn-success rounded px-4" [disabled]="form.invalid || isLoading">
+        {{ isLoading ? 'Guardando...' : 'Guardar cambios' }}
+      </button>
+    </div>
+  </form>
+</ng-template>

@@ -2,12 +2,6 @@ import { Component, ElementRef, EventEmitter, inject, Input, Output, TemplateRef
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { CampusService, dataCampus } from '../../../../services/campus.service';
-import { dataLevel, dataLevelAll, LevelService } from '../../../../services/level.service';
-import { dataGrade, dataGradeAll, GradeService } from '../../../../services/grade.service';
-import { dataSection, SectionService } from '../../../../services/section.service';
-import { error } from 'console';
-import { dataPeriod, PeriodService } from '../../../../services/period.service';
 import { environment } from '../../../../../../enviroments/environment';
 import { HttpClient } from '@angular/common/http';
 
@@ -25,8 +19,8 @@ export class ModalEditComponent {
   @Output() updated = new EventEmitter<void>();
 
   private http = inject(HttpClient);
-  private toolsForm   = inject(FormBuilder);//  private toolsForm = inject(FormBuilder);
-  private notification = inject(ToastrService);//private toastr = inject(ToastrService);
+  private toolsForm   = inject(FormBuilder);
+  private notification = inject(ToastrService);
   private modalService = inject(NgbModal);
   private baseUrl = environment.apiBase;
   

@@ -4,10 +4,10 @@ import { MenuTabsComponent, TabItem } from '../../../components/dashboard/menu-t
 import { environment } from '../../../../enviroments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { ModalEditComponent } from '../academic-setting/modals/modal-edit/modal-edit.component';
-import { ModalDeleteComponent } from '../academic-setting/modals/modal-delete/modal-delete.component';
-import { ModalAddComponent } from '../academic-setting/modals/modal-add/modal-add.component';
 import { TableComponent } from '../../../components/table/table.component';
+import { ModalAddComponent } from './modals/modal-add/modal-add.component';
+import { ModalDeleteComponent } from './modals/modal-delete/modal-delete.component';
+import { ModalEditComponent } from './modals/modal-edit/modal-edit.component';
 
 export interface ScheduleRow {
   classroom_id: number;
@@ -22,7 +22,7 @@ export interface ScheduleRow {
 
 @Component({
   selector: 'app-class-assignment',
-  imports: [PanelHeaderComponent, MenuTabsComponent, ModalDeleteComponent, ModalEditComponent, ModalAddComponent, TableComponent],
+  imports: [PanelHeaderComponent, MenuTabsComponent,  ModalDeleteComponent, TableComponent, ModalAddComponent, ModalEditComponent],
   templateUrl: './class-assignment.component.html',
   styleUrl: './class-assignment.component.css'
 })
@@ -78,11 +78,27 @@ export class ClassAssignmentComponent implements OnInit {
     this.http
       .get<ScheduleRow[]>(`${this.baseUrl}/aula/${classroomId}/schedule`)
       .subscribe(rows => {
-        console.log('👀 Schedule rows recibidos:', rows);
+        //console.log('👀 Schedule rows recibidos:', rows);
         this.groupByDay(rows);
         // ¡Aquí recargamos la pestaña que está activa!
         this.refreshActiveTab();
       }, err => console.error(err));
+
+    this.loadSchedule();
+  }
+
+    /** Centraliza la petición, el groupBy y el refresh */
+  private loadSchedule() {
+    const classroomId = +this.route.snapshot.paramMap.get('id')!;
+    this.http
+      .get<ScheduleRow[]>(`${this.baseUrl}/aula/${classroomId}/schedule`)
+      .subscribe({
+        next: rows => {
+          this.groupByDay(rows);
+          this.refreshActiveTab();
+        },
+        error: err => console.error(err)
+      });
   }
 
   // Llama al método de carga correspondiente
@@ -171,30 +187,40 @@ export class ClassAssignmentComponent implements OnInit {
     //––– Acciones editar / borrar (idénticas para todas)
   @ViewChild('modalEdit') modalEdit!: ModalEditComponent;
   @ViewChild('modalDelete') modalDelete!: ModalDeleteComponent;
+  // en ClassAssignmentComponent
   openModalEdit(row: any) {
-    if (!isNaN(+row.id)) {
-      this.modalEdit.rowId = +row.id;
-      this.modalEdit.openModal();
-    }
+    console.log('⚡ openModalEdit disparado con row:', row);
+    const scheduleId = +row.schedule_id;
+    if (isNaN(scheduleId)) return;
+    this.modalEdit.data      = row;
+    this.modalEdit.activeTab = this.activeTab;
+    this.modalEdit.openModal();
+  }
+
+    testOpenEdit() {
+    // Borra cualquier dato previo
+    this.modalEdit.data = {
+      schedule_id:    0,
+      course_id:      0,
+      teacher_id:     0,
+      start_time:     '',
+      end_time:       '',
+      teacher_specialty: ''
+    };
+    this.modalEdit.openModal();
   }
 
   openModalDelete(row: any) {
-    if (!isNaN(+row.id)) {
-      this.modalDelete.rowId = +row.id;
-      this.modalDelete.openModal();
-    }
+    const scheduleId = +row.schedule_id;
+    if (isNaN(scheduleId)) return;
+    this.modalDelete.rowId     = scheduleId;
+    this.modalDelete.activeTab = this.activeTab;
+    this.modalDelete.openModal();
   }
 
-
   onCreatedOrEditedOrDeleted() {
-    switch (this.activeTab) {
-      case 'lunes':     this.loadLunes();   break;
-      case 'martes':   this.loadMartes();   break;
-      case 'miercoles':    this.loadMiercoles();   break;
-      case 'jueves': this.loadJueves(); break;
-      case 'viernes':  this.loadViernes();  break;
-      case 'sabado' : this.loadSabado(); break;
-    }
+    console.log("Evento de recarga ejecutado");
+    this.loadSchedule();
   }
 
 }
