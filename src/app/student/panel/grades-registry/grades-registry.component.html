@@ -17,26 +17,19 @@
         <div class="col-12 col-md-6 mb-4">
           <div class="card p-4 h-100">
             <h5 class="mb-3">Notas del 1er bimestre</h5>
-            <div class="table-responsive">
-              <table class="table table-rounded">
-                <thead class="table-success">
-                  <tr>
-                    <th scope="col">NRO</th>
-                    <th scope="col">Concepto</th>
-                    <th scope="col">Nota</th>
-                    
-                  </tr>
-                </thead>
-                <tbody class="table-group-divider">
-                  <tr *ngFor="let item of registryItems; let i = index">
-                    <td>{{ i + 1 }}</td>
-                    <td>{{ item.concepto }}</td>
-                    <td>{{ item.valor }}</td>
-                    
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+
+                <app-table
+                    #libretaUnoTable
+                    [columns]="columnsLibreta"
+                    [originalRows]="rowsLibreta"
+                    [columnMappings]="columnMappingsLibreta"
+  
+                    [acciones]="false"
+ 
+                    [verFila]="false"
+
+                />
+
           </div>
         </div>
 
@@ -56,26 +49,15 @@
         <div class="col-12 col-md-6 mb-4">
           <div class="card p-4 h-100">
             <h5 class="mb-3">Notas del 2do bimestre</h5>
-            <div class="table-responsive">
-              <table class="table table-rounded">
-                <thead class="table-success">
-                  <tr>
-                    <th scope="col">NRO</th>
-                    <th scope="col">Concepto</th>
-                    <th scope="col">Nota</th>
+
+                <app-table
+                    #libretaTable
+                    [columns]="columnsLibreta"
+                    [originalRows]="rowsLibreta"
+                    [columnMappings]="columnMappingsLibreta"
                     
-                  </tr>
-                </thead>
-                <tbody class="table-group-divider">
-                  <tr *ngFor="let item of registryItems; let i = index">
-                    <td>{{ i + 1 }}</td>
-                    <td>{{ item.concepto }}</td>
-                    <td>{{ item.valor }}</td>
-                    
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+                />
+
           </div>
         </div>
 

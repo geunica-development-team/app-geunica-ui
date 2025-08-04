@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { DataStudentService } from '../../services/dataStudent.service';
 import { Curso } from '../../services/modelStudent';
 import { forkJoin } from 'rxjs';
 import { MenuTabsComponent, TabItem } from '../../../components/dashboard/menu-tabs/menu-tabs.component';
 import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
+import { TableComponent } from '../../../components/table/table.component';
 
 interface RegistryItem {
   concepto: string;
@@ -14,7 +15,7 @@ interface RegistryItem {
 
 @Component({
   selector: 'app-grades-registry',
-  imports: [CommonModule, RouterModule, MenuTabsComponent, PanelHeaderComponent],
+  imports: [CommonModule, RouterModule, MenuTabsComponent, PanelHeaderComponent, TableComponent],
   templateUrl: './grades-registry.component.html',
   styleUrl: './grades-registry.component.css'
 })
@@ -48,10 +49,12 @@ export class GradesRegistryComponent implements OnInit {
     }
 
 
-  ngOnInit(): void {
+  ngOnInit(): void {/*
   const idParam = this.route.snapshot.paramMap.get('id');
   const courseId = idParam ? +idParam : null;
   if (!courseId) return;
+
+
 
   // 1) Cargo curso + exámenes + notas en paralelo
   forkJoin({
@@ -83,6 +86,17 @@ export class GradesRegistryComponent implements OnInit {
     console.error('Error cargando datos:', err);
     this.loading = false;
   });
+  s*/
+  }
+  
+
+  @ViewChild('libretaTable') libretaTable?: TableComponent;
+  columnsLibreta = ['Vence','Cuota','Accion', 'Monto'];
+  
+  // MAPEO PARA COLUMNAS Y FILAS
+  columnMappingsLibreta = {'ID': 'id','Nombre': 'name','Localización': 'location'};
+  rowsLibreta: any[] = [];
+  loadLibreta() {
 
   }
 

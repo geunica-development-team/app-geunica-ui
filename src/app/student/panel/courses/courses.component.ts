@@ -6,6 +6,9 @@ import { RouterModule } from '@angular/router';
 import { SearcherComponent } from '../../../components/searcher/searcher.component';
 import { HttpClient } from '@angular/common/http';
 import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
+import { environment } from '../../../../enviroments/environment';
+
+
 
 @Component({
   selector: 'app-courses',
@@ -15,28 +18,25 @@ import { PanelHeaderComponent } from '../../../components/dashboard/shared-compo
   styleUrls: ['./courses.component.css']
 })
 export class CoursesComponent implements OnInit {
-  courses: any[]        = [];
-  filteredCourses: any[] = [];
+  courses: any[] = [];
+  filteredCourse: any[] = [];
   searchTerm: string = '';
+
+  private baseUrl = environment.apiBase;
 
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
-    // Llama directamente a la vista /cursos
-    this.http.get<any[]>('http://localhost:3000/course/cursos')
-      .subscribe(data => {
-        this.courses = data;
-        this.filteredCourses = data;
-      }, err => {
-        console.error('Error al cargar cursos:', err);
-      });
+    this.http.get<any[]>(`${this.baseUrl}/student/me/courses`)
+      .subscribe(
+        data => {
+          this.courses = data;
+          this.filteredCourse = data;
+        },
+        err => console.error('Error al cargar mis cursos:', err)
+      );
   }
 
-  onSearch() {
-    // filtra por course_name si quieres...
-    this.filteredCourses = this.courses.filter(c =>
-      c.course_name.toLowerCase().includes(this.searchTerm.toLowerCase())
-    );
-  }
+
 
 }

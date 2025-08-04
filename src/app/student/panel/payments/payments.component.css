@@ -32,3 +32,41 @@
   height: 10.7rem;
 }
 
+
+
+.section-title {
+  display: inline-block;
+  border-bottom: 3px solid #919191;
+  padding-bottom: 0.25rem;
+}
+
+.table-rounded {
+  border-collapse: separate;
+  border-spacing: 0;
+  /* Borde exterior */
+  border: 1px solid #d3d3d3;  /* color azul de Bootstrap “primary” */
+  border-radius: 0.5rem;      /* radio para todas las esquinas */
+  overflow: hidden;           /* para que el radio se aplique */
+}
+
+/* Esquinas superiores */
+.table-rounded thead tr th:first-child {
+  border-top-left-radius: 0.5rem;
+}
+.table-rounded thead tr th:last-child {
+  border-top-right-radius: 0.5rem;
+}
+
+/* Esquinas inferiores */
+.table-rounded tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 0.5rem;
+}
+.table-rounded tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 0.5rem;
+}
+
+/* Opcional: quitar bordes dobles internos si lo deseas */
+.table-rounded th,
+.table-rounded td {
+  border: 1px solid #dee2e6;
+}

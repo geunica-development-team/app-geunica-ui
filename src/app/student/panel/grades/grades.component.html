@@ -6,8 +6,10 @@
     <div class="col-12 col-md-6">
       <app-searcher
         [(term)]="searchTerm"
-        placeholder="Buscar nota por curso"
-        (search)="onSearch()"
+        placeholder="Buscar nota por curso..."
+        [items]="courses"
+        field="courseName" 
+        (filtered)="filteredCourse = $event"
       ></app-searcher>
     </div>
   </div>
@@ -15,14 +17,14 @@
   <!-- 2. Fila de las cards -->
       
     <div class="row g-4">
-      <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let course of filteredCourses">
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let course of filteredCourse">
         
           <app-card-courses class="h-100"
             [etiquetaTitulo]="'CURSO'"
-            [titulo]="course.course_name"
+            [titulo]="course.courseName"
             [etiquetaSubtitulo1]="'CÓDIGO'"
-            [subtitulo1]="course.course_code"
-            [link]="['/student/panel/grades', course.id_curso, 'gradesRegistry']">
+            [subtitulo1]="course.courseCode"
+            [link]="['/student/panel/grades',  'gradesRegistry']"><!---course.courseId,-->
             
             <!-- este ng-content se pegará al final de card-body -->
 
