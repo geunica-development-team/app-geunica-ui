@@ -11,6 +11,7 @@ import { TableComponent } from '../../../components/table/table.component';
 import { USERS } from '../../../admin/utility/db-simulator';
 import { ModalDebtDetailsComponent } from '../../../admin/panel/student-users/modal-debt-details/modal-debt-details.component';
 import { FormsModule } from '@angular/forms';
+import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
 
 interface GradeInfo {
   grado:     string;
@@ -21,7 +22,8 @@ interface GradeInfo {
 
 @Component({
   selector: 'app-attendance-managment',
-  imports: [CommonModule, SearcherComponent, CardCoursesComponent, AppModalComponent, TableComponent, FormsModule],
+  imports: [CommonModule, SearcherComponent, CardCoursesComponent, 
+    AppModalComponent, TableComponent, FormsModule, PanelHeaderComponent],
   templateUrl: './attendance-managment.component.html',
   styleUrl: './attendance-managment.component.css'
 })

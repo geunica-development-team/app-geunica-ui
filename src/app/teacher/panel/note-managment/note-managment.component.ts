@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { USERS } from '../../../admin/utility/db-simulator';
 import { TableComponent } from '../../../components/table/table.component';
 import { FormsModule } from '@angular/forms';
+import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
 
 interface GradeInfo {
   grado:     string;
@@ -22,7 +23,8 @@ interface GradeInfo {
 
 @Component({
   selector: 'app-note-managment',
-  imports: [CommonModule, SearcherComponent, CardCoursesComponent, AppModalComponent, TableComponent, FormsModule],
+  imports: [CommonModule, SearcherComponent, CardCoursesComponent, 
+    AppModalComponent, TableComponent, FormsModule, PanelHeaderComponent],
   templateUrl: './note-managment.component.html',
   styleUrl: './note-managment.component.css'
 })

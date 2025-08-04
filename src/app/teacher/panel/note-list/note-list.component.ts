@@ -6,6 +6,7 @@ import { DataStudentService } from '../../../student/services/dataStudent.servic
 import { forkJoin } from 'rxjs';
 
 import { MenuTabsComponent, TabItem } from '../../../components/dashboard/menu-tabs/menu-tabs.component';
+import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
 
 interface RegistryItem {
   concepto: string;
@@ -14,7 +15,7 @@ interface RegistryItem {
 
 @Component({
   selector: 'app-note-list',
-  imports: [CommonModule, RouterModule, MenuTabsComponent],
+  imports: [CommonModule, RouterModule, MenuTabsComponent, PanelHeaderComponent],
   templateUrl: './note-list.component.html',
   styleUrl: './note-list.component.css'
 })

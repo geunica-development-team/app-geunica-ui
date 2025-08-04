@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FlatAsistencia } from '../../services/modelTeacher';
 import { ActivatedRoute } from '@angular/router';
 import { DataTeacherService } from '../../services/dataTeacher.service';
+import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
 
 type Status = 'asistió' | 'falto' | 'tardanza';
 

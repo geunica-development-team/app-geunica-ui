@@ -4,6 +4,7 @@ import {  DataStudentService } from '../../services/dataStudent.service';
 import { CardCoursesComponent } from '../../../components/card-courses/card-courses.component';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
 
 
 interface Attendance {
@@ -23,7 +24,7 @@ interface Session {
 
 @Component({
   selector: 'app-attendance',
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, PanelHeaderComponent],
   templateUrl: './attendance.component.html',
   styleUrl: './attendance.component.css'
 })

@@ -4,9 +4,10 @@ import { CalendarOptions, DayHeaderContentArg } from '@fullcalendar/core'; // us
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid';
+import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
 @Component({
   selector: 'app-schedule',
-  imports: [FullCalendarModule,],
+  imports: [FullCalendarModule, PanelHeaderComponent],
   templateUrl: './schedule.component.html',
   styleUrl: './schedule.component.css'
 })

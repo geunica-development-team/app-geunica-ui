@@ -7,11 +7,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from '../../../app.component';
 import { AppModalComponent } from '../../../components/app-modal/app-modal.component';
 import { Anuncio } from '../../services/modelStudent';
+import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
 
 
 @Component({
   selector: 'app-announcement',
-  imports: [CommonModule, AppModalComponent],
+  imports: [CommonModule, AppModalComponent, PanelHeaderComponent],
   templateUrl: './announcement.component.html',
   styleUrl: './announcement.component.css'
 })

@@ -3,10 +3,11 @@ import { Component, OnInit } from '@angular/core';
 import { CardCoursesComponent } from '../../../components/card-courses/card-courses.component';
 import { SearcherComponent } from '../../../components/searcher/searcher.component';
 import { HttpClient } from '@angular/common/http';
+import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
 
 @Component({
   selector: 'app-assigned-courses',
-  imports: [CommonModule, CardCoursesComponent, SearcherComponent],
+  imports: [CommonModule, CardCoursesComponent, SearcherComponent, PanelHeaderComponent],
   templateUrl: './assigned-courses.component.html',
   styleUrl: './assigned-courses.component.css'
 })

@@ -7,10 +7,11 @@ import { SearcherComponent } from '../../../components/searcher/searcher.compone
 import { RouterModule } from '@angular/router';
 import { Curso, Docente } from '../../services/modelStudent';
 import { HttpClient } from '@angular/common/http';
+import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
 
 @Component({
   selector: 'app-grades',
-  imports: [CommonModule, FormsModule, CardCoursesComponent, SearcherComponent, RouterModule],
+  imports: [CommonModule, FormsModule, CardCoursesComponent, SearcherComponent, RouterModule, PanelHeaderComponent],
   templateUrl: './grades.component.html',
   styleUrl: './grades.component.css'
 })

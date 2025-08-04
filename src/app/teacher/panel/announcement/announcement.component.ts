@@ -7,11 +7,12 @@ import { Anuncio } from '../../services/modelTeacher';
 import { DataTeacherService } from '../../services/dataTeacher.service';
 import {QuillModule } from 'ngx-quill'
 import { FormsModule } from '@angular/forms';
+import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
 
 @Component({
   selector: 'app-announcement',
   standalone: true,
-  imports: [CommonModule, AppModalComponent,  FormsModule, QuillModule ],
+  imports: [CommonModule, AppModalComponent,  FormsModule, QuillModule, PanelHeaderComponent ],
   templateUrl: './announcement.component.html',
   styleUrl: './announcement.component.css'
 })

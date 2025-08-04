@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
 interface ScheduleItem {
   vencimiento: string;
   concepto: string;
@@ -8,7 +9,7 @@ interface ScheduleItem {
 }
 @Component({
   selector: 'app-payments',
-  imports: [CommonModule],
+  imports: [CommonModule, PanelHeaderComponent],
   templateUrl: './payments.component.html',
   styleUrl: './payments.component.css'
 })

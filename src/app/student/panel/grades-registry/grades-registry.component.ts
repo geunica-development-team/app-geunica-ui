@@ -5,6 +5,7 @@ import { DataStudentService } from '../../services/dataStudent.service';
 import { Curso } from '../../services/modelStudent';
 import { forkJoin } from 'rxjs';
 import { MenuTabsComponent, TabItem } from '../../../components/dashboard/menu-tabs/menu-tabs.component';
+import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
 
 interface RegistryItem {
   concepto: string;
@@ -13,7 +14,7 @@ interface RegistryItem {
 
 @Component({
   selector: 'app-grades-registry',
-  imports: [CommonModule, RouterModule, MenuTabsComponent],
+  imports: [CommonModule, RouterModule, MenuTabsComponent, PanelHeaderComponent],
   templateUrl: './grades-registry.component.html',
   styleUrl: './grades-registry.component.css'
 })

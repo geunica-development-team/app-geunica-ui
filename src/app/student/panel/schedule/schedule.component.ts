@@ -5,9 +5,10 @@ import { CommonModule } from '@angular/common';
 import { CalendarOptions, DayHeaderContentArg } from '@fullcalendar/core'; // useful for typechecking
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
+import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
 @Component({
   selector: 'app-schedule',
-  imports: [ FullCalendarModule, CommonModule],
+  imports: [ FullCalendarModule, CommonModule, PanelHeaderComponent],
 
   templateUrl: './schedule.component.html',
   styleUrl: './schedule.component.css'

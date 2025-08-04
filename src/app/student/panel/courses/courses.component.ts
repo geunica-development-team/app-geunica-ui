@@ -5,11 +5,12 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { SearcherComponent } from '../../../components/searcher/searcher.component';
 import { HttpClient } from '@angular/common/http';
+import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
 
 @Component({
   selector: 'app-courses',
   
-  imports: [CardCoursesComponent, CommonModule, FormsModule, RouterModule, SearcherComponent],
+  imports: [CardCoursesComponent, CommonModule, FormsModule, RouterModule, SearcherComponent, PanelHeaderComponent],
   templateUrl: './courses.component.html',
   styleUrls: ['./courses.component.css']
 })

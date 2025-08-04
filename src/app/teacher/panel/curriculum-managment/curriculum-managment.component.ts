@@ -4,10 +4,11 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CardListComponent } from '../../../components/card-list/card-list.component';
 import { CommonModule } from '@angular/common';
 import { DataTeacherService } from '../../services/dataTeacher.service';
+import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
 
 @Component({
   selector: 'app-curriculum-managment',
-  imports: [CardListComponent, CommonModule, RouterModule],
+  imports: [CardListComponent, CommonModule, RouterModule, PanelHeaderComponent],
   templateUrl: './curriculum-managment.component.html',
   styleUrl: './curriculum-managment.component.css'
 })
