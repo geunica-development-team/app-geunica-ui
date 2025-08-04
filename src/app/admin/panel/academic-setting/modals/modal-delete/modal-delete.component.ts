@@ -67,6 +67,14 @@ export class ModalDeleteComponent {
       this.notifycation.error('ID de rol no válido', 'Error');
     }
   }
+
+  deleteCourse() {
+    if (this.rowId) {
+      console.log('HOLIIIIIIIIIIIIIII')
+    } else {
+      this.notifycation.error('ID de curso no válido', 'Error');
+    }
+  }
   
   @ViewChild('modalDelete') modalDelete!: TemplateRef<ElementRef>;
   openModal() {

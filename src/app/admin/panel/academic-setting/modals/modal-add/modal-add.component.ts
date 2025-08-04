@@ -8,6 +8,7 @@ import { GradeService } from '../../../../services/grade.service';
 import { SectionService } from '../../../../services/section.service';
 import { PeriodService } from '../../../../services/period.service';
 import { RoleService } from '../../../../services/role.service';
+import { CourseService } from '../../../../services/course.service';
 
 @Component({
   selector: 'app-modal-add',
@@ -28,6 +29,7 @@ export class ModalAddComponent {
   private sectionService = inject(SectionService);
   private periodService = inject(PeriodService);
   private roleService = inject(RoleService);
+  private courseService = inject(CourseService);
 
   ngOnInit() {
     this.loadLevels();
@@ -40,6 +42,7 @@ export class ModalAddComponent {
       case 'grados': return 'Registrar nuevo grado';
       case 'secciones': return 'Registrar nueva sección';
       case 'roles': return 'Registrar nuevo rol';
+      case 'cursos': return 'Registrar nuevo curso';
       default: return 'Registrar';
     }
   }
@@ -223,6 +226,51 @@ export class ModalAddComponent {
     })
   }
 
+  //PARA AGREGAR CURSO
+  formAddCourse = this.toolsForm.group({
+    'name': ['', [Validators.required]],
+    'code': ['', [Validators.required]],
+    'description': [''],
+    'mode': ['', [Validators.required]],
+    'area': ['', [Validators.required]],
+    'type': ['', [Validators.required]],
+  });
+  
+  addCourse() {
+    if (this.formAddCourse.invalid) {
+      this.notifycation.error('Debes completar todos los campos correctamente', 'Error');
+      return;
+    }
+
+    this.courseService.addCourse({
+      name: this.formAddCourse.get('name')?.value ?? '',
+      code: this.formAddCourse.get('code')?.value ?? '',
+      description: this.formAddCourse.get('description')?.value ?? '',
+      mode: this.formAddCourse.get('mode')?.value ?? '',
+      area: this.formAddCourse.get('area')?.value ?? '',
+      type: this.formAddCourse.get('type')?.value ?? '',
+      state: 'active' // valor por defecto
+    }).subscribe({
+      next: (value: any) => {
+        this.notifycation.success('Curso agregado', 'Éxito');
+        this.added.emit();
+        this.modalService.dismissAll();
+        this.formAddCourse.reset();
+      },
+      error: (error: Error) => {
+        this.notifycation.error(error.message, 'Error');
+      }
+    });
+  }
+
+  areaOptions = [
+    { value: 'Científica', label: 'Científica' },
+    { value: 'Humanidades', label: 'Humanidades' },
+    { value: 'Matemática', label: 'Matemática' },
+    { value: 'Arte', label: 'Arte' },
+    { value: 'Deporte', label: 'Deporte' },
+  ];
+
   @ViewChild('modalAdd') modalAdd!: TemplateRef<ElementRef>;  
 
   openModal() {
@@ -255,6 +303,9 @@ export class ModalAddComponent {
         break;
       case 'roles':
         this.formAddRole.reset();
+        break;
+      case 'cursos':
+        this.formAddCourse.reset();
         break;
     }
     this.modalService.dismissAll();

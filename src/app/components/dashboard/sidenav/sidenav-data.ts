@@ -100,11 +100,6 @@ export const menuItemsAdmin = [
       active: true 
     },
     { 
-      icon: 'fa-solid fa-people-roof', 
-      label: 'Aulas', 
-      route: 'aulas' 
-    },
-    { 
       icon: 'fa-solid fa-calendar', 
       label: 'Horarios', 
       route: 'horarios' 
@@ -124,6 +119,16 @@ export const menuItemsAdmin = [
       icon: 'fa-solid fa-sliders', 
       label: 'Configuración académica', 
       route: 'configuracion-academica'
+    },
+    { 
+      icon: 'fa-solid fa-people-roof', 
+      label: 'Aulas', 
+      route: 'aulas' 
+    },
+    { 
+      icon: 'fa-solid fa-object-ungroup', 
+      label: 'Asignación de cursos', 
+      route: 'asignacion-cursos' 
     },
     { 
       icon: 'fas fa-cog', 

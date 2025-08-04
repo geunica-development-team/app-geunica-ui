@@ -139,6 +139,40 @@
     </div>
 }
 
+@if (activeTab === 'cursos') {
+    <div class="mb-4 d-flex justify-content-center justify-content-md-end">
+        <button class="btn-custom-green" (click)="modalAdd.openModal()">
+            <i class="fa-solid fa-plus me-2"></i>Registrar nuevo curso
+        </button>
+    </div>
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Cursos</h5>
+                <div class="input-group" style="width: 250px;">
+                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                <input (input)="applyFilter($event)" type="text" class="form-control form-control-sm" placeholder="Buscar curso...">
+                </div>
+            </div>
+            <div class="card-body p-3">
+                <app-table
+                    #coursesTable
+                    [columns]="columnsCourses"
+                    [originalRows]="rowsCourses"
+                    [columnMappings]="columnMappingsCourses"
+                    [pageSize]="10"
+                    [acciones]="true"
+                    [editarFila]="true"
+                    [accionEditar]="openModalEdit.bind(this)"
+                    [verFila]="false"
+                    [eliminarFila]="true"
+                    [accionEliminar]="openModalDelete.bind(this)"
+                />
+            </div>
+        </div>
+    </div>
+}
+
 </app-menu-tabs>
 
 <app-modal-add

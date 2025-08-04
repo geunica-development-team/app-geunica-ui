@@ -12,6 +12,7 @@ import { ModalEditComponent } from "./modals/modal-edit/modal-edit.component";
 import { ModalDeleteComponent } from './modals/modal-delete/modal-delete.component';
 import { dataPeriodAll, PeriodService } from '../../services/period.service';
 import { dataRoleAll, RoleService } from '../../services/role.service';
+import { CourseService, dataCourseAll } from '../../services/course.service';
 
 @Component({
   selector: 'app-academic-setting',
@@ -24,6 +25,7 @@ export class AcademicSettingComponent {
   private gradeService = inject(GradeService);
   private sectionService = inject(SectionService);
   private periodService = inject(PeriodService);
+  private courseService = inject(CourseService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
@@ -32,6 +34,7 @@ export class AcademicSettingComponent {
     { id: "grados", label: "Grados", icon: "fa-solid fa-chart-simple" },
     { id: "secciones", label: "Secciones", icon: "fa-solid fa-users-rectangle" },
     { id: "periodos", label: "Periodos", icon: "fa-solid fa-calendar" },
+    { id: "cursos", label: "Cursos", icon: "fa-solid fa-swatchbook" },
   ];
 
   activeTab = "niveles";
@@ -58,6 +61,7 @@ export class AcademicSettingComponent {
     this.loadGrades();
     this.loadSections();
     this.loadPeriods();
+    this.loadCourses();
   }
 
   @ViewChild('modalEdit') modalEdit!: ModalEditComponent;
@@ -235,6 +239,63 @@ export class AcademicSettingComponent {
     });
   }
 
+  //PARA TABLA COURSES:
+  // COLUMNAS DE LA TABLA
+  columnsCourses = [
+  'ID',
+  'Nombre',
+  'Código',
+  'Descripción',
+  'Modalidad',
+  'Área',
+  'Tipo',
+  'Estado'
+  ];
+  
+  // MAPEO PARA COLUMNAS Y FILAS
+  columnMappingsCourses = {
+  'ID': 'id',
+  'Nombre': 'name',
+  'Código': 'code',
+  'Descripción': 'description',
+  'Modalidad': 'mode',
+  'Área': 'area',
+  'Tipo': 'type',
+  'Estado': 'stateText'
+  };
+
+  rowsCourses: dataCourseAll[] = [];
+
+  @ViewChild('coursesTable') coursesTable?: TableComponent;
+
+  loadCourses() {
+    this.courseService.getAllCourses().subscribe({
+      next: (courses: dataCourseAll[]) => {
+        this.rowsCourses = courses.map((course): dataCourseAll & { stateText: string, stateClass: string } => ({
+          id: course.id,
+          name: course.name,
+          code: course.code,
+          description: course.description,
+          mode: course.mode,
+          area: course.area,
+          type: course.type,
+          state: course.state,
+          stateText: course.state === 'active' ? 'Activo' : 'Inactivo',
+          stateClass: course.state === 'active'
+            ? 'badge bg-success-subtle text-success fw-semibold'
+            : 'badge bg-danger-subtle text-danger fw-semibold'
+        }));
+        
+        if (this.coursesTable) {
+          this.coursesTable.updateTable();
+        }
+      },
+      error: (error) => {
+        console.error('Error al cargar la lista de cursos: ', error);
+      }
+    });
+  }
+
   //PARA EL FILTRO DE LA TABLA (BUSCADOR)
   applyFilter(event: Event) {
     if (this.levelsTable) {
@@ -261,6 +322,12 @@ export class AcademicSettingComponent {
       ).value;
       this.periodsTable.updateTable();
     }
+    else if (this.coursesTable) {
+      this.coursesTable.filterValue = (
+        event.target as HTMLInputElement
+      ).value;
+      this.coursesTable.updateTable();
+    }
   }
 
   onCreatedOrEditedOrDeleted() {
@@ -276,6 +343,9 @@ export class AcademicSettingComponent {
         break;
       case 'periodos':
         this.loadPeriods();
+        break;
+      case 'cursos':
+        this.loadCourses();
         break;
     }
   }

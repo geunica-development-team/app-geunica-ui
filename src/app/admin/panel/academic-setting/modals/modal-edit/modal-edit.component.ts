@@ -6,9 +6,9 @@ import { CampusService, dataCampus } from '../../../../services/campus.service';
 import { dataLevel, dataLevelAll, LevelService } from '../../../../services/level.service';
 import { dataGrade, dataGradeAll, GradeService } from '../../../../services/grade.service';
 import { dataSection, SectionService } from '../../../../services/section.service';
-import { error } from 'console';
 import { dataPeriod, PeriodService } from '../../../../services/period.service';
 import { dataRole, RoleService } from '../../../../services/role.service';
+import { CourseService, dataCourse } from '../../../../services/course.service';
 
 @Component({
   selector: 'app-modal-edit',
@@ -30,6 +30,7 @@ export class ModalEditComponent {
   private sectionService = inject(SectionService);
   private periodService = inject(PeriodService);
   private roleService = inject(RoleService);
+  private courseService = inject(CourseService);
 
   getTitle(): string {
     switch (this.activeTab) {
@@ -37,7 +38,8 @@ export class ModalEditComponent {
       case 'niveles': return 'Editar nivel/programa';
       case 'grados': return 'Editar grado';
       case 'secciones': return 'Editar sección';
-      case 'roles': return 'Editar rol';      
+      case 'roles': return 'Editar rol';
+      case 'cursos': return 'Editar curso';      
       default: return 'Editar';
     }
   }
@@ -335,6 +337,76 @@ export class ModalEditComponent {
     }
   }
 
+  //PARA EDITAR CURSO
+  formEditCourse = this.toolsForm.group({
+    'name': ['', [Validators.required]],
+    'code': ['', [Validators.required]],
+    'description': [''],
+    'mode': ['', [Validators.required]],
+    'area': ['', [Validators.required]],
+    'type': ['', [Validators.required]],
+    'state': ['', [Validators.required]]
+  })
+
+  loadCourseDetails() {
+    if (this.rowId && !isNaN(this.rowId)) {
+      this.courseService.getCourseById(this.rowId).subscribe({
+        next: (course) => {
+          this.formEditCourse.patchValue({
+            name: course.name,
+            code: course.code,
+            description: course.description,
+            mode: course.mode,
+            area: course.area,
+            type: course.type,
+            state: course.state
+          });
+        },
+        error: (error) => {
+          this.notifycation.error('Error al cargar los detalles del curso', 'Error');
+        }
+      })
+    } else {
+      this.notifycation.error('ID del curso inválido', 'Error');
+    }
+  }
+
+  updateCourse() {
+    if (this.formEditCourse.valid && this.rowId) {
+      const updatedCourse: dataCourse = {
+      name: this.formEditCourse.get('name')?.value ?? '',
+      code: this.formEditCourse.get('code')?.value ?? '',
+      description: this.formEditCourse.get('description')?.value ?? '',
+      mode: this.formEditCourse.get('mode')?.value ?? '',
+      area: this.formEditCourse.get('area')?.value ?? '',
+      type: this.formEditCourse.get('type')?.value ?? '',
+      state: this.formEditCourse.get('state')?.value ?? '',
+      }
+      this.courseService.updateCourse(this.rowId, updatedCourse).subscribe({
+
+        next: (value: any) => {
+          this.notifycation.success(`Curso actualizado con éxito.`, 'Éxito');
+          this.updated.emit();
+          this.modalService.dismissAll();
+          this.formEditCourse.reset();
+        },
+        error: (error: Error) => {
+          this.notifycation.error(error.message, 'Error');
+        }
+      })
+    } else {
+      this.notifycation.error('Debes completar todos los campos correctamente', 'Error');
+    }
+  }
+
+  areaOptions = [
+    { value: 'Científica', label: 'Científica' },
+    { value: 'Humanidades', label: 'Humanidades' },
+    { value: 'Matemática', label: 'Matemática' },
+    { value: 'Arte', label: 'Arte' },
+    { value: 'Deporte', label: 'Deporte' },
+  ];
+
   @ViewChild('modalEdit') modalEdit!: TemplateRef<ElementRef>;  
 
   openModal() {
@@ -370,6 +442,9 @@ export class ModalEditComponent {
       case 'roles':
         this.loadRoleDetails();
         break;
+      case 'cursos':
+        this.loadCourseDetails();
+        break;
     }
   }
 
@@ -390,7 +465,10 @@ export class ModalEditComponent {
       case 'periodos':
         this.formEditPeriod.reset();
         break;
-      case 'role':
+      case 'roles':
+        this.formEditRole.reset();
+        break;
+      case 'cursos':
         this.formEditRole.reset();
         break;
     }

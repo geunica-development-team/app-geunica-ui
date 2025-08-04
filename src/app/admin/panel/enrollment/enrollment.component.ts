@@ -187,7 +187,6 @@ export class EnrollmentComponent {
   }
 
   onDeleteEnrollment(row: any) {
-    console.log("Eliminar inscripción:", row)
     this.openModalDeleteEnrollment(row)
   }
 
