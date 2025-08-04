@@ -1,24 +1,25 @@
 <app-panel-header title="Asistencias" />
-<ng-container *ngIf="attendance; else loading">
+
+<ng-container *ngIf="months.length; else loading">
   
-    <div class="container py-4" *ngIf="let m of summary">
+    <div class="container py-4">
   <div class="row g-4">
     <div 
       class="col-12 col-sm-6 col-md-4 col-lg-3"
-      *ngFor="let mes of attendance.months"
+      *ngFor="let m of months"
     >
       <div 
         class="card h-100 clickable-card" 
-        (click)="openMonth(mes)"
+        (click)="openMonth(m)"
         style="cursor: pointer;"
       >
         <img 
           src="https://picsum.photos/300/150" 
           class="card-img-top" 
-          [alt]="mes.month"
+          [alt]="m.month"
         >
         <div class="card-body d-flex flex-column justify-content-center">
-          <h5 class="card-title text-center">{{ mes.month | titlecase }}</h5>
+          <h5 class="card-title text-center">{{ m.month | titlecase }}</h5>
         </div>
       </div>
     </div>
@@ -48,14 +49,14 @@
   >
     <div class="modal-asistencia-derecha-panel">
       <!-- 1) Mes -->
-      <h5 class="mb-3 text-center">{{ selectedMonth.month | titlecase }}</h5>
+      <h5 class="mb-3 text-center">{{ selectedMonth.month | titlecase }} {{ selectedMonth.year }}</h5>
 
       <!-- 2) Calificación general -->
       <h3 class="mb-2 pb-2 border-bottom text-center">Calificación general</h3>
       <p class="mb-4 mt-4 text-center">
-        {{ presentCount }} presente(s) <strong>|</strong>
-        {{ absentCount  }} ausente(s) <strong>|</strong>
-        {{ tardyCount   }} atrasado(s)
+        {{ presentCount }} presentes <strong>|</strong>
+        {{ absentCount }} ausentes   <strong>|</strong>
+        {{ tardyCount   }} atrasos
       </p>
 
       <!-- 3) Tabla de sesiones -->
@@ -69,11 +70,16 @@
           </thead>
           <tbody>
             <tr *ngFor="let s of selectedMonth.sessions">
-              <td>{{ s.date | date:'dd/MM/yyyy' }}</td>
+              <td>{{ s.attendanceDate | date:'dd/MM/yyyy' }}</td>
               <td>
                   <span class="badge bg-dark rounded-pill text-white d-inline-flex justify-content-center align-items-center"
-                        style="width: 5rem; height: 1.7rem;">
-                    {{ s.status }}
+                        style="width: 5rem; height: 1.7rem;"
+                  >
+                  {{ 
+                    s.status === 'present' ? 'Asistió'
+                    : s.status === 'absent'  ? 'Ausente'
+                    :                         'Tardanza'
+                  }}
                   </span>
               </td>
             </tr>

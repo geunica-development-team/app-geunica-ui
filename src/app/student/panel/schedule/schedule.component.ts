@@ -1,11 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import { CommonModule } from '@angular/common';
-import { CalendarOptions, DayHeaderContentArg } from '@fullcalendar/core'; // useful for typechecking
+import { CalendarOptions, DayHeaderContentArg, EventInput } from '@fullcalendar/core'; // useful for typechecking
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
+import { environment } from '../../../../enviroments/environment';
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-schedule',
   imports: [ FullCalendarModule, CommonModule, PanelHeaderComponent],
@@ -13,7 +15,25 @@ import { PanelHeaderComponent } from '../../../components/dashboard/shared-compo
   templateUrl: './schedule.component.html',
   styleUrl: './schedule.component.css'
   })
-export class ScheduleComponent {
+export class ScheduleComponent implements OnInit {
+
+  private baseUrl = environment.apiBase;
+  constructor(private http: HttpClient) {}
+
+  private courseColors: Record<string, string> = {
+    'Matemáticas':    '#3498db',
+    'Ciencias':       '#2ecc71',
+    'Historia':       '#e67e22',
+    'Lengua':         '#9b59b6',
+    'Inglés':         '#1abc9c',
+    'Arte':           '#f1c40f',
+    'Educ. Física':   '#e74c3c',
+    'Geografía':      '#34495e',
+    'Música':         '#2c3e50',
+    'Biología':       '#27ae60',
+    // curso por defecto
+    '_default':       '#95a5a6'
+  };
 
   calendarOptions: CalendarOptions = {
     plugins: [
@@ -53,37 +73,89 @@ export class ScheduleComponent {
       return { html: `<span>${nombre} ${textoFecha}</span>` };
     },
 
-    dateClick: (arg) => this.handleDateClick(arg),
-    events: [
-      // Lunes 21
-      { title: 'Matemáticas',   start: '2025-07-21T07:30:00', end: '2025-07-21T09:00:00', color: '#3498db' },
-      { title: 'Recreo',        start: '2025-07-21T09:00:00', end: '2025-07-21T09:30:00', display: 'background', color: '#95a5a6' },
-      { title: 'Ciencias',      start: '2025-07-21T09:30:00', end: '2025-07-21T11:00:00', color: '#2ecc71' },
-
-      // Martes 22
-      { title: 'Historia',      start: '2025-07-22T07:30:00', end: '2025-07-22T09:00:00', color: '#e67e22' },
-      { title: 'Recreo',        start: '2025-07-22T09:00:00', end: '2025-07-22T09:30:00', display: 'background', color: '#95a5a6' },
-      { title: 'Lengua',        start: '2025-07-22T09:30:00', end: '2025-07-22T11:00:00', color: '#9b59b6' },
-
-      // Miércoles 23
-      { title: 'Inglés',        start: '2025-07-23T07:30:00', end: '2025-07-23T09:00:00', color: '#1abc9c' },
-      { title: 'Recreo',        start: '2025-07-23T09:00:00', end: '2025-07-23T09:30:00', display: 'background', color: '#95a5a6' },
-      { title: 'Arte',          start: '2025-07-23T09:30:00', end: '2025-07-23T11:00:00', color: '#f1c40f' },
-
-      // Jueves 24
-      { title: 'Educ. Física',  start: '2025-07-24T07:30:00', end: '2025-07-24T09:00:00', color: '#e74c3c' },
-      { title: 'Recreo',        start: '2025-07-24T09:00:00', end: '2025-07-24T09:30:00', display: 'background', color: '#95a5a6' },
-      { title: 'Geografía',     start: '2025-07-24T09:30:00', end: '2025-07-24T11:00:00', color: '#34495e' },
-
-      // Viernes 25
-      { title: 'Música',        start: '2025-07-25T07:30:00', end: '2025-07-25T09:00:00', color: '#2c3e50' },
-      { title: 'Recreo',        start: '2025-07-25T09:00:00', end: '2025-07-25T09:30:00', display: 'background', color: '#95a5a6' },
-      { title: 'Biología',      start: '2025-07-25T09:30:00', end: '2025-07-25T11:00:00', color: '#27ae60' }
-    ]
+    dateClick: (arg: DateClickArg) => this.handleDateClick(arg),
+    events: []
   };
 
+  ngOnInit() {
+    this.loadSchedule();
+  }
+
+  private loadSchedule() {
+    this.http
+      .get<any[]>(`${this.baseUrl}/student/me/schedule`)
+      .subscribe(
+        data => {
+          const dowMap: Record<string, number> = {
+            'Lunes': 1, 'Martes': 2, 'Miércoles': 3,
+            'Jueves': 4, 'Viernes': 5
+          };
+
+          const events: EventInput[] = data.map(item => ({
+            title:      item.courseName,
+            daysOfWeek: [dowMap[item.day] || 1],
+            startTime:  item.startTime.slice(0,5),  // "HH:mm"
+            endTime:    item.endTime.slice(0,5),
+            color:      this.courseColors[item.courseName] 
+                        ?? this.courseColors['_default']
+          }));
+
+          this.calendarOptions = {
+            ...this.calendarOptions,
+            events
+          };
+        },
+        err => console.error('Error cargando schedule:', err)
+      );
+  }
+
+  /** Combina un día de la semana ("Lunes") con la hora en ISO para esta semana */
+  private combineDateTime(dayName: string, time: string): string | null {
+    // Lista original de días en español
+    const dias = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+    // Creamos un mapa normalizado (sin acentos, minúsculas) → índice de día
+    const map: Record<string, number> = {};
+    dias.forEach((d, idx) => {
+      const key = d
+        .normalize('NFD')
+        .replace(/\p{Diacritic}/gu, '')
+        .toLowerCase();
+      map[key] = idx;
+    });
+
+    // Normalizamos el día entrante
+    const keyIn = dayName
+      .normalize('NFD')
+      .replace(/\p{Diacritic}/gu, '')
+      .toLowerCase();
+
+    const targetDay = map[keyIn];
+    if (targetDay === undefined) {
+      console.warn(`Día no reconocido: "${dayName}"`);
+      return null;
+    }
+
+    const today = new Date();
+    // Ajustamos domingo (0) a 7 para cálculo
+    const currentDow = today.getDay() === 0 ? 7 : today.getDay();
+    const desiredDow = targetDay === 0 ? 7 : targetDay;
+    const offset = desiredDow - currentDow;
+    const d = new Date(today);
+    d.setDate(today.getDate() + offset);
+
+    // Validamos fecha
+    if (isNaN(d.getTime())) {
+      console.warn('Fecha inválida generada para', dayName);
+      return null;
+    }
+
+    const datePart = d.toISOString().slice(0, 10);
+    return `${datePart}T${time}`;
+  }
+
+
   handleDateClick(arg: DateClickArg) {
-    alert('date click! ' + arg.dateStr);
+    alert('Clicked en ' + arg.dateStr);
   }
   
   
