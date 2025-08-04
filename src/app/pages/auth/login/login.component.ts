@@ -99,7 +99,7 @@ export class LoginComponent {
         }
       },
       error: (error: Error) => {
-          this.notifycation.error(error.message, 'Error');
+        this.notifycation.error(error.message, 'Error');
       }
     })
   }

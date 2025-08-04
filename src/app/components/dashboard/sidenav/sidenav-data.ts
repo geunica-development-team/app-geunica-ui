@@ -100,11 +100,6 @@ export const menuItemsAdmin = [
       active: true 
     },
     { 
-      icon: 'fa-solid fa-users', 
-      label: 'Usuarios', 
-      route: 'usuarios' 
-    },
-    { 
       icon: 'fa-solid fa-people-roof', 
       label: 'Aulas', 
       route: 'aulas' 
@@ -126,9 +121,14 @@ export const menuItemsAdmin = [
       badge: 24 
     },
     { 
-      icon: 'fas fa-cog', 
+      icon: 'fa-solid fa-sliders', 
       label: 'Configuración académica', 
       route: 'configuracion-academica'
+    },
+    { 
+      icon: 'fas fa-cog', 
+      label: 'Configuración del sistema', 
+      route: 'configuracion-sistema'
     }
 ];
 

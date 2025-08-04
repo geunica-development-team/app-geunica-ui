@@ -14,43 +14,70 @@
   <div class="modal-body bg-white p-4">
     <!-- Información del estudiante -->
     <div class="alert alert-info border rounded mb-3">
+      <h6 class="fw-semibold mb-2">
+        <i class="fas fa-user me-2"></i>
+        Información del Estudiante
+      </h6>
       <strong>Estudiante:</strong> {{ studentFullName }}<br>
-      <strong>Resultado de evaluación:</strong> {{ result || 'Sin evaluar' }}
+      <strong>Fecha de inscripción:</strong> {{ registrationDate }}<br>
+      <strong>Nivel y grado seleccionado en la inscripción:</strong> {{ levelAndGrade }}<br>
+      <strong>Resultado de la evaluación:</strong> {{ psyEvaluationResult }}
     </div>
-
     <!-- Filtros -->
     <div class="section-divider">
       <h5 class="fw-semibold mb-0">Filtros</h5>
     </div>
 
-    <div class="row mb-4">
-      <div class="col-md-4">
+    <div class="row mb-3">
+      <div class="col-md-3">
+        <label for="shift" class="form-label fw-medium small">Filtrar por Sede:</label>
+        <select 
+          id="shift"
+          class="form-select rounded"
+          [(ngModel)]="selectedCampus"
+          >
+          <option value="" disabled>Todas las sedes</option>
+          @for (campus of campus; track campus.id) {
+            <option [value]="campus.name"> {{campus.name}} </option>
+          }
+        </select>
+      </div>
+      <div class="col-md-3">
         <label for="level" class="form-label fw-medium small">Filtrar por Nivel:</label>
         <select 
           id="level"
-          class="form-select rounded">
-          <option value="">Todos los niveles</option>
+          class="form-select rounded"
+          [(ngModel)]="selectedLevelId"
+          (change)="onLevelChange()"
+          >
+          <option [ngValue]="null" disabled>Todos los niveles</option>
+          @for (level of levels; track level.id) {
+            <option [ngValue]="level.id"> {{level.name}} </option>
+          }
         </select>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-3">
         <label for="grade" class="form-label fw-medium small">Filtrar por Grado:</label>
         <select 
           id="grade"
-          class="form-select rounded">
-          <option value="">Todos los grados</option>
+          class="form-select rounded"
+          [(ngModel)]="selectedGrade"
+          >
+          <option value="" disabled>Todos los grados</option>
+          @for (grade of filteredGrades; track grade.id) {
+            <option [value]="grade.name"> {{grade.name}} </option>
+          }
         </select>
       </div>
-      <div class="col-md-4">
-        <label for="shift" class="form-label fw-medium small">Filtrar por Turno:</label>
-        <select 
-          id="shift"
-          class="form-select rounded">
-          <option value="">Todos los turnos</option>
-        </select>
+      <div class="col-md-3">
+        <label for="filter" class="form-label fw-medium small">Filtros</label>
+        <button id="filter" class="btn btn-outline-secondary ms-2" (click)="clearFilters()">
+          Limpiar filtros
+        </button>
       </div>
     </div>
 
-    <div class="mb-3">
+    <div class="mb-2">
       <small class="text-muted">
         Mostrando {{ filteredGroups.length }} de {{ availableGroups.length }} grupos
       </small>
@@ -58,39 +85,42 @@
 
     <!-- Selector de Grupo -->
     <div class="mb-3">
-      <label class="form-label fw-medium small">Seleccionar Grupo:</label>
+      <label class="form-label fw-medium small">Seleccionar aula:</label>
       
-      @if (availableGroups.length === 0) {
+      @if (filteredGroups.length === 0) {
         <div class="alert alert-warning border rounded">
           No hay grupos disponibles con los filtros seleccionados.
         </div>
       } @else {
         <div class="border rounded p-2 group-scroll-container">
-          @for (classroom of availableGroups; track classroom.id) {
-            <div class="group-option rounded p-3 mb-2 bg-white">
+          @for (classroom of filteredGroups; track classroom.id) {
+            <div class="group-option rounded p-3 mb-2 bg-white" [class.disabled]="isGroupDisabled(classroom)">
               <label class="d-flex align-items-start mb-0">
                 <input 
                   type="radio" 
                   name="group"
                   [value]="classroom.id"
+                  [(ngModel)]="selectedClassroomId"
+                  [disabled]="isGroupDisabled(classroom)"
                   class="form-check-input me-3 mt-1">
-                
                 <div class="flex-grow-1">
                   <div class="d-flex align-items-center gap-2 mb-1">
                     <span class="fw-semibold small">
-                      {{ classroom.grade }} {{ classroom.section }} ({{ classroom.level }})
-                    </span>
-                    <span>
-                      {{ classroom.status }}
+                      {{ classroom.campus }}: {{ classroom.level }} - {{ classroom.grade }} {{ classroom.section }} - {{ classroom.shift }} ({{ classroom.period }} - {{ classroom.periodState }})
                     </span>
                   </div>
-                  
+                  <span class="mb-1" [class]="getGroupStatusClass(classroom)">
+                    {{ classroom.status }}
+                  </span>
                   <small class="text-muted d-block">
-                    Estudiantes especiales: {{ classroom.total_special_students }}/{{ classroom.special_capacity }} - 
+                    Cupos de condición psicológica: {{ classroom.total_special_students }}/{{ classroom.special_capacity }}
+                  </small>
+                  <small class="text-muted d-block">
                     Total: {{ classroom.total_students }}/{{ classroom.capacity }}
                   </small>
                   
-                  <small class="text-muted d-block">
+                  <small class="text-info fw-medium d-block ">
+                    {{ getGroupAvailabilityInfo(classroom) }}
                   </small>
                 </div>
               </label>
@@ -104,14 +134,23 @@
   <div class="modal-footer bg-white border-top d-flex justify-content-end gap-2 p-3">
     <button 
       type="button" 
+      class="btn btn-danger rounded px-4"
+      (click)="rejectInscription()">
+      Rechazar inscripción
+    </button>
+    <button 
+      type="button" 
       class="btn btn-secondary rounded px-4"
       (click)="onCancel()">
       Cancelar
     </button>
     <button 
       type="button" 
-      class="btn btn-success rounded px-4">
-      Generar Ticket
+      class="btn btn-success rounded px-4"
+      [disabled]="isSelectedGroupDisabled"
+      (click)="onConfirm()"
+      >
+      Confirmar
     </button>
   </div>
 </ng-template>

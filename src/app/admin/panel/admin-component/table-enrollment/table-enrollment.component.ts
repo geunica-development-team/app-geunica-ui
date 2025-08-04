@@ -1,6 +1,6 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { AuthService } from '../../../../services/auth.service';
-import { UserService, UserSession } from '../../../../services/user.service';
+import { UserServiceAuth, UserSession } from '../../../../services/user.service';
 import { error } from 'console';
 
 @Component({
@@ -11,7 +11,7 @@ import { error } from 'console';
 })
 export class TableEnrollmentComponent {
   private authService = inject(AuthService);
-  private userService = inject(UserService);
+  private userService = inject(UserServiceAuth);
 
   @Input() eliminarFila!: boolean
   @Input() verFila!: boolean
@@ -21,8 +21,10 @@ export class TableEnrollmentComponent {
   @Input() accionRestaurarInscripcion!: (row: any) => void
   @Input() accionVerInscripcion!: (row: any) => void
   @Input() accionEliminarInscripcion!: (row: any) => void
+  @Input() accionContinuarMatricula!: (row: any) => void
 
-  @Input() actionContinueRegistration!: (row: any) => void
+  @Input() accionVerMatricula!: (row: any) => void
+
   @Input() actionMarkPayment!: (row: any) => void
 
   @Input() accionRegistrarEvaluacion!: (row: any) => void
@@ -125,6 +127,12 @@ export class TableEnrollmentComponent {
     this.rows = this.filteredRows.slice(this.startIndex, this.endIndex)
   }
 
+  
+  // Verificar si es columna de deuda
+  isEnrollmentColumn(column: string): boolean {
+    return column === "Matrícula"
+  }
+
   applyFilter(event: Event) {
     this.filterValue = (event.target as HTMLInputElement).value
     this.currentPage = 1
@@ -193,7 +201,7 @@ export class TableEnrollmentComponent {
         }
       case "Rechazado":
         return { text: "Restaurar inscripción", action: "restaurarInscripcion", class: "btn-restaurarInscripcion" }
-      case "Pago pendiente":
+      case "Salón asignado":
         return { text: "Marcar pago", action: "marcarPago", class: "btn-marcarPago" }
       case "Matriculado":
         return null
@@ -211,7 +219,7 @@ export class TableEnrollmentComponent {
         this.accionAnularEvaluacion(row)
         break
       case "continuarMatricula":
-        this.actionContinueRegistration(row)
+        this.accionContinuarMatricula(row)
         break
       case "restaurarInscripcion":
         this.accionRestaurarInscripcion(row)
@@ -235,8 +243,8 @@ export class TableEnrollmentComponent {
         return "badge estadoEvaluado"
       case "Rechazado":
         return "badge estadoRechazado"
-      case "Pago pendiente":
-        return "badge estadoPagoPendiente"
+      case "Salón asignado":
+        return "badge estadoSalonAsignado"
       case "Matriculado":
         return "badge estadoMatriculado"
       default:

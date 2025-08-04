@@ -221,4 +221,43 @@
             </button>
         </div>
     }
+    @if (activeTab === 'roles') {
+        <form [formGroup]="formAddRole" (ngSubmit)="addRole()" id="formAddRole">
+            <div class="modal-body bg-white p-4">
+                <div class="mb-3">     
+                    <label class="form-label fw-medium small">Rol</label>
+                    <input 
+                    type="text" 
+                    class="form-control rounded" 
+                    placeholder="Nombre del rol"
+                    name="role"
+                    formControlName="role">
+                </div>
+                <div class="mb-3">     
+                    <label class="form-label fw-medium small">Descripción del rol</label>
+                    <input 
+                    type="text" 
+                    class="form-control rounded" 
+                    placeholder="Descripción del rol"
+                    name="description"
+                    formControlName="description">
+                </div>
+            </div>
+        </form>
+        <div class="modal-footer bg-white border-top d-flex justify-content-end gap-2 p-3">
+            <button 
+            type="button" 
+            class="btn btn-secondary rounded px-4"
+            (click)="onCancel()">
+            Cancelar
+            </button>
+            <button 
+            type="submit" 
+            class="btn btn-success rounded px-4"
+            form="formAddRole"
+            [disabled]="formAddRole.invalid">
+            Registrar rol
+            </button>
+        </div>
+    }
 </ng-template>

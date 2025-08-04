@@ -1,6 +1,5 @@
 import { Component, ElementRef, EventEmitter, inject, Output, TemplateRef, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AssignGroupData, GroupOption } from '../../../services/enrollment.service';
 
 @Component({
   selector: 'app-modal-delete-enrollment',

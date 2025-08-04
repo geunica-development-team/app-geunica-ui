@@ -1,6 +1,5 @@
 import { Component, ElementRef, EventEmitter, inject, Output, TemplateRef, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AssignGroupData, GroupOption, PaymentData } from '../../../services/enrollment.service';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -12,7 +11,7 @@ import { FormsModule } from '@angular/forms';
 export class ModalMarkPaymentComponent {
   private modalService = inject(NgbModal)
 
-  @Output() paymentMarked = new EventEmitter<PaymentData>()
+  @Output() paymentMarked = new EventEmitter<any>()
 
   // Datos del estudiante (solo lectura)
   currentStudent: any = null
@@ -182,64 +181,64 @@ export class ModalMarkPaymentComponent {
 
   onConfirm() {
     // Validaciones básicas
-    if (!this.paymentData.amount || this.paymentData.amount <= 0) {
-      alert("Por favor ingresa un monto válido")
-      return
-    }
-
-    if (!this.paymentData.paymentDate) {
-      alert("Por favor selecciona una fecha de pago")
-      return
-    }
-
-    if (!this.paymentData.paymentMethod) {
-      alert("Por favor selecciona un método de pago")
-      return
-    }
-
-    // Validar credenciales según el tipo seleccionado
-    let finalCredentials = { username: "", password: "" }
-
-    if (this.paymentData.generateCredentials === "automatic") {
-      finalCredentials = { ...this.generatedCredentials }
-    } else if (this.paymentData.generateCredentials === "manual") {
-      if (!this.manualCredentials.username || !this.manualCredentials.password) {
-        alert("Por favor completa las credenciales manuales")
-        return
-      }
-      finalCredentials = { ...this.manualCredentials }
-    }
-
-    const paymentInfo: PaymentData = {
-      studentId: this.currentStudent.id,
-      studentName: this.currentStudent.student,
-      level: this.currentStudent.application_level,
-      grade: "2do A", // Esto debería venir de los datos del estudiante
-      amount: this.paymentData.amount,
-      paymentDate: this.paymentData.paymentDate,
-      paymentMethod: this.paymentData.paymentMethod,
-      observations: this.paymentData.observations,
-      generateCredentials: this.paymentData.generateCredentials,
-      notifyGuardianBy: this.paymentData.notifyGuardianBy,
-      credentials: finalCredentials, // Agregar las credenciales al objeto
-    }
-
-    console.log("Datos del pago:", paymentInfo)
-    this.paymentMarked.emit(paymentInfo)
-    this.modalService.dismissAll()
-
-    // Mostrar mensaje de confirmación
-    let message = "Pago marcado exitosamente."
-
-    if (this.paymentData.notifyGuardianBy === "whatsapp") {
-      message += " Se enviará notificación por WhatsApp."
-    } else if (this.paymentData.notifyGuardianBy === "email") {
-      message += " Se enviará notificación por correo electrónico."
-    } else {
-      message += " No se enviará notificación."
-    }
-
-    alert(message)
+    //if (!this.paymentData.amount || this.paymentData.amount <= 0) {
+    //  alert("Por favor ingresa un monto válido")
+    //  return
+    //}
+//
+    //if (!this.paymentData.paymentDate) {
+    //  alert("Por favor selecciona una fecha de pago")
+    //  return
+    //}
+//
+    //if (!this.paymentData.paymentMethod) {
+    //  alert("Por favor selecciona un método de pago")
+    //  return
+    //}
+//
+    //// Validar credenciales según el tipo seleccionado
+    //let finalCredentials = { username: "", password: "" }
+//
+    //if (this.paymentData.generateCredentials === "automatic") {
+    //  finalCredentials = { ...this.generatedCredentials }
+    //} else if (this.paymentData.generateCredentials === "manual") {
+    //  if (!this.manualCredentials.username || !this.manualCredentials.password) {
+    //    alert("Por favor completa las credenciales manuales")
+    //    return
+    //  }
+    //  finalCredentials = { ...this.manualCredentials }
+    //}
+//
+    //const paymentInfo: PaymentData = {
+    //  studentId: this.currentStudent.id,
+    //  studentName: this.currentStudent.student,
+    //  level: this.currentStudent.application_level,
+    //  grade: "2do A", // Esto debería venir de los datos del estudiante
+    //  amount: this.paymentData.amount,
+    //  paymentDate: this.paymentData.paymentDate,
+    //  paymentMethod: this.paymentData.paymentMethod,
+    //  observations: this.paymentData.observations,
+    //  generateCredentials: this.paymentData.generateCredentials,
+    //  notifyGuardianBy: this.paymentData.notifyGuardianBy,
+    //  credentials: finalCredentials, // Agregar las credenciales al objeto
+    //}
+//
+    //console.log("Datos del pago:", paymentInfo)
+    //this.paymentMarked.emit(paymentInfo)
+    //this.modalService.dismissAll()
+//
+    //// Mostrar mensaje de confirmación
+    //let message = "Pago marcado exitosamente."
+//
+    //if (this.paymentData.notifyGuardianBy === "whatsapp") {
+    //  message += " Se enviará notificación por WhatsApp."
+    //} else if (this.paymentData.notifyGuardianBy === "email") {
+    //  message += " Se enviará notificación por correo electrónico."
+    //} else {
+    //  message += " No se enviará notificación."
+    //}
+//
+    //alert(message)
   }
 
   onCancel() {

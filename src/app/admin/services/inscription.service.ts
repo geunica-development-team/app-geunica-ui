@@ -87,6 +87,40 @@ export interface dataInscriptionAll {
             name: string;
         }
     }
+    enrollments?: {
+        state: string;
+    }[];
+}
+
+export interface dataEnrollmentList {
+    enrollments: {
+        id: number;
+        state: string;
+        dateEnrollment: string;
+        classroom: {
+            id?: number;
+            name: string;
+            shift: string;
+            grade: {
+                name: string
+                level: {
+                    name: string;
+                }
+            };
+            period: {
+                name: string
+                startDate: string
+                endDate: string
+                state: boolean
+            };
+            section: {
+                name: string
+            };
+            campus: {
+                name: string
+            }
+        }
+    }[];
 }
 
 export interface dataChangeState {
@@ -151,6 +185,11 @@ export class InscriptionService {
     changeState(id: number, data: dataChangeState) {
         return this.httpService
         .patch(`${this.auth_end_point}/inscription/state/${id}`, { ...data})
+        .pipe(catchError(this.handleError));
+    }
+    getEnrollmentsById(id:number) {
+        return this.httpService
+        .get<dataEnrollmentList>(`${this.auth_end_point}/inscription/${id}`)
         .pipe(catchError(this.handleError));
     }
 }

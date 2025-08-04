@@ -7,6 +7,7 @@ import { dataLevelAll, LevelService } from '../../../../services/level.service';
 import { GradeService } from '../../../../services/grade.service';
 import { SectionService } from '../../../../services/section.service';
 import { PeriodService } from '../../../../services/period.service';
+import { RoleService } from '../../../../services/role.service';
 
 @Component({
   selector: 'app-modal-add',
@@ -26,6 +27,7 @@ export class ModalAddComponent {
   private gradeService = inject(GradeService);
   private sectionService = inject(SectionService);
   private periodService = inject(PeriodService);
+  private roleService = inject(RoleService);
 
   ngOnInit() {
     this.loadLevels();
@@ -37,6 +39,7 @@ export class ModalAddComponent {
       case 'niveles': return 'Registrar nuevo nivel/programa';
       case 'grados': return 'Registrar nuevo grado';
       case 'secciones': return 'Registrar nueva sección';
+      case 'roles': return 'Registrar nuevo rol';
       default: return 'Registrar';
     }
   }
@@ -193,6 +196,33 @@ export class ModalAddComponent {
     })
   }
 
+  //PARA AGREGAR ROL
+  formAddRole = this.toolsForm.group({
+    'role': ['', [Validators.required]],
+    'description': ['', [Validators.required]],
+  })
+
+  addRole() {
+    if (this.formAddRole.invalid) {
+      this.notifycation.error('Debes completar todos los campos correctamente', 'Error');
+      return;
+    }
+    this.roleService.addRole({
+      role: this.formAddRole.get('role')?.value ?? '',
+      description: this.formAddRole.get('description')?.value ?? ''
+    }).subscribe({
+      next: (value: any) => {
+        this.notifycation.success('Rol agregado', 'Éxito')
+        this.added.emit();
+        this.modalService.dismissAll();
+        this.formAddRole.reset();
+      },
+      error: (error: Error) => {
+        this.notifycation.error(error.message, 'Error');
+      }
+    })
+  }
+
   @ViewChild('modalAdd') modalAdd!: TemplateRef<ElementRef>;  
 
   openModal() {
@@ -222,6 +252,9 @@ export class ModalAddComponent {
         break;
       case 'periodos':
         this.formAddPeriod.reset();
+        break;
+      case 'roles':
+        this.formAddRole.reset();
         break;
     }
     this.modalService.dismissAll();

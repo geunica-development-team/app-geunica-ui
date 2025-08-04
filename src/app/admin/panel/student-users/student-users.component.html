@@ -4,55 +4,51 @@
 <div class="col-12">
   <div class="card">
     <div class="card-header d-grid d-lg-flex justify-content-between align-items-center">
-      <h5 class="card-title mb-2 mb-lg-0">Lista de Estudiantes</h5>
+      <h5 class="card-title mb-2 mb-lg-0">Lista de Estudiantes Matriculados</h5>
       
       <!-- Filtros -->
       <div class="d-flex gap-3 align-items-center">
-        <div class="d-flex gap-3">
-          <!-- Filtro por Estado Estudiante -->
-          <select 
-            class="form-select form-select-sm w-100"
-            style="width: 200px;"
-            [(ngModel)]="selectedStudentStatus"
-            (change)="applyFilters()">
-            <option value="">Todos los estados</option>
-            @for (status of studentStatusOptions; track status.value) {
-              <option [value]="status.value">{{ status.label }}</option>
-            }
-          </select>
-          
-          <!-- NUEVO: Filtro por Estado de Deuda -->
-          <select 
-            class="form-select form-select-sm w-100"
-            [(ngModel)]="selectedDebtStatus"
-            (change)="applyFilters()">
-            <option value="">Todas las deudas</option>
-            @for (debtOption of debtStatusOptions; track debtOption.value) {
-              <option [value]="debtOption.value">{{ debtOption.label }}</option>
-            }
-          </select>
+        <!-- Filtro por Estado Estudiante -->
+        <select 
+          class="form-select form-select-sm w-100"
+          style="width: 200px;"
+          [(ngModel)]="selectedStudentStatus"
+          (change)="applyFilters()">
+          <option value="">Todos los estados</option>
+          @for (status of studentStatusOptions; track status.value) {
+            <option [value]="status.value">{{ status.label }}</option>
+          }
+        </select>
+        
+        <!-- NUEVO: Filtro por Estado de Deuda -->
+        <select 
+          class="form-select form-select-sm w-100"
+          style="width: 200px;"
+          [(ngModel)]="selectedDebtStatus"
+          (change)="applyFilters()">
+          <option value="">Todas las deudas</option>
+          @for (debtOption of debtStatusOptions; track debtOption.value) {
+            <option [value]="debtOption.value">{{ debtOption.label }}</option>
+          }
+        </select>
+        <!-- Buscador -->
+        <div class="input-group w-100" style="width: 250px;">
+          <span class="input-group-text"><i class="fas fa-search"></i></span>
+          <input 
+            (input)="applySearchFilter($event)"
+            type="text"
+            class="form-control form-control-sm"
+            placeholder="Buscar..."
+            [(ngModel)]="searchValue">
         </div>
-
-        <div class="d-flex gap-3">
-          <!-- Buscador -->
-          <div class="input-group w-100" style="width: 250px;">
-            <span class="input-group-text"><i class="fas fa-search"></i></span>
-            <input 
-              (input)="applySearchFilter($event)"
-              type="text"
-              class="form-control form-control-sm"
-              placeholder="Buscar estudiante..."
-              [(ngModel)]="searchValue">
-          </div>
-          
-          <!-- Botón limpiar -->
-          <button 
-            type="button"
-            class="btn btn-outline-secondary btn-sm"
-            (click)="clearFilters()">
-            <i class="fas fa-times"></i>
-          </button>
-        </div>
+        
+        <!-- Botón limpiar -->
+        <button 
+          type="button"
+          class="btn btn-outline-secondary btn-sm"
+          (click)="clearFilters()">
+          <i class="fas fa-times"></i>
+        </button>
       </div>
     </div>
 

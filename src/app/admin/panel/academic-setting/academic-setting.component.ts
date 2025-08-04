@@ -11,6 +11,7 @@ import { dataSectionAll, SectionService } from '../../services/section.service';
 import { ModalEditComponent } from "./modals/modal-edit/modal-edit.component";
 import { ModalDeleteComponent } from './modals/modal-delete/modal-delete.component';
 import { dataPeriodAll, PeriodService } from '../../services/period.service';
+import { dataRoleAll, RoleService } from '../../services/role.service';
 
 @Component({
   selector: 'app-academic-setting',
@@ -19,7 +20,6 @@ import { dataPeriodAll, PeriodService } from '../../services/period.service';
   styleUrl: './academic-setting.component.css'
 })
 export class AcademicSettingComponent {
-  private campusService = inject(CampusService);
   private levelService = inject(LevelService);
   private gradeService = inject(GradeService);
   private sectionService = inject(SectionService);
@@ -28,14 +28,13 @@ export class AcademicSettingComponent {
   private router = inject(Router);
 
   tabs: TabItem[] = [
-    { id: "sedes", label: "Sedes", icon: "fa-solid fa-tents"},
     { id: "niveles", label: "Niveles/Programas", icon: "fa-solid fa-layer-group"},
     { id: "grados", label: "Grados", icon: "fa-solid fa-chart-simple" },
     { id: "secciones", label: "Secciones", icon: "fa-solid fa-users-rectangle" },
-    { id: "periodos", label: "Periodos", icon: "fa-solid fa-calendar" }
+    { id: "periodos", label: "Periodos", icon: "fa-solid fa-calendar" },
   ];
 
-  activeTab = "sedes";
+  activeTab = "niveles";
 
   // Cambiar tab activo
   setActiveTab(tabId: string) {
@@ -49,7 +48,12 @@ export class AcademicSettingComponent {
   }
 
   ngOnInit() {
-    this.loadCampus();
+    this.route.queryParams.subscribe(params => {
+      const tabParam = params['tab'];
+      if (tabParam && this.tabs.some(tab => tab.id === tabParam)) {
+        this.activeTab = tabParam;
+      }
+    });
     this.loadLevels();
     this.loadGrades();
     this.loadSections();
@@ -76,43 +80,6 @@ export class AcademicSettingComponent {
     } else {
       console.error('ID inválido:', row.id);
     }
-  }
-
-  //PARA TABLA SEDES:
-  // COLUMNAS DE LA TABLA
-  columnsCampus = [
-  'ID',
-  'Nombre',
-  'Localización'
-  ];
-  
-  // MAPEO PARA COLUMNAS Y FILAS
-  columnMappingsCampus = {
-  'ID': 'id',
-  'Nombre': 'name',
-  'Localización': 'location'
-  };
-
-  rowsCampus: dataCampusAll[] = [];
-
-  @ViewChild('campusTable') campusTable?: TableComponent;
-
-  loadCampus() {
-    this.campusService.getAllCampus().subscribe({
-      next:(campus) => {
-        this.rowsCampus = campus.map((campus: any): dataCampusAll => ({
-          id: campus.id,
-          name: campus.name,
-          location: campus.location
-        }));
-        if (this.campusTable) {
-          this.campusTable.updateTable();
-        }
-      },
-        error: (error) => {
-          console.error('Error al cargar la lista de sedes: ', error);
-        }
-    });
   }
 
   //PARA TABLA NIVELES:
@@ -263,21 +230,14 @@ export class AcademicSettingComponent {
         }
       },
         error: (error) => {
-          console.error('Error al cargar la lista de niveles/programas: ', error);
+          console.error('Error al cargar la lista de periodos: ', error);
         }
     });
   }
 
-
   //PARA EL FILTRO DE LA TABLA (BUSCADOR)
   applyFilter(event: Event) {
-    if (this.campusTable) {
-      this.campusTable.filterValue = (
-        event.target as HTMLInputElement
-      ).value;
-      this.campusTable.updateTable();
-    }
-    else if (this.levelsTable) {
+    if (this.levelsTable) {
       this.levelsTable.filterValue = (
         event.target as HTMLInputElement
       ).value;
@@ -305,9 +265,6 @@ export class AcademicSettingComponent {
 
   onCreatedOrEditedOrDeleted() {
     switch (this.activeTab) {
-      case 'sedes':
-        this.loadCampus();
-        break;
       case 'niveles':
         this.loadLevels();
         break;

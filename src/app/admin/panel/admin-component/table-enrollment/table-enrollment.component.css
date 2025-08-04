@@ -50,9 +50,12 @@
 
 .btn-sm:hover {
   transform: translateY(-1px);
+  color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   filter: brightness(0.9); /* más oscurito el fondo */
 }
+
+
 
 /* Paginado */
 .btn-pagination {
@@ -107,7 +110,7 @@
   background-color: #FFE3E3;
   color: #D32F2F;
 }
-.estadoPagoPendiente {
+.estadoSalonAsignado {
   background-color: #FFF3E0;
   color: #EF6C00;
 }

@@ -6,7 +6,7 @@ import { TableEnrollmentComponent } from '../../../admin/panel/admin-component/t
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
-import { UserService, UserSession } from '../../../services/user.service';
+import { UserServiceAuth, UserSession } from '../../../services/user.service';
 import { ModalAddEvaluationComponent } from '../modal-add-evaluation/modal-add-evaluation.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalEditEvaluationComponent } from '../modal-edit-evaluation/modal-edit-evaluation.component';
@@ -23,7 +23,7 @@ export class PsychologistInscriptionsListComponent {
   private modalService = inject(NgbModal);
   private inscriptionService = inject(InscriptionService)
   private authService = inject(AuthService);
-  private userService = inject(UserService);
+  private userService = inject(UserServiceAuth);
 
   userProfile!: UserSession;
   

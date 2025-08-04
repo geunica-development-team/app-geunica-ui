@@ -1,10 +1,13 @@
-import { Component, ElementRef, EventEmitter, inject, Output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, Output, TemplateRef, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { AssignGroupData, GroupOption } from '../../../services/enrollment.service';
 import { FormsModule } from '@angular/forms';
-import { GRADO, NIVEL, TURNO } from '../../../utility/personal-data';
 import { ClassroomService, dataClassroomAll } from '../../../services/classroom.service';
 import { InscriptionService } from '../../../services/inscription.service';
+import { ToastrService } from 'ngx-toastr';
+import { CampusService, dataCampusAll } from '../../../services/campus.service';
+import { dataLevelAll, LevelService } from '../../../services/level.service';
+import { dataGradeAll, GradeService } from '../../../services/grade.service';
+import { EnrollmentService } from '../../../services/registration.service';
 
 export interface dataClassroomAdapted {
   id: number;
@@ -13,7 +16,10 @@ export interface dataClassroomAdapted {
   special_capacity: number;
   total_students: number;
   total_special_students: number;
+  campus: string;
   level: string;
+  period: string;
+  periodState: string;
   grade: string;
   section: string;
   status: string;
@@ -27,56 +33,116 @@ export interface dataClassroomAdapted {
 })
 export class ModalContinueRegistrationComponent {
   @Output() classroomAssigned = new EventEmitter<any>();
+  @Input() rowId!: number;
 
   //INYECCIONES
   private modalService = inject(NgbModal);
+  private notifycation = inject(ToastrService);
   private classroomService = inject(ClassroomService);
   private inscriptionService = inject(InscriptionService);
+  private enrollmentService = inject(EnrollmentService);
+  private campusService = inject(CampusService);
+  private levelService = inject(LevelService);
+  private gradeService = inject(GradeService);
   
+  isLoadingGroups = true;
+  
+  //PARA IMPRIMIR LOS DATOS EN LA VISTA
   studentFullName: string = '';
-  typeOfDocument: string = '';
-  documentNumber: string = '';
-  dateBirthDate: string = '';
-  studentGender: string = '';
 
   registrationDate: string = '';
   levelAndGrade: string = '';
 
-  result: string = '';
+  hasPsychology: boolean = false;
+  psyEvaluationDate: string = '';
+  psyEvaluationResult: string = '';
 
+  loadStudentDetails() {
+    if (this.rowId && !isNaN(this.rowId)) {
+      this.inscriptionService.getInscriptionById(this.rowId).subscribe({
+        next: (enrollment) => {
+          //STUDENT
+          const names = enrollment.student?.person?.names ?? '';
+          const paternal = enrollment.student?.person?.paternalSurname ?? '';
+          const maternal = enrollment.student?.person?.maternalSurname ?? '';
+          this.studentFullName = `${names} ${paternal} ${maternal}`;
+
+          //INSCRIPTION
+          const enrollmentDate = enrollment.registrationDate ?? '';
+          this.registrationDate = this.formatDate(enrollmentDate)
+
+          const level = enrollment.grade?.level?.name ?? '';
+          const grade = enrollment.grade?.name ?? '';
+          this.levelAndGrade = `${level} ${grade}`;
+
+          this.hasPsychology = enrollment.psychology != null;
+          
+          if (this.hasPsychology) {
+            const evaluationDate = enrollment.psychology?.evaluationDate;
+            this.psyEvaluationDate = `${evaluationDate}`;
+  
+            const evaluationResult = enrollment.psychology?.result === true ? 'Con condición' : 'Sin condición';
+            this.psyEvaluationResult = `${evaluationResult}`;
+          } else {
+            this.psyEvaluationDate = '';
+            this.psyEvaluationResult = '';;
+          }
+        },
+        error: (error) => {
+          this.notifycation.error('Error al cargar los detalles de la inscripción', 'Error')
+        }
+      })
+    } else {
+      this.notifycation.error('ID de la inscripción inválido', 'Error');
+    }
+  }
+
+  //PARA LISTAR LOS SALONES
   classrooms: dataClassroomAll[] = []
   availableGroups: dataClassroomAdapted[] = []
 
   @ViewChild('modalContinueRegistration') modalContinueRegistration!: TemplateRef<ElementRef>;
 
   loadClassrooms() {
+    this.isLoadingGroups = true;
+
     this.classroomService.getAllClassrooms().subscribe({
       next:(classrooms) => {
         this.classrooms = classrooms;
         
+        this.isLoadingGroups = false;
+
         this.availableGroups = classrooms.map(classroom => ({
           id: classroom.id,
           shift: classroom.shift,
           capacity: classroom.capacity,
           special_capacity: classroom.specialCapacity,
-          total_students: 0,
-          total_special_students: 0,
+          total_students: classroom.totalStudents,
+          total_special_students: classroom.totalSpecialStudents,
+          campus: classroom.campus?.name,
           level: classroom.grade?.level?.name,
+          period: classroom.period?.name,
+          periodState: classroom.period?.state ? 'En curso' : 'Finalizado',
           grade: classroom.grade?.name,
           section: classroom.section?.name,
-          status: 'Disponible'
+          status: ''
         }));
-        console.log(this.availableGroups);
+        this.updateGroupAvailability();
       },
       error: (error) => {
+        this.isLoadingGroups = false;
         console.error('Error al cargar salones', error);
       }
     })
   }
-  openModal(studentData: any) {
+
+  openModal() {
     this.loadClassrooms();
-    // Actualizar el estado de disponibilidad de todos los grupos
-    //this.updateGroupAvailability();
+    this.loadStudentDetails();
+    this.loadCampus();
+    this.loadLevels();
+    this.loadGrades();
+    this.clearFilters();
     
     this.modalService.open(this.modalContinueRegistration, { 
       centered: true,
@@ -85,165 +151,231 @@ export class ModalContinueRegistrationComponent {
     });
   }
 
-  get filteredGroups(): dataClassroomAdapted[] {
-    return this.availableGroups;
+  //ID DEL AULA SELECCIONADA
+  selectedClassroomId: number | null = null;
+
+  //PARA APLICAR LOS FILTROS
+  selectedCampus: string = '';
+  selectedLevel: string = '';
+  selectedGrade: string = '';
+
+  
+  campus: dataCampusAll[] = []
+  loadCampus() {
+    this.campusService.getAllCampus().subscribe({
+      next: (value) => {
+        this.campus = value;
+      },
+      error: (error: Error) => {
+        console.error('Error al cargar las sedes', error);
+      }
+    })
+  }
+  
+  levels: dataLevelAll[] = []
+  loadLevels() {
+    this.levelService.getAllLevels().subscribe({
+      next: (value) => {
+        this.levels = value;
+      },
+      error: (error: Error) => {
+        console.error('Error al cargar los niveles/programas', error);
+      }
+    })
+  }
+  
+  grades: dataGradeAll[] = []
+  loadGrades() {
+    this.gradeService.getAllGrades().subscribe({
+      next: (value) => {
+        this.grades = value;
+      },
+      error: (error: Error) => {
+        console.error('Error al cargar los grados', error);
+      }
+    })
+  }  
+  
+  //FILTRAR GRADO POR NIVEL
+  selectedLevelId: number | null = null;
+
+  onLevelChange() {
+   const selected = this.levels.find(level => level.id === this.selectedLevelId);
+    this.selectedLevel = selected?.name ?? '';
+    this.selectedGrade = '';
   }
 
-  // Método para obtener grupos filtrados
-  //get filteredGroups(): GroupOption[] {
-  //  return this.availableGroups.filter(group => {
-  //    // Filtrar por nivel (si está seleccionado)
-  //    if (this.selectedLevel && group.level.toLowerCase() !== this.selectedLevel.toLowerCase()) {
-  //      return false;
-  //    }
-  //    
-  //    // Filtrar por grado (si está seleccionado)
-  //    if (this.selectedGrade && !group.name.toLowerCase().includes(this.selectedGrade.toLowerCase())) {
-  //      return false;
-  //    }
-  //    
-  //    // Filtrar por turno (si está seleccionado)
-  //    if (this.selectedShift && group.shift.toLowerCase() !== this.selectedShift.toLowerCase()) {
-  //      return false;
-  //    }
-  //    
-  //    return true;
-  //  });
-  //}
-//
-  //// Método para actualizar la disponibilidad de los grupos
-  //updateGroupAvailability() {
-  //  this.availableGroups.forEach(group => {
-  //    const studentHasCondition = this.currentStudent?.eval_result === 'Con condición';
-  //    
-  //    // Verificar si el grupo está completo
-  //    const isGroupFull = group.total_students >= group.capacity;
-  //    
-  //    // Verificar si hay cupo para estudiantes con condición especial
-  //    const hasSpecialSpot = group.total_special_students < group.special_capacity;
-  //    
-  //    // Determinar el estado del grupo
-  //    if (isGroupFull) {
-  //      group.status = 'Completo';
-  //    } else if (studentHasCondition && !hasSpecialSpot) {
-  //      group.status = 'Saturado';
-  //    } else {
-  //      group.status = 'Disponible';
-  //    }
-  //  });
-  //}
-//
-  //onLevelChange() {
-  //  console.log('Nivel cambiado a:', this.selectedLevel);
-  //  this.selectedGroupId = ''; // Limpiar selección de grupo al cambiar filtro
-  //  this.updateGroupAvailability();
-  //}
-//
-  //onGradeChange() {
-  //  console.log('Grado cambiado a:', this.selectedGrade);
-  //  this.selectedGroupId = ''; // Limpiar selección de grupo al cambiar filtro
-  //  this.updateGroupAvailability();
-  //}
-//
-  //onShiftChange() {
-  //  console.log('Turno cambiado a:', this.selectedShift);
-  //  this.selectedGroupId = ''; // Limpiar selección de grupo al cambiar filtro
-  //  this.updateGroupAvailability();
-  //}
-//
-  //onGroupSelect(groupId: string) {
-  //  this.selectedGroupId = groupId;
-  //  console.log('Grupo seleccionado:', groupId);
-  //}
-//
-  //getGroupStatusClass(group: GroupOption): string {
-  //  switch (group.status) {
-  //    case 'Disponible':
-  //      return 'badge-success';
-  //    case 'Saturado':
-  //      return 'badge-warning';
-  //    case 'Completo':
-  //      return 'badge-danger';
-  //    default:
-  //      return 'badge-secondary';
-  //  }
-  //}
-//
-  //// Método para verificar si un grupo debe estar deshabilitado
-  //isGroupDisabled(group: GroupOption): boolean {
-  //  const studentHasCondition = this.currentStudent?.eval_result === 'Con condición';
-  //  
-  //  // El grupo está deshabilitado si:
-  //  // 1. El total de estudiantes ya alcanzó la capacidad máxima, O
-  //  // 2. El estudiante tiene condición especial Y ya se alcanzó el límite de estudiantes especiales
-  //  const isGroupFull = group.total_students >= group.capacity;
-  //  const specialCapacityFull = group.total_special_students >= group.special_capacity;
-  //  
-  //  if (isGroupFull) {
-  //    return true; // Grupo completamente lleno
-  //  }
-  //  
-  //  if (studentHasCondition && specialCapacityFull) {
-  //    return true; // Sin cupo para estudiantes con condición especial
-  //  }
-  //  
-  //  return false; // Grupo disponible
-  //}
-//
-  //// Método para obtener información detallada sobre la disponibilidad
-  //getGroupAvailabilityInfo(group: GroupOption): string {
-  //  const studentHasCondition = this.currentStudent?.eval_result === 'Con condición';
-  //  const availableSpots = group.capacity - group.total_students;
-  //  const availableSpecialSpots = group.special_capacity - group.total_special_students;
-  //  
-  //  if (group.total_students >= group.capacity) {
-  //    return 'Grupo completo';
-  //  }
-  //  
-  //  if (studentHasCondition && group.total_special_students >= group.special_capacity) {
-  //    return 'Sin cupo para estudiantes con condición especial';
-  //  }
-  //  
-  //  if (studentHasCondition) {
-  //    return `${availableSpots} cupos disponibles (${availableSpecialSpots} para condición especial)`;
-  //  }
-  //  
-  //  return `${availableSpots} cupos disponibles`;
-  //}
-//
-  //get isSelectedGroupDisabled(): boolean {
-  //  if (!this.selectedGroupId) return true;
-  //  const group = this.availableGroups.find(g => g.id === this.selectedGroupId);
-  //  return group ? this.isGroupDisabled(group) : true;
-  //}
-//
-  //onConfirm() {
-  //  const selectedGroup = this.availableGroups.find(g => g.id === this.selectedGroupId);
-  //  
-  //  if (!selectedGroup) {
-  //    alert('Por favor selecciona un grupo');
-  //    return;
-  //  }
-  //  
-  //  if (this.isGroupDisabled(selectedGroup)) {
-  //    alert('El grupo seleccionado no tiene cupos disponibles');
-  //    return;
-  //  }
-  //  
-  //  const assignData: AssignGroupData = {
-  //    studentId: this.currentStudent.id,
-  //    studentName: this.currentStudent.student,
-  //    level: this.selectedLevel,
-  //    grade: this.selectedGrade,
-  //    selectedGroup: selectedGroup
-  //  };
-  //  
-  //  console.log('Datos a enviar:', assignData);
-  //  this.groupAssigned.emit(assignData);
-  //  this.modalService.dismissAll();
-  //}
+  get filteredGrades() {
+    if (!this.selectedLevelId) return this.grades;
+    return this.grades.filter(grade => grade.level.id === this.selectedLevelId);
+  }
+  
+  //FILTRAR SALONES
+  get filteredGroups(): dataClassroomAdapted[] {
+    return this.availableGroups.filter(group => {
+      const levelMatch = !this.selectedLevel || group.level?.toLowerCase() === this.selectedLevel.toLowerCase();
+      const gradeMatch = !this.selectedGrade || group.grade?.toLowerCase() === this.selectedGrade.toLowerCase();
+      const campusMatch = !this.selectedCampus || group.campus?.toLowerCase() === this.selectedCampus.toLowerCase();
+    
+      return levelMatch && gradeMatch && campusMatch;
+    })
+  }
+  
+  updateGroupAvailability() {
+    this.availableGroups.forEach(group => {
+      // Verificar si el grupo está completo
+      const isFull = group.total_students >= group.capacity;      
+      // Determinar el estado del grupo
+      if (isFull) {
+        group.status = 'Completo';
+      } else {
+        group.status = 'Disponible';
+      }
+    });
+  }
+  
+  getGroupStatusClass(classroom: dataClassroomAdapted): string {
+    switch (classroom.status) {
+      case 'Disponible':
+        return 'badge badge-success';
+      case 'Saturado':
+        return 'badge badge-warning';
+      case 'Completo':
+        return 'badge badge-danger';
+      default:
+        return 'badge badge-secondary';
+    }
+  }
+
+  // Método para verificar si un grupo debe estar deshabilitado
+  isGroupDisabled(classroom: dataClassroomAdapted): boolean {
+    const studentHasCondition = this.psyEvaluationResult === 'Con condición';
+
+    const isGroupFull = classroom.total_students >= classroom.capacity;
+    const specialCapacityFull = classroom.total_special_students >= classroom.special_capacity;
+  
+    if (isGroupFull) {
+      return true;
+    }
+    if (studentHasCondition && specialCapacityFull) {
+      return true;
+    }
+    return false;
+  }
+
+  // Método para obtener información detallada sobre la disponibilidad
+  getGroupAvailabilityInfo(classroom: dataClassroomAdapted): string {
+    const studentHasCondition = this.psyEvaluationResult === 'Con condición';
+    const availableSpots = classroom.capacity - classroom.total_students;
+    const availableSpecialSpots = classroom.special_capacity - classroom.total_special_students;
+    
+    if (classroom.total_students >= classroom.capacity) {
+      return 'Grupo completo';
+    }
+    
+    if (studentHasCondition && classroom.total_special_students >= classroom.special_capacity) {
+      return 'Sin cupo para estudiantes con condición especial';
+    }
+    
+    if (studentHasCondition) {
+      return `${availableSpots} cupos disponibles (${availableSpecialSpots} para condición especial)`;
+    }
+    
+    return `${availableSpots} cupos disponibles`;
+  }
+
+  get isSelectedGroupDisabled(): boolean {
+    if (!this.selectedClassroomId) return true;
+    const group = this.availableGroups.find(g => g.id === this.selectedClassroomId);
+    return group ? this.isGroupDisabled(group) : true;
+  }
+
+  onConfirm() {
+    if (!this.selectedClassroomId) {
+      this.notifycation.warning('Debes seleccionar un aula', 'Grupo no seleccionado');
+      return;
+    }
+    
+    const selectedGroup = this.availableGroups.find(g => g.id === this.selectedClassroomId);
+    
+    if (!selectedGroup) {
+      this.notifycation.error('El grupo seleccionado no existe', 'Error');
+      return;
+    }
+
+    if (this.isGroupDisabled(selectedGroup)) {
+      this.notifycation.warning('El grupo seleccionado no tiene cupos disponibles', 'Sin cupos');
+      return;
+    }
+
+    const dataClassroomSelected = {
+      idInscription: this.rowId,
+      idClassroom: this.selectedClassroomId
+    };
+
+    this.enrollmentService.addEnrollment(dataClassroomSelected).subscribe({
+      next: () => {
+
+        const newState = { state: 'Salón asignado' };
+
+        this.inscriptionService.changeState(this.rowId, newState).subscribe({
+          next: () => {
+            this.notifycation.success('Matrícula creada y salón asignado exitosamente', 'Éxito');
+            this.classroomAssigned.emit();
+            this.modalService.dismissAll();
+          },
+          error: (error) => {
+            this.notifycation.warning('Matrícula creada pero error en el cambio de estado', 'Advertencia');
+            this.modalService.dismissAll();
+          }
+        });
+      },
+      error: (error) => {
+        this.notifycation.error(error.message, 'Error al crear matrícula');
+      }
+    })
+
+  }
+
+  rejectInscription() {
+    const confirmReject = confirm('¿Estás seguro de rechazar esta inscripción?');
+
+    if (!confirmReject) return;
+
+    const newState = { state: 'Rechazado' };
+
+    this.inscriptionService.changeState(this.rowId, newState).subscribe({
+      next: () => {
+        this.notifycation.success('Inscripción rechazada correctamente', 'Rechazo exitoso');
+        this.classroomAssigned.emit();
+        this.modalService.dismissAll();
+      },
+      error: (error) => {
+        this.notifycation.error('Error al rechazar la inscripción', 'Error');
+      }
+    });
+  }
 
   onCancel() {
+    this.selectedClassroomId = null;
+    this.availableGroups = [];
     this.modalService.dismissAll();
+  }
+
+  formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // +1 porque enero es 0
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  }
+
+  clearFilters(): void {
+    this.selectedCampus = '';
+    this.selectedLevel = '';
+    this.selectedGrade = '';
+    this.selectedClassroomId = null;
+
+    this.filteredGroups; // vuelve a aplicar filtros sin nada seleccionado
   }
 }

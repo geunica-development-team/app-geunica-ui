@@ -32,7 +32,7 @@ export class ModalDeleteComponent {
     if (this.rowId) {
       console.log('HOLIIIIIIIIIIIIIII')
     } else {
-      this.notifycation.error('ID de producto no válido', 'Error');
+      this.notifycation.error('ID de sede no válido', 'Error');
     }
   }
 
@@ -40,7 +40,7 @@ export class ModalDeleteComponent {
     if (this.rowId) {
       console.log('HOLIIIIIIIIIIIIIII')
     } else {
-      this.notifycation.error('ID de producto no válido', 'Error');
+      this.notifycation.error('ID de nivel/programa no válido', 'Error');
     }
   }
 
@@ -48,7 +48,7 @@ export class ModalDeleteComponent {
     if (this.rowId) {
       console.log('HOLIIIIIIIIIIIIIII')
     } else {
-      this.notifycation.error('ID de producto no válido', 'Error');
+      this.notifycation.error('ID de grado no válido', 'Error');
     }
   }
 
@@ -56,7 +56,15 @@ export class ModalDeleteComponent {
     if (this.rowId) {
       console.log('HOLIIIIIIIIIIIIIII')
     } else {
-      this.notifycation.error('ID de producto no válido', 'Error');
+      this.notifycation.error('ID de sección no válido', 'Error');
+    }
+  }
+
+  deleteRole() {
+    if (this.rowId) {
+      console.log('HOLIIIIIIIIIIIIIII')
+    } else {
+      this.notifycation.error('ID de rol no válido', 'Error');
     }
   }
   

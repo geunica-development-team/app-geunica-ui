@@ -2,7 +2,7 @@ import { Component, ElementRef, inject, TemplateRef, ViewChild } from '@angular/
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { UserService } from '../../../../services/user.service';
+import { UserServiceAuth } from '../../../../services/user.service';
 import { error } from 'console';
 
 @Component({
@@ -16,7 +16,7 @@ export class ModalChangePasswordComponent {
   private modalService = inject(NgbModal);
   private toolsForm = inject(FormBuilder);
   private notifycation = inject(ToastrService);
-  private userService = inject(UserService);
+  private userService = inject(UserServiceAuth);
 
   @ViewChild('modalChangePassword') modalChangePassword!: TemplateRef<ElementRef>;  
 

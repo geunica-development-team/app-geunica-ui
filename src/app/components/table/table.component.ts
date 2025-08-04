@@ -50,6 +50,16 @@ export class TableComponent {
     return this._searchFilter
   }
 
+  private _roleFilter = ""
+  @Input()
+  set roleFilter(value: string) {
+    this._roleFilter = value
+    this.updateTable()
+  }
+  get roleFilter(): string {
+    return this._roleFilter
+  }
+
   @Input() statusColumnKey = ""
 
   private _originalRows: any[] = []
@@ -82,6 +92,12 @@ export class TableComponent {
         statusMatch = data[this.statusColumnKey] === this._statusFilter
       }
 
+      // Filtro por rol
+      let roleMatch = true
+      if (this._roleFilter && this._roleFilter.trim() !== "") {
+        roleMatch = data.role === this._roleFilter
+      }
+
       // Filtro por deuda
       let debtMatch = true
       if (this._debtFilter && this._debtFilter.trim() !== "") {
@@ -101,7 +117,7 @@ export class TableComponent {
         )
       }
 
-      return statusMatch && debtMatch && searchMatch
+      return statusMatch && debtMatch && roleMatch && searchMatch
     })
 
     this.filteredRows.sort((a, b) => a.id - b.id)

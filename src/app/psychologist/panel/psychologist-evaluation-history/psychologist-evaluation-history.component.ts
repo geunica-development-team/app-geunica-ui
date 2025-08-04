@@ -2,7 +2,7 @@ import { Component, inject, ViewChild } from '@angular/core';
 import { PanelHeaderComponent } from "../../../components/dashboard/shared-components/panel-header/panel-header.component";
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/auth.service';
-import { UserService, UserSession } from '../../../services/user.service';
+import { UserServiceAuth, UserSession } from '../../../services/user.service';
 import { TableEnrollmentComponent } from '../../../admin/panel/admin-component/table-enrollment/table-enrollment.component';
 import { dataInscriptionAll, InscriptionService } from '../../../admin/services/inscription.service';
 import { ModalEditEvaluationComponent } from '../modal-edit-evaluation/modal-edit-evaluation.component';
@@ -18,7 +18,7 @@ export class PsychologistEvaluationHistoryComponent {
   private inscriptionService = inject(InscriptionService)
   private notifycation = inject(ToastrService);
   private authService = inject(AuthService);
-  private userService = inject(UserService);
+  private userService = inject(UserServiceAuth);
 
   userProfile!: UserSession;
   

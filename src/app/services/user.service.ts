@@ -67,7 +67,7 @@ export interface dataChangePassword {
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
+export class UserServiceAuth {
   private httpService = inject(HttpClient);
   private authStorage = inject(AuthStorageService);
   private auth_end_point = 'https://app-geunica-backend.onrender.com';

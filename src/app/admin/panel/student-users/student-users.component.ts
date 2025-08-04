@@ -213,10 +213,4 @@ export class StudentUsersComponent {
     }
   }
 
-  applyFilter(event: Event) {
-    if (this.studentUsersTable) {
-      this.studentUsersTable.filterValue = (event.target as HTMLInputElement).value
-      this.studentUsersTable.updateTable()
-    }
-  }
 }

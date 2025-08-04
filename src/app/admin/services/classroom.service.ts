@@ -67,7 +67,9 @@ export interface dataClassroomAll {
     period: {
         name: string,
         state: string
-    }
+    },
+    totalStudents: number,
+    totalSpecialStudents: number
 }
 
 @Injectable({

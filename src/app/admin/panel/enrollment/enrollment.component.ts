@@ -1,7 +1,6 @@
 import { Component, inject, ViewChild } from '@angular/core';
 import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
 import { TableEnrollmentComponent } from '../admin-component/table-enrollment/table-enrollment.component';
-import { AssignGroupData, Enrollment } from '../../services/enrollment.service';
 import { ModalContinueRegistrationComponent } from './modal-continue-registration/modal-continue-registration.component';
 import { ModalMarkPaymentComponent } from './modal-mark-payment/modal-mark-payment.component';
 import { ModalDeleteEnrollmentComponent } from './modal-delete-enrollment/modal-delete-enrollment.component';
@@ -10,10 +9,11 @@ import { ModalReadEnrollmentComponent } from './modal-read-enrollment/modal-read
 import { FormsModule } from '@angular/forms';
 import { dataInscriptionAll, InscriptionService } from '../../services/inscription.service';
 import { ToastrService } from 'ngx-toastr';
+import { ModalEnrollmentListComponent } from './modal-enrollment-list/modal-enrollment-list.component';
 
 @Component({
   selector: 'app-enrollment',
-  imports: [PanelHeaderComponent, TableEnrollmentComponent, ModalContinueRegistrationComponent, ModalMarkPaymentComponent, ModalDeleteEnrollmentComponent, ModalAddEnrollmentComponent, ModalReadEnrollmentComponent, FormsModule],
+  imports: [PanelHeaderComponent, TableEnrollmentComponent, ModalContinueRegistrationComponent, ModalMarkPaymentComponent, ModalDeleteEnrollmentComponent, ModalAddEnrollmentComponent, ModalReadEnrollmentComponent, FormsModule, ModalEnrollmentListComponent],
   templateUrl: './enrollment.component.html',
   styleUrl: './enrollment.component.css'
 })
@@ -29,7 +29,8 @@ export class EnrollmentComponent {
   @ViewChild("modalMarkPayment") modalMarkPayment!: ModalMarkPaymentComponent
   @ViewChild("modalDeleteEnrollment") modalDeleteEnrollment!: ModalDeleteEnrollmentComponent
   @ViewChild("modalReadEnrollment") modalReadEnrollment!: ModalReadEnrollmentComponent
-  
+  @ViewChild("modalEnrollmentList") modalEnrollmentList!: ModalEnrollmentListComponent
+
   // FILTROS
   selectedStatus = ""
   searchValue = ""
@@ -39,11 +40,11 @@ export class EnrollmentComponent {
     "ID",
     "Estudiante",
     "DNI",
-    "Apoderado",
     "Grado y Sección",
     "Fecha",
     "Estado Inscripción",
-    "Evaluación Resultado"
+    "Evaluación Resultado",
+    "Matrícula"
   ]
 
   // MAPEO PARA COLUMNAS Y FILAS
@@ -51,11 +52,11 @@ export class EnrollmentComponent {
     ID: "id",
     Estudiante: "studentFullName",
     "DNI": "documentNumber",
-    Apoderado: "tutorFullName",
     "Grado y Sección": "gradeAndSection",
     Fecha: "registrationDate",
     "Estado Inscripción": "state",
     "Evaluación Resultado": "evaluationResult",
+    "Matrícula": "enrollmentSummary",
   }
   
   // ESTADOS DISPONIBLES
@@ -64,7 +65,7 @@ export class EnrollmentComponent {
     { value: "Evaluación en proceso", label: "Evaluación en proceso" },
     { value: "Evaluado", label: "Evaluado" },
     { value: "Rechazado", label: "Rechazado" },
-    { value: "Pago pendiente", label: "Pago pendiente" },
+    { value: "Salón asignado", label: "Salón asignado" },
     { value: "Matriculado", label: "Matriculado" },
   ]
     
@@ -77,48 +78,50 @@ export class EnrollmentComponent {
       next:(inscription) => {
         this.rows = inscription.map((inscription: any): dataInscriptionAll & {
           studentFullName: string,
-          tutorFullName: string,
           gradeAndSection: string,
           documentNumber: string,
-          evaluationResult: string
-        } => ({
-          id: inscription.id,
-          registrationDate: this.formatDate(inscription.registrationDate),
-          state: inscription.state,
-          student: {
-            person: {
-              names: inscription.student?.person?.names,
-              paternalSurname: inscription.student?.person?.paternalSurname,
-              maternalSurname: inscription.student?.person?.maternalSurname,
-              documentNumber: inscription.student?.person?.documentNumber
-            }
-          },
-          tutor: {
-            person: {
-              names: inscription.tutor?.person?.names,
-              paternalSurname: inscription.tutor?.person?.paternalSurname,
-              maternalSurname: inscription.tutor?.person?.maternalSurname,
-            }
-          },
-          grade: {
-            id: inscription.grade.id,
-            name: inscription.grade.name,
-            level: {
-              id: inscription.grade.level.id,
-              name: inscription.grade.level.name
-            }
-          },
-          psychology: inscription.psychology ?? null,
-          documentNumber: `${inscription.student?.person?.documentNumber}`,
-          studentFullName: `${inscription.student?.person?.names} ${inscription.student?.person?.paternalSurname} ${inscription.student?.person?.maternalSurname}`,
-          tutorFullName: `${inscription.tutor?.person?.names} ${inscription.tutor?.person?.paternalSurname} ${inscription.tutor?.person?.maternalSurname}`,
-          gradeAndSection: `${inscription.grade?.level?.name} - ${inscription.grade?.name}`,
-          evaluationResult: inscription.psychology ? (inscription.psychology.result === true
-            ? 'Con condición'
-            : 'Sin condición'
-          )
-          : 'No evaluado'
-        }));
+          evaluationResult: string,
+          enrollmentSummary: string
+        } => {
+          const pendingEnrollments = inscription.enrollments?.filter((enrollments: any) => enrollments.state === 'Pendiente de pago') || [];
+        
+          return {
+            id: inscription.id,
+            registrationDate: this.formatDate(inscription.registrationDate),
+            state: inscription.state,
+            student: {
+              person: {
+                names: inscription.student?.person?.names,
+                paternalSurname: inscription.student?.person?.paternalSurname,
+                maternalSurname: inscription.student?.person?.maternalSurname,
+                documentNumber: inscription.student?.person?.documentNumber
+              }
+            },
+            grade: {
+              id: inscription.grade.id,
+              name: inscription.grade.name,
+              level: {
+                id: inscription.grade.level.id,
+                name: inscription.grade.level.name
+              }
+            },
+            psychology: inscription.psychology ?? null,
+            documentNumber: `${inscription.student?.person?.documentNumber}`,
+            studentFullName: `${inscription.student?.person?.names} ${inscription.student?.person?.paternalSurname} ${inscription.student?.person?.maternalSurname}`,
+            gradeAndSection: `${inscription.grade?.level?.name} - ${inscription.grade?.name}`,
+            evaluationResult: inscription.psychology ? (inscription.psychology.result === true
+              ? 'Con condición'
+              : 'Sin condición'
+            )
+            : 'No evaluado',
+            enrollments: inscription.enrollments ?? [],
+            enrollmentSummary: pendingEnrollments.length > 0
+              ? `${pendingEnrollments.length}`
+              : '-',
+          };
+        });
+        
+
         if (this.enrollmentTable) {
           this.enrollmentTable.updateTable();
         }
@@ -158,13 +161,12 @@ export class EnrollmentComponent {
   }
 
   openModalContinueRegistration(row: any) {
-    if (this.modalContinueRegistration) {
-      this.modalContinueRegistration.openModal(row)
+    if (row && row.id && !isNaN(row.id)) {
+      this.modalContinueRegistration.rowId = Number(row.id);
+      this.modalContinueRegistration.openModal();
+    } else {
+      console.error('ID inválido:', row.id);
     }
-  }
-
-  onContinueRegistration = (row: Enrollment) => {
-    this.openModalContinueRegistration(row)
   }
 
   openModalMarkPayment(row: any) {
@@ -173,7 +175,7 @@ export class EnrollmentComponent {
     }
   }
 
-  onMarkPayment = (row: Enrollment) => {
+  onMarkPayment(row: any) {
     console.log("Marcar pago:", row)
     this.openModalMarkPayment(row)
   }
@@ -184,11 +186,19 @@ export class EnrollmentComponent {
     }
   }
 
-  onDeleteEnrollment = (row: Enrollment) => {
+  onDeleteEnrollment(row: any) {
     console.log("Eliminar inscripción:", row)
     this.openModalDeleteEnrollment(row)
   }
 
+  openModalEnrollmentList(row: any) {
+    if (row && row.id && !isNaN(row.id)) {
+      this.modalEnrollmentList.rowId = Number(row.id);
+      this.modalEnrollmentList.openModal();
+    } else {
+      console.error('ID inválido:', row.id);
+    }
+  }
 
   onSendForEvaluation = (row: dataInscriptionAll) => {
     const newState = {
@@ -242,22 +252,6 @@ export class EnrollmentComponent {
         this.notifycation.error('Error al cambiar el estado de la inscripción', 'Error');
       }
     })
-  }
-
-  ongroupAssigned(data: AssignGroupData) {
-    console.log("Grupo asignado:", data)
-
-    const studentIndex = this.rows.findIndex((row) => row.id === data.studentId)
-    if (studentIndex !== -1) {
-      this.rows[studentIndex].state = "Pago pendiente"
-      if (this.enrollmentTable) {
-        this.enrollmentTable.updateTable()
-      }
-    }
-
-    alert(
-      `Ticket generado para ${data.studentName} en el grupo ${data.selectedGroup?.name}. Estado actualizado a "Pago pendiente"`,
-    )
   }
 
   formatDate(dateString: string): string {

@@ -86,7 +86,9 @@ export class ClassroomsComponent {
           stateText: classroom.period?.state === true ? 'En curso': 'Finalizado',
           stateClass: classroom.period?.state === true ? 'badge bg-success-subtle text-success fw-semibold' : 'badge bg-danger-subtle text-danger fw-semibold',
           gradeAndSection: `${classroom.grade.name} ${classroom.section.name}`,
-          capacityDisplay: `0/${classroom.capacity} | 0/${classroom.specialCapacity}`
+          capacityDisplay: `${classroom.totalStudents}/${classroom.capacity} | ${classroom.totalSpecialStudents}/${classroom.specialCapacity}`,
+          totalStudents: classroom.totalStudents,
+          totalSpecialStudents: classroom.totalSpecialStudents
         }));
         if (this.classroomTable) {
           this.classroomTable.updateTable();

@@ -8,6 +8,7 @@ import { dataGrade, dataGradeAll, GradeService } from '../../../../services/grad
 import { dataSection, SectionService } from '../../../../services/section.service';
 import { error } from 'console';
 import { dataPeriod, PeriodService } from '../../../../services/period.service';
+import { dataRole, RoleService } from '../../../../services/role.service';
 
 @Component({
   selector: 'app-modal-edit',
@@ -28,6 +29,7 @@ export class ModalEditComponent {
   private gradeService = inject(GradeService);
   private sectionService = inject(SectionService);
   private periodService = inject(PeriodService);
+  private roleService = inject(RoleService);
 
   getTitle(): string {
     switch (this.activeTab) {
@@ -35,6 +37,7 @@ export class ModalEditComponent {
       case 'niveles': return 'Editar nivel/programa';
       case 'grados': return 'Editar grado';
       case 'secciones': return 'Editar sección';
+      case 'roles': return 'Editar rol';      
       default: return 'Editar';
     }
   }
@@ -285,6 +288,52 @@ export class ModalEditComponent {
       this.notifycation.error('Debes completar todos los campos correctamente', 'Error');
     }
   }
+  
+  //PARA EDITAR SECCION
+  formEditRole = this.toolsForm.group({
+    'role': ['', [Validators.required]],
+    'description': ['', [Validators.required]],
+  })
+
+  loadRoleDetails() {
+    if (this.rowId && !isNaN(this.rowId)) {
+      this.roleService.getRoleById(this.rowId).subscribe({
+        next: (role) => {
+          this.formEditRole.patchValue({
+            role: role.role,
+            description: role.description
+          });
+        },
+        error: (error) => {
+          this.notifycation.error('Error al cargar los detalles del rol', 'Error');
+        }
+      })
+    } else {
+      this.notifycation.error('ID del rol inválido', 'Error');
+    }
+  }
+
+  updateRole() {
+    if (this.formEditRole.valid && this.rowId) {
+      const updatedRole: dataRole = {
+      role: this.formEditRole.get('role')?.value ?? '',
+      description: this.formEditRole.get('description')?.value ?? ''
+      }
+      this.roleService.updateRole(this.rowId, updatedRole).subscribe({
+        next: (value: any) => {
+          this.notifycation.success(`Rol actualizado con éxito.`, 'Éxito');
+          this.updated.emit();
+          this.modalService.dismissAll();
+          this.formEditRole.reset();
+        },
+        error: (error: Error) => {
+          this.notifycation.error(error.message, 'Error');
+        }
+      })
+    } else {
+      this.notifycation.error('Debes completar todos los campos correctamente', 'Error');
+    }
+  }
 
   @ViewChild('modalEdit') modalEdit!: TemplateRef<ElementRef>;  
 
@@ -318,6 +367,9 @@ export class ModalEditComponent {
       case 'periodos':
         this.loadPeriodDetails();
         break;
+      case 'roles':
+        this.loadRoleDetails();
+        break;
     }
   }
 
@@ -330,14 +382,17 @@ export class ModalEditComponent {
         this.formEditLevel.reset();
         break;
       case 'grados':
-      this.formEditGrade.reset();
-      break;
+        this.formEditGrade.reset();
+        break;
       case 'secciones':
-      this.formEditSection.reset();
-      break;
+        this.formEditSection.reset();
+        break;
       case 'periodos':
-      this.formEditPeriod.reset();
-      break;
+        this.formEditPeriod.reset();
+        break;
+      case 'role':
+        this.formEditRole.reset();
+        break;
     }
     this.modalService.dismissAll();
   }

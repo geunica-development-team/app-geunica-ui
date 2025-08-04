@@ -1,0 +1,209 @@
+<ng-template #modalEnrollmentList let-modal>
+    <div class="modal-header bg-white border-bottom px-4">
+        <h4 class="modal-title fw-semibold text-dark mb-0">Editar matrícula</h4>
+        <button 
+        type="button" 
+        class="btn-close" 
+        aria-label="Close"
+        (click)="onCancel()">
+        </button>
+    </div>
+
+    <div class="modal-body bg-white p-4">
+        @for (enrollment of enrollments; track enrollment) {
+            <div class="section-divider mb-3">
+                    <h6 class="fw-semibold fs-5 mb-0 text-success">
+                    Información general
+                    </h6>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                <div class="d-flex align-items-center mb-2">
+                    <i class="fas fa-info-circle text-muted me-2"></i>
+                    <span><strong class="fw-semibold">Estado:</strong>
+                        @switch (enrollment.state) {
+                            @case ('Pendiente de pago') {
+                                <span class="badge bg-warning ms-2"> {{ enrollment.state }}</span>
+                            }
+                            @case ('Pagado') {
+                                <span class="badge bg-success ms-2"> {{ enrollment.state }}</span>
+                            }
+                            @case ('Anulado') {
+                                <span class="badge bg-danger ms-2"> {{ enrollment.state }}</span>
+                            }
+                        }
+                    </span>
+                </div>
+                </div>
+                <div class="col-md-6">
+                <div class="d-flex align-items-center mb-2">
+                    <i class="fas fa-calendar-alt text-muted me-2"></i>
+                    <span><strong class="fw-medium">Fecha de matrícula:</strong> {{ formatDate(enrollment.dateEnrollment) }}</span>
+                </div>
+                </div>
+            </div>
+            <div class="border rounded p-3 mb-3">
+
+            <!-- Información del Aula -->
+                <div class="section-divider mb-3">
+                    <h6 class="fw-semibold fs-5 mb-0 text-success">
+                    <i class="fas fa-chalkboard me-2"></i>
+                    Información del Aula
+                    </h6>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-6">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-graduation-cap text-muted me-2"></i>
+                        <span><strong class="fw-medium">Nivel, grado y sección:</strong> {{ enrollment.classroom.grade.level.name }} - {{ enrollment.classroom.grade.name }} {{ enrollment.classroom.section.name }}</span>
+                    </div>
+                    </div>
+                    <div class="col-md-6">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-clock text-muted me-2"></i>
+                        <span><strong class="fw-medium">Turno:</strong> {{ enrollment.classroom.shift }}</span>
+                    </div>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-12">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-building text-muted me-2"></i>
+                        <span><strong class="fw-medium">Sede:</strong> {{ enrollment.classroom.campus.name }}</span>
+                    </div>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-12">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-calendar-week text-muted me-2"></i>
+                        <span><strong class="fw-medium">Periodo:</strong> {{ enrollment.classroom.period.name }} ({{ formatDate(enrollment.classroom.period.startDate) }} - {{ formatDate(enrollment.classroom.period.endDate) }})</span>
+                    </div>
+                    </div>
+                </div>
+
+                </div>
+            <div class="row mb-3">
+            <div class="col-md-3">
+                <label for="shift" class="form-label fw-medium small">Filtrar por Sede:</label>
+                <select 
+                id="shift"
+                class="form-select rounded"
+                [(ngModel)]="selectedCampus"
+                >
+                <option value="" disabled>Todas las sedes</option>
+                @for (campus of campus; track campus.id) {
+                    <option [value]="campus.name"> {{campus.name}} </option>
+                }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="level" class="form-label fw-medium small">Filtrar por Nivel:</label>
+                <select 
+                id="level"
+                class="form-select rounded"
+                [(ngModel)]="selectedLevelId"
+                (change)="onLevelChange()"
+                >
+                <option [ngValue]="null" disabled>Todos los niveles</option>
+                @for (level of levels; track level.id) {
+                    <option [ngValue]="level.id"> {{level.name}} </option>
+                }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="grade" class="form-label fw-medium small">Filtrar por Grado:</label>
+                <select 
+                id="grade"
+                class="form-select rounded"
+                [(ngModel)]="selectedGrade"
+                >
+                <option value="" disabled>Todos los grados</option>
+                @for (grade of filteredGrades; track grade.id) {
+                    <option [value]="grade.name"> {{grade.name}} </option>
+                }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="filter" class="form-label fw-medium small">Filtros</label>
+                <button id="filter" class="btn btn-outline-secondary ms-2" (click)="clearFilters()">
+                Limpiar filtros
+                </button>
+            </div>
+            </div>
+
+            <div class="mb-2">
+            <small class="text-muted">
+                Mostrando {{ filteredGroups.length }} de {{ availableGroups.length }} grupos
+            </small>
+            </div>
+
+            <!-- Selector de Grupo -->
+            <div class="mb-3">
+            <label class="form-label fw-medium small">Seleccionar aula:</label>
+            
+            @if (filteredGroups.length === 0) {
+                <div class="alert alert-warning border rounded">
+                No hay grupos disponibles con los filtros seleccionados.
+                </div>
+            } @else {
+                <div class="border rounded p-2 group-scroll-container">
+                @for (classroom of filteredGroups; track classroom.id) {
+                    <div class="group-option rounded p-3 mb-2 bg-white" [class.disabled]="isGroupDisabled(classroom)">
+                    <label class="d-flex align-items-start mb-0">
+                        <input 
+                        type="radio" 
+                        name="group"
+                        [value]="classroom.id"
+                        [(ngModel)]="selectedClassroomId"
+                        [disabled]="isGroupDisabled(classroom)"
+                        class="form-check-input me-3 mt-1">
+                        <div class="flex-grow-1">
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <span class="fw-semibold small">
+                            {{ classroom.campus }}: {{ classroom.level }} - {{ classroom.grade }} {{ classroom.section }} - {{ classroom.shift }} ({{ classroom.period }} - {{ classroom.periodState }})
+                            </span>
+                        </div>
+                        <span class="mb-1" [class]="getGroupStatusClass(classroom)">
+                            {{ classroom.status }}
+                        </span>
+                        <small class="text-muted d-block">
+                            Cupos de condición psicológica: {{ classroom.total_special_students }}/{{ classroom.special_capacity }}
+                        </small>
+                        <small class="text-muted d-block">
+                            Total: {{ classroom.total_students }}/{{ classroom.capacity }}
+                        </small>
+                        
+                        <small class="text-info fw-medium d-block ">
+                            {{ getGroupAvailabilityInfo(classroom) }}
+                        </small>
+                        </div>
+                    </label>
+                    </div>
+                }
+                </div>
+            }
+        </div>
+        }
+    </div>
+    <div class="modal-footer bg-white border-top d-flex justify-content-end gap-2 p-3">
+        <button 
+        type="button" 
+        class="btn btn-danger rounded px-4"
+        (click)="deleteEnrollment()">
+        Eliminar matrícula
+        </button>
+        <button 
+        type="button" 
+        class="btn btn-success rounded px-4"
+        (click)="editEnrollment()">
+        Guardar cambios
+        </button>
+        <button 
+        type="button" 
+        class="btn btn-secondary rounded px-4"
+        (click)="onCancel()">
+        Cancelar
+        </button>
+    </div>
+</ng-template>

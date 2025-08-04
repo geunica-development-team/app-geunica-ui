@@ -21,7 +21,7 @@ export class ModalReadEnrollmentComponent {
   private modalService = inject(NgbModal);
   private toolsForm = inject(FormBuilder);
   private notifycation = inject(ToastrService);
-  private enrollmentService = inject(InscriptionService);
+  private inscriptionService = inject(InscriptionService);
   private levelService = inject(LevelService);
   private gradeService = inject(GradeService);
 
@@ -96,7 +96,7 @@ export class ModalReadEnrollmentComponent {
 
   loadEnrollmentDetails() {
     if (this.rowId && !isNaN(this.rowId)) {
-      this.enrollmentService.getInscriptionById(this.rowId).subscribe({
+      this.inscriptionService.getInscriptionById(this.rowId).subscribe({
         next: (enrollment) => {
           this.selectedLevelId = enrollment.grade.level.id;
 
@@ -199,7 +199,7 @@ export class ModalReadEnrollmentComponent {
         },
         idGrade: Number(this.formEditEnrollment.get('grade')?.value) ?? 0,
       }
-      this.enrollmentService.updateInscription(this.rowId, updatedEnrollment).subscribe({
+      this.inscriptionService.updateInscription(this.rowId, updatedEnrollment).subscribe({
         next: (value: any) => {
           this.notifycation.success(`Inscripción actualizada con éxito.`, 'Éxito');
           this.enrollmentUpdated.emit();

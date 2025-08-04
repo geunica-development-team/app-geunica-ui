@@ -19,13 +19,26 @@
                   <span [class]="getStateClass(row[columnMappings[column]])">
                     {{ row[columnMappings[column]] }}
                   </span>
-                } @else {
+                }
+                @else if (isEnrollmentColumn(column)) {
+                  @if (row.enrollmentSummary !== '-') {
+                    <button 
+                      class="btn btn-outline-info btn-hover-white btn-sm me-2"
+                      (click)="accionVerMatricula(row)">
+                      <i class="fas fa-eye"></i>
+                      Ver matrícula
+                    </button>
+                  } @else {
+                    <span>-</span>
+                  }
+                }
+                @else {
                   {{ row[columnMappings[column]] }}
                 }
               </td>
             }
-            <td class="text-center">
-              <div class="d-flex justify-content-center gap-2">
+            <td>
+              <div class="d-flex justify-content-between gap-2">
                 <!-- Botón Ver (siempre visible) -->
                  @if (verFila) {
                   <button 

@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { ModalChangePasswordComponent } from "./modal-change-password/modal-change-password.component";
 import { AuthService } from '../../../services/auth.service';
 import { HttpClient } from '@angular/common/http';
-import { UserService, UserSession } from '../../../services/user.service';
+import { UserServiceAuth, UserSession } from '../../../services/user.service';
 
 @Component({
   selector: 'app-profile',
@@ -12,7 +12,7 @@ import { UserService, UserSession } from '../../../services/user.service';
 })
 export class ProfileComponent {
   private authService = inject(AuthService);
-  private userService = inject(UserService);
+  private userService = inject(UserServiceAuth);
 
   userProfile!: UserSession;
 

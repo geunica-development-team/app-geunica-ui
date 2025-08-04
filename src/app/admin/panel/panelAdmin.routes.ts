@@ -1,7 +1,6 @@
 import { Routes } from "@angular/router";
 import { PanelComponent } from "./panel.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
-import { UsersComponent } from "./users/users.component";
 import { FinanceComponent } from "./finance/finance.component";
 import { EnrollmentComponent } from "./enrollment/enrollment.component";
 import { StudentUsersComponent } from "./student-users/student-users.component";
@@ -10,6 +9,7 @@ import { StudentDetailsComponent } from "./student-users/student-details/student
 import { roleGuard } from "../../guards/role.guard";
 import { AcademicSettingComponent } from "./academic-setting/academic-setting.component";
 import { ClassroomsComponent } from "./classrooms/classrooms.component";
+import { SystemSettingComponent } from "./system-setting/system-setting.component";
 
 export const adminPanelRoutes: Routes = [
     {
@@ -44,10 +44,6 @@ export const adminPanelRoutes: Routes = [
                 component: InternalUsersComponent
             },
             {
-                path: 'usuarios',
-                component: UsersComponent
-            },
-            {
                 path: 'aulas',
                 component: ClassroomsComponent
             },
@@ -58,6 +54,10 @@ export const adminPanelRoutes: Routes = [
             {
                 path: 'configuracion-academica',
                 component: AcademicSettingComponent
+            },
+            {
+                path: 'configuracion-sistema',
+                component: SystemSettingComponent
             },
             {
                 path: 'perfil',

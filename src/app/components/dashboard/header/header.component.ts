@@ -3,7 +3,7 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthStorageService } from '../../../services/auth-storage.service';
 import { jwtDecode } from 'jwt-decode';
 import { ToastrService } from 'ngx-toastr';
-import { UserService, UserSession } from '../../../services/user.service';
+import { UserServiceAuth, UserSession } from '../../../services/user.service';
 
 @Component({
   selector: 'app-header',
@@ -13,7 +13,7 @@ import { UserService, UserSession } from '../../../services/user.service';
 })
 export class HeaderComponent {
   private authStorage = inject(AuthStorageService);
-  private userService = inject(UserService);
+  private userService = inject(UserServiceAuth);
   private router = inject(Router);
 
 
