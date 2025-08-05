@@ -46,7 +46,7 @@ export const studentPanelRoutes: Routes = [
                     { path: '', 
                         component: GradesComponent 
                     },
-                    { path: 'gradesRegistry', //:id/
+                    { path: ':id/gradesRegistry', //
                         component: GradesRegistryComponent
                     },
                 ]

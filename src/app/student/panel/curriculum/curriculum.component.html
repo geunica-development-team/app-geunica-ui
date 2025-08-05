@@ -1,38 +1,63 @@
-<app-panel-header title="Temas del curso" />
-<ng-container *ngIf="course; else cargando">
-  <h2 class="mb-3">{{ course.nombre }}</h2>
-  <div class="container py-4">
-    <div class="row justify-content-center">
-      <div class="col-12 col-md-8">
+<app-panel-header [title]="'Temario de : ' + (course?.nombre || '')"/>
 
-        <!-- Botón y mini-card a la izquierda -->
-        <div class="mb-3 d-flex justify-content-end">
-            <div class="dropdown">
-                <label class="me-2">Filtrar por:</label>
-                
-                <button 
-                class="btn btn-outline-success dropdown-toggle" 
-                type="button" 
-                id="dropdownMenuButton" 
-                data-bs-toggle="dropdown" 
-                aria-expanded="false"
-                style="min-width: 6rem;">
-                  Ver todos 
-                </button>
+<ng-container *ngIf="!loading; else cargando">
 
-                <ul class="dropdown-menu dropdown-menu-end mt-2" aria-labelledby="dropdownMenuButton">
-                <li><a class="dropdown-item py-1" >Completados</a></li>
-                <li><a class="dropdown-item py-1" >Por completar</a></li>
-                </ul>
-            </div>
-        </div>
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 
-        <app-card-list 
-          [title]="'Temario de ' + course.nombre" 
-          [items]="curriculum">
-        </app-card-list>
+  <ng-container *ngIf="course && !error">
+    <h2 class="mb-3">{{ course.courseName }}</h2>
+
+    <div class="mb-3 d-flex justify-content-end">
+      <label class="me-2 align-self-center">Filtrar por:</label>
+      <div class="dropdown">
+        <button
+          class="btn btn-outline-success dropdown-toggle"
+          type="button"
+          id="dropdownMenuButton"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          Ver todos
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+          <li><a class="dropdown-item">Completados</a></li>
+          <li><a class="dropdown-item">Por completar</a></li>
+        </ul>
       </div>
     </div>
-  </div>
+
+    <div class="card p-4 shadow-sm mb-4">
+      <h4 class="mb-3 text-center">Temario de {{ course.courseName }}</h4>
+
+      <div *ngFor="let item of curriculum" class="card mb-3 p-3">
+        <div class="row g-3 align-items-center">
+          <!-- si tienes imagen -->
+          <div class="col-12 col-md-3" *ngIf="item.imageUrl">
+            <img [src]="item.imageUrl" class="img-fluid rounded" [alt]="item.title" />
+          </div>
+          <div class="col-12 col-md-9">
+            <h5 class="card-title">{{ item.title }}</h5>
+            <p class="card-text">{{ item.description }}</p>
+            <p class="mb-0">
+              <small>
+                <strong>Posición:</strong> {{ item.position }}
+                <strong>Creado:</strong> {{ item.createdAt | date:'short' }}
+              </small>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <p *ngIf="curriculum.length === 0" class="text-center text-muted">
+        No hay temas disponibles para este curso.
+      </p>
+    </div>
+  </ng-container>
+
 </ng-container>
-<ng-template #cargando>…</ng-template>
+
+<ng-template #cargando>
+  <div class="text-center py-4">
+    <div class="spinner-border" role="status"></div>
+  </div>
+</ng-template>

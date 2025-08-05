@@ -27,8 +27,8 @@
             [subtitulo1]="course.courseCode"
             [etiquetaSubtitulo2]="'DOCENTE'"
             [subtitulo2]="course.teacherName"
-            [link]="['/student/panel/courses', course.courseId, 'curriculum']">
-
+            [link]="['/student/panel/courses', course.classAssignmentId, 'curriculum']">
+            <a [routerLink]="['/curriculum', course.classAssignmentId]">Ver temario</a>
             </app-card-courses>
       </div>
     </div>
