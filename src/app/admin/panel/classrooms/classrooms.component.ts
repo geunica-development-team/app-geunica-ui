@@ -5,10 +5,11 @@ import { ClassroomService, dataClassroomAll } from '../../services/classroom.ser
 import { ModalAddClassroomComponent } from './modal-add-classroom/modal-add-classroom.component';
 import { ModalEditClassroomComponent } from "./modal-edit-classroom/modal-edit-classroom.component";
 import { ModalDeleteClassroomComponent } from "./modal-delete-classroom/modal-delete-classroom.component";
+import { ModalClassAssignmentComponent } from './modal-class-assignment/modal-class-assignment.component';
 
 @Component({
   selector: 'app-classrooms',
-  imports: [PanelHeaderComponent, TableComponent, ModalAddClassroomComponent, ModalEditClassroomComponent, ModalDeleteClassroomComponent],
+  imports: [PanelHeaderComponent, TableComponent, ModalAddClassroomComponent, ModalEditClassroomComponent, ModalDeleteClassroomComponent, ModalClassAssignmentComponent],
   templateUrl: './classrooms.component.html',
   styleUrl: './classrooms.component.css'
 })
@@ -38,6 +39,16 @@ export class ClassroomsComponent {
       console.error('ID inválido:', row.id);
     }
   }
+
+  @ViewChild('modalClassAssignment') modalClassAssignment!: ModalClassAssignmentComponent;
+  openModalClassAssignment(row: any) {
+    if (row && row.id && !isNaN(row.id)) {
+      this.modalClassAssignment.rowId = Number(row.id);
+      this.modalClassAssignment.openModal();
+    } else {
+      console.error('ID inválido:', row.id);
+    }
+  }
   
   // COLUMNAS DE LA TABLA
   columns = [
@@ -49,7 +60,8 @@ export class ClassroomsComponent {
     'Nivel',
     'Grado y Sección',
     'Turno',
-    'Capacidad'
+    'Capacidad',
+    'Cursos asignados',
   ];
   
   // MAPEO PARA COLUMNAS Y FILAS
@@ -62,7 +74,8 @@ export class ClassroomsComponent {
     'Nivel': 'level',
     'Grado y Sección': 'gradeAndSection',
     'Turno': 'shift',
-    'Capacidad': 'capacityDisplay'
+    'Capacidad': 'capacityDisplay',
+    'Cursos asignados': 'classAssignmentsSummary'
   };
 
   rows: dataClassroomAll[] = [];
@@ -72,7 +85,13 @@ export class ClassroomsComponent {
   loadClassrooms() {
     this.classroomService.getAllClassrooms().subscribe({
       next:(classroom) => {
-        this.rows = classroom.map((classroom: any): dataClassroomAll & { gradeAndSection: string, capacityDisplay: string, stateText: string, stateClass: string } => ({
+        this.rows = classroom.map((classroom: any): dataClassroomAll & {
+          gradeAndSection: string,
+          capacityDisplay: string,
+          stateText: string,
+          stateClass: string,
+          classAssignmentsSummary: string
+        } => ({
           id: classroom.id,
           name: classroom.name,
           campus: classroom.campus?.name,
@@ -88,7 +107,11 @@ export class ClassroomsComponent {
           gradeAndSection: `${classroom.grade.name} ${classroom.section.name}`,
           capacityDisplay: `${classroom.totalStudents}/${classroom.capacity} | ${classroom.totalSpecialStudents}/${classroom.specialCapacity}`,
           totalStudents: classroom.totalStudents,
-          totalSpecialStudents: classroom.totalSpecialStudents
+          totalSpecialStudents: classroom.totalSpecialStudents,
+          classAssignments: classroom.classAssignments ?? [],
+          classAssignmentsSummary: classroom.classAssignments?.length > 0
+          ? `${classroom.classAssignments?.length} curso/s asignado/s`
+          : '-',
         }));
         if (this.classroomTable) {
           this.classroomTable.updateTable();

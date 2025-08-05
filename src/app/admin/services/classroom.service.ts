@@ -14,31 +14,65 @@ export interface dataClassroom {
 }
 
 export interface dataClassroomById {
-    id: number,
-    name: string,
-    shift: string,
-    capacity: number,
-    specialCapacity: number
+    id: number;
+    name: string;
+    shift: string;
+    capacity: number;
+    specialCapacity: number;
+
     campus: {
-        id: number,
-        name: string
-    },
+        id: number;
+        name: string;
+        location: string;
+    };
+
     grade: {
-        id: number,
-        name: string,
+        id: number;
+        name: string;
         level: {
-        id: number,
-        name: string
-        }
-    },
+        id: number;
+        name: string;
+        };
+    };
+
     section: {
-        id: number,
-        name: string
-    },
+        id: number;
+        name: string;
+    };
+
     period: {
-        id: number,
-        name: string
-    }
+        id: number;
+        name: string;
+        state: boolean;
+    };
+
+    classAssignments: {
+        id: number;
+        course: {
+            id: number;
+            name: string;
+            code: string;
+            description: string;
+            state: string;
+            mode: string;
+            area: string;
+            type: string;
+        };
+        teacher: {
+            id: number;
+            specialty: string;
+            state: string;
+        };
+        classSchedules: {
+            id: number;
+            day: string;
+            startTime: string;
+            endTime: string;
+        }[];
+    }[];
+
+    totalStudents: number;
+    totalSpecialStudents: number;
 }
 
 export interface dataClassroomAll {
@@ -68,6 +102,7 @@ export interface dataClassroomAll {
         name: string,
         state: string
     },
+    classAssignments?: []
     totalStudents: number,
     totalSpecialStudents: number
 }

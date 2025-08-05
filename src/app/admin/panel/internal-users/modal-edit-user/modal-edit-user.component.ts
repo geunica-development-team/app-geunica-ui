@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { dataUser, UserService } from '../../../services/user.service';
 import { CampusService, dataCampusAll } from '../../../services/campus.service';
 import { dataRoleAll, RoleService } from '../../../services/role.service';
+import { TeacherService } from '../../../services/teacher.service';
 
 @Component({
   selector: 'app-modal-edit-user',
@@ -22,6 +23,7 @@ export class ModalEditUserComponent {
   private userService = inject(UserService);
   private campusService = inject(CampusService);
   private roleService = inject(RoleService);
+  private teacherService = inject(TeacherService);
 
   ngOnInit() {
     this.formEditInternalUser.get('password')?.clearValidators();
@@ -274,7 +276,7 @@ export class ModalEditUserComponent {
 
       const newRole = selectedRoleName;
       if (previousRole === 'teacher' && newRole !== 'teacher' && this.teacherId) {
-        this.userService.deleteTeacher(this.teacherId).subscribe({
+        this.teacherService.deleteTeacher(this.teacherId).subscribe({
           next: () => {
             console.log('Docente eliminado o desactivado exitosamente');
           },
@@ -302,7 +304,7 @@ export class ModalEditUserComponent {
             }
 
             if (this.teacherId) {
-              this.userService.updateTeacher(this.teacherId, teacherData).subscribe({
+              this.teacherService.updateTeacher(this.teacherId, teacherData).subscribe({
                 next: () => {
                   this.notifycation.success('Docente actualizado correctamente', 'Éxito');
                   this.internalUserEdited.emit();
@@ -325,7 +327,7 @@ export class ModalEditUserComponent {
                 return;
               }
               
-              this.userService.createTeacher(teacherCreationData).subscribe({
+              this.teacherService.createTeacher(teacherCreationData).subscribe({
                 next: () => {
                   this.notifycation.success('Docente creado correctamente', 'Éxito');
                   this.internalUserEdited.emit();

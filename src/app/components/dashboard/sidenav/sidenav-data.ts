@@ -126,11 +126,6 @@ export const menuItemsAdmin = [
       route: 'aulas' 
     },
     { 
-      icon: 'fa-solid fa-object-ungroup', 
-      label: 'Asignación de cursos', 
-      route: 'asignacion-cursos' 
-    },
-    { 
       icon: 'fas fa-cog', 
       label: 'Configuración del sistema', 
       route: 'configuracion-sistema'

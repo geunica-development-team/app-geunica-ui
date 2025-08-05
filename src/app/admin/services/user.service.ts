@@ -51,10 +51,7 @@ export interface dataUserById extends dataUser {
     }
 }
 
-export interface dataTeacher {
-    idPerson?: number,
-    specialty: string
-}
+
 
 
 @Injectable({
@@ -121,27 +118,6 @@ export class UserService {
         return this.httpService
         .patch(`${this.auth_end_point}/user/full/${id}`, { ...data})
         .pipe(catchError(this.handleError));
-    }
-
-    createTeacher(data: dataTeacher) {
-        return this.httpService
-        .post(this.auth_end_point+'/teacher', {...data})
-        .pipe(catchError(this.handleError)
-        )
-    }
-
-    updateTeacher(id: number, data: dataTeacher) {
-        return this.httpService
-        .patch(`${this.auth_end_point}/teacher/${id}`, { ...data})
-        .pipe(catchError(this.handleError)
-        )
-    }
-
-    deleteTeacher(id: number) {
-        return this.httpService
-        .delete(`${this.auth_end_point}/teacher/${id}`)
-        .pipe(catchError(this.handleError)
-        )
     }
 }
             

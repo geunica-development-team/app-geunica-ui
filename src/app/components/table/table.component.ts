@@ -12,10 +12,14 @@ export class TableComponent {
   @Input() accionEliminar!: (row: any) => void
   @Input() accionVer!: (row: any) => void
   @Input() accionVerDeuda!: (row: any) => void
+
+  @Input() accionAsignaciones!: (row: any) => void
+
   @Input() acciones!: boolean
   @Input() editarFila!: boolean
   @Input() eliminarFila!: boolean
   @Input() verFila!: boolean
+  @Input() asignaciones!: boolean
   @Input() verPagos = false
   @Input() columns: string[] = []
 

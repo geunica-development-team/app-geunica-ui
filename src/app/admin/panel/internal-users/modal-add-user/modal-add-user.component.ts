@@ -5,6 +5,7 @@ import { CampusService, dataCampusAll } from '../../../services/campus.service';
 import { dataRoleAll, RoleService } from '../../../services/role.service';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../../../services/user.service';
+import { TeacherService } from '../../../services/teacher.service';
 
 @Component({
   selector: 'app-modal-add-user',
@@ -21,6 +22,7 @@ export class ModalAddUserComponent {
   private campusService = inject(CampusService);
   private roleService = inject(RoleService);
   private userService = inject(UserService);
+  private teacherService = inject(TeacherService);
   
   ngOnInit() {
     this.loadCampus();
@@ -218,7 +220,7 @@ export class ModalAddUserComponent {
             specialty
           };
 
-          this.userService.createTeacher(teacherData).subscribe({
+          this.teacherService.createTeacher(teacherData).subscribe({
             next: () => {
               this.notifycation.success('Docente creado correctamente', 'Éxito');
               this.internalUserAdded.emit();
