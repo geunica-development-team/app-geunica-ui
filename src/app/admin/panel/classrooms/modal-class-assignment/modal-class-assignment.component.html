@@ -10,46 +10,48 @@
     </div>
     <div class="modal-body bg-white p-4">
         <form [formGroup]="formClassAssignment" (ngSubmit)="onSaveAssignment()" id="formClassAssignment">
-            <!-- PASO 2: Seleccionar Curso -->
-            <div class="mb-4">
-                <div class="section-divider mb-3">
-                    <h6 class="fw-semibold fs-5 mb-0 text-success">
-                    <i class="fas fa-book me-2"></i>
-                    Seleccionar Curso
-                    </h6>
-                </div>
-                
-                <div class="row">
-                    <div class="col-md-12">
-                        <label class="form-label fw-medium small">Curso</label>
-                        <select class="form-select" formControlName="course" name="course">
-                        <option [value]="null" disabled selected>Seleccionar curso...</option>
-                        @for (course of courses; track course.id) {
-                            <option [value]="course.id">{{ course.name }} - {{ course.area }}</option>
-                        }
-                        </select>
+            <div class="row">
+                <!-- PASO 2: Seleccionar Curso -->
+                <div class="col-md-6 mb-4">
+                    <div class="section-divider mb-3">
+                        <h6 class="fw-semibold fs-5 mb-0 text-success">
+                        <i class="fas fa-book me-2"></i>
+                        Seleccionar Curso
+                        </h6>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="form-label fw-medium small">Curso</label>
+                            <select class="form-select" formControlName="course" name="course">
+                            <option [value]="null" disabled selected>Seleccionar curso...</option>
+                            @for (course of courses; track course.id) {
+                                <option [value]="course.id">{{ course.name }} - {{ course.area }}</option>
+                            }
+                            </select>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- PASO 3: Seleccionar Docente -->
-            <div class="mb-4">
-                <div class="section-divider mb-3">
-                    <h6 class="fw-semibold fs-5 mb-0 text-success">
-                    <i class="fas fa-user-tie me-2"></i>
-                    Seleccionar Docente
-                    </h6>
-                </div>
-                
-                <div class="row">
-                    <div class="col-md-12">
-                        <label class="form-label fw-medium small">Docente</label>
-                        <select class="form-select" formControlName="teacher" name="teacher">
-                            <option [value]="null" disabled selected>Seleccionar docente...</option>
-                            @for (teacher of teachers; track teacher.id) {
-                                <option [value]="teacher.id">{{ teacher.person.names }} {{ teacher.person.paternalSurname }} {{ teacher.person.maternalSurname }} - {{ teacher.specialty }}</option>
-                            }
-                        </select>
+    
+                <!-- PASO 3: Seleccionar Docente -->
+                <div class="col-md-6 mb-4">
+                    <div class="section-divider mb-3">
+                        <h6 class="fw-semibold fs-5 mb-0 text-success">
+                        <i class="fas fa-user-tie me-2"></i>
+                        Seleccionar Docente
+                        </h6>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="form-label fw-medium small">Docente</label>
+                            <select class="form-select" formControlName="teacher" name="teacher">
+                                <option [value]="null" disabled selected>Seleccionar docente...</option>
+                                @for (teacher of teachers; track teacher.id) {
+                                    <option [value]="teacher.id">{{ teacher.person.names }} {{ teacher.person.paternalSurname }} {{ teacher.person.maternalSurname }} - {{ teacher.specialty }}</option>
+                                }
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
