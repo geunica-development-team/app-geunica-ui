@@ -1,16 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { SearcherComponent } from '../../../components/searcher/searcher.component';
 import { DataTeacherService } from '../../services/dataTeacher.service';
 import { CardCoursesComponent } from '../../../components/card-courses/card-courses.component';
 import { forkJoin } from 'rxjs';
 import { AppModalComponent } from '../../../components/app-modal/app-modal.component';
 import { Estudiante, Persona } from '../../services/modelTeacher';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { USERS } from '../../../admin/utility/db-simulator';
 import { TableComponent } from '../../../components/table/table.component';
 import { FormsModule } from '@angular/forms';
 import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
+import { environment } from '../../../../enviroments/environment';
+import { HttpClient } from '@angular/common/http';
 
 interface GradeInfo {
   grado:     string;
@@ -23,8 +25,7 @@ interface GradeInfo {
 
 @Component({
   selector: 'app-note-managment',
-  imports: [CommonModule, SearcherComponent, CardCoursesComponent, 
-    AppModalComponent, TableComponent, FormsModule, PanelHeaderComponent],
+  imports: [CommonModule, SearcherComponent, AppModalComponent, TableComponent, FormsModule, PanelHeaderComponent],
   templateUrl: './note-managment.component.html',
   styleUrl: './note-managment.component.css'
 })
@@ -37,6 +38,43 @@ export class NoteManagmentComponent {
   constructor(
     private dataSvc: DataTeacherService,
     private router: Router) {}
+
+      private http     = inject(HttpClient);
+  private route    = inject(ActivatedRoute);
+  private baseUrl  = environment.apiBase;
+
+
+
+  @ViewChild("notesTable") notesTable?: TableComponent
+  // Definición de columnas para la tabla
+  columnsNotes = ['ID', 'Grado/Nivel/seccion', 'Aula'];
+
+  // Mapeo de encabezados a propiedades de fila
+  columnMappingsNotes: Record<string, string> = {
+    'ID': 'id',
+    'Grado/Nivel/seccion': 'gradoSeccion',
+    'Aula': 'aula'
+  };
+
+  // Datos de ejemplo (15 registros: 5 originales + 10 nuevos)
+  rowsNotes: any[] = [];
+
+
+  // Carga de datos de ejemplo
+  loadNotes() {
+     this.http.get<any[]>(`${this.baseUrl}/teacher/me/assignments`)
+      .subscribe({
+        next: data => {
+          this.rowsNotes = data.map(ca => ({
+            id:            ca.id,
+            gradoSeccion:  `${ca.classroom.grade.level.name} ${ca.classroom.grade.name} - ${ca.classroom.section.name}`,
+            aula:          ca.classroom.name,
+          }));
+        },
+        error: err => console.error('Error al cargar asignaturas:', err)
+      });
+  }
+
 
 
     // FILTROS
@@ -105,7 +143,7 @@ export class NoteManagmentComponent {
   }
 
   ngOnInit() {
-
+    this.loadNotes();
 
     forkJoin({
       niveles:   this.dataSvc.getNiveles(),

@@ -1,23 +1,10 @@
 import { CommonModule } from '@angular/common';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FlatAsistencia } from '../../services/modelTeacher';
 import { ActivatedRoute } from '@angular/router';
-import { DataTeacherService } from '../../services/dataTeacher.service';
-import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
+import { environment } from '../../../../enviroments/environment';
 
 type Status = 'asistió' | 'falto' | 'tardanza';
-
-interface AttendanceRecord {
-  day: string;       // e.g. 'Lunes'
-  status: Status;
-}
-
-interface Student {
-  id: number;
-  name: string;
-  avatarUrl: string;
-  records: AttendanceRecord[];
-}
 
 @Component({
   selector: 'app-attendance-list',
@@ -26,88 +13,78 @@ interface Student {
   styleUrl: './attendance-list.component.css'
 })
 export class AttendanceListComponent implements OnInit {
-  // 1. Cabecera de días de la semana
-  weekRange = '10 Julio 2025 - 16 Julio 2025';
-  days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
-  // Dentro de AttendanceListComponent
-  allStatuses: Status[] = ['asistió', 'falto', 'tardanza'];
+ days = ['Lunes','Martes','Miércoles','Jueves','Viernes'];
+  allStatuses: Status[] = ['asistió','falto','tardanza'];
 
-  // 2. Datos simulados de estudiantes y su asistencia
-  students: Student[] = [
-    {
-      id: 1,
-      name: 'Juanito Quispe',
-      avatarUrl: 'https://i.pravatar.cc/40?img=1',
-      records: [
-        { day: 'Lunes',     status: 'asistió' },
-        { day: 'Martes',    status: 'asistió' },
-        { day: 'Miércoles', status: 'falto'   },
-        { day: 'Jueves',    status: 'asistió' },
-        { day: 'Viernes',   status: 'falto'   },
-      ]
-    },
-    {
-      id: 2,
-      name: 'María Gómez',
-      avatarUrl: 'https://i.pravatar.cc/40?img=2',
-      records: [
-        { day: 'Lunes',     status: 'asistió' },
-        { day: 'Martes',    status: 'asistió' },
-        { day: 'Miércoles', status: 'tardanza' },
-        { day: 'Jueves',    status: 'asistió' },
-        { day: 'Viernes',   status: 'asistió' },
-      ]
-    },
-        {
-      id: 3,
-      name: 'Jomaira Jujuy',
-      avatarUrl: 'https://i.pravatar.cc/40?img=3',
-      records: [
-        { day: 'Lunes',     status: 'asistió' },
-        { day: 'Martes',    status: 'asistió' },
-        { day: 'Miércoles', status: 'tardanza' },
-        { day: 'Jueves',    status: 'asistió' },
-        { day: 'Viernes',   status: 'asistió' },
-      ]
-    },
-        {
-      id: 4,
-      name: 'Xiomara Menez',
-      avatarUrl: 'https://i.pravatar.cc/40?img=4',
-      records: [
-        { day: 'Lunes',     status: 'asistió' },
-        { day: 'Martes',    status: 'asistió' },
-        { day: 'Miércoles', status: 'tardanza' },
-        { day: 'Jueves',    status: 'asistió' },
-        { day: 'Viernes',   status: 'asistió' },
-      ]
-    },
-        {
-      id: 5,
-      name: 'Ernestro Nuñez',
-      avatarUrl: 'https://i.pravatar.cc/40?img=5',
-      records: [
-        { day: 'Lunes',     status: 'asistió' },
-        { day: 'Martes',    status: 'asistió' },
-        { day: 'Miércoles', status: 'tardanza' },
-        { day: 'Jueves',    status: 'asistió' },
-        { day: 'Viernes',   status: 'asistió' },
-      ]
-    },
-    // …más estudiantes
-  ];
+  students: any[] = [];    // arreglo de alumnos con sus registros
+  caId!: number;
+  private baseUrl = environment.apiBase;
 
-  constructor() {}
+  constructor(
+    private route: ActivatedRoute,
+    private http: HttpClient
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.caId = +this.route.snapshot.paramMap.get('id_salon')!;
+    this.loadAttendance();
+  }
 
-  // Devuelve las dos opciones que NO son el actual
+  private loadAttendance() {
+  const token = localStorage.getItem('token') || '';
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+  this.http
+    .get<any[]>(
+      `${environment.apiBase}/teacher/me/assignment/${this.caId}/attendance`,
+      { headers }
+    )
+    .subscribe(
+      atts => this.buildStudentGrid(atts),
+      err  => console.error('Error al cargar asistencias:', err)
+    );
+  }
+
+  private buildStudentGrid(atts: any[]) {
+    const grouped = new Map<number, { name: string, recs: { day: string, status: Status }[] }>();
+
+    // 1) Agrupar por usuario
+    atts.forEach(a => {
+      const uid = a.userId;
+      if (!grouped.has(uid)) {
+        grouped.set(uid, {
+          name: `${a.user.person.names} ${a.user.person.paternalSurname}`,
+          recs: []
+        });
+      }
+      const date = new Date(a.attendanceDate);
+      const weekday = this.days[date.getDay() - 1];
+      grouped.get(uid)!.recs.push({
+        day: weekday,
+        status: this.mapStatus(a.status)
+      });
+    });
+
+    // 2) Construir arreglo final, con un registro por cada día
+    this.students = Array.from(grouped.entries()).map(([uid, info]) => {
+      const recs = this.days.map(day =>
+        info.recs.find(r => r.day === day) || { day, status: 'falto' }
+      );
+      return { id: uid, name: info.name, records: recs };
+    });
+  }
+
+  private mapStatus(s: string): Status {
+    if (s === 'present' || s === 'asistió')   return 'asistió';
+    if (s === 'absent'  || s === 'falto')     return 'falto';
+    if (s === 'late'    || s === 'tardanza')  return 'tardanza';
+    return 'falto';
+  }
+
   getOtherStatuses(current: Status): Status[] {
     return this.allStatuses.filter(s => s !== current);
   }
 
-
-  // Mapea status a clase Bootstrap
   statusClass(status: Status) {
     return {
       'asistió':  'btn-asistio',

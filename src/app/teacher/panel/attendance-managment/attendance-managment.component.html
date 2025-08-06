@@ -15,106 +15,29 @@
   </div>
 
   <!-- 2. Fila de las cards -->
-      
-  <div class="row g-4">
-    <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let g of filteredGrades">
-        <app-card-courses class="h-100"
-          [etiquetaTitulo]="'GRADO'" 
-          [titulo]="g.grado"
-          [etiquetaSubtitulo1]="'NIVEL'"
-          [subtitulo1]="g.nivel"
-          [etiquetaSubtitulo2]="'SECCIÓN'"
-          [subtitulo2]="g.seccion"
-          (click)="openModalAttendanceManagment(g)"         
-          style="cursor: pointer;">
-          
-          <!-- '/student/panel/courses', course.id_curso, 'curriculum' -->
-          <!-- el link tenemos que cambiarlo, lo mejor seria crear un curriculum para profesor -->
 
-        </app-card-courses>
-
-    </div>
-  </div>
-</div>
-
-<!-- Modal reutilizable -->
-<app-app-modal
-  [visible]="!!selectedGrade" 
-  (closed)="closeModal()"
-  width="9000px"
-  maxWidth="50vw"
-  borderRadius="0.75rem"
->
-  <ng-container *ngIf="selectedGrade">
-    <div class="p-4">
-
-      <!-- 1) Título -->
-      <h4 class="mb-3 text-center">
-        {{ selectedGrade.nivel }} – {{ selectedGrade.grado }} 
-        <small class="text-muted">({{ selectedGrade.seccion }})</small>
-      </h4>
-      <hr/>
-
-      <!-- Estudiantes Table -->
-      <div class="col-12">
+  <div class="col-12">
         <div class="card">
-          <div class="card-header d-grid d-lg-flex justify-content-between align-items-center">
-            <h5 class="card-title mb-2 mb-lg-0">Lista de Estudiantes</h5>
-            
-            <!-- Filtros -->
-            <div class="d-flex gap-3 align-items-center">
-              <div class="d-flex gap-3">
-                <!-- Filtro por Estado Estudiante -->
-
-                
-                <!-- NUEVO: Filtro por Estado de Deuda -->
-     
-              </div>
-
-              <div class="d-flex gap-3">
-                <!-- Buscador -->
-                <div class="input-group w-100" style="width: 250px;">
-                  <span class="input-group-text"><i class="fas fa-search"></i></span>
-                  <input 
-                    (input)="applySearchFilter($event)"
-                    type="text"
-                    class="form-control form-control-sm"
-                    placeholder="Buscar estudiante..."
-                    [(ngModel)]="searchValue">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Gestion de asistencias</h5>
+                <div class="input-group" style="width: 250px;">
+                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                <input (input)="applyFilter($event)" type="text" class="form-control" placeholder="Buscar por aula...">
                 </div>
-                
-                <!-- Botón limpiar -->
-                <button 
-                  type="button"
-                  class="btn btn-outline-secondary btn-sm"
-                  (click)="clearFilters()">
-                  <i class="fas fa-times"></i>
-                </button>
-              </div>
             </div>
-          </div>
-
-          <div class="card-body p-3">
-            <app-table
-              #studentUsersTable
-              [columns]="columns"
-              [originalRows]="rows"
-              [columnMappings]="columnMappings"
-              [pageSize]="5"
-              [acciones]="true"
-              [editarFila]="false"
-              [eliminarFila]="false"
-              [verFila]="true"
-              [verPagos]="true"
-              [accionVer]="onVerFicha"   
-              
-              [searchFilter]="searchValue"
-              [statusColumnKey]="'studentStatus'"
-            />
-          </div>
+            <div class="card-body p-3">
+                <app-table
+                    #attendanceTable
+                    [columns]="columnsAttendances"
+                    [originalRows]="rowsAttendances"
+                    [columnMappings]="columnMappingsAttendances"
+                    [pageSize]="10"
+                    [acciones]="true"
+                    [verFila]="true"
+                    [accionVer]="onVerFicha"
+                />
+            </div>
         </div>
-      </div>
+    </div><!--"-->
 
-    </div>
-  </ng-container>
-</app-app-modal>
+</div>
