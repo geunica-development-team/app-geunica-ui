@@ -28,50 +28,41 @@ export class CurriculumComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const idParam  = this.route.snapshot.paramMap.get('id');
-    console.log('INIT: idParam =', idParam);
-    const courseId = idParam ? +idParam : null;
-    console.log('INIT: courseId =', courseId);
+    const idParam = this.route.snapshot.paramMap.get('id');
+    const assignmentId = idParam ? +idParam : null;
 
-    if (!courseId) {
-      this.error   = 'ID de curso inválido';
+    if (!assignmentId) {
+      this.error   = 'ID de asignación inválido';
       this.loading = false;
       return;
     }
 
-    // 1) obtengo datos del curso
-    console.log('GET Course →', `${this.baseUrl}/student/me/courses/${courseId}`);
-    this.http
-      .get<any>(`${this.baseUrl}/student/me/courses/${courseId}`)
+    // 1) obtengo datos de la asignación/curso
+    this.http.get<any>(`${this.baseUrl}/student/me/courses/${assignmentId}`)
       .subscribe({
         next: c => {
-          console.log('RESPONSE Course →', c);
           this.course = c;
-          const realCourseId = c.courseId;
-          console.log('USANDO realCourseId para currículum →', realCourseId);
-
-          // 2) obtengo los temas de ese curso
-          console.log('GET Curriculum →', `${this.baseUrl}/student/me/courses/${courseId}/curriculum`);
-          this.http
-            .get<any[]>(`${this.baseUrl}/student/me/courses/${realCourseId}/curriculum`)
+          // ------------------------------------------------------------------
+          // 2) OJO: vuelvo a usar assignmentId, ¡no c.courseId!
+          // ------------------------------------------------------------------
+          this.http.get<Curriculum[]>(`${this.baseUrl}/student/me/courses/${assignmentId}/curriculum`)
             .subscribe({
               next: list => {
-                console.log('RESPONSE Curriculum →', list);
                 this.curriculum = list;
                 this.loading    = false;
               },
-              error: err => {
-                console.error('ERROR Curriculum GET', err);
+              error: () => {
                 this.error   = 'No se pudo cargar el currículum';
                 this.loading = false;
               }
             });
         },
-        error: err => {
-          console.error('ERROR Course GET', err);
+        error: () => {
           this.error   = 'No se pudo cargar los datos del curso';
           this.loading = false;
         }
       });
   }
+
+
 }
