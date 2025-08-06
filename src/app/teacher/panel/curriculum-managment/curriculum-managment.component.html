@@ -1,42 +1,241 @@
-<app-panel-header title="Temas del curso" />
-<ng-container *ngIf="course; else cargando">
-  <h2 class="mb-3">{{ course.nombre }}</h2>
-  <div class="container py-4">
-    <div class="row justify-content-center">
-      <div class="col-12 col-md-8">
-
-        <!-- Botón y mini-card a la izquierda -->
-        <div class="mb-3 d-flex justify-content-end">
-            <div class="dropdown">
-                <label class="me-2">Filtrar por:</label>
-                
-                <button 
-                class="btn btn-outline-success dropdown-toggle" 
-                type="button" 
-                id="dropdownMenuButton" 
-                data-bs-toggle="dropdown" 
-                aria-expanded="false"
-                style="min-width: 6rem;">
-                  Ver todos 
-                </button>
-
-                <ul class="dropdown-menu dropdown-menu-end mt-2" aria-labelledby="dropdownMenuButton">
-                <li><a class="dropdown-item py-1" >Completados</a></li>
-                <li><a class="dropdown-item py-1" >Por completar</a></li>
-                </ul>
-            </div>
+<app-panel-header title="Temario del curso" />
+<ng-container *ngIf="!loading; else cargando">
+  <!-- Contenedor principal con columnas invisibles -->
+  <div class="row">
+    <!-- Columna invisible izquierda -->
+    <div class="col-0 col-lg-2 d-none d-lg-block"></div>
+    
+    <!-- Contenido principal -->
+    <div class="col-12 col-lg-8">
+      <div *ngIf="!error; else errorTpl">
+        <!-- Header del curso -->
+        <div class="mb-4">
+          <h3 class="text-success fw-bold mb-1">{{ assignment.course.name }}</h3>
+          <p class="text-muted mb-0">
+            <i class="bi bi-mortarboard me-1"></i>
+            {{ assignment.classroom.grade.name }} de {{ assignment.classroom.grade.level.name }}
+            <span class="mx-2">•</span>
+            <i class="bi bi-people me-1"></i>
+            Sección {{ assignment.classroom.section?.name }}
+          </p>
         </div>
 
-        <app-card-list 
-          [title]="'Temario de ' + course.nombre" 
-          > <!--[items]="curriculum"--->
-        </app-card-list>
+        <!-- Card principal del temario -->
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-success text-white border-0">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center">
+                <i class="bi bi-journal-text me-2"></i>
+                <h5 class="mb-0">Temario del Curso</h5>
+                <span class="badge bg-light text-success ms-2">{{ curriculum.length }} tema(s)</span>
+              </div>
+              
+              <!-- Botón principal para agregar -->
+              <button class="btn btn-light btn-sm" (click)="openCreateModal()">
+                <i class="bi bi-plus-circle me-1"></i>
+                Nuevo Tema
+              </button>
+            </div>
+          </div>
+          
+          <div class="card-body p-0">
+            <!-- Lista de temas -->
+            <div class="list-group list-group-flush" *ngIf="curriculum.length > 0">
+              <div 
+                *ngFor="let item of curriculum; let i = index" 
+                class="list-group-item border-0 py-3"
+                [class.border-start]="item.scheduledDate"
+                [class.border-success]="item.scheduledDate"
+                [class.border-4]="item.scheduledDate"
+              >
+                <div class="row align-items-center">
+                  <!-- Número de posición -->
+                  <div class="col-auto">
+                    <div class="bg-success text-white-50 rounded-circle d-flex align-items-center justify-content-center" 
+                         style="width: 36px; height: 36px; font-weight: bold;">
+                      {{ item.position || i + 1 }}
+                    </div>
+                  </div>
+                  
+                  <!-- Contenido principal -->
+                  <div class="col">
+                    <div class="d-flex justify-content-between align-items-start">
+                      <div class="flex-grow-1">
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                          <h6 class="mb-0 fw-semibold">{{ item.title }}</h6>
+                          
+                          <!-- Badge de estado si tiene fecha programada -->
+                          <span class="badge bg-success-subtle text-success" *ngIf="item.scheduledDate">
+                            <i class="bi bi-calendar-check me-1"></i>
+                            Programado
+                          </span>
+                        </div>
+                        
+                        <p class="mb-1 text-muted" *ngIf="item.description">
+                          {{ item.description }}
+                        </p>
+                        
+                        <!-- Metadatos -->
+                        <div class="d-flex flex-wrap gap-3 align-items-center">
+                          <small class="text-muted" *ngIf="item.scheduledDate">
+                            <i class="bi bi-calendar3 text-success me-1"></i>
+                            Programado: {{ item.scheduledDate | date:'mediumDate' }}
+                          </small>
+                          <small class="text-muted">
+                            <i class="bi bi-clock me-1"></i>
+                            Creado: {{ item.createdAt | date:'short' }}
+                          </small>
+                        </div>
+                      </div>
+                      
+                      <!-- Botones de acción -->
+                      <div class="d-flex gap-1">
+                        <!-- Botón editar - pequeño y en blanco -->
+                        <button 
+                          class="btn btn-success btn-sm border-0 p-1" 
+                          (click)="editTema(item)"
+                          title="Editar tema"
+                          style="width: 5rem; height: 28px;"
+                        >
+                          <i class="bi bi-pencil text-muted"></i>
+                          Editar
+                        </button>
+                        
+                        <!-- Dropdown para más acciones -->
+                        <div class="dropdown">
+                          <button 
+                            class="btn btn-light btn-sm dropdown-toggle border-0 p-1" 
+                            type="button" 
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                            title="Más acciones"
+                            style="width: 28px; height: 28px;"
+                          >
+                            <i class="bi bi-three-dots text-muted"></i>
+                          </button>
+                          <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                              <a class="dropdown-item" href="#" (click)="moveUp(item, $event)">
+                                <i class="bi bi-arrow-up text-primary me-2"></i>
+                                Mover arriba
+                              </a>
+                            </li>
+                            <li>
+                              <a class="dropdown-item" href="#" (click)="moveDown(item, $event)">
+                                <i class="bi bi-arrow-down text-primary me-2"></i>
+                                Mover abajo
+                              </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <!----
+                            <li>
+                              <a class="dropdown-item" href="#" (click)="duplicateTema(item, $event)">
+                                <i class="bi bi-copy text-info me-2"></i>
+                                Duplicar tema
+                              </a>
+                            </li>
+                            --->
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                              <a class="dropdown-item text-danger" href="#" (click)="deleteTema(item, $event)">
+                                <i class="bi bi-trash me-2"></i>
+                                Eliminar
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Estado vacío -->
+            <div *ngIf="curriculum.length === 0" class="text-center py-5">
+              <div class="text-success mb-3">
+                <i class="bi bi-journal-plus" style="font-size: 3.5rem;"></i>
+              </div>
+              <h5 class="text-muted mb-2">¡Comienza a crear tu temario!</h5>
+              <p class="text-muted mb-4">
+                Organiza los temas de tu curso de manera estructurada.<br>
+                Puedes programar fechas y reordenar según tu planificación.
+              </p>
+              <button class="btn btn-success" (click)="openCreateModal()">
+                <i class="bi bi-plus-circle me-2"></i>
+                Crear Primer Tema
+              </button>
+            </div>
+          </div>
+          
+          <!-- Footer con acciones masivas -->
+          <div class="card-footer bg-light border-0" *ngIf="curriculum.length > 0">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="text-muted small">
+                <i class="bi bi-info-circle me-1"></i>
+                Total: {{ curriculum.length }} tema(s) en el temario
+              </div>
+              <div class="btn-group" role="group">
+                <button class="btn btn-outline-success btn-sm" (click)="reorderTemas()">
+                  <i class="bi bi-arrow-down-up me-1"></i>
+                  Reordenar
+                </button>
+                <button class="btn btn-outline-success btn-sm" (click)="exportTemas()">
+                  <i class="bi bi-download me-1"></i>
+                  Exportar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+    
+    <!-- Columna invisible derecha -->
+    <div class="col-0 col-lg-2 d-none d-lg-block"></div>
   </div>
 </ng-container>
+
 <ng-template #cargando>
-  <div class="text-center py-4">
-    <div class="spinner-border" role="status"></div>
+  <div class="row">
+    <div class="col-0 col-lg-2 d-none d-lg-block"></div>
+    <div class="col-12 col-lg-8">
+      <div class="text-center py-5">
+        <div class="spinner-border text-success" role="status">
+          <span class="visually-hidden">Cargando temario...</span>
+        </div>
+        <p class="text-muted mt-3">Cargando temas del curso...</p>
+      </div>
+    </div>
+    <div class="col-0 col-lg-2 d-none d-lg-block"></div>
   </div>
 </ng-template>
+
+<ng-template #errorTpl>
+  <div class="row">
+    <div class="col-0 col-lg-2 d-none d-lg-block"></div>
+    <div class="col-12 col-lg-8">
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>
+        {{ error }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+    <div class="col-0 col-lg-2 d-none d-lg-block"></div>
+  </div>
+</ng-template>
+
+<app-modal-add-curriculum
+  #modalAdd
+  (added)="onCreatedOrEditedOrDeleted()"
+/>
+
+<app-modal-edit-curriculum
+  #modalEdit
+  (updated)="onCreatedOrEditedOrDeleted()"
+/>
+
+<app-modal-delet-curriculum
+  #modalDelete
+  (deleted)="onCreatedOrEditedOrDeleted()"
+/>
