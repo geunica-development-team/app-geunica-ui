@@ -1,10 +1,12 @@
 import { Component, ElementRef, EventEmitter, inject, Input, Output, TemplateRef, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ClassroomService, dataClassroomById } from '../../../services/classroom.service';
+import { forkJoin } from 'rxjs';
+import { ClassroomService, dataClassroomById } from '../../../../services/classroom.service';
 import { ToastrService } from 'ngx-toastr';
-import { dataTeacherAll, TeacherService } from '../../../services/teacher.service';
-import { CourseService, dataCourseAll } from '../../../services/course.service';
+import { dataTeacherAll, TeacherService } from '../../../../services/teacher.service';
+import { CourseService, dataCourseAll } from '../../../../services/course.service';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AssignClassroomService, dataAssignClassroom, dataScheduleClassroom } from '../../../../services/class-assignment.service';
 
 interface ScheduleItem {
   day: string
@@ -20,7 +22,7 @@ interface ScheduleItem {
 })
 export class ModalClassAssignmentComponent {
   @Output() assigned = new EventEmitter<any>();
-  @Input() rowId!: number;
+  @Input() classroomId!: number;
 
   private modalService = inject(NgbModal);
   private toolsForm = inject(FormBuilder);
@@ -28,6 +30,7 @@ export class ModalClassAssignmentComponent {
   private classroomService = inject(ClassroomService);
   private courseService = inject(CourseService);
   private teacherService = inject(TeacherService);
+  private assignService = inject(AssignClassroomService);
 
   ngOnInit() {
     this.formClassAssignment.get('course')?.valueChanges.subscribe((value) => {
@@ -68,7 +71,7 @@ export class ModalClassAssignmentComponent {
     'teacher': [null, [Validators.required]]
   })
 
-  dataClassrooms: dataClassroomById | null = null;
+  dataClassroom: dataClassroomById | null = null;
   selectedClassroomId : number | null = null;
 
   selectedTeacherId: number | undefined = undefined;
@@ -77,15 +80,15 @@ export class ModalClassAssignmentComponent {
   schedules: ScheduleItem[] = [];
 
   loadClassroomDetails() {
-    if (this.rowId && !isNaN(this.rowId)) {
-      this.classroomService.getClassroomById(this.rowId).subscribe({
+    if (this.classroomId && !isNaN(this.classroomId)) {
+      this.classroomService.getClassroomById(this.classroomId).subscribe({
         next: (classroom) => {
-          this.dataClassrooms = classroom;
+          this.dataClassroom = classroom;
           
           this.selectedClassroomId = classroom.id
         },
         error: (error) => {
-          this.notifycation.error('Error al cargar los detalles del grado', 'Error');
+          this.notifycation.error('Error al cargar los detalles del aula', 'Error');
         }
       })
     } else {
@@ -185,7 +188,45 @@ export class ModalClassAssignmentComponent {
   }
 
   onSaveAssignment() {
-    console.log('uwu')
+    if (!this.canSaveAssignment()) return;
+
+    const payloadAssign: dataAssignClassroom = {
+      idClassroom: this.selectedClassroomId!,
+      idCourse: this.selectedCourseId!,
+      idTeacher: this.selectedTeacherId!
+    };
+
+    this.assignService.addAssignClassroom(payloadAssign).subscribe({
+      next: (data: any) => {
+        const classAssignmentId = data.id;
+
+        const scheduleRequests = this.schedules.map(schedule => {
+          const schedulePayload: dataScheduleClassroom = {
+            idClassAssignment: classAssignmentId,
+            day: schedule.day,
+            startTime: schedule.startTime,
+            endTime: schedule.endTime
+          };
+          return this.assignService.addScheduleClassroom(schedulePayload);
+        });
+
+        forkJoin(scheduleRequests).subscribe({
+          next: () => {
+            this.notifycation.success('Asignación y horarios creados con éxito', 'Éxito');
+            this.assigned.emit(); // si quieres que el padre refresque la lista
+            this.modalService.dismissAll();
+          },
+          error: (error) => {
+            console.error(error);
+            this.notifycation.error('Error al guardar los horarios', 'Error');
+          }
+        });
+      },
+      error: (error) => {
+        console.error(error);
+        this.notifycation.error('Error al guardar la asignación', 'Error');
+      }
+    })
   }
 
   @ViewChild('modalClassAssignment') modalClassAssignment!: TemplateRef<ElementRef>;  

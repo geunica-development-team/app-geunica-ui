@@ -100,14 +100,19 @@ export const menuItemsAdmin = [
       active: true 
     },
     { 
-      icon: 'fa-solid fa-calendar', 
-      label: 'Horarios', 
-      route: 'horarios' 
+      icon: 'fa-solid fa-people-roof', 
+      label: 'Aulas', 
+      route: 'aulas' 
     },
     { 
       icon: 'fa-solid fa-coins', 
       label: 'Finanzas', 
       route: 'finanzas' 
+    },
+    { 
+      icon: 'fa-solid fa-calendar', 
+      label: 'Horarios', 
+      route: 'horarios' 
     },
     { 
       icon: 'fas fa-bullhorn', 
@@ -119,11 +124,6 @@ export const menuItemsAdmin = [
       icon: 'fa-solid fa-sliders', 
       label: 'Configuración académica', 
       route: 'configuracion-academica'
-    },
-    { 
-      icon: 'fa-solid fa-people-roof', 
-      label: 'Aulas', 
-      route: 'aulas' 
     },
     { 
       icon: 'fas fa-cog', 

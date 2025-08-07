@@ -10,6 +10,7 @@ import { roleGuard } from "../../guards/role.guard";
 import { AcademicSettingComponent } from "./academic-setting/academic-setting.component";
 import { ClassroomsComponent } from "./classrooms/classrooms.component";
 import { SystemSettingComponent } from "./system-setting/system-setting.component";
+import { ClassroomDetailsComponent } from "./classrooms/classroom-details/classroom-details.component";
 
 export const adminPanelRoutes: Routes = [
     {
@@ -46,6 +47,10 @@ export const adminPanelRoutes: Routes = [
             {
                 path: 'aulas',
                 component: ClassroomsComponent
+            },
+            {
+                path: "aulas/:id",
+                component: ClassroomDetailsComponent,
             },
             {
                 path: 'finanzas',

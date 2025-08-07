@@ -5,15 +5,16 @@ import { ClassroomService, dataClassroomAll } from '../../services/classroom.ser
 import { ModalAddClassroomComponent } from './modal-add-classroom/modal-add-classroom.component';
 import { ModalEditClassroomComponent } from "./modal-edit-classroom/modal-edit-classroom.component";
 import { ModalDeleteClassroomComponent } from "./modal-delete-classroom/modal-delete-classroom.component";
-import { ModalClassAssignmentComponent } from './modal-class-assignment/modal-class-assignment.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-classrooms',
-  imports: [PanelHeaderComponent, TableComponent, ModalAddClassroomComponent, ModalEditClassroomComponent, ModalDeleteClassroomComponent, ModalClassAssignmentComponent],
+  imports: [PanelHeaderComponent, TableComponent, ModalAddClassroomComponent, ModalEditClassroomComponent, ModalDeleteClassroomComponent],
   templateUrl: './classrooms.component.html',
   styleUrl: './classrooms.component.css'
 })
 export class ClassroomsComponent {
+  private router = inject(Router)
   private classroomService = inject(ClassroomService);
 
   ngOnInit() {
@@ -40,16 +41,6 @@ export class ClassroomsComponent {
     }
   }
 
-  @ViewChild('modalClassAssignment') modalClassAssignment!: ModalClassAssignmentComponent;
-  openModalClassAssignment(row: any) {
-    if (row && row.id && !isNaN(row.id)) {
-      this.modalClassAssignment.rowId = Number(row.id);
-      this.modalClassAssignment.openModal();
-    } else {
-      console.error('ID inválido:', row.id);
-    }
-  }
-  
   // COLUMNAS DE LA TABLA
   columns = [
     'ID',
@@ -123,6 +114,10 @@ export class ClassroomsComponent {
     });
   }
 
+  onVerAula = (row: any) => {
+    this.router.navigate(["/admin/panel/aulas", row.id])
+  }
+
   applyFilter(event: Event) {
     if (this.classroomTable) {
       this.classroomTable.filterValue = (
@@ -131,7 +126,7 @@ export class ClassroomsComponent {
       this.classroomTable.updateTable();
     }
   }
-
+  
   onCreatedOrEditedOrDeleted() {
     this.loadClassrooms();
   }

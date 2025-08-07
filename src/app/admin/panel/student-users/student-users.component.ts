@@ -195,7 +195,6 @@ export class StudentUsersComponent {
 
   // ACCIONES
   onVerFicha = (row: any) => {
-    console.log("Ver ficha del estudiante:", row)
     this.router.navigate(["/admin/panel/estudiantes-matriculados", row.userId])
   }
 

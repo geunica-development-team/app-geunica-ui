@@ -28,7 +28,7 @@
                 [verFila]="false"
                 [eliminarFila]="true"
                 [asignaciones]="true"
-                [accionAsignaciones]="openModalClassAssignment.bind(this)"
+                [accionAsignaciones]="onVerAula"
                 [accionEliminar]="openModalDeleteClassroom.bind(this)"
             />
         </div>
@@ -48,9 +48,4 @@
 <app-modal-delete-classroom
     #modalDeleteClassroom
     (classroomDeleted)="onCreatedOrEditedOrDeleted()"
-/>
-
-<app-modal-class-assignment
-    #modalClassAssignment
-    (assigned)="onCreatedOrEditedOrDeleted()"
 />

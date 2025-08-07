@@ -8,45 +8,11 @@ export interface dataAssignClassroom {
     idTeacher: number
 }
 
-export interface dataAssignClassroomById {
-    id: number,
-    name: string,
-    shift: string,
-    capacity: number,
-    specialCapacity: number
-    campus: {
-        id: number,
-        name: string
-    },
-    grade: {
-        id: number,
-        name: string,
-        level: {
-        id: number,
-        name: string
-        }
-    },
-    section: {
-        id: number,
-        name: string
-    },
-    period: {
-        id: number,
-        name: string
-    }
-}
-
-export interface dataAssignClassroomAll {
-    id: number;
-    courseName: string;
-    courseCode: string;
-    classroomName: string;
-    shift: string;
-    grade: string;
-    section: string;
-    level: string;
-    teacherFullName: string;
-    teacherSpecialty: string;
+export interface dataScheduleClassroom {
+    idClassAssignment: number,
+    day: string,
+    startTime: string,
+    endTime: string
 }
 
 @Injectable({
@@ -86,23 +52,18 @@ export class AssignClassroomService {
     addAssignClassroom(data: dataAssignClassroom) {
         return this.httpService
         .post(this.auth_end_point+'/class-assignment', {...data})
-        .pipe(catchError(this.handleError)
-        );
-    }
-    getAssignsClassroomAll() {
-        return this.httpService
-        .get<dataAssignClassroomAll[]>(this.auth_end_point+'/class-assignment')
-        .pipe(catchError(this.handleError)
-        );
-    }
-    getAssignClassroomById(id:number) {
-        return this.httpService
-        .get<dataAssignClassroomById>(`${this.auth_end_point}/class-assignment/${id}`)
         .pipe(catchError(this.handleError));
     }
     updateAssignClassroom(id: number, data: dataAssignClassroom) {
         return this.httpService
         .patch(`${this.auth_end_point}/class-assignment/${id}`, { ...data})
+        .pipe(catchError(this.handleError));
+    }
+
+    
+    addScheduleClassroom(data: dataScheduleClassroom) {
+        return this.httpService
+        .post(this.auth_end_point+'/class-schedule', {...data})
         .pipe(catchError(this.handleError));
     }
 }

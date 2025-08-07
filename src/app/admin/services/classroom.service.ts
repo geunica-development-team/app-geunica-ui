@@ -44,6 +44,8 @@ export interface dataClassroomById {
         id: number;
         name: string;
         state: boolean;
+        startDate: string;
+        endDate: string;
     };
 
     classAssignments: {
@@ -62,6 +64,11 @@ export interface dataClassroomById {
             id: number;
             specialty: string;
             state: string;
+            person: {
+                names: string;
+                paternalSurname: string;
+                maternalSurname: string
+            }
         };
         classSchedules: {
             id: number;

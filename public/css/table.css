@@ -9,8 +9,8 @@
   font-weight: 600;
   border-bottom: none;
   background-color: #f1f4f9;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 /* Añadir borde redondeado en la parte superior */
@@ -22,7 +22,6 @@
 .table thead th:last-child {
   border-top-right-radius: 0.75rem;
   border-bottom-right-radius: 0.75rem;
-  text-align: center;
 }
 
 .table td {
