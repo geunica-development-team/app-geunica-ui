@@ -1,20 +1,6 @@
 <app-panel-header title="Gestion de notas" />
 <div class="container py-4">
 
-  <!-- 1. Fila del buscador -->
-  <div class="row mb-4">
-    <div class="col-12 col-md-6">
-      <app-searcher
-        [(term)]="searchTerm"
-        placeholder="Buscar por curso"
-        
-        field="title"
-        
-        (search)="onSearch()"
-      ></app-searcher>
-    </div>
-  </div>
-
 
 <div class="col-12">
         <div class="card">
@@ -33,9 +19,8 @@
                     [columnMappings]="columnMappingsNotes"
                     [pageSize]="10"
                     [acciones]="true"
-
                     [verFila]="true"
- 
+                    [accionVer]="onVerFicha"
                 />
             </div>
         </div>
@@ -63,86 +48,3 @@
 />
 -->
 
-<!-- Modal reutilizable -->
-<app-app-modal
-  [visible]="!!selectedGrade" 
-  (closed)="closeModal()"
-  width="700px"
-  maxWidth="90vw"
-  borderRadius="0.75rem"
->
-
-  <ng-container *ngIf="selectedGrade">
-    <div class="p-4">
-
-      <!-- 1) Título -->
-      <h4 class="mb-3 text-center">
-        {{ selectedGrade.nivel }} – {{ selectedGrade.grado }} 
-        <small class="text-muted">({{ selectedGrade.seccion }})</small>
-      </h4>
-      <hr/>
-
-      <!-- Estudiantes Table -->
-      <div class="col-12">
-        <div class="card">
-          <div class="card-header d-grid d-lg-flex justify-content-between align-items-center">
-            <h5 class="card-title mb-2 mb-lg-0">Lista de Estudiantes</h5>
-            
-            <!-- Filtros -->
-            <div class="d-flex gap-3 align-items-center">
-              <div class="d-flex gap-3">
-                <!-- Filtro por Estado Estudiante -->
-
-                
-                <!-- NUEVO: Filtro por Estado de Deuda -->
-     
-              </div>
-
-              <div class="d-flex gap-3">
-                <!-- Buscador -->
-                <div class="input-group w-100" style="width: 250px;">
-                  <span class="input-group-text"><i class="fas fa-search"></i></span>
-                  <input 
-                    (input)="applySearchFilter($event)"
-                    type="text"
-                    class="form-control form-control-sm"
-                    placeholder="Buscar estudiante..."
-                    [(ngModel)]="searchValue">
-                </div>
-                
-                <!-- Botón limpiar -->
-                <button 
-                  type="button"
-                  class="btn btn-outline-secondary btn-sm"
-                  (click)="clearFilters()">
-                  <i class="fas fa-times"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div class="card-body p-3">
-            <app-table
-              #studentUsersTable
-              [columns]="columns"
-              [originalRows]="rows"
-              [columnMappings]="columnMappings"
-              [pageSize]="5"
-              [acciones]="true"
-              [editarFila]="false"
-              [eliminarFila]="false"
-              [verFila]="true"
-              [verPagos]="true"
-              [accionVer]="onVerEstudentNote"   
-              
-              [searchFilter]="searchValue"
-              [statusColumnKey]="'studentStatus'"
-            />
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </ng-container>
-
-</app-app-modal>

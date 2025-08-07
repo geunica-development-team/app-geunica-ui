@@ -1,0 +1,308 @@
+<div class="container-fluid py-4">
+  <!-- Loading -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2">Cargando notas del estudiante...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="error && !loading" class="alert alert-danger" role="alert">
+    <i class="fas fa-exclamation-triangle me-2"></i>
+    {{ error }}
+  </div>
+
+  <!-- Content -->
+  <div *ngIf="!loading && !error">
+    <!-- Header -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <h4 class="card-title mb-1">
+                <i class="fas fa-graduation-cap me-2"></i>
+                Notas del Estudiante
+              </h4>
+              <p class="text-muted mb-0">
+                <small>Assignment ID: {{assignmentId}} | Enrollment ID: {{enrollmentId}}</small>
+              </p>
+            </div>
+            <button class="btn btn-outline-secondary" (click)="goBack()">
+              <i class="fas fa-arrow-left me-2"></i>
+              Volver
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filtros de Período -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <h6 class="card-subtitle mb-3">
+              <i class="fas fa-filter me-2"></i>
+              Filtros de Período
+            </h6>
+            <div class="row">
+              <div class="col-md-6">
+                <label for="periodType" class="form-label">Tipo de Período</label>
+                <select 
+                  id="periodType"
+                  class="form-select" 
+                  [(ngModel)]="selectedPeriodType"
+                  (change)="onPeriodTypeChange()"
+                >
+                  <option *ngFor="let type of periodTypes" [value]="type.value">
+                    {{type.label}}
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label for="periodNumber" class="form-label">Número de Período</label>
+                <select 
+                  id="periodNumber"
+                  class="form-select"
+                  [(ngModel)]="selectedPeriodNumber"
+                  (change)="onPeriodNumberChange()"
+                >
+                  <option *ngFor="let num of getPeriodNumbers()" [value]="num">
+                    {{num}}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resumen de Notas -->
+    <div class="row mb-4">
+      <div class="col-md-4">
+        <div class="card text-center">
+          <div class="card-body">
+            <i class="fas fa-clipboard-check text-primary fs-2 mb-2"></i>
+            <h5 class="card-title">Promedio Exámenes</h5>
+            <h3 class="text-primary">{{getExamsAverage()}}</h3>
+            <small class="text-muted">{{studentGrades?.exams?.length || 0}} exámenes</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card text-center">
+          <div class="card-body">
+            <i class="fas fa-tasks text-success fs-2 mb-2"></i>
+            <h5 class="card-title">Promedio Actividades</h5>
+            <h3 class="text-success">{{getActivitiesAverage()}}</h3>
+            <small class="text-muted">{{studentGrades?.activities?.length || 0}} actividades</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card text-center">
+          <div class="card-body">
+            <i class="fas fa-trophy text-warning fs-2 mb-2"></i>
+            <h5 class="card-title">Promedio Ponderado</h5>
+            <h3 [class]="getScoreClass(getWeightedAverage())">{{getWeightedAverage()}}</h3>
+            <small class="text-muted">Incluye pesos</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs para Exámenes y Actividades -->
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs" id="gradesTab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button 
+                  class="nav-link active" 
+                  id="exams-tab" 
+                  data-bs-toggle="tab" 
+                  data-bs-target="#exams" 
+                  type="button" 
+                  role="tab"
+                >
+                  <i class="fas fa-clipboard-check me-2"></i>
+                  Exámenes ({{studentGrades?.exams?.length || 0}})
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button 
+                  class="nav-link" 
+                  id="activities-tab" 
+                  data-bs-toggle="tab" 
+                  data-bs-target="#activities" 
+                  type="button" 
+                  role="tab"
+                >
+                  <i class="fas fa-tasks me-2"></i>
+                  Actividades ({{studentGrades?.activities?.length || 0}})
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          <div class="card-body">
+            <div class="tab-content" id="gradesTabContent">
+              
+              <!-- Tab Exámenes -->
+              <div class="tab-pane fade show active" id="exams" role="tabpanel">
+                <div *ngIf="studentGrades?.exams && studentGrades.exams.length > 0; else noExams">
+                  <div class="table-responsive">
+                    <table class="table table-hover">
+                      <thead class="table-light">
+                        <tr>
+                          <th>Examen</th>
+                          <th>Tipo</th>
+                          <th>Fecha</th>
+                          <th>Peso</th>
+                          <th class="text-center">Nota</th>
+                          <th class="text-center">Estado</th>
+                          <th>Registrado</th>
+                          <th class="text-center">Acciones</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let examScore of studentGrades.exams">
+                          <td>
+                            <strong>{{examScore.exam.name}}</strong>
+                            <br>
+                            <small class="text-muted">
+                              {{examScore.exam.periodType}} {{examScore.exam.periodNumber}}
+                            </small>
+                          </td>
+                          <td>
+                            <span class="badge bg-primary">{{examScore.exam.typeExam}}</span>
+                          </td>
+                          <td>{{formatDate(examScore.exam.date)}}</td>
+                          <td>
+                            <span class="badge bg-info">{{examScore.exam.weight}}%</span>
+                          </td>
+                          <td class="text-center">
+                            <span [class]="getScoreClass(examScore.score)" class="fs-5">
+                              {{examScore.score}}
+                            </span>
+                          </td>
+                          <td class="text-center">
+                            <span [class]="getStateClass(examScore.state)">
+                              {{examScore.state}}
+                            </span>
+                          </td>
+                          <td>
+                            <small>{{formatDate(examScore.registrationDate)}}</small>
+                          </td>
+                          <td class="text-center">
+                            <button 
+                              class="btn btn-sm btn-outline-primary"
+                              (click)="editExamScore(examScore)"
+                              title="Editar nota"
+                            >
+                              <i class="fas fa-edit"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                
+                <ng-template #noExams>
+                  <div class="text-center py-5">
+                    <i class="fas fa-clipboard-check text-muted fs-1 mb-3"></i>
+                    <h5 class="text-muted">No hay exámenes registrados</h5>
+                    <p class="text-muted">
+                      No se encontraron exámenes para el período seleccionado
+                      ({{selectedPeriodType}} {{selectedPeriodNumber}})
+                    </p>
+                  </div>
+                </ng-template>
+              </div>
+
+              <!-- Tab Actividades -->
+              <div class="tab-pane fade" id="activities" role="tabpanel">
+                <div *ngIf="studentGrades?.activities && studentGrades.activities.length > 0; else noActivities">
+                  <div class="table-responsive">
+                    <table class="table table-hover">
+                      <thead class="table-light">
+                        <tr>
+                          <th>Actividad</th>
+                          <th>Tipo</th>
+                          <th>Fecha</th>
+                          <th>Peso</th>
+                          <th class="text-center">Nota</th>
+                          <th class="text-center">Estado</th>
+                          <th>Registrado</th>
+                          <th class="text-center">Acciones</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let activityScore of studentGrades.activities">
+                          <td>
+                            <strong>{{activityScore.activity.name}}</strong>
+                            <br>
+                            <small class="text-muted">
+                              {{activityScore.activity.periodType}} {{activityScore.activity.periodNumber}}
+                            </small>
+                          </td>
+                          <td>
+                            <span class="badge bg-success">{{activityScore.activity.typeActivity}}</span>
+                          </td>
+                          <td>{{formatDate(activityScore.activity.date)}}</td>
+                          <td>
+                            <span class="badge bg-info">{{activityScore.activity.weight}}%</span>
+                          </td>
+                          <td class="text-center">
+                            <span [class]="getScoreClass(activityScore.score)" class="fs-5">
+                              {{activityScore.score}}
+                            </span>
+                          </td>
+                          <td class="text-center">
+                            <span [class]="getStateClass(activityScore.state)">
+                              {{activityScore.state}}
+                            </span>
+                          </td>
+                          <td>
+                            <small>{{formatDate(activityScore.registrationDate)}}</small>
+                          </td>
+                          <td class="text-center">
+                            <button 
+                              class="btn btn-sm btn-outline-primary"
+                              (click)="editActivityScore(activityScore)"
+                              title="Editar nota"
+                            >
+                              <i class="fas fa-edit"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                
+                <ng-template #noActivities>
+                  <div class="text-center py-5">
+                    <i class="fas fa-tasks text-muted fs-1 mb-3"></i>
+                    <h5 class="text-muted">No hay actividades registradas</h5>
+                    <p class="text-muted">
+                      No se encontraron actividades para el período seleccionado
+                      ({{selectedPeriodType}} {{selectedPeriodNumber}})
+                    </p>
+                  </div>
+                </ng-template>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

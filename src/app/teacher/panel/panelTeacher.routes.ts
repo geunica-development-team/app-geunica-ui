@@ -10,6 +10,7 @@ import { ScheduleComponent } from "./schedule/schedule.component";
 import { AttendanceListComponent } from "./attendance-list/attendance-list.component";
 import { NoteListComponent } from "./note-list/note-list.component";
 import { CurriculumManagmentComponent } from "./curriculum-managment/curriculum-managment.component";
+import { StudentNoteComponent } from "./student-note/student-note.component";
 
 export const teacherPanelRoutes: Routes = [
     {
@@ -18,7 +19,7 @@ export const teacherPanelRoutes: Routes = [
         canActivate: [roleGuard],
         data: { role: 'docente' },
         children: [
-{
+            {
                 path: '',
                 redirectTo: 'dashboard',
                 pathMatch: 'full'
@@ -40,11 +41,15 @@ export const teacherPanelRoutes: Routes = [
             },
             {
                 path: "NoteManagment",
-                component: NoteManagmentComponent
+                component: NoteManagmentComponent       
             },
             {
-                path: "NoteList/:id_estudiante",
+                path: "NoteList/:assignmentId",
                 component: NoteListComponent
+            },
+            {
+                path: "StudentNote/:assignmentId/:enrollmentId",
+                component: StudentNoteComponent
             },
             {
                 path: "attendanceManagment",

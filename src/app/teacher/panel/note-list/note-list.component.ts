@@ -1,105 +1,104 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { Curso } from '../../services/modelTeacher';
-import { ActivatedRoute, RouterModule } from '@angular/router';
-import { DataStudentService } from '../../../student/services/dataStudent.service';
-import { forkJoin } from 'rxjs';
-
+import { Component, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MenuTabsComponent, TabItem } from '../../../components/dashboard/menu-tabs/menu-tabs.component';
 import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
-
-interface RegistryItem {
-  concepto: string;
-  valor: number;
-}
+import { TeacherService } from '../student-note/teacher.service';
+import { TableComponent } from '../../../components/table/table.component';
+import { environment } from '../../../../enviroments/environment';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-note-list',
-  imports: [CommonModule, RouterModule, MenuTabsComponent, PanelHeaderComponent],
+  imports: [CommonModule, RouterModule, PanelHeaderComponent, TableComponent],
   templateUrl: './note-list.component.html',
   styleUrl: './note-list.component.css'
 })
 export class NoteListComponent {
 
-    course!: Curso;
-  registryItems: RegistryItem[] = [];
+  @ViewChild('assignmentsTable') assignmentsTable?: TableComponent;
+
+  // configuraciones de la tabla
+  columnsAssignments    = ['ID', 'Nombres y apellidos', 'Código', 'Teléfono', 'Género'];
+  columnMappingsAssignments = {
+    'ID':       'enrollmentId',
+    'Nombres y apellidos':   'studentName',
+    'Código':   'studentCode',
+    'Teléfono': 'phoneNumber',
+    'Género':   'gender'
+  };
+  rowsAssignments: any[] = [];
+  allRows: any[] = [];
   loading = true;
+  error: string | null = null;
+
+  private baseUrl = environment.apiBase;
 
   constructor(
     private route: ActivatedRoute,
-    private dataSvc: DataStudentService
+    private router: Router,
+    private http: HttpClient
   ) {}
 
-    tabs: TabItem[] = [
-    { id: '1er Bimestre',  label: '1er Bimestre', icon: 'fas fa-file-alt' },
-
-    {id: '2do Bimestre',     label: '2do Bimestre',     icon: 'fas fa-file-alt'},
-    {id: '3er Bimestre',      label: '3er Bimestre',      icon: 'fas fa-file-alt'},
-    {id: '4to Bimestre', label: '4to Bimestre', icon: 'fas fa-file-alt'},
-    {id: 'Bimestre Final', label: 'Bimestre Final', icon: 'fas fa-file-alt'}
-
-  ];
-
-  // pestaña activa
-  activeTab = "ficha";
-
-  // opcional: reaccionar a cambio
-  onTabChanged(newTab: string) {
-    this.activeTab = newTab;
-    console.log('Pestaña activa ahora:', newTab);
-  }
-
-  ngOnInit(): void {
-  const idParam = this.route.snapshot.paramMap.get('id_estudiante');
-  const courseId = idParam ? +idParam : null;
-  if (!courseId) return;
-
-  // 1) Cargo curso + exámenes + notas en paralelo
-  forkJoin({
-    course: this.dataSvc.getCourseById(courseId),
-    exams: this.dataSvc.getExams(),
-    grades: this.dataSvc.getGrades(),
-  }).subscribe(({ course, exams, grades }) => {
-    this.course = course;
-
-    // 2) Filtrar exámenes de este curso
-    const courseExams = exams.filter(e => e.id_asignacion_de_clase === courseId);
-
-    // 3) Filtrar notas de esos exámenes
-    const relevantGrades = grades.filter(g =>
-      courseExams.some(e => e.id_examen === g.id_examen)
-    );
-
-    // 4) Mapear a tu tabla
-    this.registryItems = relevantGrades.map(g => {
-      const exam = courseExams.find(e => e.id_examen === g.id_examen)!;
-      return {
-        concepto: exam.nombre_examen,
-        valor:    g.valor,
-        
-      };
-    });
-
-    this.loading = false;
-  }, err => {
-    console.error('Error cargando datos:', err);
-    this.loading = false;
-  });
-
-  }
-
-    // Métodos para acciones
-  onEditNote(item: RegistryItem) {
-    console.log('Editar', item);
-    // Aquí podrías abrir un modal o navegar a un formulario de edición
-  }
-
-  onDeleteNote(item: RegistryItem) {
-    console.log('Borrar', item);
-    // Aquí podrías mostrar un confirm dialog y luego eliminar
-    if (confirm(`¿Eliminar nota "${item.concepto}"?`)) {
-      this.registryItems = this.registryItems.filter(i => i !== item);
+  ngOnInit() {
+   // 1) Lee el parámetro correcto:
+    const caId = Number(this.route.snapshot.paramMap.get('assignmentId'));
+    if (!caId) {
+      this.error   = 'ID de asignación inválido';
+      this.loading = false;
+      return;
     }
+
+    // 2) Llama al endpoint con ese caId válido
+    this.http
+      .get<any[]>(`${this.baseUrl}/teacher/me/assignment/${caId}/students`)
+      .subscribe({
+        next: enrollments => {
+          this.allRows = enrollments.map(en => ({
+            enrollmentId: en.id,
+            studentName:  `${en.inscription.student.names} ${en.inscription.student.paternalSurname} ${en.inscription.student.maternalSurname}`,
+            studentCode:  en.inscription.student.documentNumber,
+            phoneNumber:  en.inscription.student.phoneNumber,
+            gender:       en.inscription.student.gender
+          }));
+          this.rowsAssignments = [...this.allRows];
+          this.loading         = false;
+        },
+        error: () => {
+          this.error   = 'No se pudieron cargar los alumnos';
+          this.loading = false;
+        }
+      });
   }
 
+  /**
+   * Al pulsar "Ver fila", navegamos a:
+   *  /teacher/panel/:assignmentId/student/:enrollmentId/grades
+   */
+  onVerNotas = (row: any) => {
+    // 3) Vuelve a leer assignmentId para navegar
+    const assignmentId = Number(this.route.snapshot.paramMap.get('assignmentId'));
+    this.router.navigate([
+      '/teacher/panel/StudentNote',
+      assignmentId,
+      row.enrollmentId
+    ]);
+  };
+
+
+  /**
+   * Filtrado local de la tabla (por ejemplo, por nombre)
+   */
+  applyFilter(event: Event) {
+    const term = (event.target as HTMLInputElement).value
+                   .trim()
+                   .toLowerCase();
+
+    // filtramos la copia completa y reasignamos a la tabla
+    this.rowsAssignments = this.allRows.filter(row =>
+      row.studentName.toLowerCase().includes(term)
+      || row.studentCode.toLowerCase().includes(term)
+      || row.classroomName.toLowerCase().includes(term)
+    );
+  }
 }
