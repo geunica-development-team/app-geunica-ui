@@ -4,11 +4,11 @@ import { environment } from '../../../../enviroments/environment';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
+import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
 
 @Component({
   selector: 'app-student-note',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, PanelHeaderComponent],
   templateUrl: './student-note.component.html',
   styleUrl: './student-note.component.css'
 })
@@ -37,7 +37,13 @@ export class StudentNoteComponent implements OnInit {
   ];
 
   // Información del estudiante
-  studentInfo: any = null;
+  // Información del estudiante y curso
+  studentInfo: {
+    studentName: string;
+    gradeName: string;
+    sectionName: string;
+    levelName: string;
+  } | null = null;
 
   private baseUrl = environment.apiBase;
 
@@ -57,11 +63,37 @@ export class StudentNoteComponent implements OnInit {
       this.loading = false;
       return;
     }
-
+    // Cargar primero la información del estudiante y curso
+    this.fetchStudentInfo();
+    // Luego, cargar las notas según el periodo
     this.loadStudentGrades();
     
   }
 
+  // Obtiene únicamente los datos de estudiante y curso 
+  fetchStudentInfo() {
+    const url = `${this.baseUrl}/teacher/assignment/${this.assignmentId}/student/${this.enrollmentId}/grades`;
+    this.http.get<any>(url).subscribe({
+      next: data => {
+        const firstExam = data.exams?.[0];
+        if (firstExam) {
+          const stu = firstExam.enrollment.inscription.student;
+          const cls = firstExam.exam.classAssignment.classroom;
+          this.studentInfo = {
+            studentName: `${stu.names} ${stu.paternalSurname} ${stu.maternalSurname}`.trim(),
+            gradeName: cls.grade.name,
+            sectionName: cls.section.name,
+            levelName: cls.grade.level.name
+          };
+        }
+      },
+      error: () => {
+        console.warn('No se pudo obtener la información del estudiante');
+      }
+    });
+  }
+
+  //Carga las notas del estudiante según los filtros de período
   loadStudentGrades() {
     this.loading = true;
     this.error = null;
@@ -155,10 +187,6 @@ export class StudentNoteComponent implements OnInit {
     if (score >= 14) return 'text-primary';
     if (score >= 11) return 'text-warning';
     return 'text-danger';
-  }
-
-  goBack() {
-    this.router.navigate(['/teacher/panel', 'NoteList', this.assignmentId]);
   }
 
   editExamScore(examScore: any) {

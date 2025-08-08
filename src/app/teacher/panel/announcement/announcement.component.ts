@@ -28,7 +28,7 @@ export interface DocenteAnnouncement {
 @Component({
   selector: 'app-announcement',
   standalone: true,
-  imports: [CommonModule, AppModalComponent,  FormsModule, QuillModule, PanelHeaderComponent ],
+  imports: [CommonModule,  FormsModule, QuillModule, PanelHeaderComponent ],
   templateUrl: './announcement.component.html',
   styleUrl: './announcement.component.css'
 })

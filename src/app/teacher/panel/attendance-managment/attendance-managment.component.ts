@@ -1,7 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { SearcherComponent } from '../../../components/searcher/searcher.component';
-import { DataTeacherService } from '../../services/dataTeacher.service';
 import { Attendance, Month } from '../../services/modelTeacher';
 import { Router } from '@angular/router';
 import { TableComponent } from '../../../components/table/table.component';
@@ -9,17 +7,18 @@ import { FormsModule } from '@angular/forms';
 import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
 import { environment } from '../../../../enviroments/environment';
 import { HttpClient } from '@angular/common/http';
+import { SearcherComponent } from '../../../components/searcher/searcher.component';
 
 @Component({
   selector: 'app-attendance-managment',
-  imports: [CommonModule, SearcherComponent, TableComponent, FormsModule, PanelHeaderComponent],
+  imports: [CommonModule, TableComponent, FormsModule, PanelHeaderComponent, SearcherComponent],
   templateUrl: './attendance-managment.component.html',
   styleUrl: './attendance-managment.component.css'
 })
 export class AttendanceManagmentComponent implements OnInit{
   searchTerm = '';
   attendance?: Attendance;
-  constructor(private dataSvc: DataTeacherService, private router: Router, private http: HttpClient) {}
+  constructor(private router: Router, private http: HttpClient) {}
   private baseUrl = environment.apiBase;
 
 
@@ -35,6 +34,7 @@ export class AttendanceManagmentComponent implements OnInit{
   };
 
   rowsAttendances: any[] = [];
+  filteredAttendances: any[] = []; 
 
   loadAttendances() {
     this.http.get<any[]>(`${this.baseUrl}/teacher/me/assignments`)
@@ -46,6 +46,7 @@ export class AttendanceManagmentComponent implements OnInit{
             aula:          ca.classroom.name,
             turno:         ca.classroom.shift
           }));
+          this.filteredAttendances = [...this.rowsAttendances];
         },
         error: err => console.error('Error al cargar asignaturas:', err)
       });
@@ -55,7 +56,14 @@ export class AttendanceManagmentComponent implements OnInit{
 
 
   applyFilter(event: Event) {
- 
+    const term = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    if (!term) {
+      this.filteredAttendances = [...this.rowsAttendances];
+    } else {
+      this.filteredAttendances = this.rowsAttendances.filter(r =>
+        r.aula.toLowerCase().includes(term)
+      );
+    }
   }
 
   onVerFicha = (row: any) => {
@@ -67,7 +75,15 @@ export class AttendanceManagmentComponent implements OnInit{
   }
 
   onSearch() {
-    this.applicarFiltro();
+    const term = this.searchTerm.trim().toLowerCase();
+    if (!term) {
+      this.filteredAttendances = [...this.rowsAttendances];
+    } else {
+      this.filteredAttendances = this.rowsAttendances.filter(r =>
+        // aquí escoges el campo donde buscar, por ejemplo 'gradoSeccion'
+        r.gradoSeccion.toLowerCase().includes(term)
+      );
+    }
   }
 
   private applicarFiltro() {

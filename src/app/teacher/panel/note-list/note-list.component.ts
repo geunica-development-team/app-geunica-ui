@@ -7,10 +7,12 @@ import { TeacherService } from '../student-note/teacher.service';
 import { TableComponent } from '../../../components/table/table.component';
 import { environment } from '../../../../enviroments/environment';
 import { HttpClient } from '@angular/common/http';
+import { SearcherComponent } from '../../../components/searcher/searcher.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-note-list',
-  imports: [CommonModule, RouterModule, PanelHeaderComponent, TableComponent],
+  imports: [CommonModule, RouterModule, PanelHeaderComponent, TableComponent, SearcherComponent, FormsModule],
   templateUrl: './note-list.component.html',
   styleUrl: './note-list.component.css'
 })
@@ -18,20 +20,25 @@ export class NoteListComponent {
 
   @ViewChild('assignmentsTable') assignmentsTable?: TableComponent;
 
-  // configuraciones de la tabla
+  // columnas y mapeos
   columnsAssignments    = ['ID', 'Nombres y apellidos', 'Código', 'Teléfono', 'Género'];
   columnMappingsAssignments = {
-    'ID':       'enrollmentId',
-    'Nombres y apellidos':   'studentName',
-    'Código':   'studentCode',
-    'Teléfono': 'phoneNumber',
-    'Género':   'gender'
+    'ID':                   'enrollmentId',
+    'Nombres y apellidos':  'studentName',
+    'Código':               'studentCode',
+    'Teléfono':             'phoneNumber',
+    'Género':               'gender'
   };
-  rowsAssignments: any[] = [];
+
+  // datos
   allRows: any[] = [];
+  rowsAssignments: any[] = [];
+
+  // buscador
+  searchTerm = '';
+
   loading = true;
   error: string | null = null;
-
   private baseUrl = environment.apiBase;
 
   constructor(
@@ -41,7 +48,6 @@ export class NoteListComponent {
   ) {}
 
   ngOnInit() {
-   // 1) Lee el parámetro correcto:
     const caId = Number(this.route.snapshot.paramMap.get('assignmentId'));
     if (!caId) {
       this.error   = 'ID de asignación inválido';
@@ -49,7 +55,6 @@ export class NoteListComponent {
       return;
     }
 
-    // 2) Llama al endpoint con ese caId válido
     this.http
       .get<any[]>(`${this.baseUrl}/teacher/me/assignment/${caId}/students`)
       .subscribe({
@@ -61,8 +66,9 @@ export class NoteListComponent {
             phoneNumber:  en.inscription.student.phoneNumber,
             gender:       en.inscription.student.gender
           }));
+          // inicializa la vista
           this.rowsAssignments = [...this.allRows];
-          this.loading         = false;
+          this.loading = false;
         },
         error: () => {
           this.error   = 'No se pudieron cargar los alumnos';
@@ -70,6 +76,18 @@ export class NoteListComponent {
         }
       });
   }
+
+  onSearch() {
+    const term = this.searchTerm.trim().toLowerCase();
+    if (!term) {
+      this.rowsAssignments = [...this.allRows];
+    } else {
+      this.rowsAssignments = this.allRows.filter(r =>
+        r.studentName.toLowerCase().includes(term)
+      );
+    }
+  }
+
 
   /**
    * Al pulsar "Ver fila", navegamos a:
@@ -89,16 +107,13 @@ export class NoteListComponent {
   /**
    * Filtrado local de la tabla (por ejemplo, por nombre)
    */
-  applyFilter(event: Event) {
-    const term = (event.target as HTMLInputElement).value
+applyFilter(event: Event) {
+  const term = (event.target as HTMLInputElement).value
                    .trim()
                    .toLowerCase();
+  this.rowsAssignments = term
+    ? this.allRows.filter(r => r.studentName.toLowerCase().includes(term))
+    : [...this.allRows];
+}
 
-    // filtramos la copia completa y reasignamos a la tabla
-    this.rowsAssignments = this.allRows.filter(row =>
-      row.studentName.toLowerCase().includes(term)
-      || row.studentCode.toLowerCase().includes(term)
-      || row.classroomName.toLowerCase().includes(term)
-    );
-  }
 }

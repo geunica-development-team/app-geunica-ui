@@ -7,11 +7,12 @@ import { PanelHeaderComponent } from '../../../components/dashboard/shared-compo
 import { environment } from '../../../../enviroments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { SearcherComponent } from '../../../components/searcher/searcher.component';
 
 
 @Component({
   selector: 'app-note-managment',
-  imports: [CommonModule, TableComponent, FormsModule, PanelHeaderComponent],
+  imports: [CommonModule, TableComponent, FormsModule, PanelHeaderComponent, SearcherComponent],
   templateUrl: './note-managment.component.html',
   styleUrl: './note-managment.component.css'
 })
@@ -40,7 +41,7 @@ export class NoteManagmentComponent {
 
   // Datos de ejemplo (15 registros: 5 originales + 10 nuevos)
   rowsNotes: any[] = [];
-
+filteredNotes: any [] = [];
 
   // Carga de datos de ejemplo
   loadClassAssignment() {
@@ -74,7 +75,15 @@ export class NoteManagmentComponent {
   }*/
 
   onSearch() {
-    
+        const term = this.searchTerm.trim().toLowerCase();
+    if (!term) {
+      this.filteredNotes = [...this.rowsNotes];
+    } else {
+      this.filteredNotes = this.rowsNotes.filter(r =>
+        // aquí escoges el campo donde buscar, por ejemplo 'gradoSeccion'
+        r.gradoSeccion.toLowerCase().includes(term)
+      );
+    }
   }
 
   applyFilter(event: Event) {
