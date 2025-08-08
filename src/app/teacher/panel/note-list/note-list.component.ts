@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
 import { TableComponent } from '../../../components/table/table.component';
@@ -7,14 +7,17 @@ import { environment } from '../../../../enviroments/environment';
 import { HttpClient } from '@angular/common/http';
 import { SearcherComponent } from '../../../components/searcher/searcher.component';
 import { FormsModule } from '@angular/forms';
+import { ModalAddActivityComponent } from './modalActivity/modal-add-activity/modal-add-activity.component';
+import { ModalAddExamComponent } from './modalExam/modal-add-exam/modal-add-exam.component';
 
 @Component({
   selector: 'app-note-list',
-  imports: [CommonModule, RouterModule, PanelHeaderComponent, TableComponent,  FormsModule],
+  imports: [CommonModule, RouterModule, PanelHeaderComponent, TableComponent,  FormsModule, 
+    ModalAddActivityComponent, ModalAddExamComponent],
   templateUrl: './note-list.component.html',
   styleUrl: './note-list.component.css'
 })
-export class NoteListComponent {
+export class NoteListComponent implements OnInit{
 
   @ViewChild('assignmentsTable') assignmentsTable?: TableComponent;
 
@@ -96,7 +99,6 @@ export class NoteListComponent {
   
   openCreateExamModal(): void {
     if (this.modalAddExam) {
-
       this.modalAddExam.openModal();
     }
   }
@@ -200,6 +202,7 @@ export class NoteListComponent {
   }
 
   // Método para cargar exámenes para gestión
+  
   loadExamsForManagement(): void {
     const caId = Number(this.route.snapshot.paramMap.get('assignmentId'));
     if (!caId) return;
@@ -305,8 +308,8 @@ export class NoteListComponent {
           this.loading = false;
           
           // Cargar también exámenes y actividades
-          this.loadExamsForManagement();
-          this.loadActivitiesForManagement();
+          //this.loadExamsForManagement();
+          //this.loadActivitiesForManagement();
         },
         error: () => {
           this.error = 'No se pudieron cargar los alumnos';

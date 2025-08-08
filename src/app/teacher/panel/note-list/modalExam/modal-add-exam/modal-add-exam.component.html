@@ -1,0 +1,146 @@
+<!-- Modal para crear examen -->
+<div class="modal fade" id="modalAddExam" tabindex="-1" aria-labelledby="modalAddExamLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content modal-modern">
+      <!-- Header del modal -->
+      <div class="modal-header modal-header-primary">
+        <div class="modal-title-container">
+          <i class="fas fa-file-alt modal-icon"></i>
+          <h5 class="modal-title" id="modalAddExamLabel">Crear Nuevo Examen</h5>
+        </div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Cuerpo del modal -->
+      <div class="modal-body">
+        <form #examForm="ngForm" (ngSubmit)="onSubmit()" novalidate>
+
+          <!-- Nombre del examen -->
+          <div class="form-group mb-3">
+            <label for="examName" class="form-label required">
+              <i class="fas fa-heading me-2"></i>Nombre
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              id="examName"
+              name="name"
+              [(ngModel)]="examData.name"
+              #nameField="ngModel"
+              required
+              maxlength="100"
+              placeholder="Ej: Examen Parcial - Matemáticas"
+              [class.is-invalid]="nameField.invalid && nameField.touched"
+            />
+            <div class="invalid-feedback" *ngIf="nameField.invalid && nameField.touched">
+              <small *ngIf="nameField.errors?.['required']">El nombre es obligatorio</small>
+            </div>
+          </div>
+
+          <!-- Fecha del examen -->
+          <div class="form-group mb-3">
+            <label for="examDate" class="form-label required">
+              <i class="fas fa-calendar-alt me-2"></i>Fecha
+            </label>
+            <input
+              type="date"
+              class="form-control"
+              id="examDate"
+              name="date"
+              [(ngModel)]="examData.date"
+              #dateField="ngModel"
+              required
+              [min]="minDate.split('T')[0]"
+              [class.is-invalid]="dateField.invalid && dateField.touched"
+            />
+            <div class="invalid-feedback" *ngIf="dateField.invalid && dateField.touched">
+              <small *ngIf="dateField.errors?.['required']">La fecha es obligatoria</small>
+            </div>
+          </div>
+
+          <!-- Peso del examen -->
+          <div class="form-group mb-3">
+            <label for="examWeight" class="form-label required">
+              <i class="fas fa-weight-hanging me-2"></i>Peso (%)
+            </label>
+            <input
+              type="number"
+              class="form-control"
+              id="examWeight"
+              name="weight"
+              [(ngModel)]="examData.weight"
+              #weightField="ngModel"
+              required
+              min="1"
+              max="100"
+              [class.is-invalid]="weightField.invalid && weightField.touched"
+            />
+            <div class="invalid-feedback" *ngIf="weightField.invalid && weightField.touched">
+              <small *ngIf="weightField.errors?.['required']">El peso es obligatorio</small>
+              <small *ngIf="weightField.errors?.['min'] || weightField.errors?.['max']">Debe ser entre 1 y 100</small>
+            </div>
+          </div>
+
+          <!-- Tipo de examen -->
+          <div class="form-group mb-3">
+            <label for="examType" class="form-label required">
+              <i class="fas fa-file-alt me-2"></i>Tipo de Examen
+            </label>
+            <select
+              class="form-select"
+              id="examType"
+              name="typeExam"
+              [(ngModel)]="examData.typeExam"
+              #typeField="ngModel"
+              required
+            >
+              <option value="Parcial">Parcial</option>
+              <option value="Final">Final</option>
+              <option value="Quiz">Quiz</option>
+            </select>
+          </div>
+
+          <!-- Estado del examen -->
+          <div class="form-group mb-3">
+            <label for="examState" class="form-label required">
+              <i class="fas fa-toggle-on me-2"></i>Estado
+            </label>
+            <select
+              class="form-select"
+              id="examState"
+              name="state"
+              [(ngModel)]="examData.state"
+              #stateField="ngModel"
+              required
+            >
+              <option value="Publicado">Publicado</option>
+              <option value="Borrador">Borrador</option>
+            </select>
+          </div>
+
+          <!-- periodType y periodNumber ocultos con valores por defecto -->
+          <input type="hidden" name="periodType" [(ngModel)]="examData.periodType" />
+          <input type="hidden" name="periodNumber" [(ngModel)]="examData.periodNumber" />
+
+        </form>
+      </div>
+
+      <!-- Footer del modal -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          <i class="fas fa-times me-2"></i>Cancelar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="!examForm.form.valid || isSubmitting"
+          (click)="onSubmit()"
+        >
+          <i class="fas fa-spinner fa-spin me-2" *ngIf="isSubmitting"></i>
+          <i class="fas fa-plus me-2" *ngIf="!isSubmitting"></i>
+          {{ isSubmitting ? 'Creando...' : 'Crear Examen' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
