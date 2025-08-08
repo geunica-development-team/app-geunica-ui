@@ -125,7 +125,6 @@ export class NoteListComponent implements OnInit{
   
   openCreateActivityModal(): void {
     if (this.modalAddActivity) {
-
       this.modalAddActivity.openModal();
     }
   }
@@ -321,6 +320,7 @@ export class NoteListComponent implements OnInit{
 
 
   // Versión mejorada con manejo de errores para la recarga de datos
+  /*
   onCreatedOrEditedOrDeleted(): void {
     console.log('Recargando datos después de operación CRUD...');
     
@@ -347,8 +347,8 @@ export class NoteListComponent implements OnInit{
     }
     
     // Recargar exámenes y actividades
-    this.loadExamsForManagement();
-    this.loadActivitiesForManagement();
-  }
+    //this.loadExamsForManagement();
+    //this.loadActivitiesForManagement();
+  }*/
 
 }
