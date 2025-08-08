@@ -49,21 +49,20 @@
       </div>
     </div>
 
-    <!-- Filtros de Período -->
-    <div class="row mb-4">
+    <!-- Selector de Tipo de Período -->
+    <div class="row mb-3">
       <div class="col-12">
         <div class="card">
-          <div class="card-body">
-            <h6 class="card-subtitle mb-3">
-              <i class="fas fa-filter me-2"></i>
-              Filtros de Período
-            </h6>
-            <div class="row">
-              <div class="col-md-6">
-                <label for="periodType" class="form-label">Tipo de Período</label>
+          <div class="card-body py-2">
+            <div class="d-flex align-items-center justify-content-between">
+              <div class="d-flex align-items-center">
+                <label class="form-label mb-0 me-3">
+                  <i class="fas fa-calendar-alt me-2"></i>
+                  <strong>Tipo de Período:</strong>
+                </label>
                 <select 
-                  id="periodType"
-                  class="form-select" 
+                  class="form-select form-select-sm" 
+                  style="width: auto;"
                   [(ngModel)]="selectedPeriodType"
                   (change)="onPeriodTypeChange()"
                 >
@@ -72,20 +71,49 @@
                   </option>
                 </select>
               </div>
-              <div class="col-md-6">
-                <label for="periodNumber" class="form-label">Número de Período</label>
-                <select 
-                  id="periodNumber"
-                  class="form-select"
-                  [(ngModel)]="selectedPeriodNumber"
-                  (change)="onPeriodNumberChange()"
-                >
-                  <option *ngFor="let num of getPeriodNumbers()" [value]="num">
-                    {{num}}
-                  </option>
-                </select>
+              
+              <!-- Toggle para mostrar meses de vacaciones (solo visible en mensual) -->
+              <div *ngIf="selectedPeriodType === 'MENSUAL'" class="form-check">
+                <input 
+                  class="form-check-input" 
+                  type="checkbox" 
+                  id="showVacationMonths"
+                  [(ngModel)]="showVacationMonths"
+                  
+                ><!--(change)="onShowVacationMonthsChange()"  -->
+                <label class="form-check-label vacation-months-toggle" for="showVacationMonths">
+                  <i class="fas fa-umbrella-beach me-1"></i>
+                  Mostrar meses de vacaciones
+                </label>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navbar de Períodos -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body py-2">
+            <nav class="navbar navbar-expand-lg navbar-light p-0">
+              <div class="container-fluid p-0">
+                <div class="navbar-nav d-flex flex-row">
+                  <a 
+                    *ngFor="let periodNum of getPeriodNumbers()"
+                    class="nav-link px-3 py-2 me-1 rounded"
+                    [class.active]="selectedPeriodNumber === periodNum"
+                    [class.bg-primary]="selectedPeriodNumber === periodNum"
+                    [class.text-white]="selectedPeriodNumber === periodNum"
+                    href="javascript:void(0)"
+                    (click)="onPeriodNumberChange(periodNum)"
+                  >
+                    {{ getPeriodLabel(periodNum) }}
+                  </a>
+                </div>
+              </div>
+            </nav>
           </div>
         </div>
       </div>
@@ -130,34 +158,37 @@
       <div class="col-12">
         <div class="card">
           <div class="card-header">
-            <ul class="nav nav-tabs card-header-tabs" id="gradesTab" role="tablist">
-              <li class="nav-item" role="presentation">
-                <button 
-                  class="nav-link active" 
-                  id="exams-tab" 
-                  data-bs-toggle="tab" 
-                  data-bs-target="#exams" 
-                  type="button" 
-                  role="tab"
-                >
-                  <i class="fas fa-clipboard-check me-2"></i>
-                  Exámenes ({{studentGrades?.exams?.length || 0}})
-                </button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button 
-                  class="nav-link" 
-                  id="activities-tab" 
-                  data-bs-toggle="tab" 
-                  data-bs-target="#activities" 
-                  type="button" 
-                  role="tab"
-                >
-                  <i class="fas fa-tasks me-2"></i>
-                  Actividades ({{studentGrades?.activities?.length || 0}})
-                </button>
-              </li>
-            </ul>
+            <div class="d-flex justify-content-between align-items-center">
+              <ul class="nav nav-tabs card-header-tabs mb-0" id="gradesTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button 
+                    class="nav-link active" 
+                    id="exams-tab" 
+                    data-bs-toggle="tab" 
+                    data-bs-target="#exams" 
+                    type="button" 
+                    role="tab"
+                  >
+                    <i class="fas fa-clipboard-check me-2"></i>
+                    Exámenes ({{studentGrades?.exams?.length || 0}})
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button 
+                    class="nav-link" 
+                    id="activities-tab" 
+                    data-bs-toggle="tab" 
+                    data-bs-target="#activities" 
+                    type="button" 
+                    role="tab"
+                  >
+                    <i class="fas fa-tasks me-2"></i>
+                    Actividades ({{studentGrades?.activities?.length || 0}})
+                  </button>
+                </li>
+              </ul>
+              
+            </div>
           </div>
 
           <div class="card-body">
@@ -210,13 +241,17 @@
                             <small>{{formatDate(examScore.registrationDate)}}</small>
                           </td>
                           <td class="text-center">
-                            <button 
-                              class="btn btn-sm btn-outline-primary"
-                              (click)="editExamScore(examScore)"
-                              title="Editar nota"
-                            >
-                              <i class="fas fa-edit"></i>
-                            </button>
+                            <div class="btn-group" role="group">
+                              <button 
+                                class="btn btn-sm btn-outline-primary me-1"
+                                (click)="editExamScore(examScore)"
+                                title="Editar nota"
+                              >
+                                <i class="fas fa-edit"></i>
+                              </button>
+                              
+                              
+                            </div>
                           </td>
                         </tr>
                       </tbody>
@@ -283,13 +318,17 @@
                             <small>{{formatDate(activityScore.registrationDate)}}</small>
                           </td>
                           <td class="text-center">
-                            <button 
-                              class="btn btn-sm btn-outline-primary"
-                              (click)="editActivityScore(activityScore)"
-                              title="Editar nota"
-                            >
-                              <i class="fas fa-edit"></i>
-                            </button>
+                            <div class="btn-group" role="group">
+                              <button 
+                                class="btn btn-sm btn-outline-primary me-1"
+                                (click)="editActivityScore(activityScore)"
+                                title="Editar nota"
+                              >
+                                <i class="fas fa-edit"></i>
+                              </button>
+                              
+                              
+                            </div>
                           </td>
                         </tr>
                       </tbody>
@@ -317,3 +356,14 @@
 
   </div>
 </div>
+
+<!-- Modales para edición de notas 
+<app-modal-edit-exam-score 
+  #modalEditExamScore 
+  (updated)="onCreatedOrEditedOrDeleted()"
+/>
+
+<app-modal-edit-activity-score 
+  #modalEditActivityScore 
+  (updated)="onCreatedOrEditedOrDeleted()"
+/> -->

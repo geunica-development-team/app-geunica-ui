@@ -13,17 +13,17 @@
 /* Animación para las tarjetas de resumen */
 .card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0.5rem 1rem rgba(0, 140, 98, 0.15);
   transition: all 0.3s ease;
 }
 
 /* Estilos para las notas */
 .text-success {
-  color: #198754 !important;
+  color: #198754 !important; 
 }
 
 .text-primary {
-  color: #0d6efd !important;
+  color: #008c62 !important;
 }
 
 .text-warning {
@@ -34,13 +34,63 @@
   color: #dc3545 !important;
 }
 
+/* Color primario personalizado para elementos activos */
+.bg-primary {
+  background-color: #008c62 !important;
+}
+
+.btn-primary {
+  background-color: #008c62;
+  border-color: #008c62;
+}
+
+.btn-primary:hover {
+  background-color: #006b4a;
+  border-color: #006b4a;
+}
+
+.btn-outline-primary {
+  color: #008c62;
+  border-color: #008c62;
+}
+
+.btn-outline-primary:hover {
+  background-color: #008c62;
+  border-color: #008c62;
+  color: #fff;
+}
+
+.text-primary {
+  color: #008c62 !important;
+}
+
+.spinner-border.text-primary {
+  color: #008c62 !important;
+}
+
+/* Navbar de períodos personalizada */
+.nav-link {
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.nav-link:hover {
+  background-color: rgba(0, 140, 98, 0.1) !important;
+  color: #008c62 !important;
+}
+
+.nav-link.active {
+  background-color: #008c62 !important;
+  color: white !important;
+}
+
 /* Estilos para las tablas */
 .table {
   margin-bottom: 0;
 }
 
 .table-hover tbody tr:hover {
-  background-color: rgba(0, 0, 0, 0.075);
+  background-color: rgba(0, 140, 98, 0.075);
 }
 
 .table th {
@@ -54,6 +104,10 @@
   font-size: 0.75em;
 }
 
+.badge.bg-info {
+  background-color: #008c62 !important;
+}
+
 /* Estilos para los tabs */
 .nav-tabs .nav-link {
   color: #495057;
@@ -63,12 +117,12 @@
 }
 
 .nav-tabs .nav-link:hover {
-  color: #229410;
-  background-color: #e9ecef;
+  color: #008c62;
+  background-color: rgba(0, 140, 98, 0.1);
 }
 
 .nav-tabs .nav-link.active {
-  color: #01c708;
+  color: #008c62;
   background-color: #fff;
   border-color: #dee2e6 #dee2e6 #fff;
   border-bottom-color: transparent;
@@ -90,6 +144,29 @@
   border-radius: 0.2rem;
 }
 
+/* Toggle para mostrar meses de vacaciones */
+.vacation-months-toggle {
+  font-size: 0.875rem;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.3s ease;
+}
+
+.vacation-months-toggle:hover {
+  color: #008c62;
+}
+
+.form-check-input:checked {
+  background-color: #008c62;
+  border-color: #008c62;
+}
+
+.form-check-input:focus {
+  border-color: #008c62;
+  outline: 0;
+  box-shadow: 0 0 0 0.25rem rgba(0, 140, 98, 0.25);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .table-responsive {
@@ -103,6 +180,11 @@
   
   .fs-5 {
     font-size: 1rem !important;
+  }
+
+  .nav-link {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
   }
 }
 
@@ -136,6 +218,18 @@
 
 /* Mejora para filtros */
 .form-select:focus {
-  border-color: #1e9c17;
-  box-shadow: 0 0 0 0.2rem rgba(21, 253, 13, 0.25);
+  border-color: #008c62;
+  box-shadow: 0 0 0 0.2rem rgba(0, 140, 98, 0.25);
+}
+
+/* Alertas personalizadas */
+.alert-info {
+  background-color: rgba(0, 140, 98, 0.1);
+  border-color: rgba(0, 140, 98, 0.3);
+  color: #006b4a;
+}
+
+/* Íconos de estado */
+.text-primary.fs-2 {
+  color: #008c62 !important;
 }
