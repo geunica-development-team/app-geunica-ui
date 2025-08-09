@@ -14,7 +14,7 @@ interface DataLogin {
 })
 export class AuthService {
     private httpService = inject(HttpClient);
-    private auth_end_point = 'http://localhost:3000';
+    private auth_end_point = 'http://localhost:3000';//https://app-geunica-backend.onrender.com
     private authStorage = inject(AuthStorageService);
     
     constructor() {}

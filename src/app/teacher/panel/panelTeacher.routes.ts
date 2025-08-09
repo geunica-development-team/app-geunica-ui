@@ -11,6 +11,7 @@ import { AttendanceListComponent } from "./attendance-list/attendance-list.compo
 import { NoteListComponent } from "./note-list/note-list.component";
 import { CurriculumManagmentComponent } from "./curriculum-managment/curriculum-managment.component";
 import { StudentNoteComponent } from "./student-note/student-note.component";
+import { ProfileComponent } from "../../pages/shared/profile/profile.component";
 
 export const teacherPanelRoutes: Routes = [
     {
@@ -67,6 +68,12 @@ export const teacherPanelRoutes: Routes = [
             {
                 path: "schedule",
                 component: ScheduleComponent
+            },
+            {
+            path: 'profile',
+            component: ProfileComponent,
+            canActivate:  [roleGuard],
+            data: { role: 'docente' }
             }
 
         ]

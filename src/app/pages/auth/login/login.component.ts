@@ -89,6 +89,8 @@ export class LoginComponent {
             this.router.navigateByUrl('/admin/panel/dashboard');
           } else if (role === 'student') {
             this.router.navigateByUrl('/student/panel/dashboard');
+          } else if (role === 'teacher') {
+            this.router.navigateByUrl('/teacher/panel/dashboard');
           } else if (role === 'psychologist') {
             this.router.navigateByUrl('/psychologist/panel/dashboard');
           } else {
@@ -103,4 +105,49 @@ export class LoginComponent {
       }
     })
   }
+
+
+  
 }
+
+/*
+  login() {
+    if (this.formLogin.invalid) {
+      this.notifycation.error('Debes completar todos los campos')
+      return;
+    }
+    this.authService.login({
+      user: this.formLogin.get('user')?.value ?? '',
+      password: this.formLogin.get('password')?.value ?? '',
+    }).subscribe({
+      next: (value: any) => {
+        this.notifycation.success(`${value.message}, ${value.user.person.names} ${value.user.person.paternalSurname}.`, 'Éxito')
+        this.formLogin.reset();
+
+        const token = this.authStorage.getToken();
+        if (token) {
+          const decoded: any = jwtDecode(token);
+          const role = decoded.role;
+
+          if (role === 'admin') {
+            this.router.navigateByUrl('/admin/panel/dashboard');
+          } else if (role === 'student') {
+            this.router.navigateByUrl('/student/panel/dashboard');
+          } else if (role === 'teacher') {
+            this.router.navigateByUrl('/teacher/panel/dashboard');
+          } else if (role === 'psychologist') {
+            this.router.navigateByUrl('/psychologist/panel/dashboard');
+          } else {
+            this.router.navigateByUrl('/unauthorized');
+          }
+        } else {
+          this.notifycation.error('No se pudo leer el token', 'Error');
+        }
+      },
+      error: (error: Error) => {
+        this.notifycation.error(error.message, 'Error');
+      }
+    })
+  }
+
+*/ 
