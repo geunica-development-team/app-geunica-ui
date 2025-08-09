@@ -37,12 +37,6 @@
                   Nivel: {{ studentInfo?.levelName }}
                 </small>
               </p>
-              <p class="text-muted mb-0">
-                <small>
-                  Assignment ID: {{ assignmentId }} |
-                  Enrollment ID: {{ enrollmentId }}
-                </small>
-              </p>
             </div>
           </div>
         </div>
@@ -124,9 +118,9 @@
       <div class="col-md-4">
         <div class="card text-center">
           <div class="card-body">
-            <i class="fas fa-clipboard-check text-primary fs-2 mb-2"></i>
+            <i class="fas fa-clipboard-check text-exam fs-2 mb-2"></i>
             <h5 class="card-title">Promedio Exámenes</h5>
-            <h3 class="text-primary">{{getExamsAverage()}}</h3>
+            <h3 class="text-exam">{{getExamsAverage()}}</h3>
             <small class="text-muted">{{studentGrades?.exams?.length || 0}} exámenes</small>
           </div>
         </div>
@@ -203,7 +197,7 @@
                         <tr>
                           <th>Examen</th>
                           <th>Tipo</th>
-                          <th>Fecha</th>
+                          
                           <th>Peso</th>
                           <th class="text-center">Nota</th>
                           <th class="text-center">Estado</th>
@@ -221,18 +215,18 @@
                             </small>
                           </td>
                           <td>
-                            <span class="badge bg-primary">{{examScore.exam.typeExam}}</span>
+                            <span class="badge bg-typeExam">{{examScore.exam.typeExam}}</span>
                           </td>
-                          <td>{{formatDate(examScore.exam.date)}}</td>
+                          
                           <td>
                             <span class="badge bg-info">{{examScore.exam.weight}}%</span>
                           </td>
                           <td class="text-center">
                             <span [class]="getScoreClass(examScore.score)" class="fs-5">
-                              {{examScore.score}}
+                              {{getDisplayScore(examScore.score)}}
                             </span>
                           </td>
-                          <td class="text-center">
+                          <td class="badge bg-typeExam">
                             <span [class]="getStateClass(examScore.state)">
                               {{examScore.state}}
                             </span>
@@ -245,12 +239,10 @@
                               <button 
                                 class="btn btn-sm btn-outline-primary me-1"
                                 (click)="editExamScore(examScore)"
-                                title="Editar nota"
+                                title="Editar nota de examen"
                               >
                                 <i class="fas fa-edit"></i>
                               </button>
-                              
-                              
                             </div>
                           </td>
                         </tr>
@@ -280,7 +272,7 @@
                         <tr>
                           <th>Actividad</th>
                           <th>Tipo</th>
-                          <th>Fecha</th>
+                          
                           <th>Peso</th>
                           <th class="text-center">Nota</th>
                           <th class="text-center">Estado</th>
@@ -300,13 +292,13 @@
                           <td>
                             <span class="badge bg-success">{{activityScore.activity.typeActivity}}</span>
                           </td>
-                          <td>{{formatDate(activityScore.activity.date)}}</td>
+                          
                           <td>
                             <span class="badge bg-info">{{activityScore.activity.weight}}%</span>
                           </td>
                           <td class="text-center">
                             <span [class]="getScoreClass(activityScore.score)" class="fs-5">
-                              {{activityScore.score}}
+                              {{getDisplayScore(activityScore.score)}}
                             </span>
                           </td>
                           <td class="text-center">
@@ -322,12 +314,10 @@
                               <button 
                                 class="btn btn-sm btn-outline-primary me-1"
                                 (click)="editActivityScore(activityScore)"
-                                title="Editar nota"
+                                title="Editar nota de tarea"
                               >
                                 <i class="fas fa-edit"></i>
                               </button>
-                              
-                              
                             </div>
                           </td>
                         </tr>
@@ -356,6 +346,10 @@
 
   </div>
 </div>
+
+<app-edit-exam-score-modal
+  (updated)="onCreatedOrEditedOrDeleted()">
+</app-edit-exam-score-modal>
 
 <!-- Modales para edición de notas 
 <app-modal-edit-exam-score 

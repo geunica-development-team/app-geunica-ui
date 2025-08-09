@@ -13,10 +13,6 @@
   <div *ngIf="error && !loading" class="alert alert-danger" role="alert">
     <i class="fas fa-exclamation-triangle me-2"></i>
     {{ error }}
-    <button class="btn btn-sm btn-outline-danger ms-3" (click)="goBack()">
-      <i class="fas fa-arrow-left me-1"></i>
-      Volver a mis cursos
-    </button>
   </div>
 
   <!-- Content -->
@@ -32,63 +28,21 @@
                   <i class="fas fa-book me-2"></i>
                   {{ courseGrades.courseInfo.courseName }}
                 </h4>
-                <p class="text-muted mb-1">
-                  <strong>Código:</strong> {{ courseGrades.courseInfo.courseCode }}
+                <p class="text-muted mb-0">
+                  <small>
+                    <strong>Estudiante:</strong> {{ studentInfo?.studentName || 'Cargando...' }} |
+                    <strong>Tutor:</strong> {{ studentInfo?.tutorName || 'Cargando...' }} |
+                    <strong>Profesor:</strong> {{ courseGrades.courseInfo.teacherName }}
+                  </small>
                 </p>
                 <p class="text-muted mb-0">
                   <small>
-                    <strong>Profesor:</strong> {{ courseGrades.courseInfo.teacherName }} |
-                    <strong>Grado:</strong> {{ courseGrades.courseInfo.grade }} |
-                    <strong>Sección:</strong> {{ courseGrades.courseInfo.section }}
+                    <strong>Nivel:</strong> {{ studentInfo?.gradeName || 'Cargando...' }} de 
+                     {{ studentInfo?.levelName || 'Cargando...' }} |
+                    <strong>Sección:</strong> {{ studentInfo?.sectionName || 'Cargando...' }} |
+                    <strong>Salon:</strong> {{ studentInfo?.classroomName || 'Cargando...' }}
                   </small>
                 </p>
-              </div>
-              <button class="btn btn-outline-primary" (click)="goBack()">
-                <i class="fas fa-arrow-left me-2"></i>
-                Volver a mis cursos
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Selector de Tipo de Período -->
-    <div class="row mb-3">
-      <div class="col-12">
-        <div class="card">
-          <div class="card-body py-2">
-            <div class="d-flex align-items-center justify-content-between flex-wrap">
-              <div class="d-flex align-items-center mb-2 mb-md-0">
-                <label class="form-label mb-0 me-3">
-                  <i class="fas fa-calendar-alt me-2"></i>
-                  <strong>Período:</strong>
-                </label>
-                <select 
-                  class="form-select form-select-sm" 
-                  style="width: auto;"
-                  [(ngModel)]="selectedPeriodType"
-                  (change)="onPeriodTypeChange()"
-                >
-                  <option *ngFor="let type of periodTypes" [value]="type.value">
-                    {{type.label}}
-                  </option>
-                </select>
-              </div>
-              
-              <!-- Toggle para mostrar meses de vacaciones (solo visible en mensual) -->
-              <div *ngIf="selectedPeriodType === 'MENSUAL'" class="form-check">
-                <input 
-                  class="form-check-input" 
-                  type="checkbox" 
-                  id="showVacationMonths"
-                  [(ngModel)]="showVacationMonths"
-                  
-                ><!---(change)="onShowVacationMonthsChange()"-->
-                <label class="form-check-label vacation-months-toggle" for="showVacationMonths">
-                  <i class="fas fa-umbrella-beach me-1"></i>
-                  Mostrar meses de vacaciones
-                </label>
               </div>
             </div>
           </div>
@@ -128,9 +82,9 @@
       <div class="col-md-4">
         <div class="card text-center">
           <div class="card-body">
-            <i class="fas fa-clipboard-check text-primary fs-2 mb-2"></i>
+            <i class="fas fa-clipboard-check text-exam fs-2 mb-2"></i>
             <h5 class="card-title">Promedio Exámenes</h5>
-            <h3 class="text-primary">{{getExamsAverage()}}</h3>
+            <h3 class="text-exam">{{getExamsAverage()}}</h3>
             <small class="text-muted">{{getFilteredExams().length}} exámenes</small>
           </div>
         </div>
@@ -204,7 +158,7 @@
                         <tr>
                           <th>Examen</th>
                           <th>Tipo</th>
-                          <th>Fecha</th>
+                          
                           <th>Peso</th>
                           <th class="text-center">Mi Nota</th>
                           <th class="text-center">Estado</th>
@@ -221,9 +175,9 @@
                             </small>
                           </td>
                           <td>
-                            <span class="badge bg-primary">{{examScore.exam.typeExam}}</span>
+                            <span class="badge bg-type">{{examScore.exam.typeExam}}</span>
                           </td>
-                          <td>{{formatDate(examScore.exam.date)}}</td>
+                          
                           <td>
                             <span class="badge bg-info">{{examScore.exam.weight}}%</span>
                           </td>
@@ -233,8 +187,8 @@
                             </span>
                           </td>
                           <td class="text-center">
-                            <span [class]="getStateClass(examScore.state)">
-                              {{examScore.state}}
+                            <span [class]="getStateClass(examScore.scoreState)">
+                              {{examScore.scoreState}}
                             </span>
                           </td>
                           <td>
@@ -267,7 +221,7 @@
                         <tr>
                           <th>Actividad</th>
                           <th>Tipo</th>
-                          <th>Fecha</th>
+                          
                           <th>Peso</th>
                           <th class="text-center">Mi Nota</th>
                           <th class="text-center">Estado</th>
@@ -284,9 +238,9 @@
                             </small>
                           </td>
                           <td>
-                            <span class="badge bg-success">{{activityScore.activity.typeActivity}}</span>
+                            <span class="badge bg-type">{{activityScore.activity.typeActivity}}</span>
                           </td>
-                          <td>{{formatDate(activityScore.activity.date)}}</td>
+                          
                           <td>
                             <span class="badge bg-info">{{activityScore.activity.weight}}%</span>
                           </td>
@@ -296,8 +250,8 @@
                             </span>
                           </td>
                           <td class="text-center">
-                            <span [class]="getStateClass(activityScore.state)">
-                              {{activityScore.state}}
+                            <span [class]="getStateClass(activityScore.scoreState)">
+                              {{activityScore.scoreState}}
                             </span>
                           </td>
                           <td>

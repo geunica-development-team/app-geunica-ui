@@ -1,8 +1,9 @@
 /* courses-list.component.scss o global */
 .clickable-card {
   cursor: pointer;
+  transition: transform 0.1s ease-in-out;
 }
 .clickable-card:hover {
-  transform: translateY(-3px);
-  transition: transform 120ms ease;
+  transform: translateY(-4px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }

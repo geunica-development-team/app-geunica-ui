@@ -9,12 +9,7 @@ import { FormsModule } from '@angular/forms';
 interface CourseGrades {
   courseInfo: {
     courseName: string;
-    courseCode: string;
     teacherName: string;
-    classroom: string;
-    level: string;
-    grade: string;
-    section: string;
   };
   exams: ExamScore[];
   activities: ActivityScore[];
@@ -26,10 +21,12 @@ interface ExamScore {
   id: number;
   score: number;
   state: string;
+  scoreState: string;
   registrationDate: string;
   exam: {
     id: number;
     name: string;
+    examState: string;
     typeExam: string;
     date: string;
     weight: number;
@@ -43,10 +40,12 @@ interface ActivityScore {
   id: number;
   score: number;
   state: string;
+  scoreState: string;
   registrationDate: string;
   activity: {
     id: number;
     name: string;
+    activityState: string;
     typeActivity: string;
     date: string;
     weight: number;
@@ -88,6 +87,15 @@ export class GradesRegistryComponent implements OnInit {
     { value: 'ANUAL', label: 'Anual', maxNumber: 1 }
   ];
 
+  studentInfo: {
+    studentName: string;
+    tutorName: string;
+    gradeName: string;
+    sectionName: string;
+    levelName: string;
+    classroomName: string;
+  } | null = null;
+
   private baseUrl = environment.apiBase;
 
   constructor(
@@ -106,14 +114,113 @@ export class GradesRegistryComponent implements OnInit {
       return;
     }
 
+    this.fetchStudentInfo();
     this.loadCourseGrades();
+  }
+
+    // Obtiene únicamente los datos de estudiante y curso 
+  fetchStudentInfo() {
+      const url = `${this.baseUrl}/student/me/enrollments`;
+      this.http.get<any[]>(url).subscribe({
+        next: (enrollments) => {
+          console.log('Student enrollments data:', enrollments);
+          
+          if (enrollments && enrollments.length > 0) {
+            // Tomar el primer enrollment (o buscar el específico si tienes el ID)
+            const enrollment = enrollments[0];
+            
+            // Extraer información según la estructura que proporcionaste
+            const student = enrollment.inscription?.student;
+            const tutor = enrollment.inscription?.tutor;
+            const classroom = enrollment.classroom;
+            const grade = classroom?.grade;
+            const level = grade?.level;
+            const section = classroom?.section;
+            
+            if (student && classroom && grade && level && section) {
+              this.studentInfo = {
+                studentName: `${student.names} ${student.paternalSurname} ${student.maternalSurname}`.trim(),
+                tutorName: `${tutor?.names || ''} ${tutor?.paternalSurname || ''} ${tutor?.maternalSurname || ''}`.trim(),
+                gradeName: grade.name,
+                sectionName: section.name,
+                levelName: level.name,
+                classroomName: classroom.name
+              };
+              
+              console.log('Student info successfully loaded:', this.studentInfo);
+            } else {
+              console.warn('Estructura de datos incompleta en enrollment');
+              this.setDefaultStudentInfo();
+            }
+          } else {
+            console.warn('No se encontraron enrollments');
+            this.setDefaultStudentInfo();
+          }
+        },
+        error: (err) => {
+          console.error('Error al obtener información del estudiante:', err);
+          this.setDefaultStudentInfo();
+        }
+      });
+    }
+
+  private setDefaultStudentInfo() {
+    this.studentInfo = {
+      studentName: 'Estudiante',
+      tutorName: 'Tutor',
+      gradeName: 'Grado',
+      sectionName: 'Sección', 
+      levelName: 'Nivel',
+      classroomName: 'Aula'
+    };
+  }
+
+  // MÉTODO ALTERNATIVO SI QUIERES BUSCAR UN ENROLLMENT ESPECÍFICO
+  fetchSpecificStudentInfo(targetClassroomId?: number) {
+    const url = `${this.baseUrl}/student/me/enrollments`;
+    this.http.get<any[]>(url).subscribe({
+      next: (enrollments) => {
+        if (enrollments && enrollments.length > 0) {
+          // Si tienes un classroom específico, buscarlo
+          let enrollment = enrollments[0]; // Por defecto el primero
+          
+          if (targetClassroomId) {
+            const specific = enrollments.find(e => e.classroom?.id === targetClassroomId);
+            if (specific) enrollment = specific;
+          }
+          
+          this.processEnrollmentData(enrollment);
+        }
+      },
+      error: (err) => {
+        console.error('Error:', err);
+        this.setDefaultStudentInfo();
+      }
+    });
+  }
+
+    private processEnrollmentData(enrollment: any) {
+    const student = enrollment.inscription?.student;
+    const tutor = enrollment.inscription?.tutor;
+    const classroom = enrollment.classroom;
+    const grade = classroom?.grade;
+    const level = grade?.level;
+    const section = classroom?.section;
+    
+    this.studentInfo = {
+      studentName: student ? `${student.names} ${student.paternalSurname} ${student.maternalSurname}`.trim() : 'Estudiante',
+      tutorName: tutor ? `${tutor.names} ${tutor.paternalSurname} ${tutor.maternalSurname}`.trim() : 'Tutor',
+      gradeName: grade?.name || 'Grado',
+      sectionName: section?.name || 'Sección',
+      levelName: level?.name || 'Nivel',
+      classroomName: classroom?.name || 'Aula'
+    };
   }
 
   // Carga toda la información del curso con notas
   loadCourseGrades() {
     this.loading = true;
     this.error = null;
-    
 
     const url = `${this.baseUrl}/student/me/courses/${this.assignmentId}/full`;
 
@@ -158,18 +265,18 @@ export class GradesRegistryComponent implements OnInit {
       scoreId: e.scoreId ?? null,
       score: (e.score === null || e.score === undefined) ? -1 : e.score,
       scoreDisplay: e.scoreDisplay ?? (e.score === null ? 'Sin calificar' : String(e.score)),
-      scoreState: e.scoreState ?? null,
+      scoreState: e.scoreState ?? e.state ?? 'Sin estado', // ⭐ AGREGAR FALLBACK
       registrationDate: e.registrationDate ?? null,
       enrollmentId: e.enrollmentId ?? data.enrollmentId ?? null,
       exam: {
         id: e.examId ?? null,
-        name: e.name ?? null,
+        name: e.name ?? 'Sin nombre',
         date: e.date ?? null,
-        weight: e.weight ?? null,
-        examState: e.examState ?? null,
-        typeExam: e.typeExam ?? null,
-        periodType: e.periodType ?? e.period_type ?? null,
-        periodNumber: e.periodNumber ?? e.period_number ?? null
+        weight: e.weight ?? 0,
+        examState: e.examState ?? 'Activo',
+        typeExam: e.typeExam ?? 'Evaluación',
+        periodType: e.periodType ?? e.period_type ?? this.selectedPeriodType,
+        periodNumber: e.periodNumber ?? e.period_number ?? this.selectedPeriodNumber
       }
     }));
 
@@ -178,18 +285,18 @@ export class GradesRegistryComponent implements OnInit {
       scoreId: a.scoreId ?? null,
       score: (a.score === null || a.score === undefined) ? -1 : a.score,
       scoreDisplay: a.scoreDisplay ?? (a.score === null ? 'Sin calificar' : String(a.score)),
-      scoreState: a.scoreState ?? null,
+      scoreState: a.scoreState ?? a.state ?? 'Sin estado', // ⭐ AGREGAR FALLBACK
       registrationDate: a.registrationDate ?? null,
       enrollmentId: a.enrollmentId ?? data.enrollmentId ?? null,
       activity: {
         id: a.activityId ?? null,
-        name: a.name ?? null,
+        name: a.name ?? 'Sin nombre',
         date: a.date ?? null,
-        weight: a.weight ?? null,
-        activityState: a.activityState ?? null,
-        typeActivity: a.typeActivity ?? null,
-        periodType: a.periodType ?? a.period_type ?? null,
-        periodNumber: a.periodNumber ?? a.period_number ?? null
+        weight: a.weight ?? 0,
+        activityState: a.activityState ?? 'Activo',
+        typeActivity: a.typeActivity ?? 'Tarea',
+        periodType: a.periodType ?? a.period_type ?? this.selectedPeriodType,
+        periodNumber: a.periodNumber ?? a.period_number ?? this.selectedPeriodNumber
       }
     }));
 
@@ -353,10 +460,13 @@ export class GradesRegistryComponent implements OnInit {
   }
 
   getStateClass(state: string): string {
-    switch (state?.toLowerCase()) {
+    if (!state) return 'badge bg-secondary';
+    switch (state.toLowerCase()) {
       case 'activo':   return 'badge bg-success';
       case 'inactivo': return 'badge bg-secondary';
       case 'pendiente':return 'badge bg-warning';
+      case 'publicado':return 'badge bg-success';
+      case 'en_espera':return 'badge bg-espera';
       default:         return 'badge bg-primary';
     }
   }
@@ -370,13 +480,10 @@ export class GradesRegistryComponent implements OnInit {
   }
 
   getScoreDisplay(score: number): string {
-    return score === -1 ? 'Sin nota' : score.toString();
+    return score === -1 ? 'Sin calificar' : score.toString();
   }
 
-  // Navegar de vuelta a la lista de cursos
-  goBack() {
-    this.router.navigate(['/student/panel/grades']);
-  }
+
 
 }
 

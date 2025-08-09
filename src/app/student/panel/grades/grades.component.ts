@@ -39,16 +39,9 @@ export class GradesComponent implements OnInit {
   }
 
   onCardClick(course: any) {
-    console.log('onCardClick, course =', course);
-
+    
     // intenta detectar el campo correcto (ajusta si tu modelo usa otro nombre)
     const classAssignmentId = course?.assignmentId ?? course?.classAssignmentId ?? course?.idClassAssignment ?? course?.id;
-
-    if (!classAssignmentId) {
-      console.error('No se encontró id para navegar. Revisa la propiedad en "course".', course);
-      // mostrar UI al usuario o notificación si quieres
-      return;
-    }
 
     // navega sólo si existe
     this.router.navigate(['/student/panel', 'grades', classAssignmentId, 'gradesRegistry']);

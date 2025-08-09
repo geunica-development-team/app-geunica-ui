@@ -22,6 +22,10 @@
   color: #198754 !important; 
 }
 
+.text-exam {
+  color: #6fa3c5 !important;
+}
+
 .text-primary {
   color: #008c62 !important;
 }
@@ -37,6 +41,10 @@
 /* Color primario personalizado para elementos activos */
 .bg-primary {
   background-color: #008c62 !important;
+}
+
+.bg-typeExam {
+  background-color: #7e8482 !important;
 }
 
 .btn-primary {
@@ -99,13 +107,42 @@
   color: #495057;
 }
 
+
+
 /* Estilos para los badges */
-.badge {
-  font-size: 0.75em;
+.badge.bg-success {
+  background-color: #198754 !important;
+  color: #ffffff !important;
+}
+
+
+.badge.bg-type {
+  background-color: #7e8482 !important;
 }
 
 .badge.bg-info {
-  background-color: #008c62 !important;
+  background-color: #5465b1 !important;
+}
+
+.badge.bg-warning {
+  background-color: #fccc3b !important;
+  color: #000000 !important;
+}
+
+.badge.bg-esperan {
+  background-color: #c5c5c5 !important;
+  color: #000000 !important;
+  border: none !important;
+}
+
+.badge.bg-danger {
+  background-color: #dc3545 !important;
+  color: #ffffff !important;
+}
+
+.badge.bg-secondary {
+  background-color: #6c757d !important;
+  color: #ffffff !important;
 }
 
 /* Estilos para los tabs */

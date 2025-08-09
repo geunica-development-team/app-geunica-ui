@@ -28,6 +28,9 @@
 .text-primary {
   color: var(--primary-color) !important;
 }
+.text-exam {
+  color: #6fa3c5 !important;
+}
 
 .text-warning {
   color: #ffc107 !important;
@@ -79,11 +82,11 @@
 
 .nav-link:hover {
   background-color: rgba(0, 140, 98, 0.1) !important;
-  color: var(--primary-color) !important;
+  color: #008c62 !important;
 }
 
 .nav-link.active {
-  background-color: var(--primary-color) !important;
+  background-color: #008c62 !important;
   color: white !important;
 }
 
@@ -267,4 +270,44 @@
   padding: 0.25rem 0.5rem;
   font-size: 0.875rem;
   border-radius: 0.2rem;
+}
+
+.badge {
+  font-size: 0.75em;
+  font-weight: 500;
+  padding: 0.35em 0.65em;
+}
+
+.badge.bg-success {
+  background-color: #198754 !important;
+  color: #ffffff !important;
+}
+
+
+.badge.bg-type {
+  background-color: #7e8482 !important;
+}
+
+.badge.bg-info {
+  background-color: #5465b1 !important;
+}
+
+.badge.bg-warning {
+  background-color: #fccc3b !important;
+  color: #000000 !important;
+}
+
+.badge.bg-espera {
+  background-color: #c5c5c5 !important;
+  color: #000000 !important;
+}
+
+.badge.bg-danger {
+  background-color: #dc3545 !important;
+  color: #ffffff !important;
+}
+
+.badge.bg-secondary {
+  background-color: #6c757d !important;
+  color: #ffffff !important;
 }

@@ -16,11 +16,11 @@
 
   <!-- 2. Fila de las cards -->
     <div class="row">
-  <div class="col-md-4 mb-4" *ngFor="let course of filteredCourse">
+  <div class="col-md-3 mb-3" *ngFor="let course of filteredCourse">
     <div class="card h-100 clickable-card" (click)="onCardClick(course)">
       <div class="card-body d-flex flex-column">
         <h5 *ngIf="course.courseName" class="card-title">CURSO: {{ course.courseName }}</h5>
-        <h6 *ngIf="course.courseCode" class="card-subtitle mb-2 text-muted">CÓDIGO: {{ course.courseCode }}</h6>
+        <h6 *ngIf="course.teacherName" class="card-subtitle mb-2 text-muted">CÓDIGO: {{ course.teacherName }}</h6>
       </div>
     </div>
   </div>

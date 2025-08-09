@@ -5,10 +5,20 @@ import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
+import { EditExamScoreModalComponent } from './editExam/edit-exam-score-modal/edit-exam-score-modal.component';
+import { EditActivityScoreModalComponent } from './editActivity/edit-activity-score-modal/edit-activity-score-modal.component';
+
+export interface Exam {
+  id: number;
+  name: string;
+  score: number;
+  maxScore?: number; // opcional si lo manejas
+  date?: string;     // opcional si lo manejas
+}
 
 @Component({
   selector: 'app-student-note',
-  imports: [CommonModule, FormsModule, PanelHeaderComponent],
+  imports: [CommonModule, FormsModule, PanelHeaderComponent, EditExamScoreModalComponent],
   templateUrl: './student-note.component.html',
   styleUrl: './student-note.component.css'
 })
@@ -81,8 +91,14 @@ export class StudentNoteComponent implements OnInit {
     const url = `${this.baseUrl}/teacher/assignment/${this.assignmentId}/student/${this.enrollmentId}/grades`;
     this.http.get<any>(url).subscribe({
       next: data => {
+        console.log('Student info data:', data); // Debug
+        
+        // CORREGIDO: Adaptar a la nueva estructura de datos
         const firstExam = data.exams?.[0];
-        if (firstExam) {
+        const firstActivity = data.activities?.[0];
+        
+        // Intentar obtener la información del primer examen
+        if (firstExam && firstExam.enrollment && firstExam.enrollment.inscription) {
           const stu = firstExam.enrollment.inscription.student;
           const cls = firstExam.exam.classAssignment.classroom;
           this.studentInfo = {
@@ -91,10 +107,56 @@ export class StudentNoteComponent implements OnInit {
             sectionName: cls.section.name,
             levelName: cls.grade.level.name
           };
+        } 
+        // Si no hay información en el examen, intentar con la primera actividad
+        else if (firstActivity && firstActivity.enrollment && firstActivity.enrollment.inscription) {
+          const stu = firstActivity.enrollment.inscription.student;
+          const cls = firstActivity.activity.classAssignment.classroom;
+          this.studentInfo = {
+            studentName: `${stu.names} ${stu.paternalSurname} ${stu.maternalSurname}`.trim(),
+            gradeName: cls.grade.name,
+            sectionName: cls.section.name,
+            levelName: cls.grade.level.name
+          };
+        }
+        // Si la nueva estructura no tiene estos datos anidados, usar un endpoint diferente
+        else {
+          // Fallback: obtener información del estudiante desde otro endpoint si es necesario
+          this.fetchStudentInfoFallback();
+        }
+      },
+      error: (err) => {
+        console.warn('No se pudo obtener la información del estudiante', err);
+        // Intentar método alternativo
+        this.fetchStudentInfoFallback();
+      }
+    });
+  }
+
+  // Método alternativo para obtener información del estudiante
+  fetchStudentInfoFallback() {
+    // Si tienes otro endpoint que devuelva la información del estudiante/enrollment
+    const url = `${this.baseUrl}/teacher/enrollment/${this.enrollmentId}/info`;
+    this.http.get<any>(url).subscribe({
+      next: data => {
+        console.log('Student info fallback data:', data); // Debug
+        if (data) {
+          this.studentInfo = {
+            studentName: data.studentName || 'Estudiante',
+            gradeName: data.gradeName || 'Grado',
+            sectionName: data.sectionName || 'Sección',
+            levelName: data.levelName || 'Nivel'
+          };
         }
       },
       error: () => {
-        console.warn('No se pudo obtener la información del estudiante');
+        // Si tampoco funciona, poner valores por defecto
+        this.studentInfo = {
+          studentName: 'Estudiante',
+          gradeName: 'Grado',
+          sectionName: 'Sección',
+          levelName: 'Nivel'
+        };
       }
     });
   }
@@ -113,10 +175,12 @@ export class StudentNoteComponent implements OnInit {
 
     this.http.get<any>(url).subscribe({
       next: data => {
+        console.log('Student grades data:', data); // Debug
         this.studentGrades = data;
         this.loading = false;
       },
-      error: () => {
+      error: (err) => {
+        console.error('Error loading grades:', err); // Debug
         this.error = 'No se pudieron cargar las notas del estudiante';
         this.loading = false;
       }
@@ -150,8 +214,6 @@ export class StudentNoteComponent implements OnInit {
     this.currentActiveTab = 'activities';
   }
 
-
-
   // ========== EDICIÓN DE NOTAS ==========
 /*
   editExamScore(examScore: any): void {
@@ -179,7 +241,7 @@ export class StudentNoteComponent implements OnInit {
   }*/
 
   // Callback cuando se crea, edita o elimina
-  onCreatedOrEditedOrDeleted(): void {
+  onCreatedOrEditedOrDeleted(updatedResponse?: any) {
     this.loadStudentGrades(); // Recargar las notas
   }
 
@@ -250,15 +312,25 @@ export class StudentNoteComponent implements OnInit {
   getExamsAverage(): number {
     const exams = this.studentGrades?.exams as any[] || [];
     if (exams.length === 0) return 0;
-    const total = exams.reduce((sum, e) => sum + e.score, 0);
-    return Math.round((total / exams.length) * 100) / 100;
+    
+    // CORREGIDO: Verificar que score existe y no es null
+    const validExams = exams.filter(e => e.score !== null && e.score !== undefined && !isNaN(e.score));
+    if (validExams.length === 0) return 0;
+    
+    const total = validExams.reduce((sum, e) => sum + Number(e.score), 0);
+    return Math.round((total / validExams.length) * 100) / 100;
   }
 
   getActivitiesAverage(): number {
     const acts = this.studentGrades?.activities as any[] || [];
     if (acts.length === 0) return 0;
-    const total = acts.reduce((sum, a) => sum + a.score, 0);
-    return Math.round((total / acts.length) * 100) / 100;
+    
+    // CORREGIDO: Verificar que score existe y no es null
+    const validActivities = acts.filter(a => a.score !== null && a.score !== undefined && !isNaN(a.score));
+    if (validActivities.length === 0) return 0;
+    
+    const total = validActivities.reduce((sum, a) => sum + Number(a.score), 0);
+    return Math.round((total / validActivities.length) * 100) / 100;
   }
 
   getWeightedAverage(): number {
@@ -268,15 +340,31 @@ export class StudentNoteComponent implements OnInit {
     let totalWeighted = 0;
     let totalWeight = 0;
 
-    (grades.exams as any[] || []).forEach(ex => {
-      const w = Number(ex.exam.weight);
-      totalWeighted += ex.score * w;
-      totalWeight += w;
+    // CORREGIDO: Verificar la estructura correcta de los datos
+    (grades.exams as any[] || []).forEach(examScore => {
+      // CORREGIDO: Verificar que tanto score como exam.weight existen
+      if (examScore.score !== null && examScore.score !== undefined && !isNaN(examScore.score) && 
+          examScore.exam?.weight !== null && examScore.exam?.weight !== undefined) {
+        const score = Number(examScore.score);
+        const weight = Number(examScore.exam.weight); // CORREGIDO: Acceder a exam.weight
+        if (!isNaN(score) && !isNaN(weight)) {
+          totalWeighted += score * weight;
+          totalWeight += weight;
+        }
+      }
     });
-    (grades.activities as any[] || []).forEach(act => {
-      const w = Number(act.activity.weight);
-      totalWeighted += act.score * w;
-      totalWeight += w;
+
+    (grades.activities as any[] || []).forEach(activityScore => {
+      // CORREGIDO: Verificar que tanto score como activity.weight existen
+      if (activityScore.score !== null && activityScore.score !== undefined && !isNaN(activityScore.score) && 
+          activityScore.activity?.weight !== null && activityScore.activity?.weight !== undefined) {
+        const score = Number(activityScore.score);
+        const weight = Number(activityScore.activity.weight); // CORREGIDO: Acceder a activity.weight
+        if (!isNaN(score) && !isNaN(weight)) {
+          totalWeighted += score * weight;
+          totalWeight += weight;
+        }
+      }
     });
 
     return totalWeight > 0
@@ -285,32 +373,81 @@ export class StudentNoteComponent implements OnInit {
   }
 
   formatDate(dateString: string): string {
-    return new Date(dateString).toLocaleDateString('es-PE');
+    if (!dateString) return 'Sin fecha';
+    try {
+      return new Date(dateString).toLocaleDateString('es-PE');
+    } catch (error) {
+      return 'Fecha inválida';
+    }
   }
 
   getStateClass(state: string): string {
+    if (!state) return 'badge bg-secondary';
     switch (state.toLowerCase()) {
-      case 'activo':   return 'badge bg-success';
-      case 'inactivo': return 'badge bg-secondary';
-      case 'pendiente':return 'badge bg-warning';
+      case 'pendiente':return 'badge bg-success';
+      case 'publicado':return 'badge bg-success';
+      case 'en_espera':return 'badge bg-esperan';
       default:         return 'badge bg-primary';
     }
   }
 
-  getScoreClass(score: number): string {
-    if (score >= 18) return 'text-success fw-bold';
-    if (score >= 14) return 'text-primary';
-    if (score >= 11) return 'text-warning';
+  // CORREGIDO: Manejar el caso de "sin calificar"
+  getScoreClass(score: any): string {
+    // Si es "sin calificar" (string) o null/undefined
+    if (score === null || score === undefined || score === 'sin calificar' || score === -1) {
+      return 'text-muted';
+    }
+    
+    // Si es un número válido
+    const numScore = Number(score);
+    if (isNaN(numScore)) return 'text-muted';
+    
+    if (numScore >= 18) return 'text-success fw-bold';
+    if (numScore >= 14) return 'text-primary';
+    if (numScore >= 11) return 'text-warning';
     return 'text-danger';
   }
 
-  editExamScore(examScore: any) {
-    // Esta función ahora maneja la edición de notas a través del modal
-    this.editExamScore(examScore);
+  // CORREGIDO: Método para mostrar el score formateado
+  getDisplayScore(score: any): string {
+    if (score === null || score === undefined || score === -1) {
+      return 'Sin calificar';
+    }
+    if (score === 'sin calificar') {
+      return 'Sin calificar';
+    }
+    return score.toString();
   }
 
-  editActivityScore(activityScore: any) {
-    // Esta función ahora maneja la edición de notas a través del modal
-    this.editActivityScore(activityScore);
+  // ELIMINADO: Las funciones duplicadas que causaban recursión infinita
+  // editExamScore(examScore: any) {
+  //   // Esta función ahora maneja la edición de notas a través del modal
+  //   this.editExamScore(examScore);
+  // }
+
+  // editActivityScore(activityScore: any) {
+  //   // Esta función ahora maneja la edición de notas a través del modal
+  //   this.editActivityScore(activityScore);
+  // }
+
+  @ViewChild(EditExamScoreModalComponent) editExamModal!: EditExamScoreModalComponent;
+
+  // MÉTODO ACTUALIZADO PARA ABRIR EL MODAL
+  editExamScore(examScore: any): void {
+    console.log('Edit exam score:', examScore);
+    
+    // Abrir el modal pasando los datos del examen
+    if (this.editExamModal) {
+      this.editExamModal.open(examScore);
+    }
   }
+
+
+
+
+  editActivityScore(activityScore: any): void {
+    console.log('Edit activity score:', activityScore);
+    // Aquí irá la lógica del modal cuando lo descomentes
+  }
+
 }
