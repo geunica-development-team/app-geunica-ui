@@ -84,11 +84,32 @@ export interface NotaActividad {
   valor: number;
 }
 
-export interface Asistencia {
+/** Registro plano de asistencia */
+export interface FlatAsistencia {
   id_asistencia: number;
   id_estudiante: number;
   status: 'asistió' | 'faltó' | 'tardanza';
   date: string;
+}
+
+/** Sesión de asistencia */
+export interface Session {
+  date: string;
+  status: 'asistió' | 'faltó' | 'tardanza';
+}
+
+/** Mes de asistencia */
+export interface Month {
+  month: string;
+  sessions: Session[];
+}
+
+/** Asistencia agrupada por meses */
+export interface Attendance {
+  [x: string]: any;
+  startDate: string;
+  endDate: string;
+  months: Month[];
 }
 
 export interface Persona {
@@ -98,11 +119,6 @@ export interface Persona {
   correo: string;
 }
 
-export interface Docente {
-  id_docente: number;
-  id_persona: number;
-  especialidad: string;
-}
 
 export interface Estudiante {
   id_estudiante: number;
@@ -111,4 +127,36 @@ export interface Estudiante {
   codigo_estudiante: string;
   fecha_ingreso: string;
   estado: string;
+}
+
+export interface Docente {
+  id_docente: number;
+  id_persona: number;
+  especialidad: string;
+}
+
+// Asignación de clase
+export interface AsignacionDeClase {
+  id_asignacion_de_clase: number;
+  id_curso: number;
+  id_salon: number;
+  id_docente: number;
+}
+
+// Inscripción virtual
+export interface InscripcionVirtual {
+  id_inscripcion: number;
+  id_estudiante: number;
+  id_nivel: number;
+  id_grado: number;
+  estado: string;
+}
+
+// Matrícula
+export interface Matricula {
+  id_matricula: number;
+  id_inscripcion: number;
+  id_salon: number;
+  estado: string;
+  condicion: boolean;
 }

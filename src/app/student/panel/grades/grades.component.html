@@ -1,3 +1,4 @@
+<app-panel-header title="Notas" />
 <div class="container py-4">
 
   <!-- 1. Fila del buscador -->
@@ -5,31 +6,26 @@
     <div class="col-12 col-md-6">
       <app-searcher
         [(term)]="searchTerm"
-        placeholder="Buscar nota por curso"
-        (search)="onSearch()"
+        placeholder="Buscar nota por curso..."
+        [items]="courses"
+        field="courseName" 
+        (filtered)="filteredCourse = $event"
       ></app-searcher>
     </div>
   </div>
 
   <!-- 2. Fila de las cards -->
-      
-    <div class="row g-4">
-      <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let course of filteredCourses">
-        
-          <app-card-courses class="h-100"
-            [etiquetaTitulo]="'CURSO'"
-            [titulo]="course.nombre"
-            [etiquetaSubtitulo1]="'CÓDIGO'"
-            [subtitulo1]="course.codigo"
-            [etiquetaSubtitulo2]="'DOCENTE'"
-            [subtitulo2]="getDocenteAsignado()"
-            [link]="['/student/panel/grades', course.id_curso, 'gradesRegistry']">
-            
-            <!-- este ng-content se pegará al final de card-body -->
-
-            </app-card-courses>
+    <div class="row">
+  <div class="col-md-3 mb-3" *ngFor="let course of filteredCourse">
+    <div class="card h-100 clickable-card" (click)="onCardClick(course)">
+      <div class="card-body d-flex flex-column">
+        <h5 *ngIf="course.courseName" class="card-title">CURSO: {{ course.courseName }}</h5>
+        <h6 *ngIf="course.teacherName" class="card-subtitle mb-2 text-muted">CÓDIGO: {{ course.teacherName }}</h6>
       </div>
     </div>
+  </div>
+</div>
+
 
 
 

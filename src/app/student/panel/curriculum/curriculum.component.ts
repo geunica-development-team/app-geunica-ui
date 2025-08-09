@@ -4,34 +4,65 @@ import { DataStudentService } from '../../services/dataStudent.service';
 import { CommonModule } from '@angular/common';
 import { CardListComponent } from '../../../components/card-list/card-list.component';
 import { Curriculum, Curso } from '../../services/modelStudent';
+import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../../../enviroments/environment';
 
 @Component({
   selector: 'app-curriculum',
-  imports: [CommonModule, RouterModule, CardListComponent],
+  imports: [CommonModule, RouterModule, PanelHeaderComponent],
   templateUrl: './curriculum.component.html',
   styleUrl: './curriculum.component.css'
 })
 export class CurriculumComponent implements OnInit {
-  course!: Curso;
-  curriculum: Curriculum[] = [];
-  mostrarDetalle = false;
+  course: any;
+  curriculum: any[] = [];
+  loading = true;
+  error: string | null = null;
+
+  private baseUrl = environment.apiBase;
 
   constructor(
     private route: ActivatedRoute,
-    private dataSvc: DataStudentService
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');
-    const courseId = idParam ? +idParam : null;
-    if (!courseId) return;
+    const assignmentId = idParam ? +idParam : null;
 
-    // 1) obtengo datos del curso
-    this.dataSvc.getCourseById(courseId).subscribe(c => this.course = c);
+    if (!assignmentId) {
+      this.error   = 'ID de asignación inválido';
+      this.loading = false;
+      return;
+    }
 
-    // 2) obtengo los temas de ese curso
-    this.dataSvc.getCurriculumByCourseId(courseId)
-      .subscribe(list => this.curriculum = list);
+    // 1) obtengo datos de la asignación/curso
+    this.http.get<any>(`${this.baseUrl}/student/me/courses/${assignmentId}`)
+      .subscribe({
+        next: c => {
+          this.course = c;
+          // ------------------------------------------------------------------
+          // 2) OJO: vuelvo a usar assignmentId, ¡no c.courseId!
+          // ------------------------------------------------------------------
+          this.http.get<Curriculum[]>(`${this.baseUrl}/student/me/courses/${assignmentId}/curriculum`)
+            .subscribe({
+              next: list => {
+                this.curriculum = list;
+                this.loading    = false;
+              },
+              error: () => {
+                this.error   = 'No se pudo cargar el currículum';
+                this.loading = false;
+              }
+            });
+        },
+        error: () => {
+          this.error   = 'No se pudo cargar los datos del curso';
+          this.loading = false;
+        }
+      });
   }
+
 
 }
