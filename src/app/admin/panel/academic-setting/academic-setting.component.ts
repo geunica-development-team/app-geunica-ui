@@ -90,15 +90,13 @@ export class AcademicSettingComponent {
   // COLUMNAS DE LA TABLA
   columnsLevels = [
   'ID',
-  'Nombre del nivel/programa',
-  'Costo'
+  'Nombre del nivel/programa'
   ];
   
   // MAPEO PARA COLUMNAS Y FILAS
   columnMappingsLevels = {
   'ID': 'id',
-  'Nombre del nivel/programa': 'name',
-  'Costo': 'cost'
+  'Nombre del nivel/programa': 'name'
   };
 
   rowsLevels: dataLevelAll[] = [];
@@ -110,8 +108,7 @@ export class AcademicSettingComponent {
       next:(level) => {
         this.rowsLevels = level.map((level: any): dataLevelAll => ({
           id: level.id,
-          name: level.name,
-          cost: level.cost
+          name: level.name
         }));
         if (this.levelsTable) {
           this.levelsTable.updateTable();
@@ -223,8 +220,8 @@ export class AcademicSettingComponent {
         this.rowsPeriods = period.map((period: any): dataPeriodAll & { stateText: string, stateClass: string } => ({
           id: period.id,
           name: period.name,
-          startDate: period.startDate,
-          endDate: period.endDate,
+          startDate: this.formatDate(period.startDate),
+          endDate: this.formatDate(period.endDate),
           state: period.state === true,
           stateText: period.state === true ? 'En curso': 'Finalizado',
           stateClass: period.state === true ? 'badge bg-success-subtle text-success fw-semibold' : 'badge bg-danger-subtle text-danger fw-semibold'
@@ -348,5 +345,13 @@ export class AcademicSettingComponent {
         this.loadCourses();
         break;
     }
+  }
+
+  formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // +1 porque enero es 0
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
   }
 }

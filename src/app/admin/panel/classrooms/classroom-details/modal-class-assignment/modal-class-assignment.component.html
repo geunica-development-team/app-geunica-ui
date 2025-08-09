@@ -11,7 +11,7 @@
     <div class="modal-body bg-white p-4">
         <form [formGroup]="formClassAssignment" (ngSubmit)="onSaveAssignment()" id="formClassAssignment">
             <div class="row">
-                <!-- PASO 2: Seleccionar Curso -->
+                <!-- PASO 1: Seleccionar Curso -->
                 <div class="col-md-6 mb-4">
                     <div class="section-divider mb-3">
                         <h6 class="fw-semibold fs-5 mb-0 text-success">
@@ -33,7 +33,7 @@
                     </div>
                 </div>
     
-                <!-- PASO 3: Seleccionar Docente -->
+                <!-- PASO 2: Seleccionar Docente -->
                 <div class="col-md-6 mb-4">
                     <div class="section-divider mb-3">
                         <h6 class="fw-semibold fs-5 mb-0 text-success">
@@ -56,7 +56,7 @@
                 </div>
             </div>
         </form>
-        <!-- PASO 4: Definir Horarios -->
+        <!-- PASO 3: Definir Horarios -->
         <div class="mb-4">
             <div class="d-flex align-items-center justify-content-between mb-3">
                 <div class="section-divider mb-3">
@@ -125,12 +125,12 @@
                     @if (schedule.day && schedule.startTime && schedule.endTime) {
                     <div class="col-12 mt-2">
                         @if (isInvalidTimeRange(schedule)) {
-                        <div class="alert alert-danger py-2 mb-0">
+                        <div class="alert alert-warning py-2 mb-0">
                             <i class="fas fa-exclamation-triangle me-2"></i>
                             <small>La hora de inicio debe ser menor que la hora de fin</small>
                         </div>
                         } @else if (hasTimeConflict(schedule, $index)) {
-                        <div class="alert alert-warning py-2 mb-0">
+                        <div class="alert alert-danger py-2 mb-0">
                             <i class="fas fa-exclamation-circle me-2"></i>
                             <small>Conflicto de horario detectado con otra asignación</small>
                         </div>

@@ -76,8 +76,7 @@ export class ModalAddComponent {
 
   //PARA AGREGAR NIVEL/PROGRAMA
   formAddLevel = this.toolsForm.group({
-    'name': ['', [Validators.required]],
-    'cost': ['', [Validators.required]]
+    'name': ['', [Validators.required]]
   })
 
   addLevel() {
@@ -86,8 +85,7 @@ export class ModalAddComponent {
       return;
     }
     this.levelService.addLevel({
-      name: this.formAddLevel.get('name')?.value ?? '',
-      cost: Number(this.formAddLevel.get('cost')?.value) ?? 0
+      name: this.formAddLevel.get('name')?.value ?? ''
     }).subscribe({
       next: (value: any) => {
         this.notifycation.success('Nivel/programa agregado', 'Éxito')

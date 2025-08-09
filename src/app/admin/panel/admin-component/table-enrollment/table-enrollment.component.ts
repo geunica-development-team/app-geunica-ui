@@ -203,7 +203,7 @@ export class TableEnrollmentComponent {
         return { text: "Restaurar inscripción", action: "restaurarInscripcion", class: "btn-restaurarInscripcion" }
       case "Salón asignado":
         return { text: "Marcar pago", action: "marcarPago", class: "btn-marcarPago" }
-      case "Matriculado":
+      case "Admitido":
         return null
       default:
         return null
@@ -245,8 +245,8 @@ export class TableEnrollmentComponent {
         return "badge estadoRechazado"
       case "Salón asignado":
         return "badge estadoSalonAsignado"
-      case "Matriculado":
-        return "badge estadoMatriculado"
+      case "Admitido":
+        return "badge estadoAdmitido"
       default:
         return "badge bg-light text-dark"
     }

@@ -1,10 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { UserDataAll } from '../../../services/users.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { USERS } from '../../../utility/db-simulator';
 import { PanelHeaderComponent } from '../../../../components/dashboard/shared-components/panel-header/panel-header.component';
 import { CommonModule } from '@angular/common';
 import { MenuTabsComponent, TabItem } from '../../../../components/dashboard/menu-tabs/menu-tabs.component';
+import { InscriptionFull, InscriptionService } from '../../../services/inscription.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-student-details',
@@ -13,11 +13,15 @@ import { MenuTabsComponent, TabItem } from '../../../../components/dashboard/men
   styleUrl: './student-details.component.css'
 })
 export class StudentDetailsComponent implements OnInit {
+
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private inscriptionService = inject(InscriptionService);
+  private notifycation = inject(ToastrService);
 
-  student: UserDataAll | null = null
-  studentId = 0
+
+  dataStudent: InscriptionFull | null = null;
+  inscriptionId: number | null = null;
 
   tabs: TabItem[] = [
     { id: "ficha", label: "Ficha Personal", icon: "fas fa-user" },
@@ -48,8 +52,8 @@ export class StudentDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
-      this.studentId = +params["id"]
-      this.loadStudentData()
+      this.inscriptionId = +params["id"]
+      this.loadInscriptionDetails();
     })
 
     // Escuchar cambios en query params para el tab
@@ -60,65 +64,67 @@ export class StudentDetailsComponent implements OnInit {
     })
   }
 
-  loadStudentData() {
-    this.student = USERS.find((user) => user.userId === this.studentId && user.role === "student") || null
-
-    if (!this.student) {
-      console.error("Estudiante no encontrado")
-      this.router.navigate(["/admin/panel/estudiantes-matriculados"])
-      return
-    }
-
-    // Procesar datos de pagos
-    this.processPaymentData()
-  }
-
-  processPaymentData() {
-    if (!this.student) return
-
-    this.allPayments = []
-    this.totalPaid = 0
-    this.totalPending = 0
-
-    // ✅ SOLO procesar pagos si existen en la base de datos
-    if (this.student.student?.levels && this.student.student.levels.length > 0) {
-      this.processLevelsPayments()
-    }
-
-    this.checkDebtStatus()
-    this.sortPayments()
-  }
-
-  processLevelsPayments() {
-    if (!this.student?.student?.levels) return
-
-    for (const level of this.student.student.levels) {
-      if (level.payments && level.payments.length > 0) {
-        for (const payment of level.payments) {
-          const amount = 350
-          const isOverdue = !payment.paid && this.isOverdue(payment.dueDate)
-
-          this.allPayments.push({
-            level: level.levelName,
-            month: payment.month,
-            year: payment.year,
-            dueDate: payment.dueDate,
-            paid: payment.paid,
-            paidDate: payment.paidDate || null,
-            amount: amount,
-            status: payment.paid ? "Pagado" : "Pendiente",
-            isOverdue: isOverdue,
-          })
-
-          if (payment.paid) {
-            this.totalPaid += amount
-          } else {
-            this.totalPending += amount
-          }
+  loadInscriptionDetails() {
+    if (this.inscriptionId && !isNaN(this.inscriptionId)) {
+      this.inscriptionService.getInscriptionFullById(this.inscriptionId).subscribe({
+        next: (inscription) => {
+          this.dataStudent = inscription;
+        },
+        error: (error) => {
+          this.notifycation.error('Error al cargar los detalles del estudiante', 'Error');
         }
-      }
+      })
+    } else {
+      this.notifycation.error('ID del estudiante inválido', 'Error');
     }
   }
+
+  //processPaymentData() {
+  //  if (!this.student) return
+//
+  //  this.allPayments = []
+  //  this.totalPaid = 0
+  //  this.totalPending = 0
+//
+  //  // ✅ SOLO procesar pagos si existen en la base de datos
+  //  if (this.student.student?.levels && this.student.student.levels.length > 0) {
+  //    this.processLevelsPayments()
+  //  }
+//
+  //  this.checkDebtStatus()
+  //  this.sortPayments()
+  //}
+
+  //processLevelsPayments() {
+  //  if (!this.student?.student?.levels) return
+//
+  //  for (const level of this.student.student.levels) {
+  //    if (level.payments && level.payments.length > 0) {
+  //      for (const payment of level.payments) {
+  //        const amount = 350
+  //        const isOverdue = !payment.paid && this.isOverdue(payment.dueDate)
+//
+  //        this.allPayments.push({
+  //          level: level.levelName,
+  //          month: payment.month,
+  //          year: payment.year,
+  //          dueDate: payment.dueDate,
+  //          paid: payment.paid,
+  //          paidDate: payment.paidDate || null,
+  //          amount: amount,
+  //          status: payment.paid ? "Pagado" : "Pendiente",
+  //          isOverdue: isOverdue,
+  //        })
+//
+  //        if (payment.paid) {
+  //          this.totalPaid += amount
+  //        } else {
+  //          this.totalPending += amount
+  //        }
+  //      }
+  //    }
+  //  }
+  //}
 
   isOverdue(dueDate: string): boolean {
     const today = new Date()

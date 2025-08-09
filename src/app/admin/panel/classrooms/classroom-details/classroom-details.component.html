@@ -42,7 +42,7 @@
                 </div>
                 <div class="col-md-4 text-md-end mt-3 mt-md-0">
                     <div class="text-secondary-50">
-                    <small class="fw-medium">Período: {{ formatDate(dataClassroom.period.startDate) }} - {{ formatDate(dataClassroom.period.endDate) }}</small>
+                    <small class="fw-medium">Periodo: {{ formatDate(dataClassroom.period.startDate) }} - {{ formatDate(dataClassroom.period.endDate) }}</small>
                     </div>
                 </div>
                 </div>
@@ -148,14 +148,16 @@
                                             <button 
                                                 type="button"
                                                 class="btn btn-outline-warning btn-sm"
-                                                title="Ver detalles">
+                                                title="Ver detalles"
+                                                (click)="openModalEditClassAssignment(assignment)">
                                                 <i class="fas fa-eye"></i>
                                                 Editar
                                             </button>
                                             <button 
                                                 type="button"
                                                 class="btn btn-outline-danger btn-sm"
-                                                title="Eliminar">
+                                                title="Eliminar"
+                                                (click)="openModalDeleteClassAssignment(assignment)">
                                                 <i class="fa-solid fa-trash"></i>
                                                 Eliminar
                                             </button>
@@ -201,10 +203,10 @@
                         </div>
                         <div class="col-6 mb-3">
                             <div class="d-flex align-items-center justify-content-center mb-2">
-                                <i class="fas fa-wheelchair fa-2x text-warning"></i>
+                                <i class="fa-solid fa-handshake-angle fa-2x text-warning"></i>
                             </div>
                             <h4 class="text-warning mb-1">{{ dataClassroom.totalSpecialStudents }}/{{ dataClassroom.specialCapacity }}</h4>
-                            <small class="text-muted">Estudiantes Especiales</small>
+                            <small class="text-muted">Estudiantes Con Condición</small>
                         </div>
                     </div>
                     
@@ -302,28 +304,50 @@
                             <thead class="table-light">
                                 <tr>
                                     <th class="border-0 fw-semibold">Estudiante</th>
-                                    <th class="border-0 fw-semibold">Código</th>
-                                    <th class="border-0 fw-semibold">Estado</th>
+                                    <th class="border-0 fw-semibold text-center">Estado</th>
+                                    <th class="border-0 fw-semibold text-center">Condición</th>
+                                    <th class="border-0 fw-semibold text-center"> </th>
+
                                 </tr>
                             </thead>
                             <tbody>
                             <!-- Ejemplo de estudiantes - reemplazar con datos reales -->
-                                <tr>
-                                    <td class="align-middle">
-                                        <div class="d-flex align-items-center">
-                                            <div>
-                                            <div class="fw-semibold">Ejemplo Estudiante</div>
-                                            <small class="text-muted">ejemploemail.com</small>
+                                @for (enrollment of enrollments; track $index) {
+                                    <tr>
+                                        <td class="align-middle">
+                                            <div class="d-flex align-items-center">
+                                                <div>
+                                                <div class="fw-semibold"> {{enrollment.names}} {{enrollment.paternalSurname}} {{enrollment.maternalSurname}} </div>
+                                                <small class="fw-medium text-secondary">DNI: {{enrollment.documentNumber}} </small>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td class="align-middle">
-                                        <span class="badge bg-light text-dark">EST-001</span>
-                                    </td>
-                                    <td class="align-middle">
-                                        <span class="badge bg-success-subtle text-success">Activo</span>
-                                    </td>
-                                </tr>
+                                        </td>
+                                        <td class="align-middle text-center fs-6">
+                                            @if (enrollment.condition === true) {
+                                                <span class="badge bg-secondary text-light">Con condición</span>
+                                            }
+                                            @else {
+                                                <span class="badge bg-secondary-subtle text-secondary">Sin condición</span>
+                                            }
+                                        </td>
+                                        <td class="align-middle text-center fs-6">
+                                            @if (enrollment.state === 'Pendiente de pago') {
+                                                <span class="badge bg-warning-subtle text-warning">Pendiente de pago</span>
+                                            }
+                                            @else if (enrollment.state === 'Pagado') {
+                                                <span class="badge bg-success-subtle text-success">Activo</span>
+                                            }
+                                            @else {
+                                                <span class="badge bg-secondary-subtle text-secondary"> {{enrollment.state}} </span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-sm btn-outline-success" (click)="goToStudent(enrollment.idInscription)">
+                                                <i class="fas fa-arrow-right"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -353,4 +377,14 @@
 <app-modal-class-assignment
     #modalClassAssignment
     (assigned)="onCreatedOrEditedOrDeleted()"
+/>
+
+<app-modal-edit-class-assignment
+  #modalEditClassAssignment
+  (edited)="onCreatedOrEditedOrDeleted()"
+/>
+
+<app-modal-delete-class-assignment
+  #modalDeleteClassAssignment
+  (deleted)="onCreatedOrEditedOrDeleted()"
 />

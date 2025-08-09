@@ -1,0 +1,181 @@
+<ng-template #modalEditClassAssignment let-modal>
+    <div class="modal-header bg-white border-bottom px-4">
+        <h4 class="modal-title fw-semibold text-dark mb-0">Información sobre asignaciones</h4>
+        <button 
+        type="button" 
+        class="btn-close" 
+        aria-label="Close"
+        (click)="onCancel()">
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="formEditClassAssignment">
+            <div class="row">
+                <!-- PASO 1: Seleccionar Curso -->
+                <div class="col-md-6 mb-4">
+                    <div class="section-divider mb-3">
+                        <h6 class="fw-semibold fs-5 mb-0 text-success">
+                        <i class="fas fa-book me-2"></i>
+                        Seleccionar Curso
+                        </h6>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="form-label fw-medium small">Curso</label>
+                            <select class="form-select" formControlName="course" name="course">
+                            <option [value]="null" disabled selected>Seleccionar curso...</option>
+                            @for (course of courses; track course.id) {
+                                <option [value]="course.id">{{ course.name }} - {{ course.area }}</option>
+                            }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- PASO 2: Seleccionar Docente -->
+                <div class="col-md-6 mb-4">
+                    <div class="section-divider mb-3">
+                        <h6 class="fw-semibold fs-5 mb-0 text-success">
+                        <i class="fas fa-user-tie me-2"></i>
+                        Seleccionar Docente
+                        </h6>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="form-label fw-medium small">Docente</label>
+                            <select class="form-select" formControlName="teacher" name="teacher">
+                                <option [value]="null" disabled selected>Seleccionar docente...</option>
+                                @for (teacher of teachers; track teacher.id) {
+                                    <option [value]="teacher.id">{{ teacher.person.names }} {{ teacher.person.paternalSurname }} {{ teacher.person.maternalSurname }} - {{ teacher.specialty }}</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="mb-4">
+            <div class="mb-2">
+                <div class="section-divider mb-3">
+                    <h6 class="fw-semibold fs-5 mb-0 text-success">
+                    <i class="fas fa-clock me-2"></i>
+                    Horarios Actuales
+                    </h6>
+                </div>
+            </div>
+            @if (existingSchedules.length === 0) {
+                <div class="alert alert-light border text-center">
+                    <i class="fas fa-calendar-plus fa-2x text-muted mb-2"></i>
+                    <p class="mb-2">No hay horarios existentes</p>
+                    <small class="text-muted">Haz clic en "Añadir Horario" para comenzar</small>
+                </div>
+            } @else {
+                <ul class="list-group mb-3">
+                    @for (schedule of existingSchedules; track $index) {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ schedule.day }} - {{ schedule.startTime }} a {{ schedule.endTime }}
+                        <button class="btn btn-outline-danger" (click)="removeExistingSchedule(schedule.id)"><i class="fas fa-trash me-2"></i>Eliminar</button>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+        <div class="mb-4">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+                <div class="section-divider mb-3">
+                    <h6 class="fw-semibold fs-5 mb-0 text-success">
+                    <i class="fas fa-clock me-2"></i>
+                    Agregar Horarios
+                    </h6>
+                </div>
+                <button type="button" class="btn btn-outline-info btn-sm" (click)="addSchedule()">
+                    <i class="fas fa-plus me-2"></i>
+                    Añadir Horario
+                </button>
+            </div>
+
+            @if (newSchedules.length === 0) {
+            <div class="alert alert-light border text-center">
+                <i class="fas fa-calendar-plus fa-2x text-muted mb-2"></i>
+                <p class="mb-2">No hay horarios nuevos definidos</p>
+                <small class="text-muted">Haz clic en "Añadir Horario" para comenzar</small>
+            </div>
+            } @else {
+            <div class="border rounded p-3">
+                @for (schedule of newSchedules; track $index) {
+                    <div class="row align-items-end mb-3 pb-3" [class.border-bottom]="$index < newSchedules.length - 1">
+                        <div class="col-md-3">
+                        <label class="form-label fw-medium small">Día</label>
+                        <select class="form-select" [(ngModel)]="schedule.day" [name]="'day_' + $index">
+                            <option value="" disabled>Seleccionar día</option>
+                            <option value="Lunes">Lunes</option>
+                            <option value="Martes">Martes</option>
+                            <option value="Miércoles">Miércoles</option>
+                            <option value="Jueves">Jueves</option>
+                            <option value="Viernes">Viernes</option>
+                            <option value="Sábado">Sábado</option>
+                            <option value="Domingo">Domingo</option>
+                        </select>
+                        </div>
+                        <div class="col-md-3">
+                        <label class="form-label fw-medium small">Hora Inicio</label>
+                        <input 
+                            type="time" 
+                            class="form-control" 
+                            [(ngModel)]="schedule.startTime" 
+                            [name]="'startTime_' + $index">
+                        </div>
+                        <div class="col-md-3">
+                        <label class="form-label fw-medium small">Hora Fin</label>
+                        <input 
+                            type="time" 
+                            class="form-control" 
+                            [(ngModel)]="schedule.endTime" 
+                            [name]="'endTime_' + $index">
+                        </div>
+                        <div class="col-md-3">
+                        <button 
+                            type="button" 
+                            class="btn btn-outline-danger w-100" 
+                            (click)="removeNewSchedule($index)"
+                            [disabled]="newSchedules.length === 1">
+                            <i class="fas fa-trash me-2"></i>
+                            Eliminar
+                        </button>
+                        </div>
+                        
+                        <!-- Validaciones para este horario -->
+                        @if (schedule.day && schedule.startTime && schedule.endTime) {
+                        <div class="col-12 mt-2">
+                            @if (isInvalidTimeRange(schedule)) {
+                            <div class="alert alert-warning py-2 mb-0">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                <small>La hora de inicio debe ser menor que la hora de fin</small>
+                            </div>
+                            } @else if (hasTimeConflict(schedule, $index)) {
+                            <div class="alert alert-danger py-2 mb-0">
+                                <i class="fas fa-exclamation-circle me-2"></i>
+                                <small>Hay conflictos entre horarios nuevos y existentes</small>
+                            </div>
+                            } @else {
+                            <div class="alert alert-success py-2 mb-0">
+                                <i class="fas fa-check me-2"></i>
+                                <small>Horario válido: {{ schedule.day }} de {{ schedule.startTime }} a {{ schedule.endTime }}</small>
+                            </div>
+                            }
+                        </div>
+                        }
+                    </div>
+                }
+            </div>
+            }
+        </div>
+    </div>
+
+    <div class="modal-footer">
+    <button class="btn btn-secondary" (click)="onCancel()">Cancelar</button>
+    <button class="btn btn-success" (click)="saveChanges()">Guardar cambios</button>
+    </div>
+</ng-template>

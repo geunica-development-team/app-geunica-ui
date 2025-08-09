@@ -66,7 +66,7 @@ export class EnrollmentComponent {
     { value: "Evaluado", label: "Evaluado" },
     { value: "Rechazado", label: "Rechazado" },
     { value: "Salón asignado", label: "Salón asignado" },
-    { value: "Matriculado", label: "Matriculado" },
+    { value: "Admitido", label: "Admitido" },
   ]
     
   rows: dataInscriptionAll[] = [];

@@ -3,8 +3,7 @@ import { inject, Injectable } from "@angular/core";
 import { catchError, throwError } from "rxjs";
 
 export interface dataLevel {
-    name: string,
-    cost: number
+    name: string
 }
 
 export interface dataLevelAll extends dataLevel {

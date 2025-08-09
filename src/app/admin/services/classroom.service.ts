@@ -114,6 +114,18 @@ export interface dataClassroomAll {
     totalSpecialStudents: number
 }
 
+export interface enrollmentSummary {
+    id: number; 
+    state: string;
+    condition: boolean;
+    idInscription: number;
+    idStudent: number;
+    names: string;
+    paternalSurname: string;
+    maternalSurname: string;
+    documentNumber: string;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -169,6 +181,13 @@ export class ClassroomService {
         return this.httpService
         .patch(`${this.auth_end_point}/classroom/${id}`, { ...data})
         .pipe(catchError(this.handleError));
+    }
+
+    getEnrollmentsByClassroomId(id:number) {
+        return this.httpService
+        .get<enrollmentSummary[]>(`${this.auth_end_point}/classroom/findStudents/${id}`)
+        .pipe(catchError(this.handleError)
+        );
     }
 }
             
