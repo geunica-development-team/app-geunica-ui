@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { finalize } from 'rxjs';
 
 // DTO coincidente con el backend
 interface CreateActivityDto {
@@ -25,7 +27,7 @@ interface CreateActivityDto {
 })
 export class ModalAddActivityComponent implements OnInit {
 
-    @Output() added = new EventEmitter<void>();
+  @Output() added = new EventEmitter<void>();
 
   activityData: CreateActivityDto = {
     classAssignmentId: 0,
@@ -44,7 +46,8 @@ export class ModalAddActivityComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -81,28 +84,42 @@ export class ModalAddActivityComponent implements OnInit {
     this.isSubmitting = false;
   }
 
-  onSubmit(): void {
+onSubmit(): void {
     if (this.isSubmitting) return;
-    if (!this.activityData.name.trim()) { alert('El nombre es obligatorio'); return; }
-    if (!this.activityData.date)        { alert('La fecha es obligatoria'); return; }
-    if (this.activityData.weight <= 0)  { alert('El peso debe ser mayor a 0'); return; }
+
+    // validación simple
+    if (!this.activityData.name.trim()) {
+      this.toastr.warning('El nombre es obligatorio', 'Validación');
+      return;
+    }
+    if (!this.activityData.date) {
+      this.toastr.warning('La fecha es obligatoria', 'Validación');
+      return;
+    }
+    if (this.activityData.weight <= 0) {
+      this.toastr.warning('El peso debe ser mayor a 0', 'Validación');
+      return;
+    }
 
     this.isSubmitting = true;
+
     this.http.post(
       `${this.baseUrl}/teacher/assignment/${this.activityData.classAssignmentId}/activities`,
       this.activityData
+    ).pipe(
+      finalize(() => this.isSubmitting = false)
     ).subscribe({
-      next: () => {
-        alert('✅ Actividad creada');
+      next: (res) => {
+        this.toastr.success('Actividad creada correctamente', 'Éxito');
         this.added.emit();
         this.closeModal();
         this.resetForm();
       },
-      error: err => {
-        console.error(err);
-        alert('❌ Error creando actividad');
-      },
-      complete: () => this.isSubmitting = false
+      error: (err) => {
+        console.error('Error creando actividad', err);
+        const msg = err?.error?.message || err?.message || 'Error creando actividad';
+        this.toastr.error(msg, 'Error');
+      }
     });
   }
 

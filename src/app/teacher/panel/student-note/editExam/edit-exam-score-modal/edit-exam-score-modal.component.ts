@@ -1,8 +1,9 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder,  FormGroup,  FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { environment } from '../../../../../../enviroments/environment';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 declare var bootstrap: any;
 @Component({
   selector: 'app-edit-exam-score-modal',
@@ -23,7 +24,9 @@ export class EditExamScoreModalComponent {
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient
+    private http: HttpClient,
+    private toastr: ToastrService,
+    private cd: ChangeDetectorRef
   ) {
     this.examForm = this.createForm();
   }
@@ -78,34 +81,36 @@ export class EditExamScoreModalComponent {
   // Enviar formulario
   onSubmit(): void {
     if (this.examForm.valid && this.examScore) {
-      this.loading = true;
+        this.loading = true;
 
-      const updateData = {
-        score: this.examForm.value.score,
-        state: this.examForm.value.state,
-        observations: this.examForm.value.observations,
-        registrationDate: new Date().toISOString()
-      };
+        const updateData = {
+          score: this.examForm.value.score,
+          state: this.examForm.value.state,
+          observations: this.examForm.value.observations,
+          registrationDate: new Date().toISOString()
+        };
 
-      const url = `${this.baseUrl}/teacher/exam-scores/${this.examScore.id}`;
+        const url = `${this.baseUrl}/teacher/exam-scores/${this.examScore.id}`;
 
-      this.http.put(url, updateData).subscribe({
-        next: (response) => {
-          this.loading = false;
-          // Emitir con el nombre 'updated'
-          this.updated.emit(response);
-          this.closeModal();
-          this.showSuccessMessage();
-        },
-        error: (error) => {
-          //console.error('Error updating exam score:', error);
-          this.loading = false;
-          this.showErrorMessage(error);
-        }
-      });
-    } else {
-      this.markFormGroupTouched();
-    }
+        this.http.put(url, updateData).subscribe({
+          next: (response) => {
+            this.loading = false;
+            this.updated.emit(response);
+
+            // Usamos toastr en lugar de alert
+            this.toastr.success('Nota actualizada correctamente', 'Éxito');
+
+            this.closeModal();
+          },
+          error: (error) => {
+            this.loading = false;
+            const message = error?.error?.message || 'Error al actualizar la nota';
+            this.toastr.error(message, 'Error');
+          }
+        });
+      } else {
+        this.markFormGroupTouched();
+      }
   }
 
   // Cerrar modal
@@ -135,13 +140,13 @@ export class EditExamScoreModalComponent {
   // Mostrar mensaje de éxito
   private showSuccessMessage(): void {
     // Puedes usar una librería como toastr o crear tu propio sistema de notificaciones
-    alert('Nota actualizada correctamente');
+    this.toastr.success('Nota actualizada correctamente', 'Éxito');
   }
 
   // Mostrar mensaje de error
   private showErrorMessage(error: any): void {
     const message = error?.error?.message || 'Error al actualizar la nota';
-    alert(`Error: ${message}`);
+    this.toastr.error(message, 'Error');
   }
 
   // Getter para facilitar validación en template

@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { finalize } from 'rxjs';
 
 // DTO coincidente con el backend
 interface CreateExamDto {
@@ -43,7 +45,8 @@ export class ModalAddExamComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -65,7 +68,7 @@ export class ModalAddExamComponent implements OnInit {
     const modalEl = document.getElementById('modalAddExam');
     if (modalEl) {
       const modal = (window as any).bootstrap.Modal.getInstance(modalEl);
-      modal.hide();
+      if (modal) modal.hide();
     }
   }
 
@@ -79,41 +82,62 @@ export class ModalAddExamComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.isSubmitting) return;
-    // ...tus validaciones...
+   if (this.isSubmitting) return;
+
+    // validaciones básicas
+    if (!this.examData.name || !this.examData.name.trim()) {
+      this.toastr.warning('El nombre del examen es obligatorio', 'Validación');
+      return;
+    }
+    if (!this.examData.date) {
+      this.toastr.warning('La fecha del examen es obligatoria', 'Validación');
+      return;
+    }
+    if (!this.examData.weight || this.examData.weight <= 0) {
+      this.toastr.warning('El peso debe ser mayor que 0', 'Validación');
+      return;
+    }
 
     const caId = Number(this.route.snapshot.paramMap.get('assignmentId'));
-    if (!caId) { alert('ID de asignación inválido'); return; }
+    if (!caId) {
+      this.toastr.error('ID de asignación inválido', 'Error');
+      return;
+    }
 
-    // Aquí creamos el objeto payload exactamente como el DTO del backend espera:
     const payload = {
       classAssignmentId: caId,
       name: this.examData.name.trim(),
-      date: this.examData.date,           // formato "YYYY-MM-DD"
+      date: this.examData.date,
       weight: this.examData.weight,
       state: this.examData.state,
       typeExam: this.examData.typeExam,
-      periodType: this.examData.periodType,     // ya es "BIMESTRE"
-      periodNumber: this.examData.periodNumber, // ya es 1
+      periodType: this.examData.periodType,
+      periodNumber: this.examData.periodNumber
     };
 
     this.isSubmitting = true;
-    this.http.post(
-      `${this.baseUrl}/teacher/assignment/${caId}/exams`,
-      payload
+
+    this.http.post(`${this.baseUrl}/teacher/assignment/${caId}/exams`, payload).pipe(
+      finalize(() => this.isSubmitting = false)
     ).subscribe({
-      next: () => {
-        alert('✅ Examen creado');
+      next: (response: any) => {
+        // éxito
+        this.toastr.success('Examen creado correctamente', 'Éxito');
+
+        // emitir evento para que el padre recargue o actualice la lista
         this.added.emit();
+
+        // cerrar modal y resetear
         this.closeModal();
         this.resetForm();
+
+        // Opcional: si quieres que el padre reciba el exam creado, cambia @Output() added = new EventEmitter<any>();
+        // y usa: this.added.emit(response);
       },
-      error: err => {
-        console.error(err);
-        alert('❌ Error creando examen');
-      },
-      complete: () => {
-        this.isSubmitting = false;
+      error: (err) => {
+        console.error('Error creando examen', err);
+        const msg = err?.error?.message || err?.message || 'Error creando examen';
+        this.toastr.error(msg, 'Error');
       }
     });
   }

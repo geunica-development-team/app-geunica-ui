@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { environment } from '../../../../../../enviroments/environment';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 declare const bootstrap: any;
 @Component({
   selector: 'app-edit-activity-score-modal',
@@ -12,7 +13,7 @@ declare const bootstrap: any;
 })
 export class EditActivityScoreModalComponent {
 
-   @Output() updated = new EventEmitter<any>();
+  @Output() updated = new EventEmitter<any>();
 
   activityForm: FormGroup;
   activityScore: any = null;
@@ -23,7 +24,8 @@ export class EditActivityScoreModalComponent {
   constructor(
     private formBuilder: FormBuilder,
     private http: HttpClient,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private toastr: ToastrService 
   ) {
     this.activityForm = this.createForm();
   }
@@ -96,20 +98,26 @@ export class EditActivityScoreModalComponent {
 
       this.http.put(url, updateData).subscribe({
         next: (response) => {
-          //console.log('Activity score updated:', response);
           this.loading = false;
           this.updated.emit(response);
+
+          // Usar Toastr para notificar éxito
+          this.toastr.success('Nota de actividad actualizada correctamente', 'Éxito');
+
           this.closeModal();
-          alert('Nota de actividad actualizada correctamente');
         },
         error: (err) => {
-          //console.error('Error updating activity score:', err);
           this.loading = false;
-          alert(err?.error?.message || 'Error al actualizar la nota de actividad');
+          const msg = err?.error?.message || 'Error al actualizar la nota de actividad';
+          // Notificar error bonito
+          this.toastr.error(msg, 'Error');
+          console.error('Error updating activity score:', err);
         }
       });
     } else {
       this.markFormGroupTouched();
+      // Notificar validación
+      this.toastr.warning('Corrige los campos marcados antes de guardar', 'Formulario inválido');
     }
   }
 
