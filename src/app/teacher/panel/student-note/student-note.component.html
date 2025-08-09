@@ -196,8 +196,7 @@
                       <thead class="table-light">
                         <tr>
                           <th>Examen</th>
-                          <th>Tipo</th>
-                          
+                          <th>Tipo</th>                         
                           <th>Peso</th>
                           <th class="text-center">Nota</th>
                           <th class="text-center">Estado</th>
@@ -216,8 +215,7 @@
                           </td>
                           <td>
                             <span class="badge bg-typeExam">{{examScore.exam.typeExam}}</span>
-                          </td>
-                          
+                          </td>                          
                           <td>
                             <span class="badge bg-info">{{examScore.exam.weight}}%</span>
                           </td>
@@ -271,8 +269,7 @@
                       <thead class="table-light">
                         <tr>
                           <th>Actividad</th>
-                          <th>Tipo</th>
-                          
+                          <th>Tipo</th>                          
                           <th>Peso</th>
                           <th class="text-center">Nota</th>
                           <th class="text-center">Estado</th>
@@ -291,8 +288,7 @@
                           </td>
                           <td>
                             <span class="badge bg-success">{{activityScore.activity.typeActivity}}</span>
-                          </td>
-                          
+                          </td>                        
                           <td>
                             <span class="badge bg-info">{{activityScore.activity.weight}}%</span>
                           </td>
@@ -348,16 +344,13 @@
 </div>
 
 <app-edit-exam-score-modal
-  (updated)="onCreatedOrEditedOrDeleted()">
+  #modalEditExamScore
+  (updated)="onCreatedOrEditedOrDeleted($event)">
 </app-edit-exam-score-modal>
 
-<!-- Modales para edición de notas 
-<app-modal-edit-exam-score 
-  #modalEditExamScore 
-  (updated)="onCreatedOrEditedOrDeleted()"
-/>
+<app-edit-activity-score-modal 
+  #modalEditActivityScore  
+  (updated)="onCreatedOrEditedOrDeleted($event)">
+</app-edit-activity-score-modal>>
 
-<app-modal-edit-activity-score 
-  #modalEditActivityScore 
-  (updated)="onCreatedOrEditedOrDeleted()"
-/> -->
+

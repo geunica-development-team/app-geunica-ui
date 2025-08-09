@@ -1,1 +1,76 @@
-<p>edit-activity-score-modal works!</p>
+<div class="modal fade" id="editActivityModal" tabindex="-1" aria-labelledby="editActivityModalLabel" aria-hidden="true" data-bs-backdrop="static">
+  <div class="modal-dialog modal-ls">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="editActivityModalLabel">
+          <i class="fas fa-edit me-2"></i>
+          Editar Nota de Actividad
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="activityScore" class="row">
+          <!-- Info actividad -->
+          <div class="col-12 mb-4">
+            <div class="card bg-light">
+              <div class="card-body">
+                <h6 class="card-title mb-2"><i class="fas fa-info-circle me-2"></i> Información de la Actividad</h6>
+                <div class="row">
+                  <div class="col-md-6">
+                    <p class="mb-1"><strong>Actividad:</strong> {{ activityScore?.activity?.name }}</p>
+                    <p class="mb-1"><strong>Tipo:</strong> {{ activityScore?.activity?.typeActivity }}</p>
+                    <p class="mb-0"><strong>Fecha:</strong> {{ formatDate(activityScore?.activity?.date) }}</p>
+                  </div>
+                  <div class="col-md-6">
+                    <p class="mb-1"><strong>Período:</strong> {{ activityScore?.activity?.periodType }} {{ activityScore?.activity?.periodNumber }}</p>
+                    <p class="mb-1"><strong>Peso:</strong> {{ activityScore?.activity?.weight }}%</p>
+                    <p class="mb-0"><strong>Estudiante:</strong> {{ getStudentName() }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Formulario -->
+          <div class="col-12">
+            <form [formGroup]="activityForm" (ngSubmit)="onSubmit()">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="score" class="form-label"><strong>Nota (0-20)</strong></label>
+                  <div class="input-group">
+                    <input type="number" id="score" formControlName="score" class="form-control" min="0" max="20" step="0.1" placeholder="Ingrese la nota" autofocus>
+                    <span class="input-group-text">/ 20</span>
+                  </div>
+                  <div *ngIf="scoreControl?.invalid && scoreControl?.touched" class="text-danger mt-1">
+                    <small>La nota debe estar entre 0 y 20</small>
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label for="state" class="form-label"><strong>Estado</strong></label>
+                  <select id="state" class="form-select" formControlName="state">
+                    <option value="pendiente">Pendiente</option>
+                    <option value="publicado">Publicado</option>
+                    <option value="EN_ESPERA">En Espera</option>
+                  </select>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div *ngIf="loading" class="text-center py-4">
+          <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Guardando...</span></div>
+          <p class="mt-2">Guardando cambios...</p>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        
+        <button type="button" class="btn btn-success" (click)="onSubmit()" [disabled]="loading || activityForm.invalid">
+          Guardar Cambios
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

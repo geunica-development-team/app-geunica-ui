@@ -1,8 +1,8 @@
 
 <div class="modal fade" id="editExamModal" tabindex="-1" aria-labelledby="editExamModalLabel" aria-hidden="true" data-bs-backdrop="static">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-ls">
     <div class="modal-content">
-      <div class="modal-header bg-primary text-white">
+      <div class="modal-header bg-success text-white">
         <h5 class="modal-title" id="editExamModalLabel">
           <i class="fas fa-edit me-2"></i>
           Editar Nota de Examen
@@ -38,7 +38,7 @@
 
           <!-- Formulario de edición -->
           <div class="col-12">
-            <form (formGroup)="examForm" (ngSubmit)="onSubmit()">
+            <form [formGroup]="examForm" (ngSubmit)="onSubmit()">
               <div class="row">
                 <!-- Nota -->
                 <div class="col-md-6 mb-3">
@@ -82,7 +82,7 @@
                       <i class="fas fa-check-circle"></i>
                       Publicado
                     </option>
-                    <option value="en_espera">
+                    <option value="EN_ESPERA">
                       <i class="fas fa-hourglass-half"></i>
                       En Espera
                     </option>
@@ -105,16 +105,7 @@
       <div class="modal-footer">
         <button 
           type="button" 
-          class="btn btn-secondary" 
-          data-bs-dismiss="modal"
-          [disabled]="loading"
-        >
-          <i class="fas fa-times me-2"></i>
-          Cancelar
-        </button>
-        <button 
-          type="button" 
-          class="btn btn-primary" 
+          class="btn btn-success" 
           (click)="onSubmit()"
           [disabled]="loading || examForm.invalid"
         >

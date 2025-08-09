@@ -18,7 +18,7 @@ export interface Exam {
 
 @Component({
   selector: 'app-student-note',
-  imports: [CommonModule, FormsModule, PanelHeaderComponent, EditExamScoreModalComponent],
+  imports: [CommonModule, FormsModule, PanelHeaderComponent, EditExamScoreModalComponent, EditActivityScoreModalComponent],
   templateUrl: './student-note.component.html',
   styleUrl: './student-note.component.css'
 })
@@ -384,7 +384,7 @@ export class StudentNoteComponent implements OnInit {
   getStateClass(state: string): string {
     if (!state) return 'badge bg-secondary';
     switch (state.toLowerCase()) {
-      case 'pendiente':return 'badge bg-success';
+      case 'pendiente':return 'badge bg-warning';
       case 'publicado':return 'badge bg-success';
       case 'en_espera':return 'badge bg-esperan';
       default:         return 'badge bg-primary';
@@ -431,8 +431,6 @@ export class StudentNoteComponent implements OnInit {
   // }
 
   @ViewChild(EditExamScoreModalComponent) editExamModal!: EditExamScoreModalComponent;
-
-  // MÉTODO ACTUALIZADO PARA ABRIR EL MODAL
   editExamScore(examScore: any): void {
     console.log('Edit exam score:', examScore);
     
@@ -442,12 +440,14 @@ export class StudentNoteComponent implements OnInit {
     }
   }
 
-
-
-
+  @ViewChild(EditActivityScoreModalComponent) editActivityModal!: EditActivityScoreModalComponent;
   editActivityScore(activityScore: any): void {
     console.log('Edit activity score:', activityScore);
-    // Aquí irá la lógica del modal cuando lo descomentes
+    if (this.editActivityModal) {
+      this.editActivityModal.open(activityScore);
+    } else {
+      console.error('EditActivity modal no disponible');
+    }
   }
 
 }

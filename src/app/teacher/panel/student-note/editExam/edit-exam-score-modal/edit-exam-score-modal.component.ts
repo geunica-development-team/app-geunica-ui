@@ -98,7 +98,7 @@ export class EditExamScoreModalComponent {
           this.showSuccessMessage();
         },
         error: (error) => {
-          console.error('Error updating exam score:', error);
+          //console.error('Error updating exam score:', error);
           this.loading = false;
           this.showErrorMessage(error);
         }
@@ -152,13 +152,5 @@ export class EditExamScoreModalComponent {
   get stateControl() {
     return this.examForm.get('state');
   }
-}
 
-// Interface para tipado (opcional)
-export interface UpdateExamScoreDto {
-  score?: number;
-  state?: string;
-  observations?: string;
-  registrationDate?: string;
 }
-
