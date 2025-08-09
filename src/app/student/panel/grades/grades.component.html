@@ -15,22 +15,17 @@
   </div>
 
   <!-- 2. Fila de las cards -->
-      
-    <div class="row g-4">
-      <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let course of filteredCourse">
-        
-          <app-card-courses class="h-100"
-            [etiquetaTitulo]="'CURSO'"
-            [titulo]="course.courseName"
-            [etiquetaSubtitulo1]="'CÓDIGO'"
-            [subtitulo1]="course.courseCode"
-            [link]="['/student/panel/grades',  'gradesRegistry']"><!---course.courseId,-->
-            
-            <!-- este ng-content se pegará al final de card-body -->
-
-            </app-card-courses>
+    <div class="row">
+  <div class="col-md-4 mb-4" *ngFor="let course of filteredCourse">
+    <div class="card h-100 clickable-card" (click)="onCardClick(course)">
+      <div class="card-body d-flex flex-column">
+        <h5 *ngIf="course.courseName" class="card-title">CURSO: {{ course.courseName }}</h5>
+        <h6 *ngIf="course.courseCode" class="card-subtitle mb-2 text-muted">CÓDIGO: {{ course.courseCode }}</h6>
       </div>
     </div>
+  </div>
+</div>
+
 
 
 

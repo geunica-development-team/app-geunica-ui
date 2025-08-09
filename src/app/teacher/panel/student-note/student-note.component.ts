@@ -32,9 +32,6 @@ export class StudentNoteComponent implements OnInit {
   // Tab activo actual
   currentActiveTab: 'exams' | 'activities' = 'exams';
 
-
-
-
   // Opciones para los filtros
   periodTypes = [
     { value: 'MENSUAL', label: 'Mensual', maxNumber: 12 },

@@ -1,0 +1,8 @@
+/* courses-list.component.scss o global */
+.clickable-card {
+  cursor: pointer;
+}
+.clickable-card:hover {
+  transform: translateY(-3px);
+  transition: transform 120ms ease;
+}
