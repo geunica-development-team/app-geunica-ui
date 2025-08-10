@@ -14,23 +14,56 @@ interface DataLogin {
 })
 export class AuthService {
     private httpService = inject(HttpClient);
-    private auth_end_point = 'http://localhost:3000';//https://app-geunica-backend.onrender.com
     private authStorage = inject(AuthStorageService);
+    private auth_end_point = 'http://localhost:3000';//https://app-geunica-backend.onrender.com
     
-    constructor() {}
+    login(data: DataLogin) {
+    console.log('🔧 Iniciando login para usuario:', data.user);
+    
+    return this.httpService
+      .post(this.auth_end_point + '/auth/login', { ...data })
+      .pipe(
+        tap((res: any) => {
+          console.log('🔧 Respuesta del backend:', res);
+          console.log('🔧 Token recibido:', !!res.token);
+          
+          if (res.token) {
+            console.log('🔧 Guardando token...');
+            this.authStorage.setToken(res.token);
+            
+            // Verificar inmediatamente que se guardó
+            const savedToken = this.authStorage.getToken();
+            console.log('🔧 Token guardado exitosamente:', !!savedToken);
+            
+            if (!savedToken) {
+              console.error('❌ ERROR: El token no se guardó correctamente');
+            }
+          } else {
+            console.error('❌ ERROR: No se recibió token del backend');
+          }
+        }),
+        catchError(this.handleError)
+      );
+    }
     
     //PARA MANEJAR ROLES Y EL TOKEN
     getDecodedToken(): any {
-        const token = localStorage.getItem('accessToken');
-        if (!token) return null;
-        
+        const token = this.authStorage.getToken();
+        if (!token) {
+        console.log('🔧 No hay token para decodificar');
+        return null;
+        }
+
         try {
-            return jwtDecode(token);
+        const decoded = jwtDecode(token);
+        console.log('🔧 Token decodificado exitosamente');
+        return decoded;
         } catch (error) {
-            console.error('Token inválido o corrupto', error);
-            return null;
+        console.error('🔧 Token inválido o corrupto', error);
+        return null;
         }
     }
+
     getUserRole(): string {
         const decoded = this.getDecodedToken();
         return decoded?.rol ?? '';
@@ -50,39 +83,30 @@ export class AuthService {
                 case "Usuario no encontrado":
                     errorMessage = backend.message;
                     break;
-                    case "Contraseña incorrecta":
-                        errorMessage = backend.message;
-                        break;
-                        default:
-                            errorMessage = backend.message || 'Error interno del servidor';
-                            break;
-                        }
-                    }
-                    return throwError(() => new Error(errorMessage));
-                }
-                
-                login(data: DataLogin) {
-                    return this.httpService
-                    .post(this.auth_end_point+'/auth/login', {...data})
-                    .pipe(
-                        tap((res: any) => {
-                            //GUARDAMOS EL TOKEN DEVUELTO POR EL BACKEND
-                            this.authStorage.setToken(res.token);
-                        }),
-                        catchError(this.handleError)
-                    );
+                case "Contraseña incorrecta":
+                    errorMessage = backend.message;
+                    break;
+                default:
+                    errorMessage = backend.message || 'Error interno del servidor';
+                    break;
                 }
             }
+        return throwError(() => new Error(errorMessage));
+    }
+                
+
+
+}
             
    
 //MANEJAR SI EL TOKEN EXPIRO
-export function isTokenExpired(token: string): boolean {
-  try {
-    const decoded: any = jwtDecode(token);
-    const now = Math.floor(Date.now() / 1000); // en segundos
-    return decoded.exp < now;
-  } catch {
-    return true;
-  }
-}
+    export function isTokenExpired(token: string): boolean {
+    try {
+        const decoded: any = jwtDecode(token);
+        const now = Math.floor(Date.now() / 1000); // en segundos
+        return decoded.exp < now;
+    } catch {
+        return true;
+    }
+    }
                 

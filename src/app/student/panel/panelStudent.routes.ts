@@ -18,7 +18,7 @@ export const studentPanelRoutes: Routes = [
         path: 'student/panel',
         component: PanelComponent,
         canActivate: [roleGuard],
-        data: { role: 'estudiante' },
+        data: { role: 'student' },
         children: [
             {
                 path: '',
@@ -71,7 +71,7 @@ export const studentPanelRoutes: Routes = [
             path: 'profile',
             component: ProfileComponent,
             canActivate:  [roleGuard],
-            data: { role: 'estudiante' }
+            data: { role: 'student' }
             }
 
         ]

@@ -29,30 +29,37 @@ export class PaymentsComponent {
   }
 
   get fullName(): string {
-    if (!this.enrollment) return '';
-    const s = this.enrollment.inscription.student;
-    return `${s.names} ${s.paternalSurname} ${s.maternalSurname}`;
+  if (!this.enrollment) return '';
+  const person = this.enrollment.inscription.student.person;  // ← Usar person
+  return `${person.names} ${person.paternalSurname} ${person.maternalSurname}`;
   }
 
   get documentAndId(): string {
-    if (!this.enrollment) return '';
-    const s = this.enrollment.inscription.student;
-    return `DNI: ${s.documentNumber} | ID: ${s.id}`;
+  if (!this.enrollment) return '';
+  const person = this.enrollment.inscription.student.person;  // ← Usar person, no student
+  return `DNI: ${person.documentNumber} | ID: ${person.id}`;
   }
 
   get classroomInfo(): string {
-    if (!this.enrollment) return '';
+    if (!this.enrollment?.classroom) return '';
     const c = this.enrollment.classroom;
-    const grado = c.grade.name;
-    const nivel = c.grade.level?.name ?? '';   
-    const aula = c.name;
-    const periodo = c.period.name;
-    // Ejemplo: "Aula 206 | Primaria 1ro | Semestre I 2026"
+    
+    // Verificar si existen las propiedades antes de usarlas
+    const aula = c.name || '';
+    const grado = c.grade?.name || '';
+    const nivel = c.grade?.level?.name || '';
+    const periodo = c.period?.name || 'Sin período';
+    
+    // Si no hay período, no lo mostramos
+    if (periodo === 'Sin período' || !c.period) {
+      return `${aula} | ${grado} de ${nivel}`;
+    }
+    
     return `${aula} | ${grado} de ${nivel} | ${periodo}`;
   }
 
   get campusName(): string {
-    return this.enrollment?.campus?.name ?? '';
+    return this.enrollment?.campus?.name || '';
   }
 
   // Raw data
