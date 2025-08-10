@@ -1,4 +1,4 @@
-<app-panel-header title="Estudiantes del aula N" />
+<app-panel-header title="Estudiantes del aula" />
 <div class="container py-4">
   <div class="main-container">
     <!-- Header Section -->
@@ -19,7 +19,7 @@
           </div>
           <div class="date-range">
             <i class="fas fa-calendar me-2"></i>
-            10 Julio 2025 - 16 Julio 2025
+            10 Agosto 2025 - 16 Agosto 2025
           </div>
         </div>
 
@@ -75,25 +75,18 @@
                   </div>
                 </td>
                 <td *ngFor="let rec of student.records; let j = index" class="text-center">
-                  <div class="status-dropdown">
-                    <button 
-                      class="status-btn dropdown-toggle"
-                      type="button" 
-                      [ngClass]="statusClass(rec.status)"
-                      data-bs-toggle="dropdown"
-                      [attr.aria-expanded]="false">
-                      {{ rec.status | uppercase }}
-                    </button>
-                    <ul class="dropdown-menu">
-                      <li *ngFor="let opt of getOtherStatuses(rec.status)">
-                        <a class="dropdown-item" 
-                           (click)="updateStatus(student.id, j, opt)"
-                           style="cursor: pointer;">
-                          {{ opt | uppercase }}
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
+
+                  <!-- Cambio: usar select en lugar de dropdown -->
+                  <select 
+                    class="form-select status-select"
+                    [ngClass]="statusClass(rec.status)"
+                    [(ngModel)]="rec.status"
+                    (ngModelChange)="updateStatus(student.id, j, $event)">
+                    <option value="asistió">ASISTIÓ</option>
+                    <option value="falto">FALTÓ</option>
+                    <option value="tardanza">TARDANZA</option>
+                  </select>
+
                 </td>
               </tr>
             </tbody>

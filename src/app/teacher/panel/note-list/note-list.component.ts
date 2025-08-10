@@ -283,39 +283,64 @@ export class NoteListComponent implements OnInit{
 
   // Actualizar el método ngOnInit para cargar también los exámenes y actividades
   ngOnInit() {
-    const caId = Number(this.route.snapshot.paramMap.get('assignmentId'));
-    if (!caId) {
+    // 1) leer tanto 'caId' como 'assignmentId' por si la ruta usa uno u otro
+    const rawCaId = this.route.snapshot.paramMap.get('caId') ?? this.route.snapshot.paramMap.get('assignmentId');
+    const caId = Number(rawCaId);
+    if (!caId || isNaN(caId)) {
       this.error = 'ID de asignación inválido';
       this.loading = false;
       return;
     }
 
-    // Cargar estudiantes (código existente)
-    this.http
-      .get<any[]>(`${this.baseUrl}/teacher/me/assignment/${caId}/students`)
-      .subscribe({
-        next: enrollments => {
-          this.allRows = enrollments.map(en => ({
-            enrollmentId: en.id,
-            studentName: `${en.inscription.student.names} ${en.inscription.student.paternalSurname} ${en.inscription.student.maternalSurname}`,
-            studentCode: en.inscription.student.documentNumber,
-            phoneNumber: en.inscription.student.phoneNumber,
-            gender: en.inscription.student.gender
-          }));
-          // inicializa la vista
-          this.rowsAssignments = [...this.allRows];
-          this.loading = false;
-          
-          // Cargar también exámenes y actividades
-          //this.loadExamsForManagement();
-          //this.loadActivitiesForManagement();
-        },
-        error: () => {
-          this.error = 'No se pudieron cargar los alumnos';
-          this.loading = false;
-        }
-      });
-  }
+    // 2) construir URL exactamente igual que backend
+    const url = `${this.baseUrl}/teacher/me/aula/${caId}/students`;
+
+    // 3) opcional: si no tienes interceptor, agrega Authorization header aquí (si el token lo guardas en localStorage)
+    const token = localStorage.getItem('token'); // o donde lo guardes
+    const httpOptions = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
+
+    this.http.get<any[]>(url, httpOptions).subscribe({
+      next: (enrollments) => {
+        console.log('Respuesta del backend (enrollments):', enrollments); // <- mira aquí en consola el shape real
+
+        // 4) mapear robustamente aceptando 2 formatos:
+        // A) formato ANIDADO (en.inscription.student...)
+        // B) formato PLANO (enrollmentId, names, studentCode, ...)
+        this.allRows = enrollments.map(en => {
+          // caso anidado
+          const nestedStudent = en?.inscription?.student;
+          if (nestedStudent) {
+            return {
+              enrollmentId: en.id ?? en.enrollmentId,
+              studentName: `${nestedStudent.names ?? ''} ${nestedStudent.paternalSurname ?? ''} ${nestedStudent.maternalSurname ?? ''}`.trim(),
+              studentCode: nestedStudent?.documentNumber ?? nestedStudent?.studentCode ?? null,
+              phoneNumber: nestedStudent?.phoneNumber ?? null,
+              gender: nestedStudent?.gender ?? null
+            };
+          }
+
+          // caso plano (lo que tu backend actualmente devuelve)
+          return {
+            enrollmentId: en.enrollmentId ?? en.id,
+            studentName: `${en.names ?? ''} ${en.paternalSurname ?? ''} ${en.maternalSurname ?? ''}`.trim(),
+            studentCode: en.documentNumber ?? en.studentCode ?? null,
+            phoneNumber: en.phoneNumber ?? null,
+            gender: en.gender ?? null
+          };
+        });
+
+        // inicializa la vista
+        this.rowsAssignments = [...this.allRows];
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Error cargando alumnos:', err);
+        this.error = 'No se pudieron cargar los alumnos';
+        this.loading = false;
+      }
+    });
+}
+
 
 
 

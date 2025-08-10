@@ -43,11 +43,12 @@
       </div>
     </div>
 
-    <!-- Selector de Tipo de Período -->
+    <!-- Selector de Tipo de Período 
     <div class="row mb-3">
       <div class="col-12">
         <div class="card">
           <div class="card-body py-2">
+            
             <div class="d-flex align-items-center justify-content-between">
               <div class="d-flex align-items-center">
                 <label class="form-label mb-0 me-3">
@@ -64,29 +65,31 @@
                     {{type.label}}
                   </option>
                 </select>
-              </div>
+              </div> 
               
-              <!-- Toggle para mostrar meses de vacaciones (solo visible en mensual) -->
+              
+              
               <div *ngIf="selectedPeriodType === 'MENSUAL'" class="form-check">
                 <input 
                   class="form-check-input" 
                   type="checkbox" 
                   id="showVacationMonths"
                   [(ngModel)]="showVacationMonths"
-                  
-                ><!--(change)="onShowVacationMonthsChange()"  -->
+                  (change)="onShowVacationMonthsChange()" 
+                >
                 <label class="form-check-label vacation-months-toggle" for="showVacationMonths">
                   <i class="fas fa-umbrella-beach me-1"></i>
                   Mostrar meses de vacaciones
                 </label>
               </div>
             </div>
+             
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Navbar de Períodos -->
+    
     <div class="row mb-4">
       <div class="col-12">
         <div class="card">
@@ -112,7 +115,7 @@
         </div>
       </div>
     </div>
-
+    -->
     <!-- Resumen de Notas -->
     <div class="row mb-4">
       <div class="col-md-4">
@@ -351,6 +354,6 @@
 <app-edit-activity-score-modal 
   #modalEditActivityScore  
   (updated)="onCreatedOrEditedOrDeleted($event)">
-</app-edit-activity-score-modal>>
+</app-edit-activity-score-modal>
 
 

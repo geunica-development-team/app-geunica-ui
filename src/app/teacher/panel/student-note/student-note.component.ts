@@ -91,47 +91,57 @@ export class StudentNoteComponent implements OnInit {
     const url = `${this.baseUrl}/teacher/assignment/${this.assignmentId}/student/${this.enrollmentId}/grades`;
     this.http.get<any>(url).subscribe({
       next: data => {
-        console.log('Student info data:', data); // Debug
-        
-        // CORREGIDO: Adaptar a la nueva estructura de datos
+        console.log('Student info data:', data); // Debug - mira aquí la estructura real
+
         const firstExam = data.exams?.[0];
         const firstActivity = data.activities?.[0];
-        
-        // Intentar obtener la información del primer examen
-        if (firstExam && firstExam.enrollment && firstExam.enrollment.inscription) {
-          const stu = firstExam.enrollment.inscription.student;
-          const cls = firstExam.exam.classAssignment.classroom;
+
+        // Helper para extraer student y classroom de la estructura conocida
+        const extractFromExam = (ex: any) => {
+          if (!ex) return null;
+          const student = ex.enrollment?.inscription?.student ?? null;
+          const classroom = ex.exam?.classAssignment?.classroom ?? null;
+          return { student, classroom };
+        };
+
+        const extractFromActivity = (ac: any) => {
+          if (!ac) return null;
+          const student = ac.enrollment?.inscription?.student ?? null;
+          const classroom = ac.activity?.classAssignment?.classroom ?? null;
+          return { student, classroom };
+        };
+
+        let extracted = extractFromExam(firstExam) ?? extractFromActivity(firstActivity);
+
+        // Si existe student, normalizamos la forma para leer nombres (admite dos estructuras)
+        if (extracted?.student) {
+          const studentObj = extracted.student;
+          // -- posible formas:
+          // 1) student.person.names (tu caso actual)
+          // 2) student.names (por si en algún endpoint futuro vuelven con ese formato)
+          const person = studentObj.person ?? studentObj; // si tiene .person usamos ese objeto, si no usamos el mismo studentObj
+
+          const classroom = extracted.classroom;
+
           this.studentInfo = {
-            studentName: `${stu.names} ${stu.paternalSurname} ${stu.maternalSurname}`.trim(),
-            gradeName: cls.grade.name,
-            sectionName: cls.section.name,
-            levelName: cls.grade.level.name
+            studentName: `${(person?.names ?? '')} ${(person?.paternalSurname ?? '')} ${(person?.maternalSurname ?? '')}`.trim(),
+            gradeName: classroom?.grade?.name ?? null,
+            sectionName: classroom?.section?.name ?? null,
+            levelName: classroom?.grade?.level?.name ?? null
           };
-        } 
-        // Si no hay información en el examen, intentar con la primera actividad
-        else if (firstActivity && firstActivity.enrollment && firstActivity.enrollment.inscription) {
-          const stu = firstActivity.enrollment.inscription.student;
-          const cls = firstActivity.activity.classAssignment.classroom;
-          this.studentInfo = {
-            studentName: `${stu.names} ${stu.paternalSurname} ${stu.maternalSurname}`.trim(),
-            gradeName: cls.grade.name,
-            sectionName: cls.section.name,
-            levelName: cls.grade.level.name
-          };
-        }
-        // Si la nueva estructura no tiene estos datos anidados, usar un endpoint diferente
-        else {
-          // Fallback: obtener información del estudiante desde otro endpoint si es necesario
+        } else {
+          // si no hay examen/actividad con info, intentar fallback (opcional)
+          console.warn('No se encontró student info en exams/activities. Intentando fallback...');
           this.fetchStudentInfoFallback();
         }
       },
       error: (err) => {
         console.warn('No se pudo obtener la información del estudiante', err);
-        // Intentar método alternativo
         this.fetchStudentInfoFallback();
       }
     });
   }
+
 
   // Método alternativo para obtener información del estudiante
   fetchStudentInfoFallback() {

@@ -26,12 +26,14 @@ export const menuItemsStudent = [
       label: 'Asistencia', 
       route: 'attendance' 
     },
+/**  
     { 
       icon: 'fas fa-bullhorn', 
       label: 'Anuncios', 
       route: 'announcement',
       badge: 24 
     },
+*/
     { 
       icon: 'fas fa-calendar-alt', 
       label: 'Horario', 
@@ -56,18 +58,23 @@ export const menuItemsTeacher = [
       label: 'Gestion de Notas', 
       route: 'NoteManagment' 
     },
+
     { 
       icon: 'fas fa-clock', 
       label: 'Gestion de asistencias', 
-      route: 'attendanceManagment',
-      badge: 24 
+      route: 'attendanceManagment'
+      
     },
+ /** 
     { 
       icon: 'fas fa-bullhorn', 
       label: 'Anuncios', 
-      route: 'announcement' 
+      route: 'announcement' ,
+      badge: 24 
     },
-        { 
+*/
+
+    { 
       icon: 'fas fa-calendar-alt', 
       label: 'Horario', 
       route: 'schedule' 
