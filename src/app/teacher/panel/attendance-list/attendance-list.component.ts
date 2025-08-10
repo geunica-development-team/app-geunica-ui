@@ -130,7 +130,7 @@ export class AttendanceListComponent implements OnInit {
 
   getDayDate(dayIndex: number): string {
     // Implementar lógica real para fechas
-    const dates = ['10/07', '11/07', '12/07', '13/07', '14/07'];
+    const dates = ['11/08', '12/08', '13/08', '14/08', '15/08'];
     return dates[dayIndex] || '';
   }
 
