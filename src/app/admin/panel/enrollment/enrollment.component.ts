@@ -175,7 +175,7 @@ export class EnrollmentComponent {
     }
   }
 
-  onMarkPayment(row: any) {
+  onMarkPayment(row: dataInscriptionAll) {
     //console.log("Marcar pago:", row)
     //this.openModalMarkPayment(row)
     const newState = {
