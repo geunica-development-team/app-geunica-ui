@@ -1,71 +1,285 @@
-<ng-container *ngIf="course; else cargando">
-  <h2 class="section-title ">{{ course.nombre }}</h2>
+<app-panel-header title="Notas del curso" />
 
-<div class="container mb-4">
-  <!-- Barra de semestres -->
-  <nav class="mb-5">
-    <ul class="nav nav-pills justify-content-between">
-      <li class="nav-item">
-        <a class="nav-link active" href="#">1er Bimestre</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">2do Bimestre</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">3er Bimestre</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">4to Bimestre</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Bimestre Final</a>
-      </li>
-    </ul>
-  </nav>
+<div class="container-fluid py-4">
+  <!-- Loading -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2">Cargando notas del curso...</p>
+  </div>
 
-  <!-- Fila que agrupa las dos columnas -->
-  <div class="row gy-4">
-    <!-- Columna izquierda -->
-    <div class="col-12 col-md-6 mb-4">
-      <div class="card p-4 h-100">
-        <h5 class="mb-3">Notas del bimestre</h5>
-        <div class="table-responsive">
-          <table class="table table-rounded">
-            <thead class="table-success">
-              <tr>
-                <th scope="col">NRO</th>
-                <th scope="col">Concepto</th>
-                <th scope="col">Nota</th>
-              </tr>
-            </thead>
-            <tbody class="table-group-divider">
-              <tr *ngFor="let item of registryItems; let i = index">
-                <td>{{ i + 1 }}</td>
-                <td>{{ item.concepto }}</td>
-                <td>{{ item.valor }}</td>
-              </tr>
-            </tbody>
-          </table>
+  <!-- Error -->
+  <div *ngIf="error && !loading" class="alert alert-danger" role="alert">
+    <i class="fas fa-exclamation-triangle me-2"></i>
+    {{ error }}
+  </div>
+
+  <!-- Content -->
+  <div *ngIf="!loading && !error && courseGrades">
+    <!-- Header del curso -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h4 class="card-title mb-1">
+                  <i class="fas fa-book me-2"></i>
+                  {{ courseGrades.courseInfo.courseName }}
+                </h4>
+                <p class="text-muted mb-0">
+                  <small>
+                    <strong>Estudiante:</strong> {{ studentInfo?.studentName || 'Cargando...' }} |
+                    <strong>Tutor:</strong> {{ studentInfo?.tutorName || 'Cargando...' }} |
+                    <strong>Profesor:</strong> {{ courseGrades.courseInfo.teacherName }}
+                  </small>
+                </p>
+                <p class="text-muted mb-0">
+                  <small>
+                    <strong>Nivel:</strong> {{ studentInfo?.gradeName || 'Cargando...' }} de 
+                     {{ studentInfo?.levelName || 'Cargando...' }} |
+                    <strong>Sección:</strong> {{ studentInfo?.sectionName || 'Cargando...' }} |
+                    <strong>Salon:</strong> {{ studentInfo?.classroomName || 'Cargando...' }}
+                  </small>
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Columna derecha -->
-    <div class="col-12 col-md-6 mb-4">
-        <div class="card p-4 h-100 d-flex align-items-center justify-content-center">
-            <h5 class="mb-3">Notas del bimestre</h5>
-            <div class="donut-chart" role="img" aria-label="Gráfico de pastel con 30% rojo, 50% azul, 20% amarillo"></div>
+    <!-- Navbar de Períodos -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body py-2">
+            <nav class="navbar navbar-expand-lg navbar-light p-0">
+              <div class="container-fluid p-0">
+                <div class="navbar-nav d-flex flex-row flex-wrap">
+                  <a 
+                    *ngFor="let periodNum of getPeriodNumbers()"
+                    class="nav-link px-3 py-2 me-1 rounded"
+                    [class.active]="selectedPeriodNumber === periodNum"
+                    [class.bg-primary]="selectedPeriodNumber === periodNum"
+                    [class.text-white]="selectedPeriodNumber === periodNum"
+                    href="javascript:void(0)"
+                    (click)="onPeriodNumberChange(periodNum)"
+                  >
+                    {{ getPeriodLabel(periodNum) }}
+                  </a>
+                </div>
+              </div>
+            </nav>
+          </div>
         </div>
+      </div>
+    </div>
+
+    <!-- Resumen de Notas -->
+    <div class="row mb-4">
+      <div class="col-md-4">
+        <div class="card text-center">
+          <div class="card-body">
+            <i class="fas fa-clipboard-check text-exam fs-2 mb-2"></i>
+            <h5 class="card-title">Promedio Exámenes</h5>
+            <h3 class="text-exam">{{getExamsAverage()}}</h3>
+            <small class="text-muted">{{getFilteredExams().length}} exámenes</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card text-center">
+          <div class="card-body">
+            <i class="fas fa-tasks text-success fs-2 mb-2"></i>
+            <h5 class="card-title">Promedio Actividades</h5>
+            <h3 class="text-success">{{getActivitiesAverage()}}</h3>
+            <small class="text-muted">{{getFilteredActivities().length}} actividades</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card text-center">
+          <div class="card-body">
+            <i class="fas fa-trophy text-warning fs-2 mb-2"></i>
+            <h5 class="card-title">Promedio Ponderado</h5>
+            <h3 [class]="getScoreClass(getWeightedAverage())">{{getWeightedAverage()}}</h3>
+            <small class="text-muted">Promedio final del período</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs para Exámenes y Actividades -->
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs mb-0" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button 
+                  class="nav-link active" 
+                  id="exams-tab" 
+                  data-bs-toggle="tab" 
+                  data-bs-target="#exams" 
+                  type="button" 
+                  role="tab"
+                >
+                  <i class="fas fa-clipboard-check me-2"></i>
+                  Exámenes ({{getFilteredExams().length}})
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button 
+                  class="nav-link" 
+                  id="activities-tab" 
+                  data-bs-toggle="tab" 
+                  data-bs-target="#activities" 
+                  type="button" 
+                  role="tab"
+                >
+                  <i class="fas fa-tasks me-2"></i>
+                  Actividades ({{getFilteredActivities().length}})
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          <div class="card-body">
+            <div class="tab-content">
+              
+              <!-- Tab Exámenes -->
+              <div class="tab-pane fade show active" id="exams" role="tabpanel">
+                <div *ngIf="getFilteredExams().length > 0; else noExams">
+                  <div class="table-responsive">
+                    <table class="table table-hover">
+                      <thead class="table-light">
+                        <tr>
+                          <th>Examen</th>
+                          <th>Tipo</th>
+                          
+                          <th>Peso</th>
+                          <th class="text-center">Mi Nota</th>
+                          <th class="text-center">Estado</th>
+                          <th>Registrado</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let examScore of getFilteredExams()">
+                          <td>
+                            <strong>{{examScore.exam.name}}</strong>
+                            <br>
+                            <small class="text-muted">
+                              {{examScore.exam.periodType}} {{examScore.exam.periodNumber}}
+                            </small>
+                          </td>
+                          <td>
+                            <span class="badge bg-type">{{examScore.exam.typeExam}}</span>
+                          </td>
+                          
+                          <td>
+                            <span class="badge bg-info">{{examScore.exam.weight}}%</span>
+                          </td>
+                          <td class="text-center">
+                            <span [class]="getScoreClass(examScore.score)" class="fs-5">
+                              {{getScoreDisplay(examScore.score)}}
+                            </span>
+                          </td>
+                          <td class="text-center">
+                            <span [class]="getStateClass(examScore.scoreState)">
+                              {{examScore.scoreState}}
+                            </span>
+                          </td>
+                          <td>
+                            <small>{{formatDate(examScore.registrationDate)}}</small>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                
+                <ng-template #noExams>
+                  <div class="text-center py-5">
+                    <i class="fas fa-clipboard-check text-muted fs-1 mb-3"></i>
+                    <h5 class="text-muted">No hay exámenes en este período</h5>
+                    <p class="text-muted">
+                      No se encontraron exámenes para el período
+                      {{selectedPeriodType}} {{selectedPeriodNumber}}
+                    </p>
+                  </div>
+                </ng-template>
+              </div>
+
+              <!-- Tab Actividades -->
+              <div class="tab-pane fade" id="activities" role="tabpanel">
+                <div *ngIf="getFilteredActivities().length > 0; else noActivities">
+                  <div class="table-responsive">
+                    <table class="table table-hover">
+                      <thead class="table-light">
+                        <tr>
+                          <th>Actividad</th>
+                          <th>Tipo</th>
+                          
+                          <th>Peso</th>
+                          <th class="text-center">Mi Nota</th>
+                          <th class="text-center">Estado</th>
+                          <th>Registrado</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let activityScore of getFilteredActivities()">
+                          <td>
+                            <strong>{{activityScore.activity.name}}</strong>
+                            <br>
+                            <small class="text-muted">
+                              {{activityScore.activity.periodType}} {{activityScore.activity.periodNumber}}
+                            </small>
+                          </td>
+                          <td>
+                            <span class="badge bg-type">{{activityScore.activity.typeActivity}}</span>
+                          </td>
+                          
+                          <td>
+                            <span class="badge bg-info">{{activityScore.activity.weight}}%</span>
+                          </td>
+                          <td class="text-center">
+                            <span [class]="getScoreClass(activityScore.score)" class="fs-5">
+                              {{getScoreDisplay(activityScore.score)}}
+                            </span>
+                          </td>
+                          <td class="text-center">
+                            <span [class]="getStateClass(activityScore.scoreState)">
+                              {{activityScore.scoreState}}
+                            </span>
+                          </td>
+                          <td>
+                            <small>{{formatDate(activityScore.registrationDate)}}</small>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                
+                <ng-template #noActivities>
+                  <div class="text-center py-5">
+                    <i class="fas fa-tasks text-muted fs-1 mb-3"></i>
+                    <h5 class="text-muted">No hay actividades en este período</h5>
+                    <p class="text-muted">
+                      No se encontraron actividades para el período
+                      {{selectedPeriodType}} {{selectedPeriodNumber}}
+                    </p>
+                  </div>
+                </ng-template>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
   </div>
 </div>
-
-
-</ng-container>
-
-<ng-template #cargando>
-  <div class="text-center py-4">
-    <div class="spinner-border" role="status"></div>
-  </div>
-</ng-template>

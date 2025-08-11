@@ -1,0 +1,106 @@
+<app-panel-header title="Estudiantes del aula" />
+<div class="container py-4">
+  <div class="main-container">
+    <!-- Header Section -->
+    <div class="header-section">
+      <div class="header-content">
+        <!-- Navegación de semana -->
+        <div class="week-navigation d-flex justify-content-between align-items-center flex-wrap">
+          <div class="d-flex gap-2">
+            <button class="nav-btn" (click)="previousWeek()">
+              <i class="fas fa-chevron-left me-1"></i> Anterior
+            </button>
+            <button class="nav-btn active" (click)="currentWeek()">
+              <i class="fas fa-calendar-week me-1"></i> Semana
+            </button>
+            <button class="nav-btn" (click)="nextWeek()">
+              Siguiente <i class="fas fa-chevron-right ms-1"></i>
+            </button>
+          </div>
+          <div class="date-range">
+            <i class="fas fa-calendar me-2"></i>
+            11 Agosto 2025 - 15 Agosto 2025
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Content Section -->
+    <div class="content-section">
+      <!-- Stats Cards -->
+      <div class="stats-cards">
+        <div class="stat-card stat-present">
+          <div class="stat-icon">
+            <i class="fas fa-check"></i>
+          </div>
+          <div class="stat-value">{{ getStatusCount('asistió') }}</div>
+          <div class="stat-label">Presentes</div>
+        </div>
+        <div class="stat-card stat-absent">
+          <div class="stat-icon">
+            <i class="fas fa-times"></i>
+          </div>
+          <div class="stat-value">{{ getStatusCount('falto') }}</div>
+          <div class="stat-label">Faltas</div>
+        </div>
+        <div class="stat-card stat-late">
+          <div class="stat-icon">
+            <i class="fas fa-clock"></i>
+          </div>
+          <div class="stat-value">{{ getStatusCount('tardanza') }}</div>
+          <div class="stat-label">Tardanzas</div>
+        </div>
+      </div>
+
+      <!-- Tabla de asistencia -->
+      <div class="table-responsive">
+        <div class="table-container">
+          <table class="table modern-table">
+            <thead>
+              <tr>
+                <th>Estudiante</th>
+                <th *ngFor="let day of days; let i = index" class="text-center">
+                  {{ day }}<br>
+                  <small class="text-muted">{{ getDayDate(i) }}</small>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let student of students; trackBy: trackByStudentId">
+                <td>
+                  <div class="student-name">
+                    <div class="student-avatar">{{ getStudentInitials(student.name) }}</div>
+                    {{ student.name }}
+                  </div>
+                </td>
+                <td *ngFor="let rec of student.records; let j = index" class="text-center">
+
+                  <!-- Cambio: usar select en lugar de dropdown -->
+                  <select 
+                    class="form-select status-select"
+                    [ngClass]="statusClass(rec.status)"
+                    [(ngModel)]="rec.status"
+                    (ngModelChange)="updateStatus(student.id, j, $event)">
+                    <option value="asistió">ASISTIÓ</option>
+                    <option value="falto">FALTÓ</option>
+                    <option value="tardanza">TARDANZA</option>
+                  </select>
+
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Loading indicator -->
+      <div *ngIf="students.length === 0" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-3 text-muted">Cargando asistencias...</p>
+      </div>
+    </div>
+  </div>
+</div>

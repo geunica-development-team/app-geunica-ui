@@ -1,0 +1,73 @@
+    <div class="modal fade" [class.show]="isOpen" [style.display]="isOpen ? 'block' : 'none'" 
+         tabindex="-1" *ngIf="isOpen">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title">
+              <i class="bi bi-pencil me-2"></i>
+              Editar Tema
+            </h5>
+            <button type="button" class="btn-close btn-close-white" (click)="closeModal()"></button>
+          </div>
+          <div class="modal-body">
+            <form (ngSubmit)="onSubmit()">
+              <div class="mb-3">
+                <label class="form-label">Título *</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  [(ngModel)]="formData.title"
+                  name="title"
+                  required
+                >
+              </div>
+              
+              <div class="mb-3">
+                <label class="form-label">Descripción</label>
+                <textarea 
+                  class="form-control" 
+                  rows="3"
+                  [(ngModel)]="formData.description"
+                  name="description"
+                ></textarea>
+              </div>
+              
+              <div class="row">
+                <div class="col-md-6">
+                  <label class="form-label">Posición</label>
+                  <input 
+                    type="number" 
+                    class="form-control" 
+                    [(ngModel)]="formData.position"
+                    name="position"
+                    min="1"
+                  >
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Fecha Programada</label>
+                  <input 
+                    type="date" 
+                    class="form-control" 
+                    [(ngModel)]="formData.scheduledDate"
+                    name="scheduledDate"
+                  >
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="closeModal()">
+              Cancelar
+            </button>
+            <button type="button" class="btn btn-primary" (click)="onSubmit()" [disabled]="saving">
+              <i class="bi bi-check-lg me-1" *ngIf="!saving"></i>
+              <span class="spinner-border spinner-border-sm me-1" *ngIf="saving"></span>
+              {{ saving ? 'Guardando...' : 'Guardar Cambios' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Overlay -->
+    <div class="modal-backdrop fade show" *ngIf="isOpen"></div>

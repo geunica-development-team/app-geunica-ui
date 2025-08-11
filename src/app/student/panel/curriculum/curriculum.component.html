@@ -1,37 +1,140 @@
-<ng-container *ngIf="course; else cargando">
-  <h2 class="mb-3">{{ course.nombre }}</h2>
-  <div class="container py-4">
-    <div class="row justify-content-center">
-      <div class="col-12 col-md-8">
+<app-panel-header [title]="'Temario ' "/>
 
-        <!-- Botón y mini-card a la izquierda -->
-        <div class="mb-3 d-flex justify-content-end">
+<ng-container *ngIf="!loading; else cargando">
+  <!-- Contenedor principal con columnas invisibles -->
+  <div class="row">
+    <!-- Columna invisible izquierda -->
+    <div class="col-0 col-lg-2 d-none d-lg-block"></div>
+    
+    <!-- Contenido principal -->
+    <div class="col-12 col-lg-8">
+      <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ error }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+
+      <ng-container *ngIf="course && !error">
+        <!-- Header Section -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div>
+            <h2 class="mb-1 fw-bold text-success">{{ course.courseName }}</h2>
+            
+          </div>
+          
+          <!-- Filtros compactos -->
+          <div class="d-flex align-items-center gap-2">
+            <span class="small text-muted">Filtrar:</span>
             <div class="dropdown">
-                <label class="me-2">Filtrar por:</label>
-                
-                <button 
-                class="btn btn-outline-success dropdown-toggle" 
-                type="button" 
-                id="dropdownMenuButton" 
-                data-bs-toggle="dropdown" 
+              <button
+                class="btn btn-outline-success btn-sm dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
                 aria-expanded="false"
-                style="min-width: 6rem;">
-                  Ver todos 
-                </button>
-
-                <ul class="dropdown-menu dropdown-menu-end mt-2" aria-labelledby="dropdownMenuButton">
-                <li><a class="dropdown-item py-1" >Completados</a></li>
-                <li><a class="dropdown-item py-1" >Por completar</a></li>
-                </ul>
+              >
+                <i class="bi bi-funnel"></i> Ver todos
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="#"><i class="bi bi-check-circle text-success me-2"></i>Completados</a></li>
+                <li><a class="dropdown-item" href="#"><i class="bi bi-clock text-warning me-2"></i>Por completar</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#"><i class="bi bi-list me-2"></i>Todos</a></li>
+              </ul>
             </div>
+          </div>
         </div>
 
-        <app-card-list 
-          [title]="'Temario de ' + course.nombre" 
-          [items]="curriculum">
-        </app-card-list>
-      </div>
+        <!-- Temario Section -->
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-light border-0">
+          </div>
+          
+          <div class="card-body p-0">
+            <!-- Lista de temas -->
+            <div class="list-group list-group-flush" *ngIf="curriculum.length > 0">
+              <div 
+                *ngFor="let item of curriculum; let i = index" 
+                class="list-group-item list-group-item-action border-0 py-3"
+              >
+                <div class="row align-items-center">
+                  <!-- Número de posición -->
+                  <div class="col-auto">
+                    <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" 
+                         style="width: 32px; height: 32px; font-size: 14px; font-weight: bold;">
+                      {{ item.position || i + 1 }}
+                    </div>
+                  </div>
+                  
+                  <!-- Contenido principal -->
+                  <div class="col">
+                    <div class="d-flex justify-content-between align-items-start">
+                      <div class="flex-grow-1">
+                        <h6 class="mb-1 fw-semibold">{{ item.title }}</h6>
+                        <p class="mb-1 text-muted small" *ngIf="item.description">
+                          {{ item.description }}
+                        </p>
+                        
+                        <!-- Metadatos compactos -->
+                        <div class="d-flex gap-3 align-items-center">
+                          <small class="text-muted" *ngIf="item.scheduledDate">
+                            <i class="bi bi-calendar3 me-1"></i>
+                            {{ item.scheduledDate | date:'shortDate' }}
+                          </small>
+                          <small class="text-muted">
+                            <i class="bi bi-clock me-1"></i>
+                            {{ item.createdAt | date:'short' }}
+                          </small>
+                        </div>
+                      </div>
+                    
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Estado vacío -->
+            <div *ngIf="curriculum.length === 0" class="text-center py-5">
+              <div class="text-muted mb-3">
+                <i class="bi bi-journal-x" style="font-size: 3rem;"></i>
+              </div>
+              <h6 class="text-muted">No hay temas disponibles</h6>
+            </div>
+          </div>
+        </div>
+      </ng-container>
     </div>
+    
+    <!-- Columna invisible derecha -->
+    <div class="col-0 col-lg-2 d-none d-lg-block"></div>
   </div>
 </ng-container>
-<ng-template #cargando>…</ng-template>
+
+<ng-template #cargando>
+  <div class="row">
+    <div class="col-0 col-lg-2 d-none d-lg-block"></div>
+    <div class="col-12 col-lg-8">
+      <div class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="text-muted mt-2">Cargando temario...</p>
+      </div>
+    </div>
+    <div class="col-0 col-lg-2 d-none d-lg-block"></div>
+  </div>
+</ng-template>
+
+<style>
+  /* Estilos adicionales opcionales */
+  .list-group-item:hover {
+    background-color: #f8f9fa;
+  }
+  
+  .dropdown-toggle::after {
+    margin-left: 0.5em;
+  }
+  
+  .btn-link:focus {
+    box-shadow: none;
+  }
+</style>
