@@ -24,11 +24,14 @@ export const routes: Routes = [
         import('./psychologist/panel/panelPsychologist.routes').then(m => m.psychologistPanelRoutes) 
     },
     {
+<<<<<<< HEAD
       path: 'teacher',
       loadChildren: () => 
         import('./teacher/panel/panelTeacher.routes').then(m => m.teacherPanelRoutes) 
     },
     {
+=======
+>>>>>>> parent of a888cfc (correccion a teacher (creo))
       path: 'student',
       loadChildren: () => 
         import('./student/panel/panelStudent.routes').then(m => m.studentPanelRoutes) 

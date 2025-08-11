@@ -10,7 +10,10 @@ import { authRoutes } from './pages/auth/auth.routes';
 import { studentPanelRoutes } from './student/panel/panelStudent.routes';
 import { adminPanelRoutes } from './admin/panel/panelAdmin.routes';
 import { psychologistPanelRoutes } from './psychologist/panel/panelPsychologist.routes';
+<<<<<<< HEAD
 import { teacherPanelRoutes } from './teacher/panel/panelTeacher.routes';
+=======
+>>>>>>> parent of a888cfc (correccion a teacher (creo))
 
 
 
@@ -22,8 +25,7 @@ export const appConfig: ApplicationConfig = {
       ...authRoutes,
       ...studentPanelRoutes,
       ...adminPanelRoutes,
-      ...psychologistPanelRoutes,
-      ...teacherPanelRoutes
+      ...psychologistPanelRoutes
     ]),
 
     provideClientHydration(
