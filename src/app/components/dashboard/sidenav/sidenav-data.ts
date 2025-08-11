@@ -116,17 +116,17 @@ export const menuItemsAdmin = [
       label: 'Finanzas', 
       route: 'finanzas' 
     },
-    { 
-      icon: 'fa-solid fa-calendar', 
-      label: 'Horarios', 
-      route: 'horarios' 
-    },
-    { 
-      icon: 'fas fa-bullhorn', 
-      label: 'Anuncios', 
-      route: 'anuncios',
-      badge: 24 
-    },
+    //{ 
+    //  icon: 'fa-solid fa-calendar', 
+    //  label: 'Horarios', 
+    //  route: 'horarios' 
+    //},
+    //{ 
+    //  icon: 'fas fa-bullhorn', 
+    //  label: 'Anuncios', 
+    //  route: 'anuncios',
+    //  badge: 24 
+    //},
     { 
       icon: 'fa-solid fa-sliders', 
       label: 'Configuración académica', 
