@@ -1,0 +1,149 @@
+<!-- Modal para crear actividad -->
+
+<div class="modal fade" id="modalAddActivity" tabindex="-1" aria-labelledby="modalAddActivityLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content modal-modern">
+      <!-- Header del modal -->
+      <div class="modal-header modal-header-primary">
+        <div class="modal-title-container">
+          <i class="fas fa-tasks modal-icon"></i>
+          <h5 class="modal-title" id="modalAddActivityLabel">Crear Nueva Actividad</h5>
+        </div>
+        <button type="button" class="btn-close btn-close-black" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+```
+  <!-- Cuerpo del modal -->
+  <div class="modal-body">
+    <form #activityForm="ngForm" (ngSubmit)="onSubmit()" novalidate>
+
+      <!-- Nombre de la actividad -->
+      <div class="form-group mb-3">
+        <label for="activityName" class="form-label required">
+          <i class="fas fa-heading me-2"></i>Nombre
+        </label>
+        <input
+          type="text"
+          class="form-control"
+          id="activityName"
+          name="name"
+          [(ngModel)]="activityData.name"
+          #nameField="ngModel"
+          required
+          maxlength="100"
+          placeholder="Ej: Proyecto de Ciencias"
+          [class.is-invalid]="nameField.invalid && nameField.touched"
+        />
+        <div class="invalid-feedback" *ngIf="nameField.invalid && nameField.touched">
+          <small *ngIf="nameField.errors?.['required']">El nombre es obligatorio</small>
+        </div>
+      </div>
+
+      <!-- Fecha de la actividad -->
+      <div class="form-group mb-3">
+        <label for="activityDate" class="form-label required">
+          <i class="fas fa-calendar-alt me-2"></i>Fecha
+        </label>
+        <input
+          type="date"
+          class="form-control"
+          id="activityDate"
+          name="date"
+          [(ngModel)]="activityData.date"
+          #dateField="ngModel"
+          required
+          [min]="minDate.split('T')[0]"
+          [class.is-invalid]="dateField.invalid && dateField.touched"
+        />
+        <div class="invalid-feedback" *ngIf="dateField.invalid && dateField.touched">
+          <small *ngIf="dateField.errors?.['required']">La fecha es obligatoria</small>
+        </div>
+      </div>
+
+      <!-- Peso de la actividad -->
+      <div class="form-group mb-3">
+        <label for="activityWeight" class="form-label required">
+          <i class="fas fa-weight-hanging me-2"></i>Peso (%)
+        </label>
+        <input
+          type="number"
+          class="form-control"
+          id="activityWeight"
+          name="weight"
+          [(ngModel)]="activityData.weight"
+          #weightField="ngModel"
+          required
+          min="1"
+          max="100"
+          [class.is-invalid]="weightField.invalid && weightField.touched"
+        />
+        <div class="invalid-feedback" *ngIf="weightField.invalid && weightField.touched">
+          <small *ngIf="weightField.errors?.['required']">El peso es obligatorio</small>
+          <small *ngIf="weightField.errors?.['min'] || weightField.errors?.['max']">Debe ser entre 1 y 100</small>
+        </div>
+      </div>
+
+      <!-- Tipo de actividad -->
+      <div class="form-group mb-3">
+        <label for="activityType" class="form-label required">
+          <i class="fas fa-tasks me-2"></i>Tipo de Actividad
+        </label>
+        <select
+          class="form-select"
+          id="activityType"
+          name="typeActivity"
+          [(ngModel)]="activityData.typeActivity"
+          #typeField="ngModel"
+          required
+        >
+          <option value="Tarea">Tarea</option>
+          <option value="Proyecto">Proyecto</option>
+          <option value="Quiz">Quiz</option>
+        </select>
+      </div>
+
+      <!-- Estado de la actividad -->
+      <div class="form-group mb-3">
+        <label for="activityState" class="form-label required">
+          <i class="fas fa-toggle-on me-2"></i>Estado
+        </label>
+        <select
+          class="form-select"
+          id="activityState"
+          name="state"
+          [(ngModel)]="activityData.state"
+          #stateField="ngModel"
+          required
+        >
+          <option value="Publicado">Publicado</option>
+          <option value="Borrador">Borrador</option>
+        </select>
+      </div>
+
+      <!-- Campos ocultos: periodType, periodNumber y classAssignmentId -->
+      <input type="hidden" name="periodType" [(ngModel)]="activityData.periodType" />
+      <input type="hidden" name="periodNumber" [(ngModel)]="activityData.periodNumber" />
+      <input type="hidden" name="classAssignmentId" [(ngModel)]="activityData.classAssignmentId" />
+
+    </form>
+  </div>
+
+  <!-- Footer del modal -->
+  <div class="modal-footer">
+
+    <button
+      type="button"
+      class="btn btn-primary"
+      [disabled]="!activityForm.form.valid || isSubmitting"
+      (click)="onSubmit()"
+    >
+      <i class="fas fa-spinner fa-spin me-2" *ngIf="isSubmitting"></i>
+      <i class="fas fa-plus me-2" *ngIf="!isSubmitting"></i>
+      {{ isSubmitting ? 'Creando...' : 'Crear Actividad' }}
+    </button>
+  </div>
+</div>
+```
+
+  </div>
+</div>

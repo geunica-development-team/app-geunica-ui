@@ -1,3 +1,5 @@
+<app-panel-header title="Cursos asignados" />
+
 <div class="container py-4">
 
   <!-- 1. Fila del buscador -->
@@ -7,7 +9,7 @@
         [(term)]="searchTerm"
         placeholder="Buscar por curso"
         [items]="courses"
-        field="title"
+        field="course.name"
         (filtered)="filteredCourses = $event"
         (search)="onSearch()"
       ></app-searcher>
@@ -17,21 +19,17 @@
   <!-- 2. Fila de las cards -->
       
     <div class="row g-4">
-      <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let course of filteredCourses">
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let co of filteredCourses">
         
           <app-card-courses class="h-100"
-            [title]="course.nombre"
-            [subtitulo1]="course.codigo"
-            
-            [subtitulo2]="course.descripcion_curso"
-            [link]="['/student/panel/courses', course.id_curso, 'curriculum']">
-            
-            <!-- este ng-content se pegará al final de card-body -->
-
+            [etiquetaTitulo]="'CURSO'"
+            [titulo]="co.course.name"
+            [etiquetaSubtitulo1]="'GRADO'"
+            [subtitulo1]="co.classroom.grade.name + ' de ' + co.classroom.grade.level.name" 
+            [etiquetaSubtitulo2]="'AULA'"
+            [subtitulo2]="co.classroom.name"
+            [link]="['/teacher/panel/coursesAsigned', co.id, 'curriculumManagment']"> 
             </app-card-courses>
       </div>
     </div>
-
-
-
 </div>
