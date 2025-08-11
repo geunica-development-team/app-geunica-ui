@@ -68,10 +68,8 @@ export const studentPanelRoutes: Routes = [
                 component: ScheduleComponent
             },
             {
-            path: 'profile',
-            component: ProfileComponent,
-            canActivate:  [roleGuard],
-            data: { role: 'student' }
+                path: 'perfil',
+                loadChildren: () => import('../../pages/shared/profile/profile.routes').then(m => m.profileRoutes)
             }
 
         ]

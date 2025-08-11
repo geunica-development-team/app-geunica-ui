@@ -10,6 +10,7 @@ import { authRoutes } from './pages/auth/auth.routes';
 import { studentPanelRoutes } from './student/panel/panelStudent.routes';
 import { adminPanelRoutes } from './admin/panel/panelAdmin.routes';
 import { psychologistPanelRoutes } from './psychologist/panel/panelPsychologist.routes';
+import { teacherPanelRoutes } from './teacher/panel/panelTeacher.routes';
 
 
 
@@ -21,7 +22,8 @@ export const appConfig: ApplicationConfig = {
       ...authRoutes,
       ...studentPanelRoutes,
       ...adminPanelRoutes,
-      ...psychologistPanelRoutes
+      ...psychologistPanelRoutes,
+      ...teacherPanelRoutes
     ]),
 
     provideClientHydration(

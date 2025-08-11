@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { authRoutes } from './pages/auth/auth.routes';
 import { adminPanelRoutes } from './admin/panel/panelAdmin.routes';
-import { teacherPanelRoutes } from './teacher/panelTeacher.routes';
 
 export const routes: Routes = [
     {
@@ -28,6 +27,11 @@ export const routes: Routes = [
       path: 'student',
       loadChildren: () => 
         import('./student/panel/panelStudent.routes').then(m => m.studentPanelRoutes) 
+    },
+    {
+      path: 'teacher',
+      loadChildren: () => 
+        import('./teacher/panel/panelTeacher.routes').then(m => m.teacherPanelRoutes) 
     },
     {
       path: 'public',
