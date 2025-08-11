@@ -10,6 +10,8 @@ import { FormsModule } from '@angular/forms';
 import { dataInscriptionAll, InscriptionService } from '../../services/inscription.service';
 import { ToastrService } from 'ngx-toastr';
 import { ModalEnrollmentListComponent } from './modal-enrollment-list/modal-enrollment-list.component';
+import { AuthService } from '../../../services/auth.service';
+import { UserServiceAuth, UserSession } from '../../../services/user.service';
 
 @Component({
   selector: 'app-enrollment',
@@ -20,9 +22,25 @@ import { ModalEnrollmentListComponent } from './modal-enrollment-list/modal-enro
 export class EnrollmentComponent {
   private inscriptionService = inject(InscriptionService)
   private notifycation = inject(ToastrService);
+  private authService = inject(AuthService);
+  private userService = inject(UserServiceAuth);
+
+  userProfile!: UserSession;
 
   ngOnInit() {
-    this.loadEnrollments();
+    const tokenDecoded = this.authService.getDecodedToken();
+    const userId = tokenDecoded?.id;
+    if (userId) {
+      this.userService.getUserById(userId).subscribe({
+        next: (user) => {
+          this.userProfile = user;
+          this.loadEnrollments();
+        },
+        error: (error) => {
+          console.error('Error al cargar perfil de usuario: ', error)
+        }
+      })
+    }
   }
 
   @ViewChild("modalContinueRegistration") modalContinueRegistration!: ModalContinueRegistrationComponent

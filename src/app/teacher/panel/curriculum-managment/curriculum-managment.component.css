@@ -1,0 +1,20 @@
+  /* Efectos hover para las acciones */
+  .list-group-item:hover {
+    background-color: rgba(25, 135, 84, 0.05);
+  }
+  
+  /* Badge personalizado */
+  .bg-success-subtle {
+    background-color: rgba(25, 135, 84, 0.1) !important;
+  }
+  
+  /* Animación sutil para botones */
+  .btn:hover {
+    transform: translateY(-1px);
+    transition: transform 0.2s ease;
+  }
+  
+  /* Borde izquierdo para temas programados */
+  .border-start.border-success {
+    border-left-width: 4px !important;
+  }

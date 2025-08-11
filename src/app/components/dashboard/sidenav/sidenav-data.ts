@@ -26,12 +26,14 @@ export const menuItemsStudent = [
       label: 'Asistencia', 
       route: 'attendance' 
     },
+/**  
     { 
       icon: 'fas fa-bullhorn', 
       label: 'Anuncios', 
       route: 'announcement',
       badge: 24 
     },
+*/
     { 
       icon: 'fas fa-calendar-alt', 
       label: 'Horario', 
@@ -56,18 +58,23 @@ export const menuItemsTeacher = [
       label: 'Gestion de Notas', 
       route: 'NoteManagment' 
     },
+
     { 
       icon: 'fas fa-clock', 
       label: 'Gestion de asistencias', 
-      route: 'attendanceManagment',
-      badge: 24 
+      route: 'attendanceManagment'
+      
     },
+ /** 
     { 
       icon: 'fas fa-bullhorn', 
       label: 'Anuncios', 
-      route: 'announcement' 
+      route: 'announcement' ,
+      badge: 24 
     },
-        { 
+*/
+
+    { 
       icon: 'fas fa-calendar-alt', 
       label: 'Horario', 
       route: 'schedule' 
@@ -109,17 +116,17 @@ export const menuItemsAdmin = [
       label: 'Finanzas', 
       route: 'finanzas' 
     },
-    { 
-      icon: 'fa-solid fa-calendar', 
-      label: 'Horarios', 
-      route: 'horarios' 
-    },
-    { 
-      icon: 'fas fa-bullhorn', 
-      label: 'Anuncios', 
-      route: 'anuncios',
-      badge: 24 
-    },
+    //{ 
+    //  icon: 'fa-solid fa-calendar', 
+    //  label: 'Horarios', 
+    //  route: 'horarios' 
+    //},
+    //{ 
+    //  icon: 'fas fa-bullhorn', 
+    //  label: 'Anuncios', 
+    //  route: 'anuncios',
+    //  badge: 24 
+    //},
     { 
       icon: 'fa-solid fa-sliders', 
       label: 'Configuración académica', 

@@ -1,105 +1,313 @@
-/* Tabla con esquinas redondeadas y borde exterior destacado */
-.section-title {
-  display: inline-block;
-  border-bottom: 3px solid #919191;
-  padding-bottom: 0.25rem;
+:root {
+  --primary-color: #008c62;
+  --primary-hover: #006b4a;
 }
 
-.table-rounded {
-  border-collapse: separate;
-  border-spacing: 0;
-  /* Borde exterior */
-  border: 1px solid #d3d3d3;  /* color azul de Bootstrap “primary” */
-  border-radius: 0.5rem;      /* radio para todas las esquinas */
-  overflow: hidden;           /* para que el radio se aplique */
+.card {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  border: 1px solid rgba(0, 0, 0, 0.125);
 }
 
-/* Esquinas superiores */
-.table-rounded thead tr th:first-child {
-  border-top-left-radius: 0.5rem;
-}
-.table-rounded thead tr th:last-child {
-  border-top-right-radius: 0.5rem;
+.card-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
 }
 
-/* Esquinas inferiores */
-.table-rounded tbody tr:last-child td:first-child {
-  border-bottom-left-radius: 0.5rem;
-}
-.table-rounded tbody tr:last-child td:last-child {
-  border-bottom-right-radius: 0.5rem;
-}
-
-/* Opcional: quitar bordes dobles internos si lo deseas */
-.table-rounded th,
-.table-rounded td {
-  border: 1px solid #dee2e6;
+/* Animación para las tarjetas de resumen */
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 140, 98, 0.15);
+  transition: all 0.3s ease;
 }
 
-
-
-
-/* Opcional: al pasar el ratón */
-.nav-pills .nav-link:hover {
-  color: #184818bf;
+/* Estilos para las notas */
+.text-success {
+  color: #198754 !important; 
 }
 
-.nav-pills .nav-link {
-  background: transparent;
-  color: #000;
-  display: inline-block;    /* para que el border-bottom solo abarque el texto */
-  padding: 0.5rem 0;        /* ajusta el padding vertical si lo necesitas */
+.text-primary {
+  color: var(--primary-color) !important;
+}
+.text-exam {
+  color: #6fa3c5 !important;
 }
 
-.nav-pills .nav-link.active {
-  font-weight: 700;
+.text-warning {
+  color: #ffc107 !important;
+}
+
+.text-danger {
+  color: #dc3545 !important;
+}
+
+.text-muted {
+  color: #6c757d !important;
+}
+
+/* Color primario personalizado */
+.bg-primary {
+  background-color: var(--primary-color) !important;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+.btn-outline-primary {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: #fff;
+}
+
+.spinner-border.text-primary {
+  color: var(--primary-color) !important;
+}
+
+/* Navbar de períodos personalizada */
+.nav-link {
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.nav-link:hover {
+  background-color: rgba(0, 140, 98, 0.1) !important;
+  color: #008c62 !important;
+}
+
+.nav-link.active {
+  background-color: #008c62 !important;
+  color: white !important;
+}
+
+/* Estilos para las tablas */
+.table {
+  margin-bottom: 0;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(0, 140, 98, 0.075);
+}
+
+.table th {
+  border-top: none;
+  font-weight: 600;
+  color: #495057;
+}
+
+/* Estilos para los badges */
+.badge {
+  font-size: 0.75em;
+}
+
+.badge.bg-info {
+  background-color: var(--primary-color) !important;
+}
+
+/* Estilos para los tabs */
+.nav-tabs .nav-link {
+  color: #495057;
+  border: 1px solid transparent;
+  border-top-left-radius: 0.375rem;
+  border-top-right-radius: 0.375rem;
+}
+
+.nav-tabs .nav-link:hover {
+  color: var(--primary-color);
+  background-color: rgba(0, 140, 98, 0.1);
+}
+
+.nav-tabs .nav-link.active {
+  color: var(--primary-color);
+  background-color: #fff;
+  border-color: #dee2e6 #dee2e6 #fff;
+  border-bottom-color: transparent;
+}
+
+/* Estilos para los iconos grandes */
+.fs-2 {
+  font-size: 2rem !important;
+}
+
+.fs-1 {
+  font-size: 2.5rem !important;
+}
+
+/* Toggle para mostrar meses de vacaciones */
+.vacation-months-toggle {
+  font-size: 0.875rem;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.3s ease;
+}
+
+.vacation-months-toggle:hover {
+  color: var(--primary-color);
+}
+
+.form-check-input:checked {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.form-check-input:focus {
+  border-color: var(--primary-color);
+  outline: 0;
+  box-shadow: 0 0 0 0.25rem rgba(0, 140, 98, 0.25);
+}
+
+/* Formularios */
+.form-select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(0, 140, 98, 0.25);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .table-responsive {
+    font-size: 0.875rem;
+  }
+  
+  .fs-5 {
+    font-size: 1rem !important;
+  }
+
+  .nav-link {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+  }
+  
+  .d-flex.justify-content-between {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+/* Estados de loading */
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+/* Animación suave para cambios */
+.tab-pane {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Estilos para mensajes vacíos */
+.py-5 {
+  padding-top: 3rem !important;
+  padding-bottom: 3rem !important;
+}
+
+/* Alertas personalizadas */
+.alert-danger {
+  background-color: rgba(220, 53, 69, 0.1);
+  border-color: rgba(220, 53, 69, 0.3);
+  color: #842029;
+}
+
+/* Botones de navegación */
+.btn-outline-danger {
+  color: #dc3545;
+  border-color: #dc3545;
+}
+
+.btn-outline-danger:hover {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: #fff;
+}
+
+/* Estilos específicos para notas sin calificar */
+.text-muted.fs-5 {
+  font-style: italic;
+}
+
+/* Mejoras para el header del curso */
+.card-title {
+  color: var(--primary-color);
+}
+
+/* Estilos para las etiquetas de peso */
+.badge.bg-info {
+  color: #fff;
+}
+
+/* Hover effects mejorados */
+.table-hover tbody tr:hover td {
+  background-color: rgba(0, 140, 98, 0.05);
+}
+
+/* Separación mejorada en elementos flex */
+.navbar-nav .nav-link {
+  white-space: nowrap;
+}
+
+/* Estilos para botones pequeños */
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  border-radius: 0.2rem;
+}
+
+.badge {
+  font-size: 0.75em;
+  font-weight: 500;
+  padding: 0.35em 0.65em;
+}
+
+.badge.bg-success {
+  background-color: #198754 !important;
+  color: #ffffff !important;
+}
+
+
+.badge.bg-type {
+  background-color: #7e8482 !important;
+}
+
+.badge.bg-info {
+  background-color: #5465b1 !important;
+}
+
+.badge.bg-warning {
+  background-color: #fccc3b !important;
   color: #000000 !important;
-  border: none;
-  border-bottom: 2px solid #000000;
 }
 
-.nav-pills .nav-item {
-  /* aseguramos que cada item pueda crecer un poco, pero no tanto como para llenar todo el ancho */
-  flex: 1;
-  text-align: center;
+.badge.bg-espera {
+  background-color: #c5c5c5 !important;
+  color: #000000 !important;
 }
 
-.nav-pills {
-  background: transparent;
-  border-bottom: none;      /* sin borde extra en el contenedor */
+.badge.bg-danger {
+  background-color: #dc3545 !important;
+  color: #ffffff !important;
 }
 
-
-
-/* css del grafico pstel*/
-
-/* Define el tamaño y el pastel con porcentajes */
-.donut-chart {
-  --size: 250px;            /* diámetro total */
-  --cutout: 190px;           /* diámetro del hueco */
-  --p1: 30;  /* porcentaje primer color */
-  --p2: 50;  /* porcentaje segundo color */
-  /* el resto (100 - p1 - p2) será el tercer color */
-
-  width: var(--size);
-  height: var(--size);
-  border-radius: 50%;
-  background: conic-gradient(
-    red 0% calc(var(--p1) * 1%),
-    rgb(18, 133, 18) calc(var(--p1) * 1%) calc((var(--p1) + var(--p2)) * 1%)
-  );
-  position: relative;
-}
-
-/* Crea el hueco centrado */
-.donut-chart::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: calc(var(--cutout));
-  height: calc(var(--cutout));
-  background: white;       /* color del fondo de tu tarjeta */
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
+.badge.bg-secondary {
+  background-color: #6c757d !important;
+  color: #ffffff !important;
 }

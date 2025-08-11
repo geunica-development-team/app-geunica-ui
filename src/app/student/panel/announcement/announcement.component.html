@@ -1,75 +1,113 @@
-<ng-container *ngIf="announcements$ | async as announcements; else cargando">
+<!-- Header Component -->
+<app-panel-header title="Anuncios" />
 
-  <h2 class="text-center mb-4">Anuncios</h2>
+<div class="container py-6">
+  <div class="main-wrapper">
+    <!-- Header Section -->
+    <div class="header-section">
+      <div class="header-content">
+        <h1 class="header-title">
+          <i class="fas fa-bullhorn me-3"></i>
+          Anuncios
+        </h1>
+        <p class="header-subtitle">Mantente informado con las últimas novedades</p>
+      </div>
+    </div>
 
-  <div class="container">
-    <div class="row justify-content-center">
-      <!-- Columna central con cards verticales -->
-      <div class="col-12 col-md-6">
-        <!-- Filtro -->
-        <div class="mb-3 d-flex justify-content-end">
-          <div class="dropdown">
-            <label class="me-2">Filtrar por:</label>
-            <button 
-              class="btn btn-outline-success dropdown-toggle" 
-              type="button" 
-              id="dropdownMenuButton" 
-              data-bs-toggle="dropdown" 
-              aria-expanded="false"
-              style="min-width: 6rem;">
-              Ver todos 
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end mt-2" aria-labelledby="dropdownMenuButton">
-              <li><a class="dropdown-item py-1">Completados</a></li>
-              <li><a class="dropdown-item py-1">Por completar</a></li>
-            </ul>
+    <!-- Content Section -->
+    <div class="content-section">
+      <!-- Filter Section -->
+      <div class="filter-section">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+          <div>
+            <h4 class="mb-0 text-dark fw-bold">Tus Anuncios</h4>
+            <small class="text-muted">Gestiona y revisa tus notificaciones</small>
+          </div>
+          <div class="filter-dropdown">
+            <div class="dropdown">
+              <button 
+                class="btn dropdown-toggle d-flex align-items-center gap-2" 
+                type="button" 
+                data-bs-toggle="dropdown">
+                <i class="fas fa-filter"></i>
+                <span>{{ getCurrentFilterText() }}</span>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" (click)="setFilter('all')" style="cursor: pointer;">
+                  <i class="fas fa-list me-2"></i>Ver todos
+                </a></li>
+                <li><a class="dropdown-item" (click)="setFilter('visto')" style="cursor: pointer;">
+                  <i class="fas fa-check me-2"></i>Completados
+                </a></li>
+                <li><a class="dropdown-item" (click)="setFilter('publicado')" style="cursor: pointer;">
+                  <i class="fas fa-clock me-2"></i>Por completar
+                </a></li>
+              </ul>
+            </div>
           </div>
         </div>
-        <!-- Card contenedora grande -->
-        <div class="card p-4 shadow-sm">
-        <!-- Lista de mini‐cards -->
-          <ng-container *ngFor="let a of announcements">
-            <div 
-              class="card mb-4 clickable-card" 
-              (click)="openAnnouncement(a)" 
-              style="cursor: pointer;"
-            >
-              <div class="d-flex align-items-center p-3">
-                <!-- Icono a la izquierda -->
-                <div 
-                  class="d-flex align-items-center justify-content-center border rounded text-white"
-                  [ngClass]="{
-                    'bg-warning': a.estado === 'publicado',
-                    'bg-success': a.estado === 'visto'
-                  }"
-                  style="width: 4rem; height: 4rem; border: .25rem solid rgba(0,0,0,0.125);"
-                >
-                  <i class="fa-solid fa-bell fs-4"></i>
-                </div>
-                <!-- Título a la derecha -->
-                <h5 class="mb-0 ms-3 flex-grow-1">{{ a.titulo }}</h5>
-              </div>
-            </div>
-          </ng-container>
-
-        </div>
-
       </div>
 
+      <!-- Loading State -->
+      <div class="loading-section" *ngIf="!(announcements$ | async)">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Cargando anuncios...</div>
+      </div>
+
+      <!-- Announcements Container -->
+      <ng-container *ngIf="announcements$ | async as announcements">
+        <div class="announcements-container" *ngIf="getFilteredAnnouncements(announcements).length > 0">
+          <div 
+            class="announcement-card" 
+            *ngFor="let announcement of getFilteredAnnouncements(announcements); trackBy: trackByAnnouncementId"
+            (click)="openAnnouncement(announcement)"
+            style="cursor: pointer;">
+            <div class="d-flex align-items-center p-4">
+              <div 
+                class="announcement-icon"
+                [ngClass]="{
+                  'icon-publicado': announcement.estado === 'publicado',
+                  'icon-visto': announcement.estado === 'visto'
+                }">
+                <i class="fas fa-bell"></i>
+              </div>
+              <div class="flex-grow-1">
+                <h5 class="announcement-title">{{ announcement.titulo }}</h5>
+                <div class="announcement-meta">
+                  <span>
+                    <i class="fas fa-calendar-alt me-1"></i>
+                    {{ announcement.fecha_creacion | date:'d \'de\' MMMM, y' }}
+                  </span>
+                  <span 
+                    class="status-badge"
+                    [ngClass]="{
+                      'status-publicado': announcement.estado === 'publicado',
+                      'status-visto': announcement.estado === 'visto'
+                    }">
+                    {{ announcement.estado | titlecase }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="announcements-container" *ngIf="getFilteredAnnouncements(announcements).length === 0">
+          <div class="empty-state">
+            <div class="empty-icon">
+              <i class="fas fa-inbox"></i>
+            </div>
+            <h5>No hay anuncios disponibles</h5>
+            <p>Los nuevos anuncios aparecerán aquí cuando estén disponibles.</p>
+          </div>
+        </div>
+      </ng-container>
     </div>
   </div>
+</div>
 
-</ng-container>
-
-<ng-template #cargando>
-  <div class="d-flex justify-content-center my-5">
-    <div class="spinner-border" role="status">
-      <span class="visually-hidden">Cargando...</span>
-    </div>
-  </div>
-</ng-template>
-
-<!-- Modal reutilizable -->
+<!-- Modal Reutilizable -->
 <app-app-modal
   [visible]="!!selectedAnnouncement"
   (closed)="closeModal()"
@@ -78,22 +116,31 @@
   borderRadius="0.75rem"
 >
   <ng-container *ngIf="selectedAnnouncement">
-    <!-- Detalle completo dentro del modal -->
-    <div class="p-3">
-      <h2 class="mb-3">{{ selectedAnnouncement.titulo }}</h2>
-      <h6 class="text-muted">{{ selectedAnnouncement.fecha_creacion | date:'longDate' }}</h6>
-      <hr>
-      <p>{{ selectedAnnouncement.cuerpo }}</p>
-      <hr>
-      <div class="d-flex justify-content-between align-items-center">
-        <small class="text-muted">Creado por {{ selectedAnnouncement.creado_por }}</small>
+    <div class="modal-custom-content">
+      <div class="modal-header-custom">
+        <h2 class="modal-title-custom">{{ selectedAnnouncement.titulo }}</h2>
+        <div class="modal-date-custom">
+          <i class="fas fa-calendar-alt me-2"></i>
+          {{ selectedAnnouncement.fecha_creacion | date:'longDate' }}
+        </div>
+      </div>
+      <div class="modal-body-custom">
+        <div class="modal-text-custom">
+          {{ selectedAnnouncement.cuerpo }}
+        </div>
+      </div>
+      <div class="modal-footer-custom">
+        <div class="modal-author-custom">
+          <i class="fas fa-user me-2"></i>
+          Creado por {{ selectedAnnouncement.creado_por }}
+        </div>
         <span 
-          class="badge"
+          class="status-badge"
           [ngClass]="{
-            'bg-warning': selectedAnnouncement.estado === 'publicado',
-            'bg-success': selectedAnnouncement.estado === 'visto'
+            'status-publicado': selectedAnnouncement.estado === 'publicado',
+            'status-visto': selectedAnnouncement.estado === 'visto'
           }">
-          {{ selectedAnnouncement.estado }}
+          {{ selectedAnnouncement.estado | titlecase }}
         </span>
       </div>
     </div>
