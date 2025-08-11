@@ -7,7 +7,7 @@ import { Observable } from "rxjs";
   providedIn: 'root'
 })
 export class TeacherService {
-  private apiUrl = 'http://localhost:3000/teacher'; // Ajusta tu URL
+  private apiUrl = 'https://app-geunica-backend.onrender.com/teacher'; // Ajusta tu URL
 
   constructor(private http: HttpClient) {}
 
