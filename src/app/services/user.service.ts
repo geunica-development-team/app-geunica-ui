@@ -70,7 +70,7 @@ export interface dataChangePassword {
 export class UserServiceAuth {
   private httpService = inject(HttpClient);
   private authStorage = inject(AuthStorageService);
-  private auth_end_point = 'http://localhost:3000';//https://app-geunica-backend.onrender.com
+  private auth_end_point = 'https://app-geunica-backend.onrender.com';//https://app-geunica-backend.onrender.com
 
   constructor() {}
 

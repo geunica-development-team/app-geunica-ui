@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiBase: 'http://localhost:3000'
+  apiBase: 'https://app-geunica-backend.onrender.com'
 };
