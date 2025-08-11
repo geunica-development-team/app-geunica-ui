@@ -1,0 +1,555 @@
+<div class="container-fluid p-4">
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-dark mb-0">
+      <i class="fas fa-cash-register me-2 text-success"></i>
+      Sistema de Caja
+    </h2>
+    <div class="d-flex gap-2">
+      @if (!cajaActiva) {
+        <button class="btn btn-success" (click)="openModalApertura()" [disabled]="loading">
+          <i class="fas fa-play me-2"></i>
+          Abrir Caja
+        </button>
+      } @else {
+        <button class="btn btn-warning text-white" (click)="openModalCierre()" [disabled]="!canCloseCaja()">
+          <i class="fas fa-stop me-2"></i>
+          Cerrar Caja
+        </button>
+      }
+    </div>
+  </div>
+
+  @if (loading) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="mt-2 text-muted">Cargando información...</p>
+    </div>
+  } @else {
+    
+    @if (!cajaActiva) {
+      <!-- Sin caja activa -->
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body text-center py-5">
+              <i class="fas fa-cash-register fa-4x text-muted mb-3"></i>
+              <h4 class="text-muted mb-3">No hay caja activa</h4>
+              <p class="text-muted mb-4">Para comenzar a operar, debe abrir una caja para la sede correspondiente.</p>
+              <button class="btn btn-success btn-lg" (click)="openModalApertura()">
+                <i class="fas fa-play me-2"></i>
+                Abrir Caja
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    } @else {
+      <!-- Caja activa -->
+      <div class="row g-4">
+        <!-- Información de la caja -->
+        <div class="col-12">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body">
+              <div class="row align-items-center">
+                <div class="col-md-8">
+                  <h5 class="fw-bold text-success mb-1">
+                    <i class="fas fa-check-circle me-2"></i>
+                    Caja Activa - {{ cajaActiva.sede?.nombre }}
+                  </h5>
+                  <p class="text-muted mb-0">
+                    Operador: {{ cajaActiva.usuario?.nombre }} | 
+                    Apertura: {{ formatDateTime(cajaActiva.fecha_apertura) }}
+                  </p>
+                </div>
+                <div class="col-md-4 text-md-end">
+                  <div class="d-flex flex-column">
+                    <small class="text-muted">Monto inicial</small>
+                    <span class="h5 fw-bold text-primary">{{ formatCurrency(cajaActiva.monto_apertura) }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Resumen financiero -->
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm bg-success text-white">
+            <div class="card-body">
+              <div class="d-flex align-items-center">
+                <div class="flex-grow-1">
+                  <h6 class="mb-1">Total Ingresos</h6>
+                  <h4 class="mb-0 fw-bold">{{ formatCurrency(cajaActiva.total_ingresos || 0) }}</h4>
+                </div>
+                <i class="fas fa-arrow-up fa-2x opacity-75"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm bg-danger text-white">
+            <div class="card-body">
+              <div class="d-flex align-items-center">
+                <div class="flex-grow-1">
+                  <h6 class="mb-1">Total Egresos</h6>
+                  <h4 class="mb-0 fw-bold">{{ formatCurrency(cajaActiva.total_egresos || 0) }}</h4>
+                </div>
+                <i class="fas fa-arrow-down fa-2x opacity-75"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm bg-info text-white">
+            <div class="card-body">
+              <div class="d-flex align-items-center">
+                <div class="flex-grow-1">
+                  <h6 class="mb-1">Diferencia</h6>
+                  <h4 class="mb-0 fw-bold">{{ formatCurrency(cajaActiva.diferencia || 0) }}</h4>
+                </div>
+                <i class="fas fa-balance-scale fa-2x opacity-75"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm bg-warning text-white">
+            <div class="card-body">
+              <div class="d-flex align-items-center">
+                <div class="flex-grow-1">
+                  <h6 class="mb-1">En Caja</h6>
+                  <h4 class="mb-0 fw-bold">{{ formatCurrency((cajaActiva.monto_apertura || 0) + (cajaActiva.diferencia || 0)) }}</h4>
+                </div>
+                <i class="fas fa-wallet fa-2x opacity-75"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Acciones rápidas -->
+        <div class="col-12">
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+              <h6 class="fw-bold mb-0">
+                <i class="fas fa-bolt me-2"></i>
+                Acciones Rápidas
+              </h6>
+            </div>
+            <div class="card-body">
+              <div class="row g-3">
+                <div class="col-md-3">
+                  <button class="btn btn-primary w-100" (click)="openModalVenta()">
+                    <i class="fas fa-shopping-cart me-2"></i>
+                    Registrar Venta
+                  </button>
+                </div>
+                <div class="col-md-3">
+                  <button class="btn btn-danger w-100" (click)="openModalEgreso()">
+                    <i class="fas fa-minus-circle me-2"></i>
+                    Registrar Egreso
+                  </button>
+                </div>
+                <div class="col-md-3">
+                  <button class="btn btn-info w-100">
+                    <i class="fas fa-file-invoice me-2"></i>
+                    Ver Boletas
+                  </button>
+                </div>
+                <div class="col-md-3">
+                  <button class="btn btn-secondary w-100">
+                    <i class="fas fa-chart-bar me-2"></i>
+                    Reportes
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Movimientos del día -->
+        <div class="col-md-6">
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+              <h6 class="fw-bold mb-0">
+                <i class="fas fa-list me-2 text-success"></i>
+                Ventas de Hoy ({{ ventasHoy.length }})
+              </h6>
+              <button class="btn btn-sm btn-outline-primary" (click)="openModalVenta()">
+                <i class="fas fa-plus me-1"></i>
+                Nueva
+              </button>
+            </div>
+            <div class="card-body p-0">
+              @if (ventasHoy.length === 0) {
+                <div class="text-center py-4">
+                  <i class="fas fa-shopping-cart fa-2x text-muted mb-2"></i>
+                  <p class="text-muted mb-0">No hay ventas registradas</p>
+                </div>
+              } @else {
+                <div class="table-responsive">
+                  <table class="table table-hover mb-0">
+                    <thead class="bg-light">
+                      <tr>
+                        <th class="border-0">Cliente</th>
+                        <th class="border-0">Total</th>
+                        <th class="border-0">Pago</th>
+                        <th class="border-0">Hora</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (venta of ventasHoy; track venta.id) {
+                        <tr>
+                          <td>{{ getEstudianteNombre(venta.estudiante_id || 0) }}</td>
+                          <td class="fw-bold text-success">{{ formatCurrency(venta.total) }}</td>
+                          <td>
+                            <span class="badge bg-primary">{{ venta.tipo_pago }}</span>
+                          </td>
+                          <td class="text-muted">{{ formatDateTime(venta.fecha).split(' ')[1] }}</td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+              <h6 class="fw-bold mb-0">
+                <i class="fas fa-minus-circle me-2 text-danger"></i>
+                Egresos de Hoy ({{ egresosHoy.length }})
+              </h6>
+              <button class="btn btn-sm btn-outline-danger" (click)="openModalEgreso()">
+                <i class="fas fa-plus me-1"></i>
+                Nuevo
+              </button>
+            </div>
+            <div class="card-body p-0">
+              @if (egresosHoy.length === 0) {
+                <div class="text-center py-4">
+                  <i class="fas fa-minus-circle fa-2x text-muted mb-2"></i>
+                  <p class="text-muted mb-0">No hay egresos registrados</p>
+                </div>
+              } @else {
+                <div class="table-responsive">
+                  <table class="table table-hover mb-0">
+                    <thead class="bg-light">
+                      <tr>
+                        <th class="border-0">Descripción</th>
+                        <th class="border-0">Monto</th>
+                        <th class="border-0">Tipo</th>
+                        <th class="border-0">Hora</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (egreso of egresosHoy; track egreso.id) {
+                        <tr>
+                          <td>{{ egreso.descripcion }}</td>
+                          <td class="fw-bold text-danger">{{ formatCurrency(egreso.monto) }}</td>
+                          <td>
+                            <span class="badge bg-secondary">{{ egreso.tipo }}</span>
+                          </td>
+                          <td class="text-muted">{{ formatDateTime(egreso.fecha).split(' ')[1] }}</td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  }
+</div>
+
+<!-- Modal Apertura de Caja -->
+<ng-template #modalApertura let-modal>
+  <div class="modal-header bg-success text-white">
+    <h5 class="modal-title fw-bold">
+      <i class="fas fa-play me-2"></i>
+      Apertura de Caja
+    </h5>
+    <button type="button" class="btn-close btn-close-white" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="mb-3">
+        <label class="form-label fw-medium">Sede</label>
+        <select class="form-select" [(ngModel)]="aperturaForm.sede_id" name="sede">
+          <option value="0">Seleccionar sede...</option>
+          @for (sede of sedes; track sede.id) {
+            <option [value]="sede.id">{{ sede.nombre }}</option>
+          }
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-medium">Usuario/Operador</label>
+        <select class="form-select" [(ngModel)]="aperturaForm.usuario_id" name="usuario">
+          <option value="0">Seleccionar usuario...</option>
+          @for (usuario of usuarios; track usuario.id) {
+            <option [value]="usuario.id">{{ usuario.nombre }}</option>
+          }
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-medium">Monto de Apertura</label>
+        <div class="input-group">
+          <span class="input-group-text">S/</span>
+          <input type="number" class="form-control" [(ngModel)]="aperturaForm.monto_apertura" name="monto" step="0.01" min="0">
+        </div>
+        <small class="text-muted">Dinero inicial en caja</small>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-medium">Observaciones</label>
+        <textarea class="form-control" [(ngModel)]="aperturaForm.observaciones" name="observaciones" rows="3" placeholder="Observaciones opcionales..."></textarea>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Cancelar</button>
+    <button type="button" class="btn btn-success" (click)="abrirCaja()" [disabled]="loadingApertura">
+      @if (loadingApertura) {
+        <span class="spinner-border spinner-border-sm me-2"></span>
+      }
+      <i class="fas fa-play me-2"></i>
+      Abrir Caja
+    </button>
+  </div>
+</ng-template>
+
+<!-- Modal Cierre de Caja -->
+<ng-template #modalCierre let-modal>
+  <div class="modal-header bg-warning text-white">
+    <h5 class="modal-title fw-bold">
+      <i class="fas fa-stop me-2"></i>
+      Cierre de Caja
+    </h5>
+    <button type="button" class="btn-close btn-close-white" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body">
+    @if (cajaActiva) {
+      <div class="alert alert-info">
+        <h6 class="fw-bold">Resumen del Día</h6>
+        <div class="row">
+          <div class="col-6">
+            <small class="text-muted">Monto inicial:</small><br>
+            <span class="fw-bold">{{ formatCurrency(cajaActiva.monto_apertura) }}</span>
+          </div>
+          <div class="col-6">
+            <small class="text-muted">Total ingresos:</small><br>
+            <span class="fw-bold text-success">{{ formatCurrency(cajaActiva.total_ingresos || 0) }}</span>
+          </div>
+          <div class="col-6 mt-2">
+            <small class="text-muted">Total egresos:</small><br>
+            <span class="fw-bold text-danger">{{ formatCurrency(cajaActiva.total_egresos || 0) }}</span>
+          </div>
+          <div class="col-6 mt-2">
+            <small class="text-muted">Debería tener:</small><br>
+            <span class="fw-bold text-primary">{{ formatCurrency((cajaActiva.monto_apertura || 0) + (cajaActiva.diferencia || 0)) }}</span>
+          </div>
+        </div>
+      </div>
+    }
+    
+    <form>
+      <div class="mb-3">
+        <label class="form-label fw-medium">Monto Real en Caja</label>
+        <div class="input-group">
+          <span class="input-group-text">S/</span>
+          <input type="number" class="form-control" [(ngModel)]="cierreForm.monto_cierre" name="monto" step="0.01" min="0">
+        </div>
+        <small class="text-muted">Contar físicamente el dinero en caja</small>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-medium">Observaciones de Cierre</label>
+        <textarea class="form-control" [(ngModel)]="cierreForm.observaciones" name="observaciones" rows="3" placeholder="Observaciones del cierre..."></textarea>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Cancelar</button>
+    <button type="button" class="btn btn-warning text-white" (click)="cerrarCaja()" [disabled]="loadingCierre">
+      @if (loadingCierre) {
+        <span class="spinner-border spinner-border-sm me-2"></span>
+      }
+      <i class="fas fa-stop me-2"></i>
+      Cerrar Caja
+    </button>
+  </div>
+</ng-template>
+
+<!-- Modal Registrar Venta -->
+<ng-template #modalVenta let-modal>
+  <div class="modal-header bg-primary text-white">
+    <h5 class="modal-title fw-bold">
+      <i class="fas fa-shopping-cart me-2"></i>
+      Registrar Venta
+    </h5>
+    <button type="button" class="btn-close btn-close-white" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label class="form-label fw-medium">Cliente/Estudiante</label>
+          <select class="form-select" [(ngModel)]="ventaForm.estudiante_id" name="estudiante">
+            <option [ngValue]="null">Cliente general</option>
+            @for (estudiante of estudiantes; track estudiante.id) {
+              <option [value]="estudiante.id">{{ estudiante.nombre }} {{ estudiante.apellido }} - {{ estudiante.documento }}</option>
+            }
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-medium">Tipo de Pago</label>
+          <select class="form-select" [(ngModel)]="ventaForm.tipo_pago" name="tipoPago">
+            <option value="efectivo">Efectivo</option>
+            <option value="tarjeta">Tarjeta</option>
+            <option value="yape">Yape</option>
+            <option value="plin">Plin</option>
+            <option value="transferencia">Transferencia</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label class="form-label fw-medium">Tipo de Documento</label>
+          <select class="form-select" [(ngModel)]="ventaForm.tipo_documento" name="tipoDocumento">
+            <option value="boleta">Boleta</option>
+            <option value="factura">Factura</option>
+            <option value="sin_documento">Sin documento</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-medium">Observaciones</label>
+          <input type="text" class="form-control" [(ngModel)]="ventaForm.observaciones" name="observaciones" placeholder="Observaciones opcionales...">
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h6 class="fw-bold mb-0">Productos/Servicios</h6>
+        <button type="button" class="btn btn-sm btn-outline-primary" (click)="agregarDetalleVenta()">
+          <i class="fas fa-plus me-1"></i>
+          Agregar
+        </button>
+      </div>
+
+      @for (detalle of ventaForm.detalles; track $index) {
+        <div class="border rounded p-3 mb-3">
+          <div class="row">
+            <div class="col-md-5">
+              <label class="form-label fw-medium small">Producto/Servicio</label>
+              <select class="form-select" [(ngModel)]="detalle.producto_servicio_id" [name]="'producto_' + $index" (change)="onProductoChange(detalle)">
+                <option value="0">Seleccionar...</option>
+                @for (producto of productosServicios; track producto.id) {
+                  <option [value]="producto.id">{{ producto.nombre }} - {{ formatCurrency(producto.precio) }}</option>
+                }
+              </select>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label fw-medium small">Cantidad</label>
+              <input type="number" class="form-control" [(ngModel)]="detalle.cantidad" [name]="'cantidad_' + $index" min="1" (input)="calcularSubtotal(detalle)">
+            </div>
+            <div class="col-md-2">
+              <label class="form-label fw-medium small">Precio Unit.</label>
+              <input type="number" class="form-control" [(ngModel)]="detalle.precio_unitario" [name]="'precio_' + $index" step="0.01" (input)="calcularSubtotal(detalle)">
+            </div>
+            <div class="col-md-2">
+              <label class="form-label fw-medium small">Subtotal</label>
+              <input type="text" class="form-control" [value]="formatCurrency(detalle.subtotal)" readonly>
+            </div>
+            <div class="col-md-1 d-flex align-items-end">
+              <button type="button" class="btn btn-sm btn-outline-danger" (click)="eliminarDetalleVenta($index)" [disabled]="ventaForm.detalles.length === 1">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+
+      <div class="alert alert-success">
+        <div class="d-flex justify-content-between align-items-center">
+          <span class="fw-bold">Total de la Venta:</span>
+          <span class="h5 fw-bold mb-0">{{ formatCurrency(getTotalVenta()) }}</span>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Cancelar</button>
+    <button type="button" class="btn btn-primary" (click)="registrarVenta()" [disabled]="loadingVenta || getTotalVenta() <= 0">
+      @if (loadingVenta) {
+        <span class="spinner-border spinner-border-sm me-2"></span>
+      }
+      <i class="fas fa-save me-2"></i>
+      Registrar Venta
+    </button>
+  </div>
+</ng-template>
+
+<!-- Modal Registrar Egreso -->
+<ng-template #modalEgreso let-modal>
+  <div class="modal-header bg-danger text-white">
+    <h5 class="modal-title fw-bold">
+      <i class="fas fa-minus-circle me-2"></i>
+      Registrar Egreso
+    </h5>
+    <button type="button" class="btn-close btn-close-white" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="mb-3">
+        <label class="form-label fw-medium">Descripción del Gasto</label>
+        <input type="text" class="form-control" [(ngModel)]="egresoForm.descripcion" name="descripcion" placeholder="Ej: Compra de útiles de oficina" required>
+      </div>
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label class="form-label fw-medium">Monto</label>
+          <div class="input-group">
+            <span class="input-group-text">S/</span>
+            <input type="number" class="form-control" [(ngModel)]="egresoForm.monto" name="monto" step="0.01" min="0.01" required>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-medium">Tipo de Gasto</label>
+          <select class="form-select" [(ngModel)]="egresoForm.tipo" name="tipo">
+            <option value="">Seleccionar tipo...</option>
+            <option value="suministros">Suministros</option>
+            <option value="servicios">Servicios</option>
+            <option value="mantenimiento">Mantenimiento</option>
+            <option value="alimentacion">Alimentación</option>
+            <option value="transporte">Transporte</option>
+            <option value="otros">Otros</option>
+          </select>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-medium">Observaciones</label>
+        <textarea class="form-control" [(ngModel)]="egresoForm.observaciones" name="observaciones" rows="3" placeholder="Detalles adicionales del gasto..."></textarea>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Cancelar</button>
+    <button type="button" class="btn btn-danger" (click)="registrarEgreso()" [disabled]="loadingEgreso">
+      @if (loadingEgreso) {
+        <span class="spinner-border spinner-border-sm me-2"></span>
+      }
+      <i class="fas fa-save me-2"></i>
+      Registrar Egreso
+    </button>
+  </div>
+</ng-template>

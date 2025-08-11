@@ -109,6 +109,16 @@ export const menuItemsAdmin = [
       label: 'Finanzas', 
       route: 'finanzas' 
     },
+    { 
+      icon: 'fa-solid fa-coins', 
+      label: 'Caja', 
+      route: 'caja' 
+    },
+    { 
+      icon: 'fa-solid fa-coins', 
+      label: 'Reportes', 
+      route: 'reportes' 
+    },
     //{ 
     //  icon: 'fa-solid fa-calendar', 
     //  label: 'Horarios', 

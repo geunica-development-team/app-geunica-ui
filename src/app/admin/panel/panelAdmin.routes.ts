@@ -11,6 +11,8 @@ import { AcademicSettingComponent } from "./academic-setting/academic-setting.co
 import { ClassroomsComponent } from "./classrooms/classrooms.component";
 import { SystemSettingComponent } from "./system-setting/system-setting.component";
 import { ClassroomDetailsComponent } from "./classrooms/classroom-details/classroom-details.component";
+import { CashRegisterDashboardComponent } from "./cash-register-dashboard/cash-register-dashboard.component";
+import { CashRegisterReportsComponent } from "./cash-register-reports/cash-register-reports.component";
 
 export const adminPanelRoutes: Routes = [
     {
@@ -55,6 +57,14 @@ export const adminPanelRoutes: Routes = [
             {
                 path: 'finanzas',
                 component: FinanceComponent
+            },
+            {
+                path: 'caja',
+                component: CashRegisterDashboardComponent
+            },
+            {
+                path: 'reportes',
+                component: CashRegisterReportsComponent
             },
             {
                 path: 'configuracion-academica',
