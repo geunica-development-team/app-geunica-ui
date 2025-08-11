@@ -18,25 +18,42 @@ import { environment } from '../../../../enviroments/environment';
   styleUrls: ['./courses.component.css']
 })
 export class CoursesComponent implements OnInit {
-  courses: any[] = [];
-  filteredCourse: any[] = [];
-  searchTerm: string = '';
+// Reemplaza la inicialización vacía
+courses: any[] = [];
+filteredCourse: any[] = [];
+searchTerm: string = '';
 
-  private baseUrl = environment.apiBase;
+// ---- ngOnInit() de prueba (usar mocks mientras desarrollas) ----
+ngOnInit() {
+  // Comenta la llamada real al backend mientras pruebas:
+  // this.http.get<any[]>(`${this.baseUrl}/student/me/courses`).subscribe(...)
 
-  constructor(private http: HttpClient) {}
+  this.loadMockCourses();
+}
 
-  ngOnInit() {
-    this.http.get<any[]>(`${this.baseUrl}/student/me/courses`)
-      .subscribe(
-        data => {
-          this.courses = data;
-          this.filteredCourse = data;
-        },
-        err => console.error('Error al cargar mis cursos:', err)
-      );
-  }
+// ----- Método mock: 2 cursos falsos -----
+loadMockCourses() {
+  this.courses = [
+    {
+      classAssignmentId: 9001,
+      courseName: 'Matemáticas Aplicadas I',
+      courseCode: 'MAT-101',
+      teacherName: 'Dra. Elena Fuentes',
 
+    },
+    {
+      classAssignmentId: 9002,
+      courseName: 'Historia del Perú y América',
+      courseCode: 'HIS-210',
+      teacherName: 'Prof. Ricardo Tapia',
 
+    }
+  ];
 
+  // Inicializar filteredCourse para que el componente muestre todo al inicio
+  this.filteredCourse = [...this.courses];
+
+  console.log('Mock courses loaded', this.courses);
+
+}
 }

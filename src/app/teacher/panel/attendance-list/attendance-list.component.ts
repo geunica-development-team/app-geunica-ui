@@ -231,6 +231,71 @@ export class AttendanceListComponent implements OnInit {
   nextWeek(): void {
     console.log('Navegando a semana siguiente');
   }
+// Reemplaza students: any[] = [];
+
+
+// Método para cargar datos falsos (llámalo desde ngOnInit() mientras pruebas)
+loadMockData() {
+  const baseDate = ['2025-08-11','2025-08-12','2025-08-13','2025-08-14','2025-08-15'];
+  this.students = [
+    {
+      id: 101,
+      name: 'María López',
+      records: [
+        { day: 'Lunes',    status: 'asistió',  attendanceId: 1001, originalAttendance: { id:1001, userId:101, attendanceDate: baseDate[0], status: 'present' } },
+        { day: 'Martes',   status: 'asistió',  attendanceId: 1002, originalAttendance: { id:1002, userId:101, attendanceDate: baseDate[1], status: 'present' } },
+        { day: 'Miércoles',status: 'tardanza', attendanceId: 1003, originalAttendance: { id:1003, userId:101, attendanceDate: baseDate[2], status: 'late' } },
+        { day: 'Jueves',   status: 'asistió',  attendanceId: 1004, originalAttendance: { id:1004, userId:101, attendanceDate: baseDate[3], status: 'present' } },
+        { day: 'Viernes',  status: 'asistió',  attendanceId: 1005, originalAttendance: { id:1005, userId:101, attendanceDate: baseDate[4], status: 'present' } }
+      ]
+    },
+    {
+      id: 102,
+      name: 'Carlos Mendoza',
+      records: [
+        { day: 'Lunes',    status: 'falto',    attendanceId: 2001, originalAttendance: { id:2001, userId:102, attendanceDate: baseDate[0], status: 'absent' } },
+        { day: 'Martes',   status: 'asistió',  attendanceId: 2002, originalAttendance: { id:2002, userId:102, attendanceDate: baseDate[1], status: 'present' } },
+        { day: 'Miércoles',status: 'asistió',  attendanceId: 2003, originalAttendance: { id:2003, userId:102, attendanceDate: baseDate[2], status: 'present' } },
+        { day: 'Jueves',   status: 'tardanza', attendanceId: 2004, originalAttendance: { id:2004, userId:102, attendanceDate: baseDate[3], status: 'late' } },
+        { day: 'Viernes',  status: 'asistió',  attendanceId: 2005, originalAttendance: { id:2005, userId:102, attendanceDate: baseDate[4], status: 'present' } }
+      ]
+    },
+    {
+      id: 103,
+      name: 'Ana María Quispe',
+      records: [
+        { day: 'Lunes',    status: 'asistió',  attendanceId: 3001, originalAttendance: { id:3001, userId:103, attendanceDate: baseDate[0], status: 'present' } },
+        { day: 'Martes',   status: 'falto',    attendanceId: 3002, originalAttendance: { id:3002, userId:103, attendanceDate: baseDate[1], status: 'absent' } },
+        { day: 'Miércoles',status: 'falto',    attendanceId: 3003, originalAttendance: { id:3003, userId:103, attendanceDate: baseDate[2], status: 'absent' } },
+        { day: 'Jueves',   status: 'asistió',  attendanceId: 3004, originalAttendance: { id:3004, userId:103, attendanceDate: baseDate[3], status: 'present' } },
+        { day: 'Viernes',  status: 'tardanza', attendanceId: 3005, originalAttendance: { id:3005, userId:103, attendanceDate: baseDate[4], status: 'late' } }
+      ]
+    },
+    {
+      id: 104,
+      name: 'Jorge Ramírez',
+      records: [
+        { day: 'Lunes',    status: 'tardanza', attendanceId: 4001, originalAttendance: { id:4001, userId:104, attendanceDate: baseDate[0], status: 'late' } },
+        { day: 'Martes',   status: 'asistió',  attendanceId: 4002, originalAttendance: { id:4002, userId:104, attendanceDate: baseDate[1], status: 'present' } },
+        { day: 'Miércoles',status: 'asistió',  attendanceId: 4003, originalAttendance: { id:4003, userId:104, attendanceDate: baseDate[2], status: 'present' } },
+        { day: 'Jueves',   status: 'asistió',  attendanceId: 4004, originalAttendance: { id:4004, userId:104, attendanceDate: baseDate[3], status: 'present' } },
+        { day: 'Viernes',  status: 'falto',    attendanceId: 4005, originalAttendance: { id:4005, userId:104, attendanceDate: baseDate[4], status: 'absent' } }
+      ]
+    }
+  ];
+
+  // Opcional: poblar attendanceMap para que updateStatus encuentre los records
+  this.attendanceMap.clear();
+  this.students.forEach(s => {
+    s.records.forEach((r: any) => {
+      if (r.attendanceId) {
+        this.attendanceMap.set(`${s.id}-${r.day}`, { id: r.attendanceId, userId: s.id, attendanceDate: r.originalAttendance?.attendanceDate, status: r.originalAttendance?.status });
+      }
+    });
+  });
+
+  console.log('Mock students loaded', this.students);
+}
 
   
 

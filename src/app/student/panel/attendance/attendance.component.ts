@@ -42,7 +42,8 @@ export class AttendanceComponent implements OnInit {
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
-    this.http.get<any[]>(`${this.baseUrl}/student/me/attendance`)
+    this.loadMockAttendance();
+    this.http.get<any[]>(``)
       .subscribe(data => {
         this.groupByMonth(data);
       }, err => console.error(err));
@@ -80,6 +81,53 @@ export class AttendanceComponent implements OnInit {
       // Orden descendente por clave “YYYY-M”
       .sort((a, b) => b.key.localeCompare(a.key));
   }
+
+  // ----- Reemplaza ngOnInit() por esto mientras pruebas -----
+
+
+// ----- Método mock: 1 mes con 10 sesiones falsas -----
+loadMockAttendance() {
+  const year = 2025;
+  const monthIndex = 7; // Agosto (0 = enero)
+  const key = `${year}-${monthIndex}`;
+  const label = new Date(year, monthIndex, 1)
+    .toLocaleString('es-PE', { month: 'long', year: 'numeric' }); // "agosto 2025"
+
+  // 10 sesiones (fechas de ejemplo, ISO)
+  const sessions = [
+    { attendanceDate: '2025-08-01T08:00:00Z', status: 'present' },
+    { attendanceDate: '2025-08-04T08:00:00Z', status: 'present' },
+    { attendanceDate: '2025-08-05T08:00:00Z', status: 'late' },
+    { attendanceDate: '2025-08-06T08:00:00Z', status: 'present' },
+    { attendanceDate: '2025-08-07T08:00:00Z', status: 'absent' },
+    { attendanceDate: '2025-08-08T08:00:00Z', status: 'present' },
+    { attendanceDate: '2025-08-11T08:00:00Z', status: 'late' },
+    { attendanceDate: '2025-08-12T08:00:00Z', status: 'present' },
+    { attendanceDate: '2025-08-13T08:00:00Z', status: 'present' },
+    { attendanceDate: '2025-08-14T08:00:00Z', status: 'absent' }
+  ];
+
+  // Montar months con un sólo mes (puedes añadir más objetos si quieres)
+  this.months = [
+    {
+      key,
+      month: label,   // ej. "agosto 2025"
+      year,
+      sessions: sessions
+    }
+  ];
+
+  console.log('Mock attendance months loaded', this.months);
+}
+
+// ----- Sugerencia de tipos (opcional) -----
+/*
+interface Session {
+  attendanceDate: string; // ISO date
+  status: 'present' | 'absent' | 'late';
+}
+*/
+
 
 
   openMonth(m: { month: string; year: number; sessions: any[] }) {

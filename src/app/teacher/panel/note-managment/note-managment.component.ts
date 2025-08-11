@@ -58,8 +58,42 @@ filteredNotes: any [] = [];
       });
   }
 
+
+
+  // Reemplaza rowsNotes: any[] = [];
+
+
+// Método para cargar datos falsos (llámalo desde ngOnInit() mientras pruebas)
+loadMockAssignments() {
+  this.rowsNotes = [
+    { id: 201, gradoSeccion: 'Primaria 1 - A',  aula: 'Aula 101' },
+    { id: 202, gradoSeccion: 'Primaria 2 - B',  aula: 'Aula 102' },
+    { id: 203, gradoSeccion: 'Primaria 3 - C',  aula: 'Aula 103' },
+    { id: 204, gradoSeccion: 'Secundaria 1 - A', aula: 'Aula 201' },
+    { id: 205, gradoSeccion: 'Secundaria 2 - B', aula: 'Aula 202' },
+
+    // 10 registros adicionales
+    { id: 206, gradoSeccion: 'Secundaria 3 - C', aula: 'Aula 203' },
+    { id: 207, gradoSeccion: 'Secundaria 4 - A', aula: 'Laboratorio' },
+    { id: 208, gradoSeccion: 'Bachillerato 1 - A', aula: 'Aula 301' },
+    { id: 209, gradoSeccion: 'Bachillerato 2 - B', aula: 'Aula 302' },
+    { id: 210, gradoSeccion: 'Técnico 1 - A', aula: 'Taller' },
+
+    { id: 211, gradoSeccion: 'Técnico 1 - B', aula: 'Aula 304' },
+    { id: 212, gradoSeccion: 'Adultos 1 - A',  aula: 'Sala Multiuso' },
+    { id: 213, gradoSeccion: 'Primaria 4 - A',  aula: 'Aula 104' },
+    { id: 214, gradoSeccion: 'Primaria 5 - B',  aula: 'Aula 105' },
+    { id: 215, gradoSeccion: 'Secundaria 5 - D', aula: 'Biblioteca' }
+  ];
+
+  // Inicializar filteredNotes para que la tabla muestre todo al inicio
+  this.filteredNotes = [...this.rowsNotes];
+
+  console.log('Mock class assignments loaded', this.rowsNotes);
+}
   ngOnInit() {
-    this.loadClassAssignment();
+ 
+    this.loadMockAssignments();
   }
 
   onVerFicha = (row: any) => {
