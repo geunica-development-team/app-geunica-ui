@@ -35,7 +35,7 @@ export const studentPanelRoutes: Routes = [
                     { path: '', 
                         component: CoursesComponent 
                     },
-                    { path: ':id/curriculum', 
+                    { path: 'curriculum', 
                         component: CurriculumComponent 
                     },
                 ]
@@ -46,7 +46,7 @@ export const studentPanelRoutes: Routes = [
                     { path: '', 
                         component: GradesComponent 
                     },
-                    { path: ':id/gradesRegistry', 
+                    { path: 'gradesRegistry', 
                         component: GradesRegistryComponent
                     },
                 ]

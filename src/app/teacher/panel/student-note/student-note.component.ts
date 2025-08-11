@@ -83,6 +83,7 @@ export class StudentNoteComponent implements OnInit {
     this.fetchStudentInfo();
     // Luego, cargar las notas según el periodo
     this.loadStudentGrades();
+    this.loadMockStudentGrades()
     
   }
 
@@ -459,5 +460,74 @@ export class StudentNoteComponent implements OnInit {
       console.error('EditActivity modal no disponible');
     }
   }
+
+
+  // Método para cargar datos de prueba (2 exámenes)
+loadMockStudentGrades() {
+  // Info del estudiante (se usa en el header)
+  this.studentInfo = {
+    studentName: 'Luis García Pérez',
+    gradeName: '3',
+    sectionName: 'A',
+    levelName: 'Secundaria'
+  };
+
+  // Notas mock
+  this.studentGrades = {
+    exams: [
+      {
+        id: 5001,
+        score: 17.5,
+        state: 'publicado',
+        registrationDate: '2025-08-05T10:00:00Z',
+        // Estructura esperada por la vista
+        exam: {
+          id: 901,
+          name: 'Examen Parcial I',
+          periodType: 'BIMESTRE',
+          periodNumber: 1,
+          typeExam: 'Parcial',
+          weight: 60,
+          classAssignment: {
+            classroom: {
+              name: 'Aula 201',
+              grade: { name: '3', level: { name: 'Secundaria' } },
+              section: { name: 'A' }
+            }
+          }
+        }
+      },
+      {
+        id: 5002,
+        score: 15,
+        state: 'publicado',
+        registrationDate: '2025-08-12T11:30:00Z',
+        exam: {
+          id: 902,
+          name: 'Examen Parcial II',
+          periodType: 'BIMESTRE',
+          periodNumber: 1,
+          typeExam: 'Parcial',
+          weight: 40,
+          classAssignment: {
+            classroom: {
+              name: 'Aula 201',
+              grade: { name: '3', level: { name: 'Secundaria' } },
+              section: { name: 'A' }
+            }
+          }
+        }
+      }
+    ],
+    activities: [] // sin actividades en este mock
+  };
+
+  // Estado UI
+  this.loading = false;
+  this.error = null;
+
+  console.log('Mock student grades loaded', this.studentGrades);
+}
+
 
 }

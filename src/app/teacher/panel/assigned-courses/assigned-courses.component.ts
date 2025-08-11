@@ -8,38 +8,29 @@ import { environment } from '../../../../enviroments/environment';
 
 @Component({
   selector: 'app-assigned-courses',
-  imports: [CommonModule, CardCoursesComponent, SearcherComponent, PanelHeaderComponent],
+  imports: [CommonModule, CardCoursesComponent, PanelHeaderComponent],
   templateUrl: './assigned-courses.component.html',
   styleUrl: './assigned-courses.component.css'
 })
-export class AssignedCoursesComponent implements OnInit {
-  courses: any[]         = [];
-  filteredCourses: any[] = [];
-  searchTerm = '';
-
-  private baseUrl = environment.apiBase;
-
-  constructor(private http: HttpClient) {}
-
-  ngOnInit() {
-    // 1) Llamamos a /teacher/me/assignments
-    this.http
-      .get<any[]>(`${this.baseUrl}/teacher/me/assignments`)
-      .subscribe({
-        next: data => {
-          // data: Array de ClassAssignment con relaciones course y classroom
-          this.courses         = data;
-          this.filteredCourses = data;
-        },
-        error: err => console.error('Error al cargar asignaciones:', err)
-      });
-  }
-
-  onSearch() {
-    const term = this.searchTerm.toLowerCase();
-    this.filteredCourses = this.courses.filter(c =>
-      c.course.name.toLowerCase().includes(term)
-    );
-  }
+export class AssignedCoursesComponent {
+  co = {
+    id: 123,
+    course: { name: 'Matemáticas Aplicadas' },
+    classroom: {
+      name: 'Aula 12',
+      grade: {
+        name: 'Quinto',
+        level: { name: 'Primaria' }
+      }
+    },
+    // --- arrays con 4 datos falsos cada uno ---
+    tags: ['Álgebra', 'Geometría', 'Proyecto', 'Presencial'],
+    students: [
+      { id: 1, name: 'María González' },
+      { id: 2, name: 'José Pérez' },
+      { id: 3, name: 'Luisa Martínez' },
+      { id: 4, name: 'Carlos Rojas' }
+    ]
+  };
   
 }

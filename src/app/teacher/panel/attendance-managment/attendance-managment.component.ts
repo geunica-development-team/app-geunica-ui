@@ -11,84 +11,82 @@ import { SearcherComponent } from '../../../components/searcher/searcher.compone
 
 @Component({
   selector: 'app-attendance-managment',
-  imports: [CommonModule, TableComponent, FormsModule, PanelHeaderComponent, SearcherComponent],
+  imports: [CommonModule, FormsModule, PanelHeaderComponent],
   templateUrl: './attendance-managment.component.html',
   styleUrl: './attendance-managment.component.css'
 })
 export class AttendanceManagmentComponent implements OnInit{
+  // búsqueda
   searchTerm = '';
-  attendance?: Attendance;
-  constructor(private router: Router, private http: HttpClient) {}
-  private baseUrl = environment.apiBase;
 
-
-  @ViewChild("attendancesTable") attendancesTable?: TableComponent
+  // columnas (ya no usadas por app-table, solo informativas)
   columnsAttendances = ['ID', 'Grado/Nivel/Sección', 'Aula', 'Turno'];
 
-  // Mapeo para <app-table>
-  columnMappingsAttendances = {
-    'ID':              'id',
-    'Grado/Nivel/Sección': 'gradoSeccion',
-    'Aula':            'aula',
-    'Turno':           'turno'
-  };
-
+  // datos falsos (4 filas)
   rowsAttendances: any[] = [];
-  filteredAttendances: any[] = []; 
+  filteredAttendances: any[] = [];
 
-  loadAttendances() {
-    this.http.get<any[]>(`${this.baseUrl}/teacher/me/assignments`)
-      .subscribe({
-        next: data => {
-          this.rowsAttendances = data.map(ca => ({
-            id:            ca.id,
-            gradoSeccion:  `${ca.classroom.grade.level.name} ${ca.classroom.grade.name} - ${ca.classroom.section.name} `,
-            aula:          ca.classroom.name,
-            turno:         ca.classroom.shift
-          }));
-          this.filteredAttendances = [...this.rowsAttendances];
-        },
-        error: err => console.error('Error al cargar asignaturas:', err)
-      });
-  }
-  // FILTROS
-  searchValue = ""
+  constructor(private router: Router) {}
 
-
-  applyFilter(event: Event) {
-    const term = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    if (!term) {
-      this.filteredAttendances = [...this.rowsAttendances];
-    } else {
-      this.filteredAttendances = this.rowsAttendances.filter(r =>
-        r.aula.toLowerCase().includes(term)
-      );
-    }
-  }
-
-  onVerFicha = (row: any) => {
-    this.router.navigate(['/teacher/panel/attendanceList',row.id ]);
-  };
-  
   ngOnInit() {
-    this.loadAttendances();
+    // --- Datos falsos ---
+    this.rowsAttendances = [
+      {
+        id: 101,
+        gradoSeccion: 'Primaria Quinto - Sección A',
+        aula: 'Aula 12',
+        turno: 'Mañana'
+      },
+      {
+        id: 102,
+        gradoSeccion: 'Secundaria Primero - Sección B',
+        aula: 'Aula 03',
+        turno: 'Tarde'
+      },
+      {
+        id: 103,
+        gradoSeccion: 'Primaria Tercero - Sección C',
+        aula: 'Aula 07',
+        turno: 'Mañana'
+      },
+      {
+        id: 104,
+        gradoSeccion: 'Secundaria Segundo - Sección A',
+        aula: 'Aula 01',
+        turno: 'Tarde'
+      }
+    ];
+
+    // inicializar filtro
+    this.filteredAttendances = [...this.rowsAttendances];
+  }
+
+  // búsqueda disparada por el input
+  onSearchInput(event: Event) {
+    this.searchTerm = (event.target as HTMLInputElement).value || '';
+    this.onSearch();
   }
 
   onSearch() {
     const term = this.searchTerm.trim().toLowerCase();
     if (!term) {
       this.filteredAttendances = [...this.rowsAttendances];
-    } else {
-      this.filteredAttendances = this.rowsAttendances.filter(r =>
-        // aquí escoges el campo donde buscar, por ejemplo 'gradoSeccion'
-        r.gradoSeccion.toLowerCase().includes(term)
-      );
+      return;
     }
+
+    this.filteredAttendances = this.rowsAttendances.filter(r =>
+      (r.gradoSeccion || '').toLowerCase().includes(term) ||
+      (r.aula || '').toLowerCase().includes(term)
+    );
   }
 
-  private applicarFiltro() {
-    const term = this.searchTerm.trim().toLowerCase();
-    if (!term) return;
+  // navegar a la ficha (usa tu ruta existente)
+  onVerFicha(row: any) {
+    this.router.navigate(['/teacher/panel/attendanceList', row.id]);
+  }
+
+  trackById(index: number, item: any) {
+    return item?.id ?? index;
   }
 
 }

@@ -9,6 +9,9 @@ import { Router } from '@angular/router';
   styleUrl: './card-courses.component.css'
 })
 export class CardCoursesComponent {
+  @Input() tags: string[] = [];
+@Input() students: { id: number; name: string }[] = [];
+
   @Input() titulo: string = '';
   @Input() subtitulo1: string = '';
   @Input() subtitulo2: string = '';
