@@ -100,7 +100,7 @@
                     <span>{{ userProfile.campus.name }}</span>
                   </div>
                 }
-                @else if (userProfile.role.role === 'psychologist') {
+                @if (userProfile.role.role === 'psychologist') {
                   <div class="info-item">
                     <label>Rol académico:</label>
                     <span> Psicólogo </span>
@@ -110,7 +110,7 @@
                     <span>{{ userProfile.campus.name }}</span>
                   </div>
                 }
-                @else if (userProfile.role.role === 'student') {
+                @if (userProfile.role.role === 'student') {
                   <div class="info-item">
                     <label>Rol académico:</label>
                     <span class=""> Estudiante </span>
@@ -133,15 +133,6 @@
                     <span class="badge bg-success text-white">{{ userProfile.academicStatus }}</span>
                   </div>
                   -->
-                }@else if (userProfile.role.role === 'teacher') {
-                  <div class="info-item">
-                    <label>Rol académico:</label>
-                    <span class="">Docente </span>
-                  </div>
-                  <div class="info-item">
-                    <label>Sede:</label>
-                    <span>{{ userProfile.campus.name }}</span>
-                  </div>
                 }
               </div>
             </div>

@@ -92,7 +92,7 @@ export class LoginComponent {
           } else if (role === 'teacher') {
             this.router.navigateByUrl('/teacher/panel/dashboard');
           } else if (role === 'psychologist') {
-            this.router.navigateByUrl('/psychologist/panel/inscripciones');
+            this.router.navigateByUrl('/psychologist/panel/dashboard');
           } else if (role === 'teacher') {
             this.router.navigateByUrl('/teacher/panel/dashboard');
           } else {
