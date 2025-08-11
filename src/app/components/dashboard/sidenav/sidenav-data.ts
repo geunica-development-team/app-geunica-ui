@@ -140,12 +140,12 @@ export const menuItemsAdmin = [
 ];
 
 export const menuItemsPsychologist = [
-    { 
-      icon: 'fas fa-home', 
-      label: 'Dashboard', 
-      route: 'dashboard',
-      active: true 
-    },
+    //{ 
+    //  icon: 'fas fa-home', 
+    //  label: 'Dashboard', 
+    //  route: 'dashboard',
+    //  active: true 
+    //},
     {
       icon: 'fa-solid fa-file-circle-plus', 
       label: 'Evaluaciones pendientes', 
