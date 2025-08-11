@@ -176,8 +176,23 @@ export class EnrollmentComponent {
   }
 
   onMarkPayment(row: any) {
-    console.log("Marcar pago:", row)
-    this.openModalMarkPayment(row)
+    //console.log("Marcar pago:", row)
+    //this.openModalMarkPayment(row)
+    const newState = {
+      state: "Admitido"
+    };
+
+    this.inscriptionService.changeState(row.id, newState).subscribe({
+      next: () => {
+        if (this.enrollmentTable) {
+          this.loadEnrollments();
+        }
+        this.notifycation.success('El estudiante fue admitido', 'Éxito');
+      },
+      error: (error) => {
+        this.notifycation.error('Error al cambiar el estado de la inscripción', 'Error');
+      }
+    })
   }
 
   openModalDeleteEnrollment(row: any) {

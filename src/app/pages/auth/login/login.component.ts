@@ -90,7 +90,7 @@ export class LoginComponent {
           } else if (role === 'student') {
             this.router.navigateByUrl('/student/panel/dashboard');
           } else if (role === 'psychologist') {
-            this.router.navigateByUrl('/psychologist/panel/dashboard');
+            this.router.navigateByUrl('/psychologist/panel/inscripciones');
           } else {
             this.router.navigateByUrl('/unauthorized');
           }
