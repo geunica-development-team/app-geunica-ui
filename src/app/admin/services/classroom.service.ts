@@ -162,30 +162,30 @@ export class ClassroomService {
                 
     addClassroom(data: dataClassroom) {
         return this.httpService
-        .post(this.auth_end_point+'/classroom', {...data})
+        .post(this.auth_end_point+'/classrooms', {...data})
         .pipe(catchError(this.handleError)
         );
     }
     getAllClassrooms() {
         return this.httpService
-        .get<dataClassroomAll[]>(this.auth_end_point+'/classroom')
+        .get<dataClassroomAll[]>(this.auth_end_point+'/classrooms')
         .pipe(catchError(this.handleError)
         );
     }
     getClassroomById(id:number) {
         return this.httpService
-        .get<dataClassroomById>(`${this.auth_end_point}/classroom/${id}`)
+        .get<dataClassroomById>(`${this.auth_end_point}/classrooms/${id}`)
         .pipe(catchError(this.handleError));
     }
     updateClassroom(id: number, data: dataClassroom) {
         return this.httpService
-        .patch(`${this.auth_end_point}/classroom/${id}`, { ...data})
+        .patch(`${this.auth_end_point}/classrooms/${id}`, { ...data})
         .pipe(catchError(this.handleError));
     }
 
     getEnrollmentsByClassroomId(id:number) {
         return this.httpService
-        .get<enrollmentSummary[]>(`${this.auth_end_point}/classroom/findStudents/${id}`)
+        .get<enrollmentSummary[]>(`${this.auth_end_point}/classrooms/findStudents/${id}`)
         .pipe(catchError(this.handleError)
         );
     }
