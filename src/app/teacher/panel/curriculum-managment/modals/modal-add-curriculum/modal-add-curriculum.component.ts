@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { environment } from '../../../../../../enviroments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthStorageService } from '../../../../../services/auth-storage.service';
 
 @Component({
   selector: 'app-modal-add-curriculum',
@@ -28,7 +29,7 @@ export class ModalAddCurriculumComponent {
 
   private baseUrl = environment.apiBase;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authStorage: AuthStorageService) {}
 
   openModal(): void {
     this.resetForm();
@@ -57,8 +58,9 @@ export class ModalAddCurriculumComponent {
       position: this.formData.position,
       scheduledDate: this.formData.scheduledDate || null
     };
-
-    this.http.post<any>(`${this.baseUrl}/teacher/me/assignment/${this.caId}/curriculum`, payload)
+    const token = this.authStorage.getToken();
+    const headers = token ? { headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) } : {};
+    this.http.post<any>(`${this.baseUrl}/teacher/me/assignment/${this.caId}/curriculum`, payload, headers)
       .subscribe({
         next: () => {
           this.added.emit();

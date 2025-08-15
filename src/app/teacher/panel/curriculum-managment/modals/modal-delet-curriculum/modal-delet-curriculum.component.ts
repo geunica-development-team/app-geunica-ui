@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { environment } from '../../../../../../enviroments/environment';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthStorageService } from '../../../../../services/auth-storage.service';
 
 @Component({
   selector: 'app-modal-delet-curriculum',
@@ -21,7 +22,7 @@ export class ModalDeletCurriculumComponent {
 
   private baseUrl = environment.apiBase;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authStorage: AuthStorageService) {}
 
   openModal(): void {
     this.isOpen = true;
@@ -35,8 +36,9 @@ export class ModalDeletCurriculumComponent {
 
   onConfirmDelete(): void {
     this.deleting = true;
-
-    this.http.delete(`${this.baseUrl}/teacher/me/curriculum/${this.curriculumId}`)
+    const token = this.authStorage.getToken();
+    const headers = token ? { headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) } : {};
+    this.http.delete(`${this.baseUrl}/teacher/me/curriculum/${this.curriculumId}`, headers)
       .subscribe({
         next: () => {
           this.deleted.emit();

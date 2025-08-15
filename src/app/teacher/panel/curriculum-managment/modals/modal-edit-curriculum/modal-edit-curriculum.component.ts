@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { environment } from '../../../../../../enviroments/environment';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthStorageService } from '../../../../../services/auth-storage.service';
 
 @Component({
   selector: 'app-modal-edit-curriculum',
@@ -28,7 +29,9 @@ export class ModalEditCurriculumComponent {
 
   private baseUrl = environment.apiBase;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, 
+    private authStorage: AuthStorageService
+  ) {}
 
   openModal(): void {
     this.loadFormData();
@@ -56,8 +59,9 @@ export class ModalEditCurriculumComponent {
       position: this.formData.position,
       scheduledDate: this.formData.scheduledDate || null
     };
-
-    this.http.put<any>(`${this.baseUrl}/teacher/me/curriculum/${this.curriculumId}`, payload)
+    const token = this.authStorage.getToken();
+    const headers = token ? { headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) } : {};
+    this.http.put<any>(`${this.baseUrl}/teacher/me/curriculum/${this.curriculumId}`, payload, headers)
       .subscribe({
         next: () => {
           this.updated.emit();

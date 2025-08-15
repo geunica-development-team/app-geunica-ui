@@ -34,39 +34,57 @@ export class CurriculumComponent implements OnInit {
     const assignmentId = idParam ? +idParam : null;
 
     if (!assignmentId) {
-      this.error   = 'ID de asignación inválido';
+      this.error = 'ID de asignación inválido';
       this.loading = false;
       return;
     }
 
     const token = this.authStorage.getToken();
-    const headers = token ? { headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) } : {};
-    // 1) obtengo datos de la asignación/curso
-    this.http.get<any>(`${this.baseUrl}/student/me/courses/${assignmentId}`, headers)
+    const httpOptions = token ? { headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) } : {};
+
+    // 1) obtengo datos de la asignación/curso (si lo necesitas)
+    this.http.get<any>(`${this.baseUrl}/student/me/courses/${assignmentId}`, httpOptions)
       .subscribe({
-        next: c => {
-          this.course = c;
-          // ------------------------------------------------------------------
-          // 2) OJO: vuelvo a usar assignmentId, ¡no c.courseId!
-          // ------------------------------------------------------------------
-          this.http.get<Curriculum[]>(`${this.baseUrl}/student/me/courses/${assignmentId}/curriculum`, headers)
+        next: courseResp => {
+          this.course = courseResp;
+          // 2) obtener el currículum: el backend devuelve { message, data, assignmentId, total }
+          this.http.get<any>(`${this.baseUrl}/student/me/courses/${assignmentId}/curriculum`, httpOptions)
             .subscribe({
-              next: list => {
-                this.curriculum = list;
-                this.loading    = false;
+              next: resp => {
+                console.log('RESP CURRICULUM ->', resp); // DEBUG: mira estructura real
+                // Si la API envía { data: [...] } usamos resp.data
+                if (Array.isArray(resp)) {
+                  this.curriculum = resp;
+                } else if (Array.isArray(resp?.data)) {
+                  this.curriculum = resp.data;
+                } else {
+                  // Fallback: intenta asignar lo que venga
+                  this.curriculum = resp ?? [];
+                }
+
+                // opcional: ordenar por position si quieres
+                if (Array.isArray(this.curriculum)) {
+                  this.curriculum.sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
+                }
+
+                this.loading = false;
               },
-              error: () => {
-                this.error   = 'No se pudo cargar el currículum';
+              error: err => {
+                console.error('Error cargando currículum', err);
+                this.error = 'No se pudo cargar el currículum';
                 this.loading = false;
               }
             });
+
         },
-        error: () => {
-          this.error   = 'No se pudo cargar los datos del curso';
+        error: err => {
+          console.error('Error cargando datos del curso', err);
+          this.error = 'No se pudo cargar los datos del curso';
           this.loading = false;
         }
       });
   }
+
 
 
 }
