@@ -41,7 +41,7 @@ export interface dataAssignClassroomById {
 })
 export class AssignClassroomService {
     private httpService = inject(HttpClient);
-    private auth_end_point = 'https://app-geunica-backend.onrender.com';
+    private auth_end_point = 'http://localhost:3000';
 
     constructor() {}
     

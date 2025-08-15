@@ -26,9 +26,7 @@ export class PaymentsComponent {
         error: err => console.error('Error fetching enrollment:', err)
       });
     this.loadPayments();
-      // Cargar mocks
-  this.loadMockEnrollment();
-  this.loadMockPayments();
+
   }
 
   get fullName(): string {
@@ -88,74 +86,5 @@ export class PaymentsComponent {
   // ---- ngOnInit() temporal para usar datos mock ----
 
 
-// ---- Mock de enrollment (para header) ----
-loadMockEnrollment() {
-  this.enrollment = {
-    id: 7001,
-    campus: { id: 10, name: 'Sede Central - Miraflores' },
-    classroom: {
-      id: 300,
-      name: 'Aula 201',
-      grade: { name: '3', level: { name: 'Secundaria' } },
-      period: { name: '2025-II' }
-    },
-    inscription: {
-      student: {
-        id: 501,
-        documentNumber: '12345678',
-        person: {
-          names: 'Lucía',
-          paternalSurname: 'González',
-          maternalSurname: 'Chávez',
-          documentNumber: '12345678',
-          id: 501
-        }
-      }
-    }
-  };
-
-  console.log('Mock enrollment loaded', this.enrollment);
 }
 
-// ---- Mock de payments (4 filas) ----
-loadMockPayments() {
-  this.payments = [
-    {
-      id: 1,
-      paymentType: { id: 1, name: 'Mensualidad Agosto' },
-      datePayment: '2025-08-10T00:00:00Z',
-      amountPaid: 120.00,
-      state: 'pendiente'   // se mostrará como "Pendiente"
-    },
-    {
-      id: 2,
-      paymentType: { id: 2, name: 'Mensualidad Julio' },
-      datePayment: '2025-07-05T00:00:00Z',
-      amountPaid: 120.00,
-      state: 'pagado'      // se mostrará como "Pagado"
-    },
-    {
-      id: 3,
-      paymentType: { id: 3, name: 'Matrícula' },
-      datePayment: '2025-03-01T00:00:00Z',
-      amountPaid: 250.00,
-      state: 'pagado'      // ya cancelado
-    },
-    {
-      id: 4,
-      paymentType: { id: 4, name: 'Mensualidad Septiembre' },
-      datePayment: '2025-09-10T00:00:00Z',
-      amountPaid: 120.00,
-      state: 'atrasado'    // se mostrará como "Atrasado"
-    }
-  ];
-
-  // Determinar nextPayment similar a la lógica real (primer no pagado)
-  this.nextPayment = this.payments.find(p => p.state !== 'pagado') || null;
-
-  console.log('Mock payments loaded', this.payments, 'nextPayment=', this.nextPayment);
-}
-
-
-
-}

@@ -35,7 +35,7 @@ export const studentPanelRoutes: Routes = [
                     { path: '', 
                         component: CoursesComponent 
                     },
-                    { path: 'curriculum', 
+                    { path: ':id/curriculum', 
                         component: CurriculumComponent 
                     },
                 ]

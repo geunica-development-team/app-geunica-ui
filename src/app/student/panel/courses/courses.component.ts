@@ -4,11 +4,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { SearcherComponent } from '../../../components/searcher/searcher.component';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
 import { environment } from '../../../../enviroments/environment';
-
-
 
 @Component({
   selector: 'app-courses',
@@ -18,42 +16,42 @@ import { environment } from '../../../../enviroments/environment';
   styleUrls: ['./courses.component.css']
 })
 export class CoursesComponent implements OnInit {
-// Reemplaza la inicialización vacía
+
 courses: any[] = [];
-filteredCourse: any[] = [];
-searchTerm: string = '';
+  filteredCourse: any[] = [];
+  searchTerm = '';
 
-// ---- ngOnInit() de prueba (usar mocks mientras desarrollas) ----
-ngOnInit() {
-  // Comenta la llamada real al backend mientras pruebas:
-  // this.http.get<any[]>(`${this.baseUrl}/student/me/courses`).subscribe(...)
+  private baseUrl = environment.apiBase;
 
-  this.loadMockCourses();
-}
+  constructor(private http: HttpClient) {}
 
-// ----- Método mock: 2 cursos falsos -----
-loadMockCourses() {
-  this.courses = [
-    {
-      classAssignmentId: 9001,
-      courseName: 'Matemáticas Aplicadas I',
-      courseCode: 'MAT-101',
-      teacherName: 'Dra. Elena Fuentes',
+  ngOnInit(): void {
+    console.log('token en localStorage =', localStorage.getItem('token'));
+    this.http.get<any[]>(`${this.baseUrl}/student/me/courses`)
+    .subscribe(
+      data => {
+        this.courses = data;
+        this.filteredCourse = data;
+      },
+      err => console.error('Error al cargar mis cursos:', err)
+    );
+  }
 
-    },
-    {
-      classAssignmentId: 9002,
-      courseName: 'Historia del Perú y América',
-      courseCode: 'HIS-210',
-      teacherName: 'Prof. Ricardo Tapia',
-
+  // Fallback: si tu componente searcher no funciona o quieres filtrar localmente
+  onLocalSearch(term: string) {
+    const t = term?.trim().toLowerCase() || '';
+    if (!t) {
+      this.filteredCourse = [...this.courses];
+      return;
     }
-  ];
+    this.filteredCourse = this.courses.filter(c =>
+      (c.courseName || '').toLowerCase().includes(t)
+      || (c.courseCode || '').toLowerCase().includes(t)
+      || (c.classroomName || '').toLowerCase().includes(t)
+      || (c.teacherName || '').toLowerCase().includes(t)
+    );
+  }
 
-  // Inicializar filteredCourse para que el componente muestre todo al inicio
-  this.filteredCourse = [...this.courses];
 
-  console.log('Mock courses loaded', this.courses);
 
-}
 }
