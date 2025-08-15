@@ -26,13 +26,18 @@
               <div>
                 <h4 class="card-title mb-1">
                   <i class="fas fa-book me-2"></i>
-                  {{ courseGrades.courseInfo.courseName }}
+                  {{ courseGrades?.courseInfo?.courseName }}
                 </h4>
+                <h5>
+                  <strong>DOCENTE:</strong> 
+                  {{ courseGrades?.courseInfo?.teacherName}}
+                </h5>
+                
                 <p class="text-muted mb-0">
                   <small>
                     <strong>Estudiante:</strong> {{ studentInfo?.studentName || 'Cargando...' }} |
                     <strong>Tutor:</strong> {{ studentInfo?.tutorName || 'Cargando...' }} |
-                    <strong>Profesor:</strong> {{ courseGrades.courseInfo.teacherName }}
+                    
                   </small>
                 </p>
                 <p class="text-muted mb-0">
@@ -58,17 +63,7 @@
             <nav class="navbar navbar-expand-lg navbar-light p-0">
               <div class="container-fluid p-0">
                 <div class="navbar-nav d-flex flex-row flex-wrap">
-                  <a 
-                    *ngFor="let periodNum of getPeriodNumbers()"
-                    class="nav-link px-3 py-2 me-1 rounded"
-                    [class.active]="selectedPeriodNumber === periodNum"
-                    [class.bg-primary]="selectedPeriodNumber === periodNum"
-                    [class.text-white]="selectedPeriodNumber === periodNum"
-                    href="javascript:void(0)"
-                    (click)="onPeriodNumberChange(periodNum)"
-                  >
-                    {{ getPeriodLabel(periodNum) }}
-                  </a>
+<!---aqui debe de ir periodos-->
                 </div>
               </div>
             </nav>

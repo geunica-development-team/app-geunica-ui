@@ -7,6 +7,7 @@ import { Curriculum, Curso } from '../../services/modelStudent';
 import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../../enviroments/environment';
+import { AuthStorageService } from '../../../services/auth-storage.service';
 
 @Component({
   selector: 'app-curriculum',
@@ -24,7 +25,8 @@ export class CurriculumComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private http: HttpClient
+    private http: HttpClient,
+    private authStorage: AuthStorageService
   ) {}
 
   ngOnInit(): void {
@@ -37,15 +39,17 @@ export class CurriculumComponent implements OnInit {
       return;
     }
 
+    const token = this.authStorage.getToken();
+    const headers = token ? { headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) } : {};
     // 1) obtengo datos de la asignación/curso
-    this.http.get<any>(`${this.baseUrl}/student/me/courses/${assignmentId}`)
+    this.http.get<any>(`${this.baseUrl}/student/me/courses/${assignmentId}`, headers)
       .subscribe({
         next: c => {
           this.course = c;
           // ------------------------------------------------------------------
           // 2) OJO: vuelvo a usar assignmentId, ¡no c.courseId!
           // ------------------------------------------------------------------
-          this.http.get<Curriculum[]>(`${this.baseUrl}/student/me/courses/${assignmentId}/curriculum`)
+          this.http.get<Curriculum[]>(`${this.baseUrl}/student/me/courses/${assignmentId}/curriculum`, headers)
             .subscribe({
               next: list => {
                 this.curriculum = list;

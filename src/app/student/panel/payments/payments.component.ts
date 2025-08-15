@@ -3,7 +3,8 @@ import { Component, inject, ViewChild } from '@angular/core';
 import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
 import { TableComponent } from '../../../components/table/table.component';
 import { environment } from '../../../../enviroments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { AuthStorageService } from '../../../services/auth-storage.service';
 
 @Component({
   selector: 'app-payments',
@@ -15,10 +16,13 @@ export class PaymentsComponent {
   private http     = inject(HttpClient);
   private baseUrl  = environment.apiBase;
   enrollment: any = null;
+  private authStorage = inject(AuthStorageService); 
 
   ngOnInit(): void {
+    const token = this.authStorage.getToken();
+    const headers = token ? { headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) } : {};
     this.http
-      .get<any[]>(`${this.baseUrl}/student/me/enrollments`)
+      .get<any[]>(`${this.baseUrl}/student/me/enrollments`, headers)
       .subscribe({
         next: data => {
           this.enrollment = data.length ? data[0] : null;
@@ -70,8 +74,9 @@ export class PaymentsComponent {
 
 
   loadPayments() {
-    //const url = `${this.baseUrl}/students/me/payments`;
-    this.http.get<any[]>(`${this.baseUrl}/student/me/payments`)
+     const token = this.authStorage.getToken();
+    const headers = token ? { headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) } : {};
+    this.http.get<any[]>(`${this.baseUrl}/student/me/payments`, headers)
       .subscribe({
         next: data => {
           this.payments = data;
@@ -82,8 +87,6 @@ export class PaymentsComponent {
         error: err => console.error('Error cargando pagos', err)
       });
   }
-
-  // ---- ngOnInit() temporal para usar datos mock ----
 
 
 }
