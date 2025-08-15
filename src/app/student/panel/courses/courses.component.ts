@@ -7,6 +7,7 @@ import { SearcherComponent } from '../../../components/searcher/searcher.compone
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
 import { environment } from '../../../../enviroments/environment';
+import { AuthStorageService } from '../../../services/auth-storage.service';
 
 @Component({
   selector: 'app-courses',
@@ -23,18 +24,16 @@ courses: any[] = [];
 
   private baseUrl = environment.apiBase;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authStorage: AuthStorageService) {}
 
   ngOnInit(): void {
-    console.log('token en localStorage =', localStorage.getItem('token'));
-    this.http.get<any[]>(`${this.baseUrl}/student/me/courses`)
-    .subscribe(
-      data => {
-        this.courses = data;
-        this.filteredCourse = data;
-      },
-      err => console.error('Error al cargar mis cursos:', err)
-    );
+    const token = this.authStorage.getToken();
+    const headers = token ? { headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) } : {};
+    this.http.get<any[]>(`${this.baseUrl}/student/me/courses`, headers)
+      .subscribe({
+        next: data => { this.courses = data; this.filteredCourse = data; },
+        error: err => console.error('Error al cargar mis cursos:', err)
+      });
   }
 
   // Fallback: si tu componente searcher no funciona o quieres filtrar localmente
