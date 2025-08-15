@@ -3,10 +3,11 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
 import { environment } from '../../../../enviroments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ModalAddCurriculumComponent } from './modals/modal-add-curriculum/modal-add-curriculum.component';
 import { ModalEditCurriculumComponent } from './modals/modal-edit-curriculum/modal-edit-curriculum.component';
 import { ModalDeletCurriculumComponent } from './modals/modal-delet-curriculum/modal-delet-curriculum.component';
+import { AuthStorageService } from '../../../services/auth-storage.service';
 
 @Component({
   selector: 'app-curriculum-managment',
@@ -31,7 +32,8 @@ export class CurriculumManagmentComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private http: HttpClient
+    private http: HttpClient, 
+    private authStorage: AuthStorageService
   ) {}
 
   ngOnInit(): void {
@@ -49,8 +51,10 @@ export class CurriculumManagmentComponent implements OnInit {
     this.loading = true;
     this.error = null;
 
+    const token = this.authStorage.getToken();
+    const headers = token ? { headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) } : {};
     // 1) Traer datos de la asignación
-    this.http.get<any>(`${this.baseUrl}/teacher/me/assignment/${this.caId}`)
+    this.http.get<any>(`${this.baseUrl}/teacher/me/assignment/${this.caId}`, headers)
       .subscribe({
         next: asg => {
           this.assignment = asg;
@@ -65,7 +69,9 @@ export class CurriculumManagmentComponent implements OnInit {
   }
 
   private loadCurriculum(): void {
-    this.http.get<any>(`${this.baseUrl}/teacher/me/assignment/${this.caId}/curriculum`)
+    const token = this.authStorage.getToken();
+    const headers = token ? { headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) } : {};
+    this.http.get<any>(`${this.baseUrl}/teacher/me/assignment/${this.caId}/curriculum`, headers)
       .subscribe({
         next: resp => {
           let items: any[];
@@ -157,7 +163,9 @@ export class CurriculumManagmentComponent implements OnInit {
       ]
     };
 
-    this.http.patch(`${this.baseUrl}/teacher/me/assignment/${this.caId}/curriculum/reorder`, reorderData)
+    const token = this.authStorage.getToken();
+    const headers = token ? { headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) } : {};
+    this.http.patch(`${this.baseUrl}/teacher/me/assignment/${this.caId}/curriculum/reorder`, reorderData, headers)
       .subscribe({
         next: () => {
           this.loadCurriculum();
@@ -170,32 +178,6 @@ export class CurriculumManagmentComponent implements OnInit {
           const tempPos = item1.position;
           item1.position = item2.position;
           item2.position = tempPos;
-        }
-      });
-  }
-
-  // ===================
-  // DUPLICAR TEMA
-  // ===================
-  duplicateTema(item: any, event: Event): void {
-    event.preventDefault();
-    
-    const payload = {
-      title: `${item.title} (Copia)`,
-      description: item.description || null,
-      position: this.curriculum.length + 1,
-      scheduledDate: null
-    };
-
-    this.http.post<any>(`${this.baseUrl}/teacher/me/assignment/${this.caId}/curriculum`, payload)
-      .subscribe({
-        next: () => {
-          this.loadCurriculum();
-          this.showSuccessMessage('Tema duplicado exitosamente');
-        },
-        error: err => {
-          console.error('Error duplicating tema →', err);
-          this.showErrorMessage('Error al duplicar el tema');
         }
       });
   }

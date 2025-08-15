@@ -6,7 +6,8 @@ import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
 import { environment } from '../../../../enviroments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { AuthStorageService } from '../../../services/auth-storage.service';
 @Component({
   selector: 'app-schedule',
   imports: [FullCalendarModule, PanelHeaderComponent],
@@ -16,7 +17,7 @@ import { HttpClient } from '@angular/common/http';
 export class ScheduleComponent {
 
   private baseUrl = environment.apiBase;
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authStorage: AuthStorageService) {}
 
   private courseColors: Record<string, string> = {
     'Matemáticas':    '#3498db',
@@ -93,8 +94,10 @@ export class ScheduleComponent {
   }
 
   private loadSchedule() {
+    const token = this.authStorage.getToken();
+    const headers = token ? { headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) } : {};
     this.http
-      .get<any[]>(`${this.baseUrl}/teacher/me/schedule`)
+      .get<any[]>(`${this.baseUrl}/teacher/me/schedule`, headers)
       .subscribe(
         data => {
           const dowMap: Record<string, number> = {

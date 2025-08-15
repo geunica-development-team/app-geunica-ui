@@ -5,9 +5,10 @@ import { TableComponent } from '../../../components/table/table.component';
 import { FormsModule } from '@angular/forms';
 import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
 import { environment } from '../../../../enviroments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { SearcherComponent } from '../../../components/searcher/searcher.component';
+import { AuthStorageService } from '../../../services/auth-storage.service';
 
 
 @Component({
@@ -23,7 +24,7 @@ export class NoteManagmentComponent {
     // Para más adelante: filtrar por salón o mes
   students: any[] = [];
   constructor(
-  private router: Router) {}
+  private router: Router, private authStorage: AuthStorageService) {}
 
   private http     = inject(HttpClient);
   private baseUrl  = environment.apiBase;
@@ -45,7 +46,9 @@ filteredNotes: any [] = [];
 
   // Carga de datos de ejemplo
   loadClassAssignment() {
-     this.http.get<any[]>(`${this.baseUrl}/teacher/me/assignments`)
+    const token = this.authStorage.getToken();
+    const headers = token ? { headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) } : {};
+     this.http.get<any[]>(`${this.baseUrl}/teacher/me/assignments`, headers)
       .subscribe({
         next: data => {
           this.rowsNotes = data.map(ca => ({
@@ -58,42 +61,8 @@ filteredNotes: any [] = [];
       });
   }
 
-
-
-  // Reemplaza rowsNotes: any[] = [];
-
-
-// Método para cargar datos falsos (llámalo desde ngOnInit() mientras pruebas)
-loadMockAssignments() {
-  this.rowsNotes = [
-    { id: 201, gradoSeccion: 'Primaria 1 - A',  aula: 'Aula 101' },
-    { id: 202, gradoSeccion: 'Primaria 2 - B',  aula: 'Aula 102' },
-    { id: 203, gradoSeccion: 'Primaria 3 - C',  aula: 'Aula 103' },
-    { id: 204, gradoSeccion: 'Secundaria 1 - A', aula: 'Aula 201' },
-    { id: 205, gradoSeccion: 'Secundaria 2 - B', aula: 'Aula 202' },
-
-    // 10 registros adicionales
-    { id: 206, gradoSeccion: 'Secundaria 3 - C', aula: 'Aula 203' },
-    { id: 207, gradoSeccion: 'Secundaria 4 - A', aula: 'Laboratorio' },
-    { id: 208, gradoSeccion: 'Bachillerato 1 - A', aula: 'Aula 301' },
-    { id: 209, gradoSeccion: 'Bachillerato 2 - B', aula: 'Aula 302' },
-    { id: 210, gradoSeccion: 'Técnico 1 - A', aula: 'Taller' },
-
-    { id: 211, gradoSeccion: 'Técnico 1 - B', aula: 'Aula 304' },
-    { id: 212, gradoSeccion: 'Adultos 1 - A',  aula: 'Sala Multiuso' },
-    { id: 213, gradoSeccion: 'Primaria 4 - A',  aula: 'Aula 104' },
-    { id: 214, gradoSeccion: 'Primaria 5 - B',  aula: 'Aula 105' },
-    { id: 215, gradoSeccion: 'Secundaria 5 - D', aula: 'Biblioteca' }
-  ];
-
-  // Inicializar filteredNotes para que la tabla muestre todo al inicio
-  this.filteredNotes = [...this.rowsNotes];
-
-  console.log('Mock class assignments loaded', this.rowsNotes);
-}
   ngOnInit() {
- 
-    this.loadMockAssignments();
+    this.loadClassAssignment();
   }
 
   onVerFicha = (row: any) => {

@@ -4,11 +4,12 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
 import { TableComponent } from '../../../components/table/table.component';
 import { environment } from '../../../../enviroments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { SearcherComponent } from '../../../components/searcher/searcher.component';
 import { FormsModule } from '@angular/forms';
 import { ModalAddActivityComponent } from './modalActivity/modal-add-activity/modal-add-activity.component';
 import { ModalAddExamComponent } from './modalExam/modal-add-exam/modal-add-exam.component';
+import { AuthStorageService } from '../../../services/auth-storage.service';
 
 @Component({
   selector: 'app-note-list',
@@ -45,7 +46,8 @@ export class NoteListComponent implements OnInit{
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient, 
+    private authStorage: AuthStorageService
   ) {}
 
 
@@ -292,14 +294,14 @@ export class NoteListComponent implements OnInit{
       return;
     }
 
+    const token = this.authStorage.getToken();
+    const headers = token ? { headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) } : {};
     // 2) construir URL exactamente igual que backend
     const url = `${this.baseUrl}/teacher/me/aula/${caId}/students`;
 
-    // 3) opcional: si no tienes interceptor, agrega Authorization header aquí (si el token lo guardas en localStorage)
-    const token = localStorage.getItem('token'); // o donde lo guardes
-    const httpOptions = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
 
-    this.http.get<any[]>(url, httpOptions).subscribe({
+
+    this.http.get<any[]>(url, headers).subscribe({
       next: (enrollments) => {
         console.log('Respuesta del backend (enrollments):', enrollments); // <- mira aquí en consola el shape real
 

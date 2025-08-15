@@ -35,7 +35,7 @@ export const teacherPanelRoutes: Routes = [
                     { path: '', 
                         component: AssignedCoursesComponent
                     },
-                    { path: ':curriculumManagment', 
+                    { path: ':id/curriculumManagment', 
                         component: CurriculumManagmentComponent
                     },
                 ]
@@ -45,11 +45,11 @@ export const teacherPanelRoutes: Routes = [
                 component: NoteManagmentComponent       
             },
             {
-                path: "NoteList/",
+                path: "NoteList/:assignmentId",
                 component: NoteListComponent
             },
             {
-                path: "StudentNote",
+                path: "StudentNote/:assignmentId/:enrollmentId",
                 component: StudentNoteComponent
             },
             {
@@ -57,7 +57,7 @@ export const teacherPanelRoutes: Routes = [
                 component: AttendanceManagmentComponent
             },
             {
-                path: "attendanceList",
+                path: "attendanceList/:id_salon",
                 component: AttendanceListComponent
             },
 

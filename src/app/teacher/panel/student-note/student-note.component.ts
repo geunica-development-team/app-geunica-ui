@@ -1,12 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '../../../../enviroments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
 import { EditExamScoreModalComponent } from './editExam/edit-exam-score-modal/edit-exam-score-modal.component';
 import { EditActivityScoreModalComponent } from './editActivity/edit-activity-score-modal/edit-activity-score-modal.component';
+import { AuthStorageService } from '../../../services/auth-storage.service';
 
 export interface Exam {
   id: number;
@@ -66,7 +67,8 @@ export class StudentNoteComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient, 
+    private authStorage: AuthStorageService
   ) {}
 
   ngOnInit() {
@@ -83,14 +85,15 @@ export class StudentNoteComponent implements OnInit {
     this.fetchStudentInfo();
     // Luego, cargar las notas según el periodo
     this.loadStudentGrades();
-    this.loadMockStudentGrades()
     
   }
 
   // Obtiene únicamente los datos de estudiante y curso 
   fetchStudentInfo() {
+    const token = this.authStorage.getToken();
+    const headers = token ? { headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) } : {};
     const url = `${this.baseUrl}/teacher/assignment/${this.assignmentId}/student/${this.enrollmentId}/grades`;
-    this.http.get<any>(url).subscribe({
+    this.http.get<any>(url, headers).subscribe({
       next: data => {
         console.log('Student info data:', data); // Debug - mira aquí la estructura real
 
@@ -146,9 +149,11 @@ export class StudentNoteComponent implements OnInit {
 
   // Método alternativo para obtener información del estudiante
   fetchStudentInfoFallback() {
+    const token = this.authStorage.getToken();
+    const headers = token ? { headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) } : {};
     // Si tienes otro endpoint que devuelva la información del estudiante/enrollment
     const url = `${this.baseUrl}/teacher/enrollment/${this.enrollmentId}/info`;
-    this.http.get<any>(url).subscribe({
+    this.http.get<any>(url, headers).subscribe({
       next: data => {
         console.log('Student info fallback data:', data); // Debug
         if (data) {
@@ -181,10 +186,11 @@ export class StudentNoteComponent implements OnInit {
       periodType: this.selectedPeriodType,
       periodNumber: this.selectedPeriodNumber.toString()
     });
-
+    const token = this.authStorage.getToken();
+    const headers = token ? { headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) } : {};
     const url = `${this.baseUrl}/teacher/assignment/${this.assignmentId}/student/${this.enrollmentId}/grades?${params}`;
 
-    this.http.get<any>(url).subscribe({
+    this.http.get<any>(url, headers).subscribe({
       next: data => {
         console.log('Student grades data:', data); // Debug
         this.studentGrades = data;
@@ -462,72 +468,6 @@ export class StudentNoteComponent implements OnInit {
   }
 
 
-  // Método para cargar datos de prueba (2 exámenes)
-loadMockStudentGrades() {
-  // Info del estudiante (se usa en el header)
-  this.studentInfo = {
-    studentName: 'Luis García Pérez',
-    gradeName: '3',
-    sectionName: 'A',
-    levelName: 'Secundaria'
-  };
-
-  // Notas mock
-  this.studentGrades = {
-    exams: [
-      {
-        id: 5001,
-        score: 17.5,
-        state: 'publicado',
-        registrationDate: '2025-08-05T10:00:00Z',
-        // Estructura esperada por la vista
-        exam: {
-          id: 901,
-          name: 'Examen Parcial I',
-          periodType: 'BIMESTRE',
-          periodNumber: 1,
-          typeExam: 'Parcial',
-          weight: 60,
-          classAssignment: {
-            classroom: {
-              name: 'Aula 201',
-              grade: { name: '3', level: { name: 'Secundaria' } },
-              section: { name: 'A' }
-            }
-          }
-        }
-      },
-      {
-        id: 5002,
-        score: 15,
-        state: 'publicado',
-        registrationDate: '2025-08-12T11:30:00Z',
-        exam: {
-          id: 902,
-          name: 'Examen Parcial II',
-          periodType: 'BIMESTRE',
-          periodNumber: 1,
-          typeExam: 'Parcial',
-          weight: 40,
-          classAssignment: {
-            classroom: {
-              name: 'Aula 201',
-              grade: { name: '3', level: { name: 'Secundaria' } },
-              section: { name: 'A' }
-            }
-          }
-        }
-      }
-    ],
-    activities: [] // sin actividades en este mock
-  };
-
-  // Estado UI
-  this.loading = false;
-  this.error = null;
-
-  console.log('Mock student grades loaded', this.studentGrades);
-}
 
 
 }
