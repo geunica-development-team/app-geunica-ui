@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 
 import { TableComponent } from '../../../components/table/table.component';
 import { FormsModule } from '@angular/forms';
@@ -17,7 +17,7 @@ import { AuthStorageService } from '../../../services/auth-storage.service';
   templateUrl: './note-managment.component.html',
   styleUrl: './note-managment.component.css'
 })
-export class NoteManagmentComponent {
+export class NoteManagmentComponent implements OnInit {
   //filteredGrades: GradeInfo[] = [];
   searchTerm: string = '';
   //selectedGrade: GradeInfo | null = null;
@@ -31,12 +31,14 @@ export class NoteManagmentComponent {
 
   @ViewChild("notesTable") notesTable?: TableComponent
   // Definición de columnas para la tabla
-  columnsNotes = ['ID', 'Grado/Nivel/seccion', 'Aula'];
+  columnsNotes = ['ID','Curso','Grado', 'Nivel/seccion', 'Aula'];
 
   // Mapeo de encabezados a propiedades de fila
   columnMappingsNotes = {
     'ID': 'id',
-    'Grado/Nivel/seccion': 'gradoSeccion',
+    'Curso': 'curso',
+    'Grado':'grado',
+    'Nivel/seccion': 'nivelSeccion',
     'Aula': 'aula'
   };
 
@@ -52,9 +54,11 @@ filteredNotes: any [] = [];
       .subscribe({
         next: data => {
           this.rowsNotes = data.map(ca => ({
-            id:            ca.id,
-            gradoSeccion:  `${ca.classroom.grade.level.name} ${ca.classroom.grade.name} - ${ca.classroom.section.name}`,
-            aula:          ca.classroom.name,
+              id: ca.id,
+              curso: ca.course?.name ?? ca.course?.code ?? '—', // ← nuevo campo
+              grado: ca.classroom?.grade?.level?.name ?? '—',
+              nivelSeccion: `${ca.classroom?.grade?.name ?? ''} - ${ca.classroom?.section?.name ?? ''}`.trim(),
+              aula: ca.classroom?.name ?? '—'
           }));
         },
         error: err => console.error('Error al cargar asignaturas:', err)

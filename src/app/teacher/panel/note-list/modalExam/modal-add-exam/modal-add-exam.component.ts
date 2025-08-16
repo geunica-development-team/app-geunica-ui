@@ -1,11 +1,12 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { environment } from '../../../../../../enviroments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
+import { AuthStorageService } from '../../../../../services/auth-storage.service';
 
 // DTO coincidente con el backend
 interface CreateExamDto {
@@ -46,7 +47,8 @@ export class ModalAddExamComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
-    private toastr: ToastrService
+    private toastr: ToastrService, 
+    private authStorage: AuthStorageService
   ) {}
 
   ngOnInit(): void {
@@ -116,8 +118,9 @@ export class ModalAddExamComponent implements OnInit {
     };
 
     this.isSubmitting = true;
-
-    this.http.post(`${this.baseUrl}/teacher/assignment/${caId}/exams`, payload).pipe(
+    const token = this.authStorage.getToken();
+    const headers = token ? { headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) } : {};
+    this.http.post(`${this.baseUrl}/exam/assignment/${caId}`, payload, headers).pipe(
       finalize(() => this.isSubmitting = false)
     ).subscribe({
       next: (response: any) => {

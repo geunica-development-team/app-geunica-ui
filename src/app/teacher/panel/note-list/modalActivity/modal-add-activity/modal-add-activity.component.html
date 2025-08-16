@@ -12,7 +12,6 @@
         <button type="button" class="btn-close btn-close-black" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
-```
   <!-- Cuerpo del modal -->
   <div class="modal-body">
     <form #activityForm="ngForm" (ngSubmit)="onSubmit()" novalidate>
@@ -121,8 +120,6 @@
       </div>
 
       <!-- Campos ocultos: periodType, periodNumber y classAssignmentId -->
-      <input type="hidden" name="periodType" [(ngModel)]="activityData.periodType" />
-      <input type="hidden" name="periodNumber" [(ngModel)]="activityData.periodNumber" />
       <input type="hidden" name="classAssignmentId" [(ngModel)]="activityData.classAssignmentId" />
 
     </form>
@@ -133,7 +130,7 @@
 
     <button
       type="button"
-      class="btn btn-primary"
+      class="btn btn-success"
       [disabled]="!activityForm.form.valid || isSubmitting"
       (click)="onSubmit()"
     >
@@ -143,7 +140,6 @@
     </button>
   </div>
 </div>
-```
 
   </div>
 </div>

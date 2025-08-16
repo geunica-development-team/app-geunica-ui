@@ -228,8 +228,7 @@ export class NoteListComponent implements OnInit{
     const caId = Number(this.route.snapshot.paramMap.get('assignmentId'));
     if (!caId) return;
 
-    this.http
-      .get<any[]>(`${this.baseUrl}/teacher/me/assignment/${caId}/activities`)
+    this.http.get<any[]>(`${this.baseUrl}/teacher/me/assignment/${caId}/activities`)
       .subscribe({
         next: activities => {
           this.activitiesList = activities;

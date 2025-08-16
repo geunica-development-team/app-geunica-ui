@@ -5,7 +5,7 @@
         <div class="col-12 col-md-6">
         <app-searcher
             [(term)]="searchTerm"
-            placeholder="Buscar por curso"
+            placeholder="Buscar por aula"
             field="title"
             (search)="onSearch()"
         ></app-searcher>
@@ -14,13 +14,7 @@
 
 <div class="col-12">
         <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="card-title mb-0">Gestion de notas</h5>
-                <div class="input-group" style="width: 250px;">
-                <span class="input-group-text"><i class="fas fa-search"></i></span>
-                <input  type="text" class="form-control" placeholder="Buscar por aula...">
-                </div>
-            </div>
+
             <div class="card-body p-3">
                 <app-table
                     #notesTable

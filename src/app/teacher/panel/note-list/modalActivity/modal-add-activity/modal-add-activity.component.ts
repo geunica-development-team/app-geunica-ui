@@ -1,11 +1,12 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { environment } from '../../../../../../enviroments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
+import { AuthStorageService } from '../../../../../services/auth-storage.service';
 
 // DTO coincidente con el backend
 interface CreateActivityDto {
@@ -15,8 +16,7 @@ interface CreateActivityDto {
   weight: number;         // ej. 20.00
   state: string;          // "Publicado" | "Borrador"
   typeActivity: string;   // "Tarea" | "Proyecto" | etc
-  periodType: string;     // "BIMESTRE"
-  periodNumber: number;   // 1
+
 }
 
 @Component({
@@ -36,8 +36,7 @@ export class ModalAddActivityComponent implements OnInit {
     weight: 10,
     state: 'Publicado',
     typeActivity: 'Tarea',
-    periodType: 'BIMESTRE',
-    periodNumber: 1
+
   };
 
   isSubmitting = false;
@@ -47,7 +46,8 @@ export class ModalAddActivityComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private authStorage: AuthStorageService
   ) {}
 
   ngOnInit(): void {
@@ -79,7 +79,6 @@ export class ModalAddActivityComponent implements OnInit {
       classAssignmentId: caId,
       name: '', date: '', weight: 10,
       state: 'Publicado', typeActivity: 'Tarea',
-      periodType: 'BIMESTRE', periodNumber: 1
     };
     this.isSubmitting = false;
   }
@@ -102,25 +101,23 @@ onSubmit(): void {
     }
 
     this.isSubmitting = true;
-
-    this.http.post(
-      `${this.baseUrl}/teacher/assignment/${this.activityData.classAssignmentId}/activities`,
-      this.activityData
-    ).pipe(
-      finalize(() => this.isSubmitting = false)
-    ).subscribe({
-      next: (res) => {
-        this.toastr.success('Actividad creada correctamente', 'Éxito');
-        this.added.emit();
-        this.closeModal();
-        this.resetForm();
-      },
-      error: (err) => {
-        console.error('Error creando actividad', err);
-        const msg = err?.error?.message || err?.message || 'Error creando actividad';
-        this.toastr.error(msg, 'Error');
-      }
-    });
+    const token = this.authStorage.getToken();
+    const headers = token ? { headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) } : {};
+    this.http.post(`${this.baseUrl}/activity/assignment/${this.activityData.classAssignmentId}`,this.activityData, headers)
+    .pipe(finalize(() => this.isSubmitting = false)
+      ).subscribe({
+        next: (res) => {
+          this.toastr.success('Actividad creada correctamente', 'Éxito');
+          this.added.emit();
+          this.closeModal();
+          this.resetForm();
+        },
+        error: (err) => {
+          console.error('Error creando actividad', err);
+          const msg = err?.error?.message || err?.message || 'Error creando actividad';
+          this.toastr.error(msg, 'Error');
+        }
+      });
   }
 
 }
