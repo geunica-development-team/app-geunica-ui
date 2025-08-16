@@ -2,7 +2,7 @@
          tabindex="-1" *ngIf="isOpen">
       <div class="modal-dialog">
         <div class="modal-content">
-          <div class="modal-header bg-primary text-white">
+          <div class="modal-header bg-success text-white">
             <h5 class="modal-title">
               <i class="bi bi-pencil me-2"></i>
               Editar Tema
@@ -56,10 +56,7 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" (click)="closeModal()">
-              Cancelar
-            </button>
-            <button type="button" class="btn btn-primary" (click)="onSubmit()" [disabled]="saving">
+            <button type="button" class="btn btn-success" (click)="onSubmit()" [disabled]="saving">
               <i class="bi bi-check-lg me-1" *ngIf="!saving"></i>
               <span class="spinner-border spinner-border-sm me-1" *ngIf="saving"></span>
               {{ saving ? 'Guardando...' : 'Guardar Cambios' }}
