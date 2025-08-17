@@ -6,8 +6,9 @@ import { environment } from '../../../../enviroments/environment';
 import { PanelHeaderComponent } from '../../../components/dashboard/shared-components/panel-header/panel-header.component';
 import { FormsModule } from '@angular/forms';
 import { AuthStorageService } from '../../../services/auth-storage.service';
+import { firstValueFrom } from 'rxjs';
 
-type Status = 'asistió' | 'falto' | 'tardanza';
+export type Status = 'presente' | 'ausente' | 'tardanza' | 'sin_registro';
 
 @Component({
   selector: 'app-attendance-list',
@@ -18,12 +19,20 @@ type Status = 'asistió' | 'falto' | 'tardanza';
 export class AttendanceListComponent implements OnInit {
 
   days = ['Lunes','Martes','Miércoles','Jueves','Viernes'];
-  allStatuses: Status[] = ['asistió','falto','tardanza'];
+  allStatuses: Status[] = ['presente','ausente','tardanza','sin_registro'];
 
   students: any[] = [];
   caId!: number;
+  
+  // PROPIEDADES PARA NAVEGACIÓN DE SEMANAS
+  currentWeekInfo: any = null;
+  availableWeeks: any[] = [];
+  selectedWeekStart: string = '';
+  periodInfo: any = null;
+  isLoading = false;
+  
   private baseUrl = environment.apiBase;
-  private attendanceMap = new Map<string, any>(); // Para mapear userId-day -> attendance record
+  private attendanceMap = new Map<string, any>();
 
   constructor(
     private route: ActivatedRoute,
@@ -33,107 +42,455 @@ export class AttendanceListComponent implements OnInit {
 
   ngOnInit(): void {
     this.caId = +this.route.snapshot.paramMap.get('id_salon')!;
-    this.loadAttendance();
+    console.log('🔍 caId extraído de la ruta:', this.caId);
+    this.loadWeeksAndAttendance();
   }
 
-  private loadAttendance() {
-    const token = localStorage.getItem('token') || '';
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-    this.http
-      .get<any[]>(
-        `${environment.apiBase}/teacher/me/assignment/${this.caId}/attendance`,
-        { headers }
-      )
-      .subscribe(
-        atts => this.buildStudentGrid(atts),
-        err  => console.error('Error al cargar asistencias:', err)
-      );
+  // MÉTODO PRINCIPAL: Cargar semanas disponibles y asistencias
+  private async loadWeeksAndAttendance(): Promise<void> {
+    this.isLoading = true;
+    
+    try {
+      // 1. Primero cargar semanas disponibles
+      await this.loadAvailableWeeks();
+      
+      // 2. Luego cargar asistencias de la semana actual
+      await this.loadAttendance();
+      
+    } catch (error) {
+      console.error('❌ Error en la carga inicial:', error);
+    } finally {
+      this.isLoading = false;
+    }
   }
 
-  private buildStudentGrid(atts: any[]) {
-    const grouped = new Map<number, { name: string, recs: any[] }>();
-    this.attendanceMap.clear(); // Limpiar el mapa
+  // CARGAR SEMANAS DISPONIBLES
+  private loadAvailableWeeks(): Promise<void> {
+    const token = this.authStorage.getToken();
+    const headers = token ? { headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) } : {};
 
-    // 1) Agrupar por usuario y guardar referencia completa del attendance
-    atts.forEach(a => {
-      const uid = a.userId;
-      if (!grouped.has(uid)) {
-        grouped.set(uid, {
-          name: `${a.user.person.names} ${a.user.person.paternalSurname} ${a.user.person.maternalSurname}`,
-          recs: []
-        });
+    const url = `${this.baseUrl}/attendance/teacher/assignment/${this.caId}/weeks`;
+    console.log('📅 Cargando semanas disponibles:', url);
+
+    return this.http.get<any>(url, headers).toPromise().then((response) => {
+      console.log('📊 Semanas disponibles:', response);
+      
+      this.currentWeekInfo = response.currentWeek;
+      this.availableWeeks = response.availableWeeks;
+      this.periodInfo = response.periodInfo;
+      
+      // Establecer semana actual como seleccionada
+      this.selectedWeekStart = this.currentWeekInfo.weekStart;
+      
+      console.log('✅ Semana seleccionada:', this.selectedWeekStart);
+    }).catch((error) => {
+      console.error('❌ Error al cargar semanas:', error);
+      throw error;
+    });
+  }
+
+  // 🔄 CARGAR ASISTENCIAS CORREGIDO
+  private async loadAttendance(weekStart?: string): Promise<void> {
+    const token = this.authStorage.getToken();
+    const headers = token ? { headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) } : {};
+
+    const week = weekStart || this.selectedWeekStart;
+    const url = week 
+      ? `${this.baseUrl}/attendance/teacher/assignment/${this.caId}/attendance?week=${week}`
+      : `${this.baseUrl}/attendance/teacher/assignment/${this.caId}/attendance`;
+
+    console.log('📡 Cargando asistencias:', url);
+
+    try {
+      const response = await firstValueFrom(this.http.get<any[]>(url, headers));
+      const data = response ?? [];
+      console.log('📊 Respuesta del backend:', data);
+      this.buildStudentGrid(data);
+    } catch (error: any) {
+      console.error('❌ Error al cargar asistencias:', error);
+      if (error.status === 401) {
+        alert('Error de autenticación. Por favor, inicia sesión nuevamente.');
+      } else if (error.status === 400 && error.error?.message?.includes('período académico')) {
+        alert('La semana seleccionada está fuera del período académico');
+      } else {
+        alert('Error al cargar las asistencias');
       }
+      throw error;
+    }
+  }
 
-      const date = new Date(a.attendanceDate);
-      const weekday = this.days[date.getDay() - 1];
-      const attendanceRecord = {
-        day: weekday,
-        status: this.mapStatus(a.status),
-        attendanceId: a.id, // ← Importante: guardar el ID de la asistencia
-        originalAttendance: a // ← Guardar el registro completo
-      };
+  // 🔄 BUILD STUDENT GRID CORREGIDO
+  private buildStudentGrid(studentsData: any[]) {
+    console.log('🏗️ Construyendo grid con datos:', studentsData);
+    this.attendanceMap.clear();
 
-      grouped.get(uid)!.recs.push(attendanceRecord);
+    this.students = studentsData.map(studentData => {
+      const student = studentData.student;
+      const user = studentData.user;
+      const attendances = studentData.attendances || [];
 
-      // Mapear userId-day -> attendance para búsqueda rápida
-      const key = `${uid}-${weekday}`;
-      this.attendanceMap.set(key, a);
-    });
+      console.log(`   👤 Procesando: ${student.person.names} ${student.person.paternalSurname}`);
+      console.log(`      - Tiene usuario: ${studentData.hasUser}`);
+      console.log(`      - Asistencias:`, attendances);
 
-    // 2) Construir arreglo final, con un registro por cada día
-    this.students = Array.from(grouped.entries()).map(([uid, info]) => {
-      const recs = this.days.map((day, dayIndex) => {
-        const existingRec = info.recs.find(r => r.day === day);
-        if (existingRec) {
-          return existingRec;
+      // Crear registro para cada día de la semana
+      const records = this.days.map((day, dayIndex) => {
+        // 🚀 CORRECCIÓN: Asegurar que siempre empecemos desde el lunes
+        const weekStartDate = new Date(this.selectedWeekStart + 'T00:00:00');
+        
+        // Si selectedWeekStart no es lunes, ajustar al lunes de esa semana
+        const dayOfWeek = weekStartDate.getDay(); // 0=domingo, 1=lunes, etc.
+        const daysToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; // Ajustar al lunes
+        weekStartDate.setDate(weekStartDate.getDate() + daysToMonday);
+        
+        // Ahora calcular el día específico (lunes + dayIndex)
+        const dayDate = new Date(weekStartDate);
+        dayDate.setDate(weekStartDate.getDate() + dayIndex);
+        const dayDateString = dayDate.toISOString().split('T')[0];
+
+        console.log(`      📅 Procesando día ${dayIndex} (${day}): ${dayDateString}`);
+        console.log(`         - selectedWeekStart: ${this.selectedWeekStart}`);
+        console.log(`         - weekStartDate ajustado: ${weekStartDate.toISOString().split('T')[0]}`);
+
+        // Buscar asistencia para esta fecha específica
+        const attendance = attendances.find((att: any) => {
+          const match = att.attendanceDate === dayDateString;
+          console.log(`         - Comparando: ${att.attendanceDate} === ${dayDateString} → ${match}`);
+          return match;
+        });
+
+        if (attendance) {
+          console.log(`         ✅ Asistencia encontrada:`, attendance);
+          // Hay registro de asistencia - MAPEO CORREGIDO
+          const status = this.mapBackendStatusToFrontend(attendance.status);
+          const key = `${user?.id || 'no-user'}-${dayDateString}`;
+          this.attendanceMap.set(key, attendance);
+          
+          return {
+            day,
+            dayDate: dayDateString,
+            status,
+            attendanceId: attendance.id,
+            originalAttendance: attendance,
+            hasRecord: true
+          };
+        } else {
+          console.log(`         ❌ Sin asistencia para ${dayDateString}`);
+          // No hay registro de asistencia
+          return {
+            day,
+            dayDate: dayDateString,
+            status: 'sin_registro' as Status,
+            attendanceId: null,
+            originalAttendance: null,
+            hasRecord: false
+          };
         }
-        // Si no existe asistencia para ese día, crear placeholder
-        return { 
-          day, 
-          status: 'falto', 
-          attendanceId: null,
-          originalAttendance: null
-        };
       });
-      return { id: uid, name: info.name, records: recs };
+
+      return {
+        id: user?.id || student.id,
+        studentId: student.id,
+        userId: user?.id || null,
+        name: `${student.person.names} ${student.person.paternalSurname} ${student.person.maternalSurname}`,
+        hasUser: studentData.hasUser,
+        records
+      };
     });
 
-    console.log('Students grid built:', this.students);
-    console.log('Attendance map:', this.attendanceMap);
+    console.log('✅ Grid construido:', this.students);
+    console.log('🗺️ Mapa de asistencias:', this.attendanceMap);
   }
 
-  private mapStatus(s: string): Status {
-    if (s === 'present' || s === 'asistió')   return 'asistió';
-    if (s === 'absent'  || s === 'falto')     return 'falto';
-    if (s === 'late'    || s === 'tardanza')  return 'tardanza';
-    return 'falto';
+  // 🔄 MAPEOS CORREGIDOS
+  private mapBackendStatusToFrontend(backendStatus: string): Status {
+    console.log(`🔄 Mapeando status backend "${backendStatus}" a frontend`);
+    
+    const statusMap: { [key: string]: Status } = {
+      'present': 'presente',
+      'absent': 'ausente', 
+      'late': 'tardanza',
+    };
+    
+    const mapped = statusMap[backendStatus] || 'sin_registro';
+    console.log(`   -> Resultado: "${mapped}"`);
+    return mapped;
   }
 
-  getOtherStatuses(current: Status): Status[] {
-    return this.allStatuses.filter(s => s !== current);
+  private mapFrontendStatusToBackend(frontendStatus: Status): string {
+    console.log(`🔄 Mapeando status frontend "${frontendStatus}" a backend`);
+    
+    const statusMap: { [key in Status]: string } = {
+      'presente': 'present',
+      'ausente': 'absent',
+      'tardanza': 'late',
+      'sin_registro': 'absent' // Fallback
+    };
+    
+    const mapped = statusMap[frontendStatus] || 'absent';
+    console.log(`   -> Resultado: "${mapped}"`);
+    return mapped;
   }
 
+  // 🔄 UPDATE STATUS COMPLETAMENTE CORREGIDO
+  updateStatus(studentId: number, dayIndex: number, newStatus: Status): void {
+    console.log(`🔄 Actualizando estado: Estudiante ${studentId}, Día ${dayIndex}, Nuevo estado: ${newStatus}`);
+    
+    const student = this.students.find(s => s.id === studentId);
+    if (!student || !student.records[dayIndex]) {
+      console.error('❌ Estudiante o registro no encontrado');
+      return;
+    }
+
+    const record = student.records[dayIndex];
+    console.log('📋 Record actual:', record);
+    
+    // Verificar si el estudiante tiene usuario
+    if (!student.hasUser) {
+      console.warn('⚠️ Estudiante sin usuario, no se puede registrar asistencia');
+      alert('Este estudiante no tiene usuario registrado en el sistema');
+      return;
+    }
+
+    // 🆕 LÓGICA MEJORADA PARA DETERMINAR ACCIÓN
+    const hasExistingAttendance = record.hasRecord && record.attendanceId;
+    
+    console.log(`📊 Estado actual:
+      - hasRecord: ${record.hasRecord}
+      - attendanceId: ${record.attendanceId}
+      - hasExistingAttendance: ${hasExistingAttendance}
+      - newStatus: ${newStatus}`);
+
+    if (newStatus === 'sin_registro') {
+      // ELIMINAR asistencia si existe
+      if (hasExistingAttendance) {
+        this.deleteAttendance(record.attendanceId, record);
+      } else {
+        // Ya está sin registro, solo actualizar UI
+        record.status = 'sin_registro';
+        record.hasRecord = false;
+      }
+    } else if (hasExistingAttendance) {
+      // ACTUALIZAR asistencia existente
+      this.updateExistingAttendance(record.attendanceId, newStatus, record);
+    } else {
+      // CREAR nueva asistencia
+      this.createNewAttendance(student.userId, record.dayDate, newStatus, record);
+    }
+  }
+
+  // 🆕 ELIMINAR ASISTENCIA
+  private deleteAttendance(attendanceId: number, record: any): void {
+    const token = this.authStorage.getToken();
+    const headers = token ? { headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) } : {};
+
+    console.log(`🗑️ Eliminando asistencia ${attendanceId}`);
+
+    this.http.delete(`${this.baseUrl}/attendance/${attendanceId}`, headers).subscribe({
+      next: (response) => {
+        console.log('✅ Asistencia eliminada:', response);
+        
+        // Actualizar record
+        record.status = 'sin_registro';
+        record.attendanceId = null;
+        record.hasRecord = false;
+        record.originalAttendance = null;
+        
+        // Actualizar mapa
+        this.attendanceMap.delete(`${record.userId}-${record.dayDate}`);
+      },
+      error: (err) => {
+        console.error('❌ Error al eliminar asistencia:', err);
+        alert(`Error al eliminar asistencia: ${err.error?.message || err.message}`);
+      }
+    });
+  }
+
+  // 🔄 ACTUALIZAR ASISTENCIA MEJORADO
+  private updateExistingAttendance(attendanceId: number, newStatus: Status, record: any): void {
+    const token = this.authStorage.getToken();
+    const headers = token ? { headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) } : {};
+    
+    const updateData = {
+      status: this.mapFrontendStatusToBackend(newStatus),
+      remarks: ''
+    };
+
+    console.log(`📝 Actualizando asistencia ${attendanceId}:`, updateData);
+
+    this.http.patch(`${this.baseUrl}/attendance/${attendanceId}`, updateData, headers).subscribe({
+      next: (response: any) => {
+        console.log('✅ Asistencia actualizada:', response);
+        
+        // Actualizar record
+        record.status = newStatus;
+        record.hasRecord = true;
+        record.originalAttendance = response;
+        
+        // Actualizar mapa
+        const key = `${record.userId}-${record.dayDate}`;
+        this.attendanceMap.set(key, response);
+      },
+      error: (err) => {
+        console.error('❌ Error al actualizar asistencia:', err);
+        alert(`Error al actualizar asistencia: ${err.error?.message || err.message}`);
+        
+        // Revertir estado en caso de error
+        this.reloadCurrentWeek();
+      }
+    });
+  }
+
+  // 🔄 CREAR ASISTENCIA MEJORADO
+  private createNewAttendance(userId: number, dayDate: string, newStatus: Status, record: any): void {
+    const token = this.authStorage.getToken();
+    const headers = token ? { headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) } : {};
+    
+    const createData = {
+      userId: userId,
+      attendanceDate: dayDate,
+      status: this.mapFrontendStatusToBackend(newStatus),
+      timeIn: newStatus === 'presente' ? new Date().toTimeString().split(' ')[0] : null,
+      remarks: ''
+    };
+
+    console.log(`➕ Creando nueva asistencia:`, createData);
+
+    this.http.post(`${this.baseUrl}/attendance`, createData, headers).subscribe({
+      next: (response: any) => {
+        console.log('✅ Nueva asistencia creada:', response);
+        
+        // Actualizar record
+        record.status = newStatus;
+        record.attendanceId = response.id;
+        record.hasRecord = true;
+        record.originalAttendance = response;
+        
+        // Actualizar mapa
+        const key = `${userId}-${dayDate}`;
+        this.attendanceMap.set(key, response);
+      },
+      error: (err) => {
+        console.error('❌ Error al crear asistencia:', err);
+        
+        // Mensaje de error más específico
+        if (err.error?.message?.includes('Ya existe una asistencia')) {
+          alert('Ya existe una asistencia para este día. Recargando datos...');
+          this.reloadCurrentWeek();
+        } else {
+          alert(`Error al crear asistencia: ${err.error?.message || err.message}`);
+        }
+      }
+    });
+  }
+
+  // 🆕 RECARGAR SEMANA ACTUAL
+  private reloadCurrentWeek(): void {
+    console.log('🔄 Recargando semana actual...');
+    this.isLoading = true;
+    this.loadAttendance(this.selectedWeekStart).finally(() => {
+      this.isLoading = false;
+    });
+  }
+
+  // NAVEGACIÓN DE SEMANAS
+  previousWeek(): void {
+    const currentIndex = this.availableWeeks.findIndex(w => w.weekStart === this.selectedWeekStart);
+    if (currentIndex > 0) {
+      const previousWeek = this.availableWeeks[currentIndex - 1];
+      this.selectWeek(previousWeek.weekStart);
+    } else {
+      console.log('📅 Ya estás en la primera semana del período');
+      alert('Ya estás en la primera semana del período académico');
+    }
+  }
+
+  currentWeek(): void {
+    if (this.currentWeekInfo) {
+      this.selectWeek(this.currentWeekInfo.weekStart);
+    }
+  }
+
+  nextWeek(): void {
+    const currentIndex = this.availableWeeks.findIndex(w => w.weekStart === this.selectedWeekStart);
+    if (currentIndex < this.availableWeeks.length - 1) {
+      const nextWeek = this.availableWeeks[currentIndex + 1];
+      this.selectWeek(nextWeek.weekStart);
+    } else {
+      console.log('📅 Ya estás en la última semana del período');
+      alert('Ya estás en la última semana del período académico');
+    }
+  }
+
+  // SELECCIONAR SEMANA ESPECÍFICA
+  private selectWeek(weekStart: string): void {
+    console.log(`📅 Seleccionando semana: ${weekStart}`);
+    this.selectedWeekStart = weekStart;
+    this.isLoading = true;
+    
+    this.loadAttendance(weekStart).finally(() => {
+      this.isLoading = false;
+    });
+  }
+
+  // MÉTODO PARA FECHAS
+  getDayDate(dayIndex: number): string {
+    if (this.selectedWeekStart) {
+      const weekStartDate = new Date(this.selectedWeekStart + 'T00:00:00');
+      
+      // Asegurar que empecemos desde el lunes
+      const dayOfWeek = weekStartDate.getDay();
+      const daysToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+      weekStartDate.setDate(weekStartDate.getDate() + daysToMonday);
+      
+      // Calcular el día específico
+      const dayDate = new Date(weekStartDate);
+      dayDate.setDate(weekStartDate.getDate() + dayIndex);
+      
+      return dayDate.toLocaleDateString('es-ES', { 
+        day: '2-digit', 
+        month: '2-digit' 
+      });
+    }
+    
+    // Fallback a semana actual
+    const today = new Date();
+    const dayDate = new Date(today);
+    dayDate.setDate(today.getDate() - today.getDay() + dayIndex + 1);
+    
+    return dayDate.toLocaleDateString('es-ES', { 
+      day: '2-digit', 
+      month: '2-digit' 
+    });
+  }
+
+  // OBTENER RANGO DE FECHAS ACTUAL
+  getCurrentDateRange(): string {
+    if (this.selectedWeekStart) {
+      const selectedWeek = this.availableWeeks.find(w => w.weekStart === this.selectedWeekStart);
+      if (selectedWeek) {
+        const startDate = new Date(selectedWeek.weekStart + 'T00:00:00');
+        const endDate = new Date(selectedWeek.weekEnd + 'T00:00:00');
+        
+        return `${startDate.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })} - ${endDate.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}`;
+      }
+    }
+    return 'Cargando...';
+  }
+
+  // VERIFICAR SI ES SEMANA ACTUAL
+  isCurrentWeekSelected(): boolean {
+    return this.currentWeekInfo && this.selectedWeekStart === this.currentWeekInfo.weekStart;
+  }
+
+  // MÉTODOS AUXILIARES
   statusClass(status: Status) {
     return {
-      'asistió':  'btn-asistio',
-      'falto':    'btn-falto',
-      'tardanza': 'btn-tardanza'
+      'presente': 'btn-presente',
+      'ausente': 'btn-ausente', 
+      'tardanza': 'btn-tardanza',
+      'sin_registro': 'btn-sin-registro'
     }[status];
-  }
-
-  getStudentInitials(name: string): string {
-    const names = name.trim().split(' ');
-    if (names.length >= 2) {
-      return (names[0][0] + names[1][0]).toUpperCase();
-    }
-    return names[0][0].toUpperCase();
-  }
-
-  getDayDate(dayIndex: number): string {
-    // Implementar lógica real para fechas
-    const dates = ['11/08', '12/08', '13/08', '14/08', '15/08'];
-    return dates[dayIndex] || '';
   }
 
   getStatusCount(status: Status): number {
@@ -148,96 +505,17 @@ export class AttendanceListComponent implements OnInit {
     return count;
   }
 
+  getStudentInitials(name: string): string {
+    const names = name.trim().split(' ');
+    if (names.length >= 2) {
+      return (names[0][0] + names[1][0]).toUpperCase();
+    }
+    return names[0][0].toUpperCase();
+  }
+
   trackByStudentId(index: number, student: any): number {
     return student.id;
   }
-
-  // MÉTODO PRINCIPAL CORREGIDO - maneja tanto string como Status
-  updateStatus(studentId: number, dayIndex: number, newStatus: string | Status): void {
-    // Convertir a Status si viene como string del select
-    const status = typeof newStatus === 'string' ? newStatus as Status : newStatus;
-    
-    const student = this.students.find(s => s.id === studentId);
-    if (!student || !student.records[dayIndex]) return;
-
-    const record = student.records[dayIndex];
-    const day = this.days[dayIndex];
-    
-    // Buscar si existe un registro de asistencia para este día
-    const key = `${studentId}-${day}`;
-    const attendanceRecord = this.attendanceMap.get(key);
-
-    if (attendanceRecord && attendanceRecord.id) {
-      // Si existe, actualizar el registro existente
-      this.updateExistingAttendance(attendanceRecord.id, status, record);
-    } else {
-      // Si no existe, necesitarás crear uno nuevo (esto requiere otro endpoint)
-      console.warn('No existe registro de asistencia para este día. Necesitas implementar creación.');
-      // Por ahora, solo actualizar en el frontend
-      record.status = status;
-    }
-  }
-
-  // Actualizar asistencia existente usando tu endpoint PATCH
-  private updateExistingAttendance(attendanceId: number, newStatus: Status, record: any): void {
-    const token = localStorage.getItem('token') || '';
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    
-    const updateData = {
-      status: this.mapStatusToBackend(newStatus),
-      remarks: '' // opcional
-    };
-
-    // Pedimos la respuesta completa para depurar
-    this.http.patch(
-      `${this.baseUrl}/teacher/assignment/${this.caId}/attendance/${attendanceId}`,
-      updateData,
-      { headers, observe: 'response' as const }
-    ).subscribe({
-      next: (resp) => {
-        console.log('PATCH response status:', resp.status, 'body:', resp.body);
-        // Actualizar en frontend
-        record.status = newStatus;
-      },
-      error: (err) => {
-        console.error('Error al actualizar asistencia (detalles):', {
-          status: err.status,
-          message: err.message,
-          error: err.error
-        });
-        // mostrar alerta útil al usuario (temporal)
-        alert(`Error al actualizar: ${err.status}\n${JSON.stringify(err.error)}`);
-      }
-    });
-  }
-
-
-  private mapStatusToBackend(status: Status): string {
-    const statusMap = {
-      'asistió': 'present',
-      'falto': 'absent',
-      'tardanza': 'late'
-    };
-    return statusMap[status] || 'absent';
-  }
-
-  // Métodos de navegación (implementar según necesidades)
-  previousWeek(): void {
-    console.log('Navegando a semana anterior');
-  }
-
-  currentWeek(): void {
-    console.log('Navegando a semana actual');
-  }
-
-  nextWeek(): void {
-    console.log('Navegando a semana siguiente');
-  }
-// Reemplaza students: any[] = [];
-
-
-
-
   
 
 }

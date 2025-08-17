@@ -192,100 +192,141 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/*botones*/
+/* SELECT DROPDOWN STYLES - CORREGIDO */
+.select-wrapper {
+  position: relative;
+  display: inline-block;
+  border-radius: 8px;
+  overflow: visible;
+  min-width: 140px;
+}
 
-.status-btn {
-  border: none;
-  border-radius: 12px;
-  padding: 0.5rem 1rem;
+.select-wrapper .status-select {
+  display: inline-block;
+  width: 100%;
+  padding: 8px 35px 8px 12px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  box-sizing: border-box;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  height: 40px;
+  line-height: 1.4;
   font-size: 0.875rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  min-width: 100px;
+  transition: all 0.3s ease;
 }
 
-.status-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+/* Hide IE/Edge default arrow */
+.select-wrapper .status-select::-ms-expand {
+  display: none;
 }
 
-.btn-asistio {
+/* Flecha personalizada */
+.select-wrapper::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid var(--arrow-color, rgba(0,0,0,0.6));
+  transition: all 0.3s ease;
+}
+
+/* Estados de color para wrapper y select */
+.select-wrapper.btn-presente {
   background: linear-gradient(135deg, #dcfce7, #bbf7d0);
-  color: #166534;
   border: 1px solid #86efac;
+  --arrow-color: #166534;
 }
 
-.btn-falto {
+.select-wrapper.btn-presente .status-select {
+  background: transparent;
+  color: #166534;
+}
+
+.select-wrapper.btn-ausente {
   background: linear-gradient(135deg, #fee2e2, #fecaca);
-  color: #991b1b;
   border: 1px solid #fca5a5;
+  --arrow-color: #991b1b;
 }
 
-.btn-tardanza {
+.select-wrapper.btn-ausente .status-select {
+  background: transparent;
+  color: #991b1b;
+}
+
+.select-wrapper.btn-tardanza {
   background: linear-gradient(135deg, #fef3c7, #fed7aa);
-  color: #92400e;
   border: 1px solid #fdba74;
+  --arrow-color: #92400e;
 }
 
+.select-wrapper.btn-tardanza .status-select {
+  background: transparent;
+  color: #92400e;
+}
 
+.select-wrapper.btn-sin-registro {
+  background: #cccccc;
+  border: 1px solid #6c757d;
+  --arrow-color: #ffffff;
+}
 
-.status-select:hover {
+.select-wrapper.btn-sin-registro .status-select {
+  background: transparent;
+  color: #ffffff;
+}
+
+/* OPCIONES DEL SELECT - VISIBLE EN DROPDOWN */
+.select-wrapper .status-select option {
+  background: white !important;
+  color: #1f2937 !important;
+  padding: 8px 12px;
+  font-weight: 600;
+  border: none;
+}
+
+.select-wrapper .status-select option:hover,
+.select-wrapper .status-select option:focus {
+  background: #f3f4f6 !important;
+  color: #1f2937 !important;
+}
+
+/* Estados hover y focus */
+.select-wrapper:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.status-select:focus {
+.select-wrapper:hover::after {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.select-wrapper .status-select:focus {
   outline: none;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 0 0 3px rgba(59, 130, 246, 0.1);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-/* Variantes de color para cada estado */
-.status-select.btn-asistio {
-  background: linear-gradient(135deg, #dcfce7, #bbf7d0), url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23166534' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
-  color: #166534;
-  border: 1px solid #86efac;
-  background-repeat: no-repeat, no-repeat;
-  background-position: 0 0, right 12px center;
-  background-size: 100% 100%, 16px 16px;
+/* Indicador de tiempo */
+.time-indicator {
+  margin-top: 4px;
+  padding: 2px 6px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  text-align: center;
 }
 
-.status-select.btn-falto {
-  background: linear-gradient(135deg, #fee2e2, #fecaca), url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23991b1b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
-  color: #991b1b;
-  border: 1px solid #fca5a5;
-  background-repeat: no-repeat, no-repeat;
-  background-position: 0 0, right 12px center;
-  background-size: 100% 100%, 16px 16px;
-}
-
-.status-select.btn-tardanza {
-  background: linear-gradient(135deg, #fef3c7, #fed7aa), url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b45309' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
-  color: #92400e;
-  border: 1px solid #fdba74;
-  background-repeat: no-repeat, no-repeat;
-  background-position: 0 0, right 12px center;
-  background-size: 100% 100%, 16px 16px;
-}
-
-/* Estilos para móviles */
-@media (max-width: 768px) {
-  .status-select {
-    min-width: 80px;
-    padding: 0.375rem 0.75rem;
-    padding-right: 35px !important;
-    font-size: 0.75rem;
-    background-size: 100% 100%, 14px 14px;
-    background-position: 0 0, right 8px center;
-  }
-}
-
-
-/** fin de los botones*/
-
+/* STATS CARDS */
 .stats-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -300,7 +341,6 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   border: 1px solid #e5e7eb;
   transition: all 0.3s ease;
-  
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -320,7 +360,7 @@
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
-  flex-shrink: 0; /* evita que se reduzca */
+  flex-shrink: 0;
 }
 
 .stat-present .stat-icon {
@@ -342,7 +382,7 @@
   font-size: 2rem;
   font-weight: 700;
   color: #1f2937;
-  margin: 0; /* remueve el margen inferior */
+  margin: 0;
 }
 
 .stat-label {
@@ -352,6 +392,61 @@
   margin: 0;
 }
 
+/* LEYENDA DE ESTADOS - MEJORADA */
+.legend {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid #e5e7eb;
+}
+
+.legend h6 {
+  color: #374151;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.legend-color {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.legend-color.btn-presente {
+  background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+  border-color: #86efac;
+}
+
+.legend-color.btn-ausente {
+  background: linear-gradient(135deg, #fee2e2, #fecaca);
+  border-color: #fca5a5;
+}
+
+.legend-color.btn-tardanza {
+  background: linear-gradient(135deg, #fef3c7, #fed7aa);
+  border-color: #fdba74;
+}
+
+.legend-color.btn-sin-registro {
+  background: #6c757d;
+  border-color: #6c757d;
+}
+
+.legend-item small {
+  color: #6b7280;
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+/* RESPONSIVE */
 @media (max-width: 768px) {
   .week-navigation {
     flex-direction: column;
@@ -366,9 +461,33 @@
     font-size: 0.875rem;
   }
   
-  .status-btn {
-    min-width: 80px;
-    padding: 0.375rem 0.75rem;
+  .select-wrapper {
+    min-width: 120px;
+  }
+  
+  .select-wrapper .status-select {
+    padding: 6px 30px 6px 8px;
     font-size: 0.75rem;
+    height: 36px;
+  }
+  
+  .select-wrapper::after {
+    right: 8px;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid var(--arrow-color, rgba(0,0,0,0.6));
+  }
+  
+  .legend {
+    padding: 1rem;
+  }
+  
+  .legend .d-flex {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .content-section {
+    padding: 1rem;
   }
 }

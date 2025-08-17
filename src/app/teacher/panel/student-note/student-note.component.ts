@@ -136,46 +136,13 @@ export class StudentNoteComponent implements OnInit {
         } else {
           // si no hay examen/actividad con info, intentar fallback (opcional)
           console.warn('No se encontró student info en exams/activities. Intentando fallback...');
-          this.fetchStudentInfoFallback();
+          
         }
       },
-      error: (err) => {
-        console.warn('No se pudo obtener la información del estudiante', err);
-        this.fetchStudentInfoFallback();
-      }
+
     });
   }
 
-
-  // Método alternativo para obtener información del estudiante
-  fetchStudentInfoFallback() {
-    const token = this.authStorage.getToken();
-    const headers = token ? { headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) } : {};
-    // Si tienes otro endpoint que devuelva la información del estudiante/enrollment
-    const url = `${this.baseUrl}/teacher/enrollment/${this.enrollmentId}/info`;
-    this.http.get<any>(url, headers).subscribe({
-      next: data => {
-        console.log('Student info fallback data:', data); // Debug
-        if (data) {
-          this.studentInfo = {
-            studentName: data.studentName || 'Estudiante',
-            gradeName: data.gradeName || 'Grado',
-            sectionName: data.sectionName || 'Sección',
-            levelName: data.levelName || 'Nivel'
-          };
-        }
-      },
-      error: () => {
-        // Si tampoco funciona, poner valores por defecto
-        this.studentInfo = {
-          studentName: 'Estudiante',
-          gradeName: 'Grado',
-          sectionName: 'Sección',
-          levelName: 'Nivel'
-        };
-      }
-    });
-  }
 
   //Carga las notas del estudiante según los filtros de período
   loadStudentGrades() {
@@ -435,17 +402,6 @@ export class StudentNoteComponent implements OnInit {
     }
     return score.toString();
   }
-
-  // ELIMINADO: Las funciones duplicadas que causaban recursión infinita
-  // editExamScore(examScore: any) {
-  //   // Esta función ahora maneja la edición de notas a través del modal
-  //   this.editExamScore(examScore);
-  // }
-
-  // editActivityScore(activityScore: any) {
-  //   // Esta función ahora maneja la edición de notas a través del modal
-  //   this.editActivityScore(activityScore);
-  // }
 
   @ViewChild(EditExamScoreModalComponent) editExamModal!: EditExamScoreModalComponent;
   editExamScore(examScore: any): void {

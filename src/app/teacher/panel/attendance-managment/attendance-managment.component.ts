@@ -41,20 +41,29 @@ export class AttendanceManagmentComponent implements OnInit{
   loadAttendances() {
     const token = this.authStorage.getToken();
     const headers = token ? { headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) } : {};
-    this.http.get<any[]>(`${this.baseUrl}/teacher/me/assignments`, headers)
+    
+    this.http.get<any[]>(`${this.baseUrl}/teacher/me/classrooms`, headers)
       .subscribe({
         next: data => {
-          this.rowsAttendances = data.map(ca => ({
-            id:            ca.id,
-            gradoSeccion:  `${ca.classroom.grade.level.name} ${ca.classroom.grade.name} - ${ca.classroom.section.name} `,
-            aula:          ca.classroom.name,
-            turno:         ca.classroom.shift
+          console.log('📊 Datos recibidos del API:', data); // Para debugging
+          
+          this.rowsAttendances = data.map(classroom => ({
+            id: classroom.id,
+            // ✅ CORRECCIÓN: Acceder directamente a las propiedades
+            gradoSeccion: `${classroom.grade.level.name} ${classroom.grade.name} - ${classroom.section.name}`,
+            aula: classroom.name,           // ← Sin .classroom
+            turno: classroom.shift          // ← Sin .classroom
           }));
+          
           this.filteredAttendances = [...this.rowsAttendances];
+          console.log('📋 Datos mapeados:', this.rowsAttendances); // Para debugging
         },
-        error: err => console.error('Error al cargar asignaturas:', err)
+        error: err => {
+          console.error('❌ Error al cargar aulas:', err);
+        }
       });
   }
+
   // FILTROS
   searchValue = ""
 
