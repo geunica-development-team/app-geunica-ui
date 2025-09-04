@@ -11,15 +11,19 @@
 
   <div class="modal-body bg-white p-4">
     <!-- DATOS DEL ESTUDIANTE -->
-    <div class="alert alert-info border rounded mb-3">
-      <h6 class="fw-semibold mb-2">Datos del estudiante:</h6>
-      <ul class="list-unstyled mb-0 small">
-        <li class="mb-1"><strong>Nombres y apellidos:</strong> {{ currentStudent?.student || 'Carlos Zuñiga' }}</li>
-        <li class="mb-1"><strong>Nivel:</strong> {{ currentStudent?.application_level || 'Primaria' }}</li>
-        <li class="mb-1"><strong>DNI:</strong> {{ currentStudent?.documentNumber || '12345678' }}</li>
-        <li class="mb-0"><strong>Grado / Grupo:</strong> 2do A</li>
-      </ul>
-    </div>
+     @if (student) {
+       <div class="alert alert-info border rounded mb-3">
+         <h6 class="fw-semibold mb-2">
+           <i class="fas fa-user me-2"></i>
+           Información del Estudiante
+         </h6>
+         <strong>Estudiante:</strong> {{ student.studentFullName }} <br>
+         <strong>Fecha de inscripción:</strong> {{ student.registrationDate }} <br>
+         <strong>Nivel, grado y sección:</strong> {{ student.levelGradeSection }} <br>
+         <strong>Resultado de la evaluación:</strong> {{ student.psyEvaluationResult }} <br>
+         <strong>Periodo:</strong> {{ student.period }} <br>
+       </div>
+     }
 
     <!-- INFORMACIÓN DEL PAGO -->
     <div class="section-divider">

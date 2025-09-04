@@ -85,7 +85,7 @@ export class ModalContinueRegistrationComponent {
             this.psyEvaluationResult = `${evaluationResult}`;
           } else {
             this.psyEvaluationDate = '';
-            this.psyEvaluationResult = '';;
+            this.psyEvaluationResult = '';
           }
         },
         error: (error) => {

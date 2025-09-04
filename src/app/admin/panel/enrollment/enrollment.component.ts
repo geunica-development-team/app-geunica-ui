@@ -170,31 +170,14 @@ export class EnrollmentComponent {
   }
 
   openModalMarkPayment(row: any) {
-    if (this.modalMarkPayment) {
-      this.modalMarkPayment.openModal(row)
+    if (row && row.id && !isNaN(row.id)) {
+      this.modalMarkPayment.rowId = Number(row.id);
+      this.modalMarkPayment.openModal();
+    } else {
+      console.error('ID inválido:', row.id);
     }
   }
-
-  onMarkPayment(row: dataInscriptionAll) {
-    //console.log("Marcar pago:", row)
-    //this.openModalMarkPayment(row)
-    const newState = {
-      state: "Admitido"
-    };
-
-    this.inscriptionService.changeState(row.id, newState).subscribe({
-      next: () => {
-        if (this.enrollmentTable) {
-          this.loadEnrollments();
-        }
-        this.notifycation.success('El estudiante fue admitido', 'Éxito');
-      },
-      error: (error) => {
-        this.notifycation.error('Error al cambiar el estado de la inscripción', 'Error');
-      }
-    })
-  }
-
+  
   openModalDeleteEnrollment(row: any) {
     if (this.modalDeleteEnrollment) {
       this.modalDeleteEnrollment.openModal(row)

@@ -25,7 +25,7 @@ export class TableEnrollmentComponent {
 
   @Input() accionVerMatricula!: (row: any) => void
 
-  @Input() actionMarkPayment!: (row: any) => void
+  @Input() accionMarcarPago!: (row: any) => void
 
   @Input() accionRegistrarEvaluacion!: (row: any) => void
 
@@ -225,7 +225,7 @@ export class TableEnrollmentComponent {
         this.accionRestaurarInscripcion(row)
         break
       case "marcarPago":
-        this.actionMarkPayment(row)
+        this.accionMarcarPago(row)
         break
       case "registrarEvaluacion":
         this.accionRegistrarEvaluacion(row)

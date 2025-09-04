@@ -10,6 +10,14 @@ export interface dataRegistration {
     idClassroom: number
 }
 
+export interface dataEnrollmentByInscription {
+  studentFullName: string;
+  registrationDate: string;
+  levelGradeSection: string;
+  psyEvaluationResult: string;
+  period: string;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -48,6 +56,11 @@ export class EnrollmentService {
         .post(this.auth_end_point+'/enrollment', {...data})
         .pipe(catchError(this.handleError)
         );
+    }
+    getEnrollmentByInscription(id:number) {
+        return this.httpService
+        .get<dataEnrollmentByInscription>(`${this.auth_end_point}/enrollment/inscription/${id}`)
+        .pipe(catchError(this.handleError));
     }
     updateEnrollment(id: number, data: dataRegistration) {
         return this.httpService

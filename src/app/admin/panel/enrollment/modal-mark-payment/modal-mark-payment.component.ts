@@ -1,6 +1,9 @@
-import { Component, ElementRef, EventEmitter, inject, Output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, Output, TemplateRef, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { InscriptionService } from '../../../services/inscription.service';
+import { dataEnrollmentByInscription, EnrollmentService } from '../../../services/registration.service';
 
 @Component({
   selector: 'app-modal-mark-payment',
@@ -9,12 +12,42 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './modal-mark-payment.component.css'
 })
 export class ModalMarkPaymentComponent {
+  @Output() paymentMarked = new EventEmitter<any>();
+  @Input() rowId!: number;
+
   private modalService = inject(NgbModal)
+  private notifycation = inject(ToastrService);
+  private enrollmentService = inject(EnrollmentService);
+  
+  //PARA IMPRIMIR LOS DATOS EN LA VISTA
+  student!: dataEnrollmentByInscription;
 
-  @Output() paymentMarked = new EventEmitter<any>()
+  loadStudentDetails() {
+    if (this.rowId && !isNaN(this.rowId)) {
+      this.enrollmentService.getEnrollmentByInscription(this.rowId).subscribe({
+        next: (enrollment: any) => {
+          // STUDENT
+          const names = enrollment.inscription?.student?.person?.names ?? '';
+          const paternal = enrollment.inscription?.student?.person?.paternalSurname ?? '';
+          const maternal = enrollment.inscription?.student?.person?.maternalSurname ?? '';
 
-  // Datos del estudiante (solo lectura)
-  currentStudent: any = null
+          this.student = {
+            studentFullName: `${names} ${paternal} ${maternal}`.trim(),
+            registrationDate: this.formatDate(enrollment.inscription?.registrationDate) ?? '',
+            // ahora usando los datos de enrollment.classroom
+            levelGradeSection: `${enrollment.classroom?.grade?.level?.name ?? ''} - ${enrollment.classroom?.grade?.name ?? ''} ${enrollment.classroom?.section?.name ?? ''}`,
+            psyEvaluationResult: enrollment.condition ? 'Con condición' : 'Sin condición',
+            period: enrollment.classroom?.period?.name ?? ''
+          };
+        },
+        error: (error) => {
+          this.notifycation.error('Error al cargar los detalles de la inscripción', 'Error')
+        }
+      });
+    } else {
+      this.notifycation.error('ID de la inscripción inválido', 'Error');
+    }
+  }
 
   // Datos del pago
   paymentData = {
@@ -49,27 +82,9 @@ export class ModalMarkPaymentComponent {
 
   @ViewChild("modalMarkPayment") modalMarkPayment!: TemplateRef<ElementRef>
 
-  openModal(studentData: any) {
-    this.currentStudent = studentData
-
-    // Inicializar datos del pago
-    this.paymentData = {
-      amount: 350,
-      paymentDate: this.getCurrentDate(),
-      paymentMethod: "Transferencia",
-      observations: "",
-      generateCredentials: "automatic",
-      notifyGuardianBy: "whatsapp",
-    }
-
-    // Limpiar credenciales manuales
-    this.manualCredentials = {
-      username: "",
-      password: "",
-    }
-
-    // Generar credenciales automáticas iniciales
-    this.generateAutomaticCredentials()
+  openModal() {
+    this.loadStudentDetails();
+    this.generateAutomaticCredentials();
 
     this.modalService.open(this.modalMarkPayment, {
       centered: true,
@@ -88,14 +103,7 @@ export class ModalMarkPaymentComponent {
 
   // Generar credenciales automáticamente basadas en el DNI
   generateAutomaticCredentials() {
-    const dni = this.currentStudent?.documentNumber || "12345678"
-
-    // Usuario: número de DNI
-    this.generatedCredentials.username = dni
-
-    // Contraseña: DNI + combinación aleatoria
-    const randomSuffix = this.generateRandomSuffix()
-    this.generatedCredentials.password = dni + randomSuffix
+    
   }
 
   // Generar sufijo aleatorio para la contraseña
@@ -243,5 +251,13 @@ export class ModalMarkPaymentComponent {
 
   onCancel() {
     this.modalService.dismissAll()
+  }
+
+  formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // +1 porque enero es 0
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
   }
 }
